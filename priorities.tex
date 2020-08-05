@@ -1,0 +1,266 @@
+\documentclass[runningheads]{llncs}
+
+% Document preparation
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO:}~#1}}
+
+% Typesetting
+\usepackage[all]{foreign}
+\usepackage{etoolbox}
+\usepackage{rotating}
+\usepackage{lscape}
+
+% Math symbols
+\usepackage[fleqn]{amsmath}
+\let\:\undefined% conflicts with namespc
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{cmll}
+\usepackage{mathtools}
+
+% Subfiles and namespaces
+\usepackage{subfiles}
+\newcommand{\onlyinsubfile}[1]{#1}
+\newcommand{\notinsubfile}[1]{}
+\usepackage{namespc}
+
+% Theorem environments
+\let\proof\relax%
+\let\endproof\relax%
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{thm-restate}
+\newenvironment{case*}[1]{\flushleft\textbf{Case} (#1).}{\endflushleft}
+\newenvironment{subcase*}[1]{\flushleft\textbf{Subcase} (#1).}{\endflushleft}
+\newenvironment{subsubcase*}[1]{\flushleft\textbf{Subsubcase} (#1).}{\endflushleft}
+
+% Inference rules
+\usepackage{mathpartir}
+\mprset{sep=1em}
+
+% Sort macros
+\usepackage{xcolor}
+\newcommand{\tm}[1]{\ensuremath{{\color[HTML]{a40038}#1}}}
+\newcommand{\ty}[1]{\ensuremath{{\color[HTML]{00007a}#1}}}
+\newcommand{\cs}[1]{\ensuremath{{\color[HTML]{009180}#1}}}
+\newcommand{\tmty}[2]{\ensuremath{\tm{#1}:\ty{#2}}}
+
+% Common definitions
+\newcommand{\sep}{\;\mid\;}
+\newcommand{\emptyenv}{\cdot}
+\newcommand{\subst}[4][]{\ifstrempty{#1}{\ensuremath{#2\{#3/#4\}}}{\ensuremath{#2(\{#3/#4\}\cup#1)}}}
+\newcommand{\plug}[2]{\ensuremath{#1[#2]}}
+\newcommand{\minpr}[0]{\ensuremath{\text{min}_{\pr}}}
+\newcommand{\maxpr}[0]{\ensuremath{\text{max}_{\pr}}}
+\newcommand{\aleq}[0]{\mathbin{{=_{\alpha}}}}
+\newcommand{\defeq}[0]{\triangleq}
+\newcommand{\elabarrow}[0]{\triangleq}% deprecated
+\newcommand{\hole}[0]{\ensuremath{\square}}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\fv}{fv}
+\DeclareMathOperator{\fn}{fn}
+\DeclareMathOperator{\bn}{bn}
+\DeclareMathOperator{\cn}{cn}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\cod}{cod}
+\DeclareMathAlphabet{\rel}{OMS}{cmsy}{m}{n}
+\DeclareMathAlphabet{\conf}{OMS}{cmsy}{m}{n}
+
+% Translations
+\newcommand{\substarrow}[2]{\xRightarrow{\scriptscriptstyle\{\tm{#1}/\tm{#2}\}}}
+\DeclarePairedDelimiter{\cpgv}{\llbracket}{\rrbracket}
+\newcommand{\cpgvc}[1]{\ensuremath{\cpgv{#1}^{\conf{C}}}}
+\newcommand{\cpgvarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgv{\cdot}}}}\;}}
+\newcommand{\cpgvcarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgvc{\cdot}}}}\;}}
+
+% Priority CP
+\namespace*{pcp}{
+  % Types
+  \providecommand{\tyone}[1][]{\ensuremath{\mathbf{1}^{#1}}}
+  \providecommand{\tynil}[1][]{\ensuremath{\mathbf{0}^{#1}}}
+  \providecommand{\tytop}[1][]{\ensuremath{\top^{#1}}}
+  \providecommand{\tybot}[1][]{\ensuremath{\bot^{#1}}}
+  \providecommand{\typlus}[3][]{\ensuremath{{#2}\mathbin{\oplus^{#1}}{#3}}}
+  \providecommand{\tywith}[3][]{\ensuremath{{#2}\mathbin{\with^{#1}}{#3}}}
+  \providecommand{\tytens}[3][]{\ensuremath{{#2}\mathbin{\otimes^{#1}}{#3}}}
+  \providecommand{\typarr}[3][]{\ensuremath{{#2}\mathbin{\parr^{#1}}{#3}}}
+  \providecommand{\co}[1]{\ensuremath{#1^\bot}}
+  % Terms
+  \providecommand{\res}[4][]{\ensuremath{(\nu{#2}^{#1}{#3}){#4}}}
+  \providecommand{\ppar}[2]{\ensuremath{#1\parallel#2}}
+  \providecommand{\halt}[0]{\ensuremath{\mathbf{0}}}
+  \providecommand{\link}[3][]{\lablink[#1]{#2}{#3}}
+  \providecommand{\send}[3]{\ensuremath{\labsend{#1}{#2}.#3}}
+  \providecommand{\usend}[3]{\ensuremath{#1\langle{#2}\rangle.#3}}
+  \providecommand{\recv}[3]{\ensuremath{\labrecv{#1}{#2}.#3}}
+  \providecommand{\close}[2]{\ensuremath{\labclose{#1}.#2}}
+  \providecommand{\wait}[2]{\ensuremath{\labwait{#1}.#2}}
+  \providecommand{\inl}[2]{\ensuremath{\labselinl{#1}.{#2}}}
+  \providecommand{\inr}[2]{\ensuremath{\labselinr{#1}.{#2}}}
+  \providecommand{\offer}[3]{\ensuremath{{#1}\triangleright\{\text{inl}:#2;\text{inr}:#3\}}}
+  \providecommand{\absurd}[1]{\ensuremath{{#1}\triangleright\{\}}}
+  % Typing judgements
+  \providecommand{\seq}[2]{\ensuremath{\tm{#1}\vdash{#2}}}
+  % Equivalences
+  \providecommand{\bbq}[0]{\approxeq}
+  \providecommand{\sbis}[0]{\sim}
+  \providecommand{\bis}[0]{\approx}
+  % Reduction relations
+  \providecommand{\red}[0]{\ensuremath{\Longrightarrow}}
+  % Labelled transition
+  \providecommand{\obs}[2]{\ensuremath{\tm{#1}{\Downarrow_{\tm{#2}}}}}
+  \providecommand{\slto}[1]{\ensuremath{\xRightarrow{\tm{#1}}}}
+  \providecommand{\stto}[0]{\ensuremath{\xRightarrow{\tm{\;\tau\;}}}}
+  \providecommand{\lto}[1]{\ensuremath{\xrightarrow{\tm{#1}}}}
+  \providecommand{\tto}[0]{\ensuremath{\xrightarrow{\tm{\;\tau\;}}}}
+  \providecommand{\lablink}[3][]{\ensuremath{{#2}{\leftrightarrow}^{#1}{#3}}}
+  \providecommand{\labsend}[2]{\ensuremath{#1[#2]}}
+  \providecommand{\labrecv}[2]{\ensuremath{#1(#2)}}
+  \providecommand{\labclose}[1]{\labsend{#1}{}}
+  \providecommand{\labwait}[1]{\labrecv{#1}{}}
+  \providecommand{\labselinl}[1]{\ensuremath{{#1}\triangleleft\text{inl}}}
+  \providecommand{\labselinr}[1]{\ensuremath{{#1}\triangleleft\text{inr}}}
+  \providecommand{\laboffinl}[1]{\ensuremath{{#1}\triangleright\text{inl}}}
+  \providecommand{\laboffinr}[1]{\ensuremath{{#1}\triangleright\text{inr}}}
+}{}
+\newcommand{\pcp}[1]{\namespace*{pcp}{}{#1}}
+
+% Priority GV
+\namespace*{pgv}{
+  % Priorities
+  \providecommand{\pbot}[0]{\ensuremath{{\bot\!}}}
+  \providecommand{\ptop}[0]{\ensuremath{{\top\!}}}
+  % Types
+  \providecommand{\tyunit}[0]{\ensuremath{\mathbf{1}}}
+  \providecommand{\tyvoid}[0]{\ensuremath{\mathbf{0}}}
+  \providecommand{\typrod}[2]{\ensuremath{{#1}\mathbin{\times}{#2}}}
+  \providecommand{\tysum}[2]{\ensuremath{{#1}\mathbin{+}{#2}}}
+  \providecommand{\tylolli}[3][]{\ensuremath{{#2}\mathbin{\multimap^{#1}}{#3}}}
+  \providecommand{\co}[1]{\ensuremath{\overline{#1}}}
+  % Session types
+  \providecommand{\tysend}[3][]{\ensuremath{!^{#1}{#2}.{#3}}}
+  \providecommand{\tyrecv}[3][]{\ensuremath{?^{#1}{#2}.{#3}}}
+  \providecommand{\tyends}[1][]{\ensuremath{\mathbf{end}_{!}^{#1}}}
+  \providecommand{\tyendr}[1][]{\ensuremath{\mathbf{end}_{?}^{#1}}}
+  \providecommand{\tyselect}[3][]{\ensuremath{{#2}\mathbin{\oplus^{#1}}{#3}}}
+  \providecommand{\tyoffer}[3][]{\ensuremath{{#2}\mathbin{\with^{#1}}{#3}}}
+  \providecommand{\tyselectemp}[1][]{\ensuremath{{\oplus}\{\}^{#1}}}
+  \providecommand{\tyofferemp}[1][]{\ensuremath{{\with}\{\}^{#1}}}
+  % Terms
+  \providecommand{\andthen}[2]{\ensuremath{#1;#2}}
+  \providecommand{\letbind}[3]{\ensuremath{\mathbf{let}\;#1\mathbin{=}#2\;\mathbf{in}\;#3}}
+  \providecommand{\pair}[2]{\ensuremath{(#1,#2)}}
+  \providecommand{\letpair}[4]{\ensuremath{\letbind{\pair{#1}{#2}}{#3}{#4}}}
+  \providecommand{\labinl}[0]{\ensuremath{\mathbf{inl}}}
+  \providecommand{\labinr}[0]{\ensuremath{\mathbf{inr}}}
+  \providecommand{\inl}[1]{\ensuremath{\labinl\;#1}}
+  \providecommand{\inr}[1]{\ensuremath{\labinr\;#1}}
+  \providecommand{\casesum}[5]{\ensuremath{\mathbf{case}\;#1\;\left\{\inl{#2}\mapsto{#3};\;\inr{#4}\mapsto{#5}\right\}}}
+  \providecommand{\unit}[0]{\ensuremath{()}}
+  \providecommand{\letunit}[2]{\ensuremath{\letbind{\unit}{#1}{#2}}}
+  \providecommand{\absurd}[1]{\ensuremath{\mathbf{absurd}\;#1}}
+  \providecommand{\link}[0]{\ensuremath{\mathbf{link}}}
+  \providecommand{\new}[0]{\ensuremath{\mathbf{new}}}
+  \providecommand{\halt}[0]{\ensuremath{\mathbf{halt}}}
+  \providecommand{\spawn}[0]{\ensuremath{\mathbf{spawn}}}
+  \providecommand{\send}[0]{\ensuremath{\mathbf{send}}}
+  \providecommand{\recv}[0]{\ensuremath{\mathbf{recv}}}
+  \providecommand{\fork}[0]{\ensuremath{\mathbf{fork}}}
+  \providecommand{\wait}[0]{\ensuremath{\mathbf{wait}}}
+  \providecommand{\close}[0]{\ensuremath{\mathbf{close}}}
+  \providecommand{\select}[1]{\ensuremath{\mathbf{select}\;#1}}
+  \providecommand{\offer}[5]{\ensuremath{\mathbf{offer}\;#1\;\{\inl{#2}\mapsto{#3};\inr{#4}\mapsto{#5}\}}}
+  \providecommand{\offeremp}[1]{\ensuremath{\mathbf{offer}\;#1\;\{\}}}
+  % Configurations
+  \providecommand{\ppar}[2]{\ensuremath{#1\parallel#2}}
+  \providecommand{\res}[3]{\ensuremath{(\nu#1#2)#3}}
+  % Flags
+  \providecommand{\main}[0]{\ensuremath{\bullet}}
+  \providecommand{\child}[0]{\ensuremath{\circ}}
+  % Typing judgements
+  \providecommand{\tseq}[4][]{\ensuremath{#2\vdash^{#1}\tmty{#3}{#4}}}
+  \providecommand{\cseq}[3][]{\ensuremath{#2\vdash^{#1}\tm{#3}}}
+  % Reduction relations
+  \providecommand{\tred}[0]{\ensuremath{\longrightarrow_{M}}}
+  \providecommand{\cred}[0]{\ensuremath{\longrightarrow}}
+}{}
+\newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
+
+% References
+\usepackage{varioref}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
+\begin{document}
+%
+\renewcommand{\onlyinsubfile}[1]{}
+\renewcommand{\notinsubfile}[1]{#1}
+%
+\title{Prioritise the Best Variation}
+%
+\author{
+  Wen Kokke%
+  \inst{1}%
+  \and%
+  Ornela Dardha%
+  \inst{2}}
+%
+\authorrunning{W. Kokke \and O. Dardha}
+%
+\institute{%
+  University of Edinburgh, Edinburgh
+  \email{wen.kokke@ed.ac.uk}
+  \\
+  University of Glasgow, Glasgow
+  \email{ornela.dardha@glasgow.ac.uk}}
+%
+\maketitle
+%
+\begin{abstract}
+To be written last\dots
+\keywords{Session types \and Process calculus}
+\end{abstract}
+
+\subfile{priority-cp}
+\subfile{priority-gv}
+\subfile{pcp-to-pgv}
+
+\appendix
+\section{Priority CP}
+{
+  \usingnamespace{pcp}
+}
+\section{Priority GV}
+{
+  \usingnamespace{pgv}
+
+  \thmpgvsubjectelaboration
+  \input{prf/lem-pgv-subject-elaboration}
+
+  \lempgvvaluedone
+  \input{prf/lem-pgv-value-done}
+
+  \lempgvsubstitution
+  \input{prf/lem-pgv-substitution}
+
+  \thmpgvsubjectreductionterms
+  \input{prf/thm-pgv-subject-reduction-terms}
+
+  \thmpgvsubjectcongruence
+  \input{prf/thm-pgv-subject-congruence}
+
+  \thmpgvsubjectreductionconfs
+  \input{prf/thm-pgv-subject-reduction-confs}
+}
+\section{Priority CP to Priority GV}
+{
+  \lempcptopgvtermspreservation
+  \input{prf/lem-pcp-to-pgv-terms-preservation}
+
+  \thmpcptopgvconfspreservation
+  \input{prf/thm-pcp-to-pgv-confs-preservation}
+}
+
+\bibliographystyle{splncs04}
+\bibliography{main}
+
+\end{document}

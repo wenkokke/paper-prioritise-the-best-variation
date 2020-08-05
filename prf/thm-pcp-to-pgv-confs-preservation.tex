@@ -1,0 +1,45 @@
+\begin{proof}
+  \begin{case}[\LabTirName{T-Cut}]
+    Immediately, from the induction hypothesis.
+    \small
+    \begin{mathpar}
+      \pcp{\inferrule*[lab=T-Cut]{
+          \seq{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}{\tm{P}}
+        }{\seq{\ty{\Gamma}}{\tm{\res{x}{y}{P}}}}}
+      \cpgvcarrow
+      \pgv{\inferrule*{
+          \cseq[\child]{\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{A}},\tmty{y}{\cpgv{B}}}{\tm{\cpgvc{P}}}
+        }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\res{x}{y}{\cpgvc{P}}}}}}
+    \end{mathpar}
+  \end{case}
+  \begin{case}[\LabTirName{T-Mix}]
+    Immediately, from the induction hypotheses.
+    \begin{mathpar}
+      \pcp{\inferrule*[lab=T-Mix]{
+          \seq{\ty{\Gamma}}{\tm{P}}
+          \\
+          \seq{\ty{\Delta}}{\tm{Q}}
+        }{\seq{\ty{\Gamma},\ty{\Delta}}{\ppar{P}{Q}}}}
+      \cpgvcarrow
+      \pgv{\inferrule*{
+          \cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\cpgvc{P}}}
+          \\
+          \cseq[\child]{\ty{\cpgv{\Delta}}}{\tm{\cpgvc{Q}}}
+        }{\cseq[\child]{\ty{\cpgv{\Gamma}},\ty{\cpgv{\Delta}}}{\tm{\ppar{\cpgvc{P}}{\cpgvc{Q}}}}}}
+    \end{mathpar}
+  \end{case}
+  \begin{case}[\LabTirName{*}]
+    By \cref{lem:pcp-to-pgv-terms-preservation}
+    \begin{mathpar}
+      \pcp{\seq{\ty{\Gamma}}{\tm{P}}}
+      \cpgvcarrow
+      \pgv{\inferrule*{
+          \tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\tm{\cpgv{P}}}{\tyunit}
+        }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\child\;\cpgv{P}}}}}
+    \end{mathpar}
+  \end{case}
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

@@ -1,0 +1,326 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\section{Priority CP}
+\usingnamespace{pcp}
+
+\subsection{Syntax}
+
+\subsubsection{Priorities, types, and environments}
+\[
+\begin{array}{lcl}
+  \ty{A}, \ty{B}, \ty{C}
+  & \coloneqq & \ty{\tyone[\cs{o}]}
+    \sep        \ty{\tybot[\cs{o}]}
+    \sep        \ty{\tynil[\cs{o}]}
+    \sep        \ty{\tytop[\cs{o}]}
+    \sep        \ty{\tytens[\cs{o}]{A}{B}}
+    \sep        \ty{\typarr[\cs{o}]{A}{B}}
+    \sep        \ty{\typlus[\cs{o}]{A}{B}}
+    \sep        \ty{\tywith[\cs{o}]{A}{B}}
+  \\
+  \ty{\Gamma}, \ty{\Delta}
+  & \coloneqq & \ty{\emptyenv}
+    \sep        \ty{\Gamma}, \tmty{x}{A}
+\end{array}
+\]
+\[
+\begin{array}{lcl}
+  \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
+  \ty{\co{(\tybot[\cs{o}])}} & = & \ty{\tyone[\cs{o}]} \\
+  \ty{\co{(\tynil[\cs{o}])}} & = & \ty{\tytop[\cs{o}]} \\
+  \ty{\co{(\tytop[\cs{o}])}} & = & \ty{\tynil[\cs{o}]}
+\end{array}
+\qquad
+\begin{array}{lcl}
+  \ty{\co{(\tytens[\cs{o}]{A}{B})}} & = & \ty{\typarr[\cs{o}]{\co{A}}{\co{B}}} \\
+  \ty{\co{(\typarr[\cs{o}]{A}{B})}} & = & \ty{\tytens[\cs{o}]{\co{A}}{\co{B}}} \\
+  \ty{\co{(\typlus[\cs{o}]{A}{B})}} & = & \ty{\tywith[\cs{o}]{\co{A}}{\co{B}}} \\
+  \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
+\end{array}
+\]
+\[
+\begin{array}{lclclcl}
+  \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o}  \\
+  \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}  \\
+  \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o}  \\
+  \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}  \\
+  \\
+  \minpr(\ty{\emptyenv})          & = & \varnothing
+\end{array}
+\qquad
+\begin{array}{lclclcl}
+  \pr(\ty{\tytens[\cs{o}]{A}{B}}) & = & \cs{o}  \\
+  \pr(\ty{\typarr[\cs{o}]{A}{B}}) & = & \cs{o}  \\
+  \pr(\ty{\typlus[\cs{o}]{A}{B}}) & = & \cs{o}  \\
+  \pr(\ty{\tywith[\cs{o}]{A}{B}}) & = & \cs{o}  \\
+  \\
+  \minpr(\ty{\Gamma},\tmty{x}{A}) & = & \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+\end{array}
+\]
+
+\subsubsection{Terms}
+\[
+\begin{array}[t]{lcl}
+  \tm{P}, \tm{Q}
+  & \coloneqq & \tm{\link{x}{y}}
+         \sep   \tm{\res{x}{y}{P}}
+         \sep   \tm{(\ppar{P}{Q})}
+         \sep   \tm{\halt}
+  \\   & \sep & \tm{\send{x}{y}{P}}
+         \sep   \tm{\close{x}{P}}
+         \sep   \tm{\recv{x}{y}{P}}
+         \sep   \tm{\wait{x}{P}}
+  \\   & \sep & \tm{\inl{x}{P}}
+         \sep   \tm{\inr{x}{P}}
+         \sep   \tm{\offer{x}{P}{Q}}
+         \sep   \tm{\absurd{x}}
+\end{array}
+\]
+
+\subsubsection{Syntactic Sugar}
+We define \emph{unbound} send:
+\[
+  \tm{\usend{x}{y}{P}}\elabarrow\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}
+\]
+
+\subsection{Typing}
+
+\subsubsection{Typing Rules}
+\begin{mathpar}
+  \inferrule*[lab=T-Link]{
+  }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A},\tmty{y}{\co{A}}}}
+
+  \inferrule*[lab=T-New]{
+    \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
+  }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
+  \\
+  \inferrule*[lab=T-Par]{
+    \seq{P}{\ty{\Gamma}}
+    \\
+    \seq{Q}{\ty{\Delta}}
+  }{\seq{\ppar{P}{Q}}{\ty{\Gamma},\ty{\Delta}}}
+
+  \inferrule*[lab=T-Halt]{
+  }{\seq{\halt}{\emptyenv}}
+  \\
+  \inferrule*[lab=T-Send]{
+    \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+  }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Close]{
+    \seq{P}{\ty{\Gamma}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma})
+  }{\seq{\close{x}{P}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}
+  \\
+  \inferrule*[lab=T-Recv]{
+    \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+  }{\seq{\recv{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\typarr[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Wait]{
+    \seq{P}{\ty{\Gamma}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma})
+  }{\seq{\wait{x}{P}}{\ty{\Gamma},\tmty{x}{\tybot[\cs{o}]}}}
+  \\
+  \inferrule*[lab=T-Select-Inl]{
+    \seq{P}{\ty{\Gamma},\tmty{x}{A}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+    \\
+    \pr(\ty{A})=\pr(\ty{B})
+  }{\seq{\inl{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Select-Inr]{
+    \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+    \\
+    \pr(\ty{A})=\pr(\ty{B})
+  }{\seq{\inr{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Offer]{
+    \seq{P}{\ty{\Gamma},\tmty{x}{A}}
+    \\
+    \seq{Q}{\ty{\Gamma},\tmty{x}{B}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+  }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Offer-Absurd]{
+    \cs{o}<\pr(\ty{\Gamma})
+  }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
+\end{mathpar}
+
+\subsubsection{Typing Rules for Syntactic Sugar}
+\begin{mathpar}
+  \inferrule*[lab=T-Unbound-Send]{
+    \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+  }{\seq{\usend{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
+  \elabarrow
+  \inferrule*{
+    \inferrule*{
+      \inferrule*{
+      }{\seq{\link{y}{z}}{\tmty{y}{\co{A}},\tmty{z}{A}}}
+      \\
+      \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+    }{\seq{\ppar{\link{y}{z}}{P}}{\ty{\Gamma},\tmty{x}{B},\tmty{y}{\co{A}},\tmty{z}{A}}}
+    \\
+    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B},\ty{\co{A}})
+  }{\seq{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
+\end{mathpar}
+
+\subsection{Label Transition Semantics}
+
+\subsubsection{Labels}
+\[
+  \tm{\ell}
+  \coloneqq \tm{\lablink{x}{y}}
+  \sep \tm{\labsend{x}{y}}
+  \sep \tm{\labclose{x}}
+  \sep \tm{\labrecv{x}{y}}
+  \sep \tm{\labwait{x}}
+  \sep \tm{\labselinl{x}}
+  \sep \tm{\labselinr{x}}
+  \sep \tm{\laboffinl{x}}
+  \sep \tm{\laboffinr{x}}
+\]
+We let $\tm{\ell_{x}}$ range over actions on the name $\tm{x}$: $\tm{\lablink{x}{y}}$, $\tm{\labsend{x}{y}}$, $\tm{\labclose{x}}$, \etc.
+
+\subsubsection{Action Rules}
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{Act-Link\textsubscript{1}}
+    & \tm{\link{x}{y}}
+    & \lto{\lablink{x}{y}}
+    & \tm{\halt}
+    \\
+    \LabTirName{Act-Send}
+    & \tm{\send{x}{y}{P}}
+    & \lto{\labsend{x}{y}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Recv}
+    & \tm{\recv{x}{y}{P}}
+    & \lto{\labrecv{x}{y}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Sel-Inl}
+    & \tm{\inl{x}{P}}
+    & \lto{\labselinl{x}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Sel-Inr}
+    & \tm{\inr{x}{P}}
+    & \lto{\labselinr{x}}
+    & \tm{P}
+  \end{array}
+  \qquad
+  \begin{array}{llcl}
+    \LabTirName{Act-Link\textsubscript{2}}
+    & \tm{\link{x}{y}}
+    & \lto{\lablink{y}{x}}
+    & \tm{\halt}
+    \\
+    \LabTirName{Act-Close}
+    & \tm{\close{x}{P}}
+    & \lto{\labclose{x}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Wait}
+    & \tm{\wait{x}{P}}
+    & \lto{\labwait{x}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Off-Inl}
+    & \tm{\offer{x}{P}{Q}}
+    & \lto{\laboffinl{x}}
+    & \tm{P}
+    \\
+    \LabTirName{Act-Off-Inr}
+    & \tm{\offer{x}{P}{Q}}
+    & \lto{\laboffinr{x}}
+    & \tm{Q}
+  \end{array}
+\end{mathpar}
+
+\subsubsection{Communication Rules}
+\begin{mathpar}
+  \inferrule*[lab=Tau-Link]{
+    \tm{P}\lto{\lablink{x}{z}}\tm{P'}
+  }{\tm{\res{x}{y}{P}}\tto\tm{\subst{P'}{z}{y}}}
+
+  \inferrule*[lab=Tau-Send]{
+    \tm{P}\lto{\ppar{\labsend{x}{x'}}{\labrecv{y}{y'}}}\tm{P'}
+  }{\tm{\res{x}{y}{P}}\tto\tm{\res{x}{y}{\res{x'}{y'}{P'}}}}
+
+  \inferrule*[lab=Tau-Close]{
+    \tm{P}\lto{\ppar{\labclose{x}}{\labwait{y}}}\tm{P'}
+  }{\tm{\res{x}{y}{P}}\tto\tm{P'}}
+
+  \inferrule*[lab=Tau-Inl]{
+    \tm{P}\lto{\ppar{\labselinl{x}}{\laboffinl{y}}}\tm{P'}
+  }{\tm{\res{x}{y}{P}}\tto\tm{\res{x}{y}{P'}}}
+
+  \inferrule*[lab=Tau-Inr]{
+    \tm{P}\lto{\ppar{\labselinr{x}}{\laboffinr{y}}}\tm{P'}
+  }{\tm{\res{x}{y}{P}}\tto\tm{\res{x}{y}{P'}}}
+\end{mathpar}
+
+\subsubsection{Structural Rules}
+\begin{mathpar}
+  \inferrule*[lab=Str-Rename]{
+    \tm{P}\aleq\tm{Q}
+    \\
+    \tm{Q}\lto{\ell}\tm{R}
+  }{\tm{P}\lto{\ell}\tm{R}}
+
+  \inferrule*[lab=Str-Res]{
+    \tm{P}\lto{\ell}\tm{P'}
+    \\
+    \tm{x},\tm{y}\not\in\fn(\tm{\ell})
+  }{\tm{\res{x}{y}{P}}\lto{\ell}\tm{\res{x}{y}{P'}}}
+
+  \inferrule*[lab=Str-Par\textsubscript{1}]{
+    \tm{P}\lto{\ell}\tm{P'}
+    \\
+    \bn(\tm{\ell})\cap\fn(\tm{Q})=\varnothing
+  }{\tm{\ppar{P}{Q}}\lto{\ell}\tm{\ppar{P'}{Q}}}
+
+  \inferrule*[lab=Str-Par\textsubscript{2}]{
+    \tm{Q}\lto{\ell}\tm{Q'}
+    \\
+    \bn(\tm{\ell})\cap\fn(\tm{P})=\varnothing
+  }{\tm{\ppar{P}{Q}}\lto{\ell}\tm{\ppar{P}{Q'}}}
+
+  \inferrule*[lab=Str-Syn]{
+    \tm{P}\lto{\ell}\tm{P'}
+    \\
+    \tm{Q}\lto{\ell'}\tm{Q'}
+    \\
+    \bn(\ell)\cap\bn(\ell')=\varnothing
+  }{\tm{\ppar{P}{Q}}\lto{\ell\parallel\ell'}\tm{\ppar{P'}{Q'}}}
+\end{mathpar}
+
+\subsection{Behavioural Theory}
+\begin{definition}[Strong bisimilarity]
+  A~symmetric relation $\rel{R}$ on processes is a strong bisimulation if $\tm{P}\mathbin{\rel{R}}\tm{Q}$ implies that if $\tm{P}\lto{\ell}\tm{P'}$, then $\tm{Q}\lto{\ell}\tm{Q'}$ for some $\tm{Q'}$ such that $\tm{P'}\mathbin{\rel{R}}\tm{Q'}$. Strong bisimilarity is the largest relation $\sbis$ that is a strong bisimulation.
+\end{definition}
+\begin{definition}[Saturated transition ($\slto{}$)]
+  Saturated transition $\slto{}$ is the smallest relation such that: $\tm{P}\stto\tm{P}$ for all $\tm{P}$; and if $\tm{P}\stto\tm{P'}$, $\tm{P'}\lto{\ell}\tm{Q'}$, and $\tm{Q'}\stto\tm{Q}$, then $\tm{P}\slto{\ell}\tm{Q}$.
+\end{definition}
+\begin{definition}[Bisimilarity]
+  A~symmetric relation $\rel{R}$ on processes is a bisimulation if $\tm{P}\mathbin{\rel{R}}\tm{Q}$ implies that if $\tm{P}\slto{\ell}\tm{P'}$, then $\tm{Q}\slto{\ell}\tm{Q'}$ for some $\tm{Q'}$ such that $\tm{P'}\mathbin{\rel{R}}\tm{Q'}$. Bisimilarity is the largest relation $\bis$ that is a bisimulation.
+\end{definition}
+
+\end{document}
+
+%%% Local Variables:
+%%% TeX-master: "priorities"
+%%% End:

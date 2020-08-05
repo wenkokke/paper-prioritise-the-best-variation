@@ -1,0 +1,543 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\section{Priority GV}
+\usingnamespace{pgv}
+
+\subsection{Static Syntax}%
+\label{sec:pgv-syntax-static}
+
+\subsubsection{Priorities, types, and environments}
+\[
+\begin{array}{lcl}
+  \cs{o}, \cs{p}, \cs{q}, \cs{r}
+  & \in & \mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}
+  \\
+  \ty{S}
+  & \coloneqq & \ty{\tysend[\cs{o}]{T}{S}}
+    \sep        \ty{\tyrecv[\cs{o}]{T}{S}}
+    \sep        \ty{\tyends[\cs{o}]}
+    \sep        \ty{\tyendr[\cs{o}]}
+  \\
+  \ty{T}, \ty{U}
+  & \coloneqq & \ty{\tyunit}
+    \sep        \ty{\tyvoid}
+    \sep        \ty{\typrod{T}{U}}
+    \sep        \ty{\tysum{T}{U}}
+    \sep        \ty{\tylolli[\cs{p},\cs{q}]{T}{U}}
+    \sep        \ty{S}
+  \\
+  \ty{\Gamma}, \ty{\Delta}
+  & \coloneqq & \ty{\emptyenv}
+    \sep        \ty{\Gamma}, \tmty{x}{T}
+\end{array}
+\]
+\[
+\begin{array}{lcl}
+  \ty{\co{\tysend[\cs{o}]{T}{S}}} & = & \ty{\tyrecv[\cs{o}]{T}{\co{S}}}
+  \\
+  \ty{\co{\tyrecv[\cs{o}]{T}{S}}} & = & \ty{\tysend[\cs{o}]{T}{\co{S}}}
+\end{array}
+\qquad
+\begin{array}{lcl}
+  \ty{\co{\tyends[\cs{o}]}} & = & \ty{\co{\tyendr[\cs{o}]}}
+  \\
+  \ty{\co{\tyendr[\cs{o}]}} & = & \ty{\co{\tyends[\cs{o}]}}
+\end{array}
+\]
+\[
+\begin{array}{lcl}
+  \pr(\ty{\tysend[\cs{o}]{T}{S}}) & = & \cs{o} \\
+  \pr(\ty{\tyrecv[\cs{o}]{T}{S}}) & = & \cs{o} \\
+  \\
+  \pr(\ty{\typrod{T}{U}}) & = & \pr({\ty{T}})\sqcap\pr({\ty{U}}) \\
+  \pr(\ty{\tysum{T}{U}})  & = & \pr({\ty{T}})\sqcap\pr({\ty{U}}) \\
+  \pr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p} \\
+  \\
+  \pr(\ty{\Gamma}, \tmty{x}{A}) & = & \pr(\ty{\Gamma})\sqcap\pr(\ty{A})
+\end{array}
+\qquad
+\begin{array}{lcl}
+  \pr(\ty{\tyends[\cs{o}]}) & = & \cs{o} \\
+  \pr(\ty{\tyendr[\cs{o}]}) & = & \cs{o} \\
+  \\
+  \pr(\ty{\tyunit})         & = & \ptop \\
+  \pr(\ty{\tyvoid})         & = & \ptop \\
+  \pr(\ty{S})               & = & \pr(\ty{S}) \\
+  \\
+  \pr(\ty{\emptyenv})       & = & \ptop
+\end{array}
+\]
+
+\subsubsection{Terms}%
+\label{sec:pgv-syntax-terms}
+\[
+\begin{array}{lcl}
+  \tm{L}, \tm{M}, \tm{N}
+  & \coloneqq & \tm{x}
+    \sep        \tm{K}
+    \sep        \tm{\lambda x.M}
+    \sep        \tm{M\;N} \\
+  & \sep      & \tm{\unit}
+    \sep        \tm{\letunit{M}{N}} \\
+  & \sep      & \tm{\pair{M}{N}}
+    \sep        \tm{\letpair{x}{y}{M}{N}} \\
+  & \sep      & \tm{\inl{M}}
+    \sep        \tm{\inr{M}}
+    \sep        \tm{\casesum{L}{x}{M}{y}{N}} \\
+  & \sep      & \tm{\absurd{M}} \\
+  \tm{K}
+  & \coloneqq & \tm{\link}
+    \sep        \tm{\new}
+    \sep        \tm{\spawn}
+    \sep        \tm{\send}
+    \sep        \tm{\recv}
+    \sep        \tm{\wait}
+    \sep        \tm{\close}
+\end{array}
+\]
+
+\subsubsection{Syntactic Sugar}%
+\label{sec:pgv-syntax-sugar}
+We define the type of pure functions, \ie functions which perform no communication:
+\[
+  \ty{\tylolli{T}{U}} \elabarrow \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}
+\]
+We define sequential composition, let-binding, and various pattern matching lambda abstractions:
+\[
+\begin{array}{lcl}
+  \tm{\andthen{M}{N}}
+  & \elabarrow & \tm{\letunit{M}{N}} \\
+  \tm{\letbind{x}{M}{N}}
+  & \elabarrow & \tm{(\lambda x.N)\;M} \\
+  \tm{\lambda\unit.M}
+  & \elabarrow & \tm{\lambda z.\letunit{z}{M}} \\
+  \tm{\lambda\pair{x}{y}.M}
+  & \elabarrow & \tm{\lambda z.\letpair{x}{y}{z}{M}}
+\end{array}
+\]
+We define fork, which combines channel creation and thread spawning in one construct:
+\[
+\begin{array}{lcl}
+  \tm{\fork}
+  & \elabarrow & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
+\end{array}
+\]
+We define types for internal and external choice, and their corresponding communication constructs:
+\[
+\begin{array}{lcl}
+  \ty{\tyselect[\cs{o}]{S}{S'}}
+  & \elabarrow & \ty{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}} \\
+  \ty{\tyoffer[\cs{o}]{S}{S'}}
+  & \elabarrow & \ty{\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}
+\end{array}
+\qquad
+\begin{array}{lcl}
+  \ty{\tyselectemp[\cs{o}]}
+  & \elabarrow & \ty{\tysend[\cs{o}]{\tyvoid}{\tyends[\cs{o+1}]}} \\
+  \ty{\tyofferemp[\cs{o}]}
+  & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
+\end{array}
+\]
+\[
+\begin{array}{lcl}
+  \tm{\select{\ell}}
+  & \elabarrow & \tm{\lambda x.\fork\;{(\lambda y.\send\;{\pair{\ell\;y}{x}})}} \\
+  \tm{\offer{L}{x}{M}{y}{N}}
+  & \elabarrow & \tm{\letpair{z}{w}{\recv\;{L}}{\wait\;{w};}} \\
+  &            & \quad\tm{\casesum{z}{x}{M}{y}{N}} \\
+  \tm{\offeremp{L}}
+  & \elabarrow & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
+\end{array}
+\]
+
+\subsection{Static Typing}%
+\label{sec:pgv-typing-static}
+
+\subsubsection{Typing Rules}
+\begin{mathpar}
+  \inferrule*[lab=T-Var]{
+  }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
+
+  \inferrule*[lab=T-Lam]{
+    \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+  }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{T}{U}}}
+
+  \inferrule*[lab=T-Const]{
+  }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
+
+  \inferrule*[lab=T-App]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+    \\
+    \cs{q}<\cs{o}
+  }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{o}]{\ty{\Gamma},\ty{\Delta}}{M\;N}{U}}
+  \\
+  \inferrule*[lab=T-Unit]{
+  }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+
+  \inferrule*[lab=T-LetUnit]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letunit{M}{N}}{T}}
+
+  \inferrule*[lab=T-Pair]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta}}{N}{U}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{M}{N}}{\typrod{T}{U}}}
+
+  \inferrule*[lab=T-LetPair]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{\typrod{T}{T'}}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T},\tmty{y}{T'}}{N}{U}
+    \\
+    \cs{p}<\pr(\ty{\Delta},\ty{T},\ty{T'})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letpair{x}{y}{M}{N}}{U}}
+
+  \inferrule*[lab=T-Inl]{
+    \tseq[o]{\ty{\Gamma}}{M}{T}
+    \\
+    \pr(\ty{T})=\pr(\ty{U})
+  }{\tseq[o]{\ty{\Gamma}}{\inl{M}}{\tysum{T}{U}}}
+
+  \inferrule*[lab=T-Inr]{
+    \tseq[o]{\ty{\Gamma}}{M}{U}
+    \\
+    \pr(\ty{T})=\pr(\ty{U})
+  }{\tseq[o]{\ty{\Gamma}}{\inr{M}}{\tysum{T}{U}}}
+
+  \inferrule*[lab=T-CaseSum]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{L}{\tysum{T}{T'}}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T}}{M}{U}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\casesum{L}{x}{M}{y}{N}}{U}}
+
+  \inferrule*[lab=T-Absurd]{
+    \tseq[o]{\ty{\Gamma}}{M}{\tyvoid}
+  }{\tseq[o]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
+\end{mathpar}
+We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations.
+
+\subsubsection{Type Schemas for Constants}
+\begin{mathpar}
+  \tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}
+
+  \tmty{\new}{\tylolli{\tyunit}{\typrod{S}{\co{S}}}}
+
+  \tmty{\spawn}{\tylolli{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}
+  \\
+  \tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}
+
+  \tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]{\tyrecv[\cs{o}]{T}{S}}{\typrod{T}{S}}}
+  \\
+  \tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}
+
+  \tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}
+\end{mathpar}
+
+\subsubsection{Typing Rules for Syntactic Sugar}
+\begin{mathpar}
+  \inferrule*[lab=T-Seq]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\andthen{M}{N}}{T}}
+
+  \inferrule*[lab=T-Let]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+    \\
+    \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T}}{N}{U}
+    \\
+    \cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letbind{x}{M}{N}}{U}}
+  \\
+  \inferrule*[lab=T-LamUnit]{
+    {\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}}
+  }{\tseq[\cs{\pbot}]
+    {\ty{\Gamma}}
+    {\lambda\unit.M}
+    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\tyunit}{T}}}
+
+  \inferrule*[lab=T-LamPair]
+  {\tseq[\cs{o}]
+    {\ty{\Gamma},\tmty{x}{T},\tmty{y}{T'}}
+    {M}
+    {U}}
+  {\tseq[\cs{\pbot}]
+    {\ty{\Gamma}}
+    {\lambda\pair{x}{y}.M}
+    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\typrod{T}{T'}}{U}}}
+  \\
+  \inferrule*[lab=T-Fork]{
+  }{\tseq[\cs{\pbot}]
+    {\emptyenv}
+    {\fork}
+    {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{S}{\tyunit})}{\co{S}}}}
+  \\
+  \inferrule*[lab=T-Select-Inl]{
+    \pr(\ty{S})=\pr(\ty{S'})
+  }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinl}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S}}}
+
+  \inferrule*[lab=T-Select-Inr]{
+    \pr(\ty{S})=\pr(\ty{S'})
+  }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinr}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S'}}}
+
+  \inferrule*[lab=T-Offer]{
+    {\tseq[\cs{p}]
+      {\ty{\Gamma}}
+      {L}
+      {\tyoffer[\cs{o}]{S}{S'}}}
+    \\
+    {\tseq[\cs{q}]
+      {\ty{\Delta},\tmty{x}{S}}
+      {M}
+      {T}}
+    \\
+    {\tseq[\cs{q}]
+      {\ty{\Delta},\tmty{y}{S'}}
+      {N}
+      {T}}
+    \\
+    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta},\ty{S},\ty{S'})
+  }{\tseq[\cs{o}\sqcup\cs{p}\sqcup\cs{q}]
+    {\ty{\Gamma},\ty{\Delta}}
+    {\offer{L}{x}{M}{y}{N}}
+    {T}}
+
+  \inferrule*[lab=T-Offer-Absurd]{
+    \tseq[\cs{p}]
+    {\ty{\Gamma}}
+    {L}
+    {\tyofferemp[\cs{o}]}
+    \\
+    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
+  }{\tseq[\cs{o}\sqcup\cs{p}]
+    {\ty{\Gamma},\ty{\Delta}}
+    {\offeremp{L}}
+    {T}}
+\end{mathpar}
+
+\subsection{Runtime Syntax}%
+\label{sec:pgv-syntax-runtime}
+
+\subsubsection{Terms}
+\[
+\begin{array}[t]{lcl}
+  \tm{\conf{C}}, \tm{\conf{D}}, \tm{\conf{E}}
+  & \coloneqq & \tm{\phi\;M}
+    \sep        \tm{\ppar{\conf{C}}{\conf{D}}}
+    \sep        \tm{\res{x}{y}{\conf{C}}}
+  \\
+  \tm{\phi}
+  & \coloneqq & \tm{\main}
+    \sep        \tm{\child}
+  \\
+  \tm{V}, \tm{W}
+  & \coloneqq & \tm{\lambda x.M}
+    \sep        \tm{\unit}
+    \sep        \tm{\pair{M}{N}}
+    \sep        \tm{\inl{M}}
+    \sep        \tm{\inr{M}}
+  \\
+  \tm{E}
+  & \coloneqq & \tm{\hole} \\
+  & \sep      & \tm{E\;M}
+    \sep        \tm{V\;E} \\
+  & \sep      & \tm{\letunit{E}{N}} \\
+  & \sep      & \tm{\pair{E}{M}}
+    \sep        \tm{\pair{V}{E}}
+    \sep        \tm{\letpair{x}{y}{E}{M}} \\
+  & \sep      & \tm{\inl{E}}
+    \sep        \tm{\inr{E}}
+    \sep        \tm{\casesum{E}{x}{M}{y}{N}} \\
+  \\
+  \tm{\conf{F}}
+  & \coloneqq & \tm{\phi\;E}
+  \\
+  \tm{\conf{G}}
+  & \coloneqq & \tm{\hole} \\
+  & \sep      & \tm{\ppar{\conf{G}}{\conf{C}}}
+    \sep        \tm{\res{x}{y}{\conf{G}}}
+\end{array}
+\]
+\[
+\begin{array}{ll}
+  \tm{\main}  + \tm{\child} = \tm{\main}
+  \\
+  \tm{\child} + \tm{\main}  = \tm{\main}
+\end{array}
+\quad
+\begin{array}{ll}
+  \tm{\child} + \tm{\child} = \tm{\child}
+  \\
+  \tm{\main}  + \tm{\main} \; \text{undefined}
+\end{array}
+\]
+
+\subsection{Runtime Typing}%
+\label{sec:pgv-typing-runtime}
+\begin{mathpar}
+  \inferrule*[lab=T-Main]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+  }{\cseq[\main]{\ty{\Gamma}}{\main\;M}}
+
+  \inferrule*[lab=T-Child]{
+    \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
+  }{\cseq[\child]{\ty{\Gamma}}{\child\;M}}
+
+  \inferrule*[lab=T-Res]{
+    \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{C}}
+  }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\conf{C}}}}
+
+  \inferrule*[lab=T-Par]{
+    \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+    \\
+    \cseq[\phi']{\ty{\Delta}}{\conf{D}}
+  }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\conf{D}}}}
+\end{mathpar}
+
+\subsection{Operational semantics}%
+\label{sec:pgv-semantics}
+
+\subsubsection{Term reduction}
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{E-Lam}  & \tm{(\lambda x.M) \; V}
+                        & \tred & \tm{\subst{M}{V}{x}}
+    \\
+    \LabTirName{E-Unit} & \tm{\letunit{\unit}{M}}
+                        & \tred & \tm{M}
+    \\
+    \LabTirName{E-Pair} & \tm{\letpair{x}{y}{\pair{V}{W}}{M}}
+                        & \tred & \tm{\subst{\subst{M}{V}{x}}{W}{y}}
+    \\
+    \LabTirName{E-Inl}  & \tm{\casesum{\inl{V}}{x}{M}{y}{N}}
+                        & \tred & \tm{\subst{M}{V}{x}}
+    \\
+    \LabTirName{E-Inr}  & \tm{\casesum{\inr{V}}{x}{M}{y}{N}}
+                        & \tred & \tm{\subst{N}{V}{y}}
+  \end{array}
+  \\
+  \inferrule*[lab=E-Lift]{
+    \tm{M}\tred\tm{M'}
+  }{\tm{\plug{E}{M}}\tred\tm{\plug{E}{M'}}}
+\end{mathpar}
+
+\subsubsection{Structural congruence}
+\[
+\begin{array}{llcl}
+  \LabTirName{E-LnkComm}  & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
+                          & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
+  \\
+  \LabTirName{E-ResComm}  & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
+                          & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
+  \\
+  \LabTirName{E-ParAssoc} & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
+                          & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
+  \\
+  \LabTirName{E-ParComm}  & \tm{\ppar{\conf{C}}{\conf{D}}}
+                          & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
+  \\
+  \LabTirName{E-Garbage}  & \tm{\ppar{\conf{C}}{\child{\unit}}}
+                          & \equiv & \tm{\conf{C}}
+  \\
+  \LabTirName{E-ScopeExt} & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
+                          & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
+                                     \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
+\end{array}
+\]
+
+\subsubsection{Configuration reduction}
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
+                         & \cred & \tm{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}
+    \\
+    \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{\spawn\;V}}
+                         & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child{(V\;\unit)}}}
+    \\
+    \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
+                           {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
+                           {\plug{\conf{F'}}{\recv\;{y}}})}}
+                         & \cred & \tm{\res{x}{y}{(\ppar
+                                   {\plug{\conf{F}}{x}}
+                                   {\plug{\conf{F'}}{\pair{V}{y}}})}}
+    \\
+    \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
+                           {\plug{\conf{F}}{\wait\;{x}}}
+                           {\plug{\conf{F'}}{\close\;{y}}})}}
+                         & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
+  \end{array}
+  \\
+  \inferrule*[lab=E-LiftC]{
+    \tm{\conf{C}}\cred\tm{\conf{C'}}
+  }{\tm{\plug{\conf{G}}{\conf{C}}}\cred\tm{\plug{\conf{G}}{\conf{C'}}}}
+
+  \inferrule*[lab=E-LiftM]{
+    \tm{M}\tred\tm{M'}
+  }{\tm{\plug{\conf{F}}{M}}\tred\tm{\plug{\conf{F}}{M'}}}
+
+  \inferrule*[lab=E-LiftE]{
+    \tm{\conf{C}}\equiv\tm{\conf{C'}}
+    \\
+    \tm{\conf{C'}}\cred\tm{\conf{D'}}
+    \\
+    \tm{\conf{D'}}\equiv\tm{\conf{D}}
+  }{\tm{\conf{C}}\cred\tm{\conf{D}}}
+\end{mathpar}
+
+\subsection{Metatheory}
+\begin{restatable}{theorem}{thmpgvsubjectelaboration}[Subject Elaboration]
+  If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$, $\tm{M}\elabarrow\tm{N}$, and $\ty{T}\elabarrow\ty{U}$,
+  then $\tseq[\cs{o}]{\ty{\Gamma}}{N}{U}$.
+\end{restatable}
+
+\begin{restatable}{lemma}{lempgvvaluedone}
+  \label{lem:value-done}
+  If $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$, then $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$.
+\end{restatable}
+
+\begin{restatable}{lemma}{lempgvsubstitution}[Substitution]
+  \label{lem:pgv-substitution}
+  If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
+\end{restatable}
+
+\begin{restatable}{theorem}{thmpgvsubjectreductionterms}[Subject Reduction ($\tred$)]
+  \label{thm:pgv-subject-reduction-terms}
+  If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
+  then $\tseq[\cs{o}]{\ty{\Gamma}}{M'}{T}$.
+\end{restatable}
+
+\begin{restatable}{theorem}{thmpgvsubjectcongruence}[Subject Congruence ($\equiv$)]
+  \label{thm:pgv-subject-congruence}
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
+  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+\end{restatable}
+
+\begin{restatable}{theorem}{thmpgvsubjectreductionconfs}[Subject Reduction ($\cred$)]
+  \label{thm:pgv-subject-reduction-confs}
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
+  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+\end{restatable}
+
+\end{document}
+
+%%% Local Variables:
+%%% TeX-master: "priorities"
+%%% End:

@@ -1,0 +1,422 @@
+\begin{proof}
+  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
+  \begin{case}[\LabTirName{T-Ax}, \LabTirName{T-Cut}, \LabTirName{T-Mix}, and \LabTirName{T-Halt}]
+    See \cref{fig:pcp-to-pgv-preservation}.
+  \end{case}
+  \begin{case}[\LabTirName{T-Close}, and \LabTirName{T-Wait}]
+    See \cref{fig:pcp-to-pgv-preservation-close-and-wait}.
+  \end{case}
+  \begin{case}[\LabTirName{T-Send}]
+    See \cref{fig:pcp-to-pgv-preservation-send}.
+  \end{case}
+  \begin{case}[\LabTirName{T-Recv}]
+    See \cref{fig:pcp-to-pgv-preservation-recv}.
+  \end{case}
+  \begin{case}[\LabTirName{T-Select-Inl}, \LabTirName{T-Select-Inr}, and \LabTirName{T-Offer}]
+    See \cref{fig:pcp-to-pgv-preservation-select-and-offer}.
+  \end{case}
+  \begin{case}[\LabTirName{T-Offer-Absurd}]
+    \todo{Add \LabTirName{T-Offer-Absurd} to PCP.}
+  \end{case}
+\end{proof}
+\begin{landscape}
+\begin{figure}
+\small
+\begin{mathpar}
+  % Translation for Ax
+  \pcp{\inferrule*[lab=T-Ax]{
+    }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A}, \tmty{y}{\co{A}}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+      }{\tmty{\link}{\tylolli[]{\typrod{\cpgv{A}}{\co{\cpgv{A}}}}{\tyunit}}}
+      \\
+      \inferrule*{
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\cpgv{A}}}
+          {x}
+          {\cpgv{A}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{y}{\co{\cpgv{A}}}}
+          {y}
+          {\co{\cpgv{A}}}}
+      }{\tseq[\cs{\pbot}]
+        {\tmty{x}{\cpgv{A}},\tmty{y}{\co{\cpgv{A}}}}
+        {\pair{x}{y}}
+        {\typrod{\cpgv{A}}{\co{\cpgv{A}}}}}
+    }{\tseq[\cs{\pbot}]
+      {\tmty{x}{\cpgv{A}},\tmty{y}{\co{\cpgv{A}}}}
+      {\link\;{\pair{x}{y}}}
+      {\tyunit}}}
+
+  % Translation for Cut
+  \pcp{\inferrule*[lab=T-Cut]{
+      \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
+    }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty
+          {\new}
+          {\tylolli{\tyunit}{{\typrod{\cpgv{A}}{\co{\cpgv{A}}}}}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\emptyenv}
+          {\unit}
+          {\tyunit}}
+      }{\tseq[\cs{\pbot}]
+        {\emptyenv}
+        {\new\;\unit}
+        {\typrod{\cpgv{A}}{\co{\cpgv{A}}}}}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{A}},\tmty{y}{\co{\cpgv{A}}}}
+        {\cpgv{P}}
+        {\tyunit}}
+    }{\tseq[\cs{p}]
+      {\ty{\cpgv{\Gamma}}}
+      {\letpair{x}{y}{\new\;\unit}{\cpgv{P}}}
+      {\tyunit}}}
+
+  % Translation for Mix
+  \pcp{\inferrule*[lab=T-Mix]{
+      \seq{\tm{P}}{\ty{\Gamma}}
+      \\
+      \seq{\tm{Q}}{\ty{\Delta}}
+    }{\seq{\tm{\ppar{P}{Q}}}{\ty{\Gamma},\ty{\Delta}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty{\spawn}{\tylolli{(\tylolli[\cs{\pr{(\ty{\Gamma})}},\cs{p}]{\tyunit}{\tyunit})}{\tyunit}}}
+        \\
+        \inferrule*{
+          \tseq[\cs{p}]
+          {\ty{\cpgv{\Gamma}}}
+          {\tm{\cpgv{P}}}
+          {\tyunit}
+        }{\tseq[\cs{\pbot}]
+          {\ty{\cpgv{\Gamma}}}
+          {\lambda\unit.\cpgv{P}}
+          {\tylolli[\cs{\pr{(\ty{\Gamma})}},\cs{p}]{\tyunit}{\tyunit}}}
+      }{\tseq[\cs{\pbot}]
+        {\ty{\cpgv{\Gamma}}}
+        {\tm{\spawn\;{(\lambda\unit.\cpgv{P})}}}
+        {\tyunit}}
+      \\
+      \tseq[\cs{q}]
+      {\ty{\cpgv{\Delta}}}
+      {\tm{\cpgv{Q}}}
+      {\tyunit}
+    }{\tseq[\cs{q}]
+      {\ty{\cpgv{\Gamma}},\ty{\cpgv{\Delta}}}
+      {\andthen{\spawn\;{(\lambda\unit.\cpgv{P})}}{\cpgv{Q}}}
+      {\tyunit}}}
+  \\
+  % Translation for Halt
+  \pcp{\inferrule*[lab=T-Halt]{
+    }{\seq{\tm{\halt}}{\emptyenv}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+    }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}}
+\end{mathpar}
+\caption{Translation $\cpgv{\cdot}$ preserves typing (\LabTirName{T-Ax}, \LabTirName{T-Cut}, \LabTirName{T-Mix}, and \LabTirName{T-Halt}).}
+\label{fig:pcp-to-pgv-preservation}
+\end{figure}
+\begin{figure}
+\begin{mathpar}
+  % Translation for Close
+  \pcp{\inferrule*[lab=T-Close]{
+      \seq{\tm{P}}{\ty{\Gamma}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\seq{\tm{\close{x}{P}}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\tyends[\cs{o}]}}
+          {x}
+          {\tyends[\cs{o}]}}
+      }{\tseq[\cs{o}]
+        {\tmty{x}{\tyends[\cs{o}]}}
+        {\close\;{x}}
+        {\tyunit}}
+      \\
+      \tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\cpgv{P}}{\tyunit}
+      \\
+      \cs{o}<\pr(\ty{\cpgv{\Gamma}})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\cpgv{\Gamma}},\tmty{x}{\tyends[\cs{o}]}}
+      {\andthen{\close\;{x}}{\cpgv{P}}}
+      {\tyunit}}}
+    \\
+  % Translation for Wait
+  \pcp{\inferrule*[lab=T-Wait]{
+      \seq{\tm{P}}{\ty{\Gamma}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\seq{\tm{\wait{x}{P}}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\tyendr[\cs{o}]}}
+          {x}
+          {\tyendr[\cs{o}]}}
+      }{\tseq[\cs{o}]
+        {\tmty{x}{\tyendr[\cs{o}]}}
+        {\wait\;{x}}
+        {\tyunit}}
+      \\
+      \tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\cpgv{P}}{\tyunit}
+      \\
+      \cs{o}<\pr(\ty{\cpgv{\Gamma}})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\cpgv{\Gamma}},\tmty{x}{\tyendr[\cs{o}]}}
+      {\andthen{\wait\;{x}}{\cpgv{P}}}
+      {\tyunit}}}
+\end{mathpar}
+\caption{Translation $\cpgv{\cdot}$ preserves typing (\LabTirName{T-Close} and \LabTirName{T-Wait}).}
+\label{fig:pcp-to-pgv-preservation-close-and-wait}
+\end{figure}
+\begin{figure}
+\begin{mathpar}
+  % Translation for Send
+  \pcp{\inferrule*[lab=T-Send]{
+      \seq{\tm{P}}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma},\ty{A},\ty{B})
+    }{\seq{\tm{\send{x}{y}{P}}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}}
+  \cpgvarrow
+  \\
+  \pgv{\inferrule*[lab=(a)]{
+      \inferrule*{
+      }{\tmty
+        {\new}
+        {\tylolli{\tyunit}{{\typrod{\cpgv{A}}{\co{\cpgv{A}}}}}}}
+      \\
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]
+        {\emptyenv}
+        {\unit}
+        {\tyunit}}
+    }{\tseq[\cs{\pbot}]
+      {\emptyenv}
+      {\new\;\unit}
+      {\typrod{\cpgv{A}}{\co{\cpgv{A}}}}}}
+  \\
+  \pgv{\inferrule*[lab=(b)]{
+      \inferrule*{
+      }{\tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]
+          {\typrod{\co{\cpgv{A}}}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}}
+          {\cpgv{B}}}}
+      \\
+      \inferrule*{
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{z}{\co{\cpgv{A}}}}
+          {x}
+          {\co{\cpgv{A}}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}}
+          {x}
+          {\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}}
+      }{\tseq[\cs{\pbot}]
+        {\tmty{x}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}},\tmty{z}{\co{\cpgv{A}}}}
+        {\pair{z}{x}}
+        {\typrod{\co{\cpgv{A}}}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}}}
+    }{\tseq[\cs{o}]
+      {\tmty{x}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}},\tmty{z}{\co{\cpgv{A}}}}
+      {\send\;{\pair{z}{x}}}
+      {\cpgv{B}}}}
+  \\
+  \pgv{\inferrule*{
+      \LabTirName{(a)}
+      \\
+      \inferrule*{
+        \LabTirName{(b)}
+        \\
+        {\tseq[\cs{p}]
+          {\ty{\cpgv{\Gamma}},\tmty{y}{\cpgv{A}},\tmty{x}{\cpgv{B}}}
+          {\cpgv{P}}
+          {\tyunit}}
+        \\
+        \cs{o}<\pr(\ty{\cpgv{\Gamma}},\ty{\cpgv{A}},\ty{\cpgv{B}})
+      }{\tseq[\cs{o}\sqcup\cs{p}]
+        {\ty{\cpgv{\Gamma}},%
+          \tmty{x}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}},%
+          \tmty{y}{\cpgv{A}},\tmty{z}{\co{\cpgv{A}}}}
+        {\letbind{x}{\send\;{\pair{z}{x}}}{\cpgv{P}}}
+        {\tyunit}}
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\cpgv{\Gamma}},\tmty{x}{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}}
+      {\letpair{y}{z}{\new\;\unit}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgv{P}}}}
+      {\tyunit}}}
+\end{mathpar}
+\caption{Translation $\cpgv{\cdot}$ preserves typing (\LabTirName{T-Send}).}
+\label{fig:pcp-to-pgv-preservation-send}
+\end{figure}
+\begin{figure}
+\begin{mathpar}
+  % Translation for Recv
+  \pcp{\inferrule*[lab=T-Recv]{
+      \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma},\ty{A},\ty{B})
+    }{\seq{\recv{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\typarr[\cs{o}]{A}{B}}}}}
+  \cpgvarrow
+  \\
+  \pgv{\inferrule*[lab=(a)]{
+      \inferrule*{
+      }{\tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]
+          {\tyrecv[\cs{o}]{{\cpgv{A}}}{\cpgv{B}}}
+          {\typrod{{\cpgv{A}}}{\cpgv{B}}}}}
+      \\
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]
+        {\tmty{x}{\tyrecv[\cs{o}]{{\cpgv{A}}}{\cpgv{B}}}}
+        {x}
+        {\tyrecv[\cs{o}]{{\cpgv{A}}}{\cpgv{B}}}}
+    }{\tseq[\cs{o}]
+      {\tmty{x}{\tyrecv[\cs{o}]{{\cpgv{A}}}{\cpgv{B}}}}
+      {\recv\;{x}}{\typrod{\cpgv{A}}{\cpgv{B}}}}}
+  \\
+  \pgv{\inferrule*{
+      \LabTirName{(a)}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\cpgv{\Gamma}},\tmty{y}{\cpgv{A}},\tmty{x}{\cpgv{B}}}
+        {\cpgv{P}}
+        {\tyunit}}
+      \\
+      \cs{o}<\pr(\ty{\cpgv{\Gamma}},\ty{\cpgv{A}},\ty{\cpgv{B}})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\cpgv{\Gamma}},%
+        \tmty{x}{\tyrecv[\cs{o}]{{\cpgv{A}}}{\cpgv{B}}},\tmty{y}{\cpgv{A}},\tmty{z}{{\cpgv{A}}}}
+      {\letbind{x}{\recv{x}}{\cpgv{P}}}{\tyunit}}}
+\end{mathpar}
+\caption{Translation $\cpgv{\cdot}$ preserves typing (\LabTirName{T-Recv}).}
+\label{fig:pcp-to-pgv-preservation-recv}
+\end{figure}
+\begin{figure}
+\begin{mathpar}
+  % Translation for Select-Inl
+  \pcp{\inferrule*[lab=T-Select-Inl]{
+      \seq{\tm{P}}{\ty{\Gamma},\tmty{x}{A}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\seq{\inl{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty
+          {\select{\labinl}}
+          {\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}{\cpgv{A}}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+          {x}
+          {\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      }{\tseq[\cs{o}]
+        {\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+        {\select{\labinl}\;{x}}
+        {\cpgv{A}}}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\Gamma},\tmty{x}{\cpgv{A}}}
+        {\cpgv{P}}
+        {\tyunit}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\Gamma},\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      {\letbind{x}{\select{\labinl}\;{x}}{\cpgv{P}}}
+      {\tyunit}}}
+  \\
+  % Translation for Select-Inl
+  \pcp{\inferrule*[lab=T-Select-Inr]{
+      \seq{\tm{P}}{\ty{\Gamma},\tmty{x}{A}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\seq{\inr{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\tmty
+          {\select{\labinr}}
+          {\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}{\cpgv{B}}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+          {x}
+          {\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      }{\tseq[\cs{o}]
+        {\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+        {\select{\labinr}\;{x}}
+        {\cpgv{B}}}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\Gamma},\tmty{x}{\cpgv{B}}}
+        {\cpgv{P}}
+        {\tyunit}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\Gamma},\tmty{x}{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      {\letbind{x}{\select{\labinr}\;{x}}{\cpgv{P}}}
+      {\tyunit}}}
+  \\
+  % Translation for Offer
+  \pcp{\inferrule*[lab=T-Offer]{
+      \seq{P}{\ty{\Gamma},\tmty{x}{A}}
+      \\
+      \seq{Q}{\ty{\Gamma},\tmty{x}{B}}
+      \\
+      \cs{o}<\pr(\ty{\Gamma},\ty{A},\ty{B})
+    }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}}
+  \cpgvarrow
+  \pgv{\inferrule*{
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]
+        {\tmty{x}{\tyoffer[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+        {x}
+        {\tyoffer[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      \\
+      \tseq[\cs{p}]{\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{A}}}{\cpgv{P}}{\tyunit}
+      \\
+      \tseq[\cs{p}]{\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{B}}}{\cpgv{Q}}{\tyunit}
+      \\
+      \cs{o}<\pr(\ty{\cpgv{\Gamma}},\ty{\cpgv{A}},\ty{\cpgv{B}})
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\cpgv{\Gamma}},\tmty{x}{\tyoffer[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+      {\offer{x}{x}{\cpgv{P}}{x}{\cpgv{Q}}}
+      {\tyunit}}}
+\end{mathpar}
+\caption{Translation $\cpgv{\cdot}$ preserves typing (\LabTirName{T-Select-Inl}, \LabTirName{T-Select-Inr}, and \LabTirName{T-Offer}).}
+\label{fig:pcp-to-pgv-preservation-select-and-offer}
+\end{figure}
+\end{landscape}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

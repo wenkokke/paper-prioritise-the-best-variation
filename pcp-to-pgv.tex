@@ -1,0 +1,90 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\section{Priority CP to Priority GV}
+
+\subsection{Translation}
+
+\paragraph{Translation on types}
+\[
+\begin{array}{lcl}
+  \ty{\cpgv{\pcp{\tytens[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}} \\
+  \ty{\cpgv{\pcp{\typarr[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgv{A}}{\cpgv{B}}}} \\
+  \ty{\cpgv{\pcp{\typlus[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}} \\
+  \ty{\cpgv{\pcp{\tywith[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+\end{array}
+\quad
+\begin{array}{lcl}
+  \ty{\cpgv{\pcp{\tyone[\cs{o}]}}}
+  & = & \ty{\pgv{\tyends[\cs{o}]}} \\
+  \ty{\cpgv{\pcp{\tybot[\cs{o}]}}}
+  & = & \ty{\pgv{\tyendr[\cs{o}]}} \\
+  \ty{\cpgv{\pcp{\tynil[\cs{o}]}}}
+  & = & \pgv{\ty{\tyselectemp[\cs{o}]}} \\
+  \ty{\cpgv{\pcp{\tytop[\cs{o}]}}}
+  & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
+\end{array}
+\]
+
+\paragraph{Translation on terms}
+\[
+\begin{array}{lcl}
+  \tm{\cpgvc{\pcp{\res{x}{y}{P}}}}
+  & = & \tm{\pgv{\res{x}{y}{\cpgvc{P}}}} \\
+  \tm{\cpgvc{\pcp{\ppar{P}{Q}}}}
+  & = & \tm{\pgv{\ppar{\cpgvc{P}}{\cpgvc{Q}}}} \\
+  \tm{\cpgvc{P}}
+  & = & \tm{\pgv{\child{\cpgv{P}}}}
+\end{array}
+\]
+\[
+\begin{array}{lcl}
+  \tm{\cpgv{\pcp{\link{x}{y}}}}
+  & = & \tm{\pgv{\link\;{\pair{x}{y}}}} \\
+  \tm{\cpgv{\pcp{\res{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{x}{y}{\new}{\cpgv{P}}}} \\
+  \tm{\cpgv{\pcp{\ppar{P}{Q}}}}
+  & = & \tm{\pgv{\andthen{\spawn\;{(\lambda\unit.\cpgv{P})}}{\cpgv{Q}}}} \\
+  \tm{\cpgv{\pcp{\halt}}}
+  & = & \tm{\pgv{\unit}} \\
+  \tm{\cpgv{\pcp{\close{x}{P}}}}
+  & = & \tm{\pgv{\andthen{\close\;{x}}{\cpgv{P}}}} \\
+  \tm{\cpgv{\pcp{\wait{x}{P}}}}
+  & = & \tm{\pgv{\andthen{\wait\;{x}}{\cpgv{P}}}} \\
+  \tm{\cpgv{\pcp{\send{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgv{P}}}}} \\
+  \tm{\cpgv{\pcp{\recv{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{y}{x}{\recv\;{x}}{\cpgv{P}}}} \\
+  \tm{\cpgv{\pcp{\inl{x}{P}}}}
+  & = & \tm{\pgv{\letbind{x}{\select{\labinl}{x}}{\cpgv{P}}}} \\
+  \tm{\cpgv{\pcp{\inr{x}{P}}}}
+  & = & \tm{\pgv{\letbind{x}{\select{\labinr}{x}}{\cpgv{P}}}} \\
+  \multicolumn{3}{l}{\tm{\cpgv{\pcp{\offer{x}{\cpgv{P}}{\cpgv{Q}}}}}} \\
+  & = & \tm{\pgv{\offer{x}{x}{\cpgv{P}}{x}{\cpgv{Q}}}}
+\end{array}
+\]
+
+\subsection{Metatheory}
+
+\begin{restatable}{lemma}{lempcptopgvtermspreservation}
+  \label{lem:pcp-to-pgv-terms-preservation}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
+  then $\pgv{\tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\cpgv{P}}{\tyunit}}$ in PGV.
+\end{restatable}
+
+\begin{restatable}{theorem}{thmpcptopgvconfspreservation}
+  \label{thm:pcp-to-pgv-confs-preservation}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
+  then $\pgv{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\cpgvc{P}}}$ in PGV.
+\end{restatable}
+
+\end{document}
+
+%%% Local Variables:
+%%% TeX-master: "priorities"
+%%% End:
