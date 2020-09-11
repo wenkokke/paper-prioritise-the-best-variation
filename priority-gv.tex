@@ -504,33 +504,33 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 
 \subsection{Metatheory}
 
-\begin{restatable}{lemma}{lempgvvaluedone}
+\begin{restatablelemma}{lempgvvaluedone}
   \label{lem:value-done}
   If $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$, then $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$.
-\end{restatable}
+\end{restatablelemma}
 
-\begin{restatable}{lemma}{lempgvsubstitution}[Substitution]
+\begin{restatablelemma}{lempgvsubstitution}[Substitution]
   \label{lem:pgv-substitution}
   If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
-\end{restatable}
+\end{restatablelemma}
 
-\begin{restatable}{theorem}{thmpgvsubjectreductionterms}[Subject Reduction ($\tred$)]
+\begin{restatabletheorem}{thmpgvsubjectreductionterms}[Subject Reduction ($\tred$)]
   \label{thm:pgv-subject-reduction-terms}
   If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
   then $\tseq[\cs{o}]{\ty{\Gamma}}{M'}{T}$.
-\end{restatable}
+\end{restatabletheorem}
 
-\begin{restatable}{theorem}{thmpgvsubjectcongruence}[Subject Congruence ($\equiv$)]
+\begin{restatabletheorem}{thmpgvsubjectcongruence}[Subject Congruence ($\equiv$)]
   \label{thm:pgv-subject-congruence}
   If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
   then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-\end{restatable}
+\end{restatabletheorem}
 
-\begin{restatable}{theorem}{thmpgvsubjectreductionconfs}[Subject Reduction ($\cred$)]
+\begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction ($\cred$)]
   \label{thm:pgv-subject-reduction-confs}
   If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
   then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-\end{restatable}
+\end{restatabletheorem}
 
 \end{document}
 

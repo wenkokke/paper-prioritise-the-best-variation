@@ -16,6 +16,7 @@
 \usepackage{stmaryrd}
 \usepackage{cmll}
 \usepackage{mathtools}
+\usepackage{environ}
 
 % Subfiles and namespaces
 \usepackage{subfiles}
@@ -24,13 +25,38 @@
 \usepackage{namespc}
 
 % Theorem environments
-\let\proof\relax%
-\let\endproof\relax%
 \spnewtheorem*{case*}{Case}{\itshape}{\rmfamily}
 \spnewtheorem*{subcase*}{Subcase}{\itshape}{\rmfamily}
-\usepackage{amsthm}
-\usepackage{thmtools}
-\usepackage{thm-restate}
+
+% Restatable theorems and lemmas (LLNCS-compatible)
+\newcommand{\restatetheorem}[1]{%
+  \begingroup
+  \renewcommand{\thetheorem}{\ref{#1}}%
+  \expandafter\expandafter\expandafter\theorem
+  \csname restatabletheorem@#1\endcsname
+  \endtheorem
+  \endgroup
+}
+\NewEnviron{restatabletheorem}[1]{%
+  \global\expandafter\xdef\csname restatabletheorem@#1\endcsname{%
+    \unexpanded\expandafter{\BODY}%
+  }%
+  \expandafter\theorem\BODY\unskip\label{#1}\endtheorem
+}
+\newcommand{\restatelemma}[1]{%
+  \begingroup
+  \renewcommand{\thelemma}{\ref{#1}}%
+  \expandafter\expandafter\expandafter\lemma
+  \csname restatablelemma@#1\endcsname
+  \endlemma
+  \endgroup
+}
+\NewEnviron{restatablelemma}[1]{%
+  \global\expandafter\xdef\csname restatablelemma@#1\endcsname{%
+    \unexpanded\expandafter{\BODY}%
+  }%
+  \expandafter\lemma\BODY\unskip\label{#1}\endlemma
+}
 
 % Inference rules
 \usepackage{mathpartir}
@@ -232,27 +258,27 @@ To be written last\dots
 {
   \usingnamespace{pgv}
 
-  \lempgvvaluedone
+  \restatelemma{lempgvvaluedone}
   \input{prf/lem-pgv-value-done}
 
-  \lempgvsubstitution
+  \restatelemma{lempgvsubstitution}
   \input{prf/lem-pgv-substitution}
 
-  \thmpgvsubjectreductionterms
+  \restatetheorem{thmpgvsubjectreductionterms}
   \input{prf/thm-pgv-subject-reduction-terms}
 
-  \thmpgvsubjectcongruence
+  \restatetheorem{thmpgvsubjectcongruence}
   \input{prf/thm-pgv-subject-congruence}
 
-  \thmpgvsubjectreductionconfs
+  \restatetheorem{thmpgvsubjectreductionconfs}
   \input{prf/thm-pgv-subject-reduction-confs}
 }
 \section{Priority CP to Priority GV}
 {
-  \lempcptopgvtermspreservation
+  \restatelemma{lempcptopgvtermspreservation}
   \input{prf/lem-pcp-to-pgv-terms-preservation}
 
-  \thmpcptopgvconfspreservation
+  \restatetheorem{thmpcptopgvconfspreservation}
   \input{prf/thm-pcp-to-pgv-confs-preservation}
 }
 
