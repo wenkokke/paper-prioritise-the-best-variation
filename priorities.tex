@@ -29,9 +29,9 @@
 \usepackage{amsthm}
 \usepackage{thmtools}
 \usepackage{thm-restate}
-\newenvironment{case*}[1]{\flushleft\textbf{Case} (#1).}{\endflushleft}
-\newenvironment{subcase*}[1]{\flushleft\textbf{Subcase} (#1).}{\endflushleft}
-\newenvironment{subsubcase*}[1]{\flushleft\textbf{Subsubcase} (#1).}{\endflushleft}
+\spnewtheorem*{case*}{Case}{\itshape}{\rmfamily}
+\spnewtheorem*{subcase*}{Subcase}{\itshape}{\rmfamily}
+\spnewtheorem*{subsubcase*}{Subsubcase}{\itshape}{\rmfamily}
 
 % Inference rules
 \usepackage{mathpartir}
@@ -233,9 +233,6 @@ To be written last\dots
 {
   \usingnamespace{pgv}
 
-  \thmpgvsubjectelaboration
-  \input{prf/lem-pgv-subject-elaboration}
-
   \lempgvvaluedone
   \input{prf/lem-pgv-value-done}
 
@@ -264,3 +261,8 @@ To be written last\dots
 \bibliography{main}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

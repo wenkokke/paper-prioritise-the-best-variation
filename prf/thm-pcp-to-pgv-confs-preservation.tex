@@ -1,5 +1,5 @@
 \begin{proof}
-  \begin{case}[\LabTirName{T-Cut}]
+  \begin{case*}[\LabTirName{T-Cut}]
     Immediately, from the induction hypothesis.
     \small
     \begin{mathpar}
@@ -11,8 +11,8 @@
           \cseq[\child]{\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{A}},\tmty{y}{\cpgv{B}}}{\tm{\cpgvc{P}}}
         }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\res{x}{y}{\cpgvc{P}}}}}}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{T-Mix}]
+  \end{case*}
+  \begin{case*}[\LabTirName{T-Mix}]
     Immediately, from the induction hypotheses.
     \begin{mathpar}
       \pcp{\inferrule*[lab=T-Mix]{
@@ -27,8 +27,8 @@
           \cseq[\child]{\ty{\cpgv{\Delta}}}{\tm{\cpgvc{Q}}}
         }{\cseq[\child]{\ty{\cpgv{\Gamma}},\ty{\cpgv{\Delta}}}{\tm{\ppar{\cpgvc{P}}{\cpgvc{Q}}}}}}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{*}]
+  \end{case*}
+  \begin{case*}[\LabTirName{*}]
     By \cref{lem:pcp-to-pgv-terms-preservation}
     \begin{mathpar}
       \pcp{\seq{\ty{\Gamma}}{\tm{P}}}
@@ -37,7 +37,7 @@
           \tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\tm{\cpgv{P}}}{\tyunit}
         }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\child\;\cpgv{P}}}}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 \end{proof}
 
 %%% Local Variables:

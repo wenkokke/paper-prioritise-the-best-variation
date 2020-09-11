@@ -1,5 +1,5 @@
 \begin{proof}
-  \begin{case}[\LabTirName{E-LnkComm}]
+  \begin{case*}[\LabTirName{E-LnkComm}]
     \begin{mathpar}
       \inferrule*{
         \inferrule*[vdots=1.5em]{
@@ -35,9 +35,9 @@
         }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\link\;{\pair{y}{x}}}{\tyunit}}
       }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 
-  \begin{case}[\LabTirName{E-ResComm}]
+  \begin{case*}[\LabTirName{E-ResComm}]
     \begin{mathpar}
       \inferrule*{
         \inferrule*{
@@ -51,9 +51,9 @@
         }{\cseq[\phi]{\ty{\Gamma},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\res{x}{y}{\conf{C}}}}
       }{\cseq[\phi]{\ty{\Gamma}}{\cseq{}{\res{z}{w}{\res{x}{y}{\conf{C}}}}}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 
-  \begin{case}[\LabTirName{E-ParAssoc}]
+  \begin{case*}[\LabTirName{E-ParAssoc}]
     \begin{mathpar}
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
@@ -75,9 +75,9 @@
         \cseq[\phi'']{\ty{\Theta}}{\conf{E}}
       }{\cseq[\phi+\phi'+\phi'']{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 
-  \begin{case}[\LabTirName{E-ParComm}]
+  \begin{case*}[\LabTirName{E-ParComm}]
     \begin{mathpar}
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
@@ -91,9 +91,9 @@
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
       }{\cseq[\phi'+\phi]{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{D}}{\conf{C}})}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 
-  \begin{case}[\LabTirName{E-Garbage}]
+  \begin{case*}[\LabTirName{E-Garbage}]
     \begin{mathpar}
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
@@ -106,9 +106,9 @@
       \equiv
       \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 
-  \begin{case}[\LabTirName{E-ScopeExt}]
+  \begin{case*}[\LabTirName{E-ScopeExt}]
     \begin{mathpar}
       \inferrule*{
         \inferrule*{
@@ -126,7 +126,7 @@
         }{\cseq{\ty{\Delta}}{\res{x}{y}{\conf{D}}}}
       }{\cseq{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}}}
     \end{mathpar}
-  \end{case}
+  \end{case*}
 \end{proof}
 
 %%% Local Variables:

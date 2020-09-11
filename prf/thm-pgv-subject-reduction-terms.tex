@@ -1,5 +1,5 @@
 \begin{proof}
-  \begin{case}[\LabTirName{E-Lam}]
+  \begin{case*}[\LabTirName{E-Lam}]
     By \cref{lem:pgv-substitution}.
     \begin{mathpar}
       \inferrule*{
@@ -12,8 +12,8 @@
       \tred
       \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{M}{V}{x}}{U}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Unit}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Unit}]
     By \cref{lem:pgv-substitution}.
     \begin{mathpar}
       \inferrule*{
@@ -25,8 +25,8 @@
       \tred
       \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Pair}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Pair}]
     By \cref{lem:pgv-substitution}.
     \begin{mathpar}
       \inferrule*{
@@ -45,8 +45,8 @@
       \\
       \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\subst{\subst{M}{V}{x}}{W}{y}}{U}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Inl}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Inl}]
     By \cref{lem:pgv-substitution}.
     \begin{mathpar}
       \inferrule*{
@@ -65,8 +65,8 @@
       \\
       \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{M}{V}{x}}{U}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Inr}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Inr}]
     By \cref{lem:pgv-substitution}.
     \begin{mathpar}
       \inferrule*{
@@ -85,10 +85,10 @@
       \\
       \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{N}{V}{y}}{U}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Lift}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Lift}]
     \todo{By induction on the evaluation context $E$.}
-  \end{case}
+  \end{case*}
 \end{proof}
 
 %%% Local Variables:

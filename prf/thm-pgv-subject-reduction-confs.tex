@@ -1,5 +1,5 @@
 \begin{proof}
-  \begin{case}[\LabTirName{E-New}]
+  \begin{case*}[\LabTirName{E-New}]
     \small
     \begin{mathpar}
       \inferrule*{
@@ -24,8 +24,8 @@
         }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\pair{x}{y}}}}
       }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}}
   \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Spawn}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Spawn}]
     \small
     \begin{mathpar}
       \inferrule*{
@@ -56,22 +56,22 @@
         }{\cseq[\child]{\ty{\Delta}}{\child\;(V\;\unit)}}
       }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\plug{\conf{F}}{\unit}}{\child\;(V\;\unit)}}}
     \end{mathpar}
-  \end{case}
-  \begin{case}[\LabTirName{E-Send}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Send}]
     See \cref{fig:pgv-subject-reduction-cred-send}.
-  \end{case}
-  \begin{case}[\LabTirName{E-Close}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Close}]
     See \cref{fig:pgv-subject-reduction-cred-close}.
-  \end{case}
-  \begin{case}[\LabTirName{E-LiftC}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-LiftC}]
     \todo{By induction on the evaluation context $\conf{G}$.}
-  \end{case}
-  \begin{case}[\LabTirName{E-LiftM}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-LiftM}]
     By \cref{thm:pgv-subject-reduction-terms}.
-  \end{case}
-  \begin{case}[\LabTirName{E-LiftE}]
+  \end{case*}
+  \begin{case*}[\LabTirName{E-LiftE}]
     By \cref{thm:pgv-subject-congruence}.
-  \end{case}
+  \end{case*}
 \end{proof}
 \begin{landscape}
 \begin{figure}[ht!]
