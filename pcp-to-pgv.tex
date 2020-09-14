@@ -9,24 +9,24 @@
 \paragraph{Translation on types}
 \[
 \begin{array}{lcl}
-  \ty{\cpgv{\pcp{\tytens[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgv{A}}}{\cpgv{B}}}} \\
-  \ty{\cpgv{\pcp{\typarr[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgv{A}}{\cpgv{B}}}} \\
-  \ty{\cpgv{\pcp{\typlus[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgv{A}}{\cpgv{B}}}} \\
-  \ty{\cpgv{\pcp{\tywith[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgv{A}}{\cpgv{B}}}}
+  \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgvT{A}}}{\cpgvT{B}}}} \\
+  \ty{\cpgvT{\pcp{\typarr[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}} \\
+  \ty{\cpgvT{\pcp{\typlus[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}} \\
+  \ty{\cpgvT{\pcp{\tywith[\cs{o}]{A}{B}}}}
+  & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
 \end{array}
 \quad
 \begin{array}{lcl}
-  \ty{\cpgv{\pcp{\tyone[\cs{o}]}}}
+  \ty{\cpgvT{\pcp{\tyone[\cs{o}]}}}
   & = & \ty{\pgv{\tyends[\cs{o}]}} \\
-  \ty{\cpgv{\pcp{\tybot[\cs{o}]}}}
+  \ty{\cpgvT{\pcp{\tybot[\cs{o}]}}}
   & = & \ty{\pgv{\tyendr[\cs{o}]}} \\
-  \ty{\cpgv{\pcp{\tynil[\cs{o}]}}}
+  \ty{\cpgvT{\pcp{\tynil[\cs{o}]}}}
   & = & \pgv{\ty{\tyselectemp[\cs{o}]}} \\
-  \ty{\cpgv{\pcp{\tytop[\cs{o}]}}}
+  \ty{\cpgvT{\pcp{\tytop[\cs{o}]}}}
   & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
 \end{array}
 \]
@@ -34,54 +34,83 @@
 \paragraph{Translation on terms}
 \[
 \begin{array}{lcl}
-  \tm{\cpgvc{\pcp{\res{x}{y}{P}}}}
-  & = & \tm{\pgv{\res{x}{y}{\cpgvc{P}}}} \\
-  \tm{\cpgvc{\pcp{\ppar{P}{Q}}}}
-  & = & \tm{\pgv{\ppar{\cpgvc{P}}{\cpgvc{Q}}}} \\
-  \tm{\cpgvc{P}}
-  & = & \tm{\pgv{\child{\cpgv{P}}}}
-\end{array}
-\]
-\[
-\begin{array}{lcl}
-  \tm{\cpgv{\pcp{\link{x}{y}}}}
+  \tm{\cpgvC{\pcp{\res{x}{y}{P}}}}
+  & = & \tm{\pgv{\res{x}{y}{\cpgvC{P}}}} \\
+  \tm{\cpgvC{\pcp{\ppar{P}{Q}}}}
+  & = & \tm{\pgv{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
+  \tm{\cpgvC{P}}
+  & = & \tm{\pgv{\child{\cpgvM{P}}}} \\
+  \\
+  \tm{\cpgvM{\pcp{\link{x}{y}}}}
   & = & \tm{\pgv{\link\;{\pair{x}{y}}}} \\
-  \tm{\cpgv{\pcp{\res{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{x}{y}{\new}{\cpgv{P}}}} \\
-  \tm{\cpgv{\pcp{\ppar{P}{Q}}}}
-  & = & \tm{\pgv{\andthen{\spawn\;{(\lambda\unit.\cpgv{P})}}{\cpgv{Q}}}} \\
-  \tm{\cpgv{\pcp{\halt}}}
+  \tm{\cpgvM{\pcp{\res{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\ppar{P}{Q}}}}
+  & = & \tm{\pgv{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
+  \tm{\cpgvM{\pcp{\halt}}}
   & = & \tm{\pgv{\unit}} \\
-  \tm{\cpgv{\pcp{\close{x}{P}}}}
-  & = & \tm{\pgv{\andthen{\close\;{x}}{\cpgv{P}}}} \\
-  \tm{\cpgv{\pcp{\wait{x}{P}}}}
-  & = & \tm{\pgv{\andthen{\wait\;{x}}{\cpgv{P}}}} \\
-  \tm{\cpgv{\pcp{\send{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgv{P}}}}} \\
-  \tm{\cpgv{\pcp{\recv{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{y}{x}{\recv\;{x}}{\cpgv{P}}}} \\
-  \tm{\cpgv{\pcp{\inl{x}{P}}}}
-  & = & \tm{\pgv{\letbind{x}{\select{\labinl}{x}}{\cpgv{P}}}} \\
-  \tm{\cpgv{\pcp{\inr{x}{P}}}}
-  & = & \tm{\pgv{\letbind{x}{\select{\labinr}{x}}{\cpgv{P}}}} \\
-  \multicolumn{3}{l}{\tm{\cpgv{\pcp{\offer{x}{\cpgv{P}}{\cpgv{Q}}}}}} \\
-  & = & \tm{\pgv{\offer{x}{x}{\cpgv{P}}{x}{\cpgv{Q}}}}
+  \tm{\cpgvM{\pcp{\close{x}{P}}}}
+  & = & \tm{\pgv{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\wait{x}{P}}}}
+  & = & \tm{\pgv{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\send{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+  \tm{\cpgvM{\pcp{\recv{x}{y}{P}}}}
+  & = & \tm{\pgv{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\inl{x}{P}}}}
+  & = & \tm{\pgv{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\inr{x}{P}}}}
+  & = & \tm{\pgv{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
+  \tm{\cpgvM{\pcp{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}
+  & = & \tm{\pgv{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}}
 \end{array}
 \]
 
 \subsection{Metatheory}
 
-\begin{restatablelemma}{lempcptopgvtermspreservation}
+\begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, $\cpgvM{\cdot}$]
   \label{lem:pcp-to-pgv-terms-preservation}
+  \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
-  then $\pgv{\tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\cpgv{P}}{\tyunit}}$ in PGV.
+  then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$ in PGV.
 \end{restatablelemma}
+\begin{proof}
+  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
+  (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
+\end{proof}
 
-\begin{restatabletheorem}{thmpcptopgvconfspreservation}
+\begin{restatabletheorem}{thmpcptopgvconfspreservation}[Preservation, $\cpgvC{\cdot}$]
   \label{thm:pcp-to-pgv-confs-preservation}
+  \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
-  then $\pgv{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\cpgvc{P}}}$ in PGV.
+  then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$ in PGV.
 \end{restatabletheorem}
+\begin{proof}
+  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
+  (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
+\end{proof}
+
+\begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencesoundness}%
+  [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
+  \label{thm:pcp-to-pgv-confs-operational-correspondence-soundness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
+  then there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red\tm{Q}}$ and $\pgv{\tm{\conf{C}}\equiv\tm{\cpgvC{Q}}}$
+\end{restatabletheorem}
+\begin{proof}
+  \todo{Write proof.}
+\end{proof}
+
+\begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencecompleteness}%
+  [Operational Correspondence, Completeness, $\cpgvC{\cdot}$]
+  \label{thm:pcp-to-pgv-confs-operational-correspondence-completeness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$ in PCP,
+  then $\pgv{\tm{\cpgvC{P}}\cred\tm{\cpgvC{Q}}}$.
+\end{restatabletheorem}
+\begin{proof}
+  \todo{Write proof.}
+\end{proof}
 
 \end{document}
 

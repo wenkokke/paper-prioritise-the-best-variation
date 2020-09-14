@@ -355,6 +355,15 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     \sep        \tm{\inl{M}}
     \sep        \tm{\inr{M}}
   \\
+  \tm{R}
+  & \coloneqq & \tm{\link\;\pair{V}{W}}
+    \sep        \tm{\new}
+    \sep        \tm{\spawn\;V} \\
+  & \sep      & \tm{\send\;\pair{V}{W}}
+    \sep        \tm{\recv\;V}
+    \sep        \tm{\close\;V}
+    \sep        \tm{\wait\;V}
+  \\
   \tm{E}
   & \coloneqq & \tm{\hole} \\
   & \sep      & \tm{E\;M}
@@ -505,32 +514,88 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 \subsection{Metatheory}
 
 \begin{restatablelemma}{lempgvvaluedone}
-  \label{lem:value-done}
+  \label{lem:pgv-value-done}
   If $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$, then $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$.
 \end{restatablelemma}
+\begin{proof}
+  By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$.
+  (Details in \cref{prf:lem-pgv-value-done}.)
+\end{proof}
 
 \begin{restatablelemma}{lempgvsubstitution}[Substitution]
   \label{lem:pgv-substitution}
+  \hfill\\%newline before theorem statement
   If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
 \end{restatablelemma}
+\begin{proof}
+  By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$. Whenever the contexts in the premises and conclusion differ, we use \cref{lem:pgv-value-done} to prove that the priorities are preserved.
+  (Details in \cref{prf:lem-pgv-substitution}.)
+\end{proof}
 
-\begin{restatabletheorem}{thmpgvsubjectreductionterms}[Subject Reduction ($\tred$)]
-  \label{thm:pgv-subject-reduction-terms}
+\begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
+  \label{lem:pgv-subject-reduction-terms}
+  \hfill\\%newline before theorem statement
   If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
   then $\tseq[\cs{o}]{\ty{\Gamma}}{M'}{T}$.
-\end{restatabletheorem}
+\end{restatablelemma}
+\begin{proof}
+  By induction on the derivation of $\tm{M}\tred\tm{M'}$.
+  (Details in \cref{prf:lem-pgv-subject-reduction-terms}.)
+\end{proof}
 
-\begin{restatabletheorem}{thmpgvsubjectcongruence}[Subject Congruence ($\equiv$)]
-  \label{thm:pgv-subject-congruence}
+\begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]
+  \label{lem:pgv-subject-congruence}
+  \hfill\\%newline before theorem statement
   If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
   then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-\end{restatabletheorem}
+\end{restatablelemma}
+\begin{proof}
+  By induction on the derivation of $\tm{\conf{C}}\equiv\tm{\conf{C'}}$.
+  (Details in \cref{prf:lem-pgv-subject-congruence}.)
+\end{proof}
 
-\begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction ($\cred$)]
+\begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]
   \label{thm:pgv-subject-reduction-confs}
+  \hfill\\%newline before theorem statement
   If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
   then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
 \end{restatabletheorem}
+\begin{proof}
+  By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
+  (Details in \cref{prf:thm-pgv-subject-reduction-confs}.)
+\end{proof}
+
+\begin{restatablelemma}{lempgvopenprogressterms}[Open Progress, $\tred$]
+  \label{lem:pgv-open-progress-terms}
+  If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$, then either:
+  \begin{description}[labelwidth=8ex]
+  \item[Done]
+    $\tm{M}$ is a value;
+  \item[Step]
+    There exists some $\tm{N}$ such that $\tm{M}\tred\tm{N}$; or
+  \item[Blocked] \label{lem:pgv-progress-terms:blocked}
+    There exists some $\tm{E}$ and $\tm{R}$ such that $\tm{M}=\tm{\plug{E}{R}}$.
+  \end{description}
+\end{restatablelemma}
+\begin{proof}
+  \todo{Write proof.}
+\end{proof}
+
+\begin{restatabletheorem}{thmpgvopenprogressconfs}[Open Progress, $\cred$]
+  \label{thm:pgv-open-progress-confs}
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, then either:
+  \begin{description}[labelwidth=8ex]
+  \item[Done]
+    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\main\;V}$;
+  \item[Step]
+    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
+  \item[Blocked]
+    There exist $\tm{x_i}$ and $\tm{y_i}$ for $0\leq{i}\leq{n}$, and $\tm{\phi_j}$ and $\tm{R_j}$ for $0\leq{j}\leq{m}$, such that $\tm{\conf{C}}=\tm{\res{x_1y_1\dots x_ny_n}{}{(\phi_1R_1 \parallel\dots\parallel \phi_mR_m)}}$ and for each $\tm{R_j}$ there exists some $\tm{a_j}\in\fn(\ty{\Gamma})$ such that $\blocked(\tm{a_j},\tm{R_j})$.
+  \end{description}
+\end{restatabletheorem}
+\begin{proof}
+  \todo{Write proof.}
+\end{proof}
 
 \end{document}
 

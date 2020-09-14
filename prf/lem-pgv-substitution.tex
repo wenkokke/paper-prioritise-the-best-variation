@@ -1,7 +1,9 @@
 \begin{proof}
+  \label{prf:lem-pgv-substitution}
   By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$.
+
   \begin{case*}[\LabTirName{T-Var}]
-    By \cref{lem:value-done}, $\cs{q}=\cs{\pbot}$.
+    By \cref{lem:pgv-value-done}, $\cs{q}=\cs{\pbot}$.
     \begin{mathpar}
       \inferrule*{
       }{\tseq[\cs{\pbot}]{\tmty{x}{U'}}{x}{U'}}
@@ -10,7 +12,7 @@
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Lam}]
-    By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Gamma},\ty{\Theta})=\pr(\ty{\Gamma},\ty{U'})$.
+    By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Gamma},\ty{\Theta})=\pr(\ty{\Gamma},\ty{U'})$.
     \begin{mathpar}
       \inferrule*{
         \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{U'},\tmty{y}{T}}{M}{U}
@@ -52,7 +54,7 @@
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{N}$]
-      By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
       \begin{mathpar}
         \inferrule*{
           \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
@@ -99,7 +101,7 @@
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{N}$]
-      By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
       \begin{mathpar}
         \inferrule*{
           \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
@@ -142,7 +144,7 @@
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{N}$]
-      By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
       \begin{mathpar}
         \inferrule*{
           \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
@@ -185,7 +187,7 @@
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{N}$]
-      By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta},\ty{T},\ty{T'})=\pr(\ty{\Delta},\ty{U'},\ty{T},\ty{T'})$.
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta},\ty{T},\ty{T'})=\pr(\ty{\Delta},\ty{U'},\ty{T},\ty{T'})$.
       \begin{mathpar}
         \inferrule*{
           \tseq[\cs{p}]{\ty{\Gamma}}{M}{\typrod{T}{T'}}
@@ -273,7 +275,7 @@
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{M}$ and $\tm{x}\in\tm{N}$]
-      By \cref{lem:value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta},\ty{T})=\pr(\ty{\Delta},\ty{U'},\ty{T})$ and $\pr(\ty{\Delta},\ty{\Theta},\ty{T'})=\pr(\ty{\Delta},\ty{U'},\ty{T'})$.
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta},\ty{T})=\pr(\ty{\Delta},\ty{U'},\ty{T})$ and $\pr(\ty{\Delta},\ty{\Theta},\ty{T'})=\pr(\ty{\Delta},\ty{U'},\ty{T'})$.
       \begin{mathpar}
         \inferrule*{
           \tseq[\cs{p}]{\ty{\Gamma}}{L}{\tysum{T}{T'}}

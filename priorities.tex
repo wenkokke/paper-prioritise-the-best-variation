@@ -8,6 +8,8 @@
 \usepackage{etoolbox}
 \usepackage{rotating}
 \usepackage{lscape}
+\usepackage{enumitem}
+\setlist[description]{style=unboxed,font=\normalfont\itshape}
 
 % Math symbols
 \usepackage[fleqn]{amsmath}
@@ -85,6 +87,7 @@
 \DeclareMathOperator{\fn}{fn}
 \DeclareMathOperator{\bn}{bn}
 \DeclareMathOperator{\cn}{cn}
+\DeclareMathOperator{\blocked}{blocked}
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\cod}{cod}
 \DeclareMathAlphabet{\rel}{OMS}{cmsy}{m}{n}
@@ -92,10 +95,11 @@
 
 % Translations
 \newcommand{\substarrow}[2]{\xRightarrow{\scriptscriptstyle\{\tm{#1}/\tm{#2}\}}}
-\DeclarePairedDelimiter{\cpgv}{\llbracket}{\rrbracket}
-\newcommand{\cpgvc}[1]{\ensuremath{\cpgv{#1}^{\conf{C}}}}
-\newcommand{\cpgvarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgv{\cdot}}}}\;}}
-\newcommand{\cpgvcarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgvc{\cdot}}}}\;}}
+\DeclarePairedDelimiter{\cpgvT}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\cpgvM}{\llparenthesis}{\rrparenthesis}
+\DeclarePairedDelimiter{\cpgvC}{\llbracket}{\rrbracket}
+\newcommand{\cpgvMarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgvM{\cdot}}}}\;}}
+\newcommand{\cpgvCarrow}[0]{\xRightarrow{\;\raisebox{2pt}{\ensuremath{{\cpgvC{\cdot}}}}\;}}
 
 % Priority CP
 \namespace*{pcp}{
@@ -206,7 +210,7 @@
   \providecommand{\cseq}[3][]{\ensuremath{#2\vdash^{#1}\tm{#3}}}
   % Reduction relations
   \providecommand{\tred}[0]{\ensuremath{\longrightarrow_{M}}}
-  \providecommand{\cred}[0]{\ensuremath{\longrightarrow}}
+  \providecommand{\cred}[0]{\ensuremath{\longrightarrow_{\conf{C}}}}
 }{}
 \newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
 
@@ -258,20 +262,28 @@ To be written last\dots
 {
   \usingnamespace{pgv}
 
+  \subsection*{Typing Derivations for Syntactic Sugar}
+  The typing derivations for the typing rules for syntactic sugar defined in~\cref{sec:pgv-syntax-sugar} are shown in~\cref{fig:pgv-typing-sugar,fig:pgv-typing-sugar-fork,fig:pgv-typing-sugar-select-inl,fig:pgv-typing-sugar-select-inr,fig:pgv-typing-sugar-offer,fig:pgv-typing-sugar-offer-absurd}.
+  \input{prf/lem-pgv-subject-elaboration}
+
   \restatelemma{lempgvvaluedone}
   \input{prf/lem-pgv-value-done}
 
   \restatelemma{lempgvsubstitution}
   \input{prf/lem-pgv-substitution}
 
-  \restatetheorem{thmpgvsubjectreductionterms}
-  \input{prf/thm-pgv-subject-reduction-terms}
+  \restatelemma{lempgvsubjectreductionterms}
+  \input{prf/lem-pgv-subject-reduction-terms}
 
-  \restatetheorem{thmpgvsubjectcongruence}
-  \input{prf/thm-pgv-subject-congruence}
+  \restatelemma{lempgvsubjectcongruence}
+  \input{prf/lem-pgv-subject-congruence}
 
   \restatetheorem{thmpgvsubjectreductionconfs}
   \input{prf/thm-pgv-subject-reduction-confs}
+
+  \restatelemma{lempgvopenprogressterms}
+
+  \restatetheorem{thmpgvopenprogressconfs}
 }
 \section{Priority CP to Priority GV}
 {

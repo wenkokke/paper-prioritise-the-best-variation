@@ -1,4 +1,7 @@
 \begin{proof}
+  \label{prf:thm-pcp-to-pgv-confs-preservation}
+  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
+
   \begin{case*}[\LabTirName{T-Cut}]
     Immediately, from the induction hypothesis.
     \small
@@ -6,10 +9,10 @@
       \pcp{\inferrule*[lab=T-Cut]{
           \seq{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}{\tm{P}}
         }{\seq{\ty{\Gamma}}{\tm{\res{x}{y}{P}}}}}
-      \cpgvcarrow
+      \cpgvCarrow
       \pgv{\inferrule*{
-          \cseq[\child]{\ty{\cpgv{\Gamma}},\tmty{x}{\cpgv{A}},\tmty{y}{\cpgv{B}}}{\tm{\cpgvc{P}}}
-        }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\res{x}{y}{\cpgvc{P}}}}}}
+          \cseq[\child]{\ty{\cpgvT{\Gamma}},\tmty{x}{\cpgvT{A}},\tmty{y}{\cpgvT{B}}}{\tm{\cpgvC{P}}}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\res{x}{y}{\cpgvC{P}}}}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Mix}]
@@ -20,22 +23,22 @@
           \\
           \seq{\ty{\Delta}}{\tm{Q}}
         }{\seq{\ty{\Gamma},\ty{\Delta}}{\ppar{P}{Q}}}}
-      \cpgvcarrow
+      \cpgvCarrow
       \pgv{\inferrule*{
-          \cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\cpgvc{P}}}
+          \cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\cpgvC{P}}}
           \\
-          \cseq[\child]{\ty{\cpgv{\Delta}}}{\tm{\cpgvc{Q}}}
-        }{\cseq[\child]{\ty{\cpgv{\Gamma}},\ty{\cpgv{\Delta}}}{\tm{\ppar{\cpgvc{P}}{\cpgvc{Q}}}}}}
+          \cseq[\child]{\ty{\cpgvT{\Delta}}}{\tm{\cpgvC{Q}}}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}},\ty{\cpgvT{\Delta}}}{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{*}]
     By \cref{lem:pcp-to-pgv-terms-preservation}
     \begin{mathpar}
       \pcp{\seq{\ty{\Gamma}}{\tm{P}}}
-      \cpgvcarrow
+      \cpgvCarrow
       \pgv{\inferrule*{
-          \tseq[\cs{p}]{\ty{\cpgv{\Gamma}}}{\tm{\cpgv{P}}}{\tyunit}
-        }{\cseq[\child]{\ty{\cpgv{\Gamma}}}{\tm{\child\;\cpgv{P}}}}}
+          \tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\tm{\cpgvM{P}}}{\tyunit}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\child\;\cpgvM{P}}}}}
     \end{mathpar}
   \end{case*}
 \end{proof}
