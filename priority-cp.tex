@@ -214,7 +214,7 @@ We define \emph{unbound} send:
     \LabTirName{E-Lnk}     & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
                            & \red & \tm{\subst{P}{w}{x}}
     \\
-    \LabTirName{E-Snd}     & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}})}}
+    \LabTirName{E-Snd}     & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
                            & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
     \\
     \LabTirName{E-End}     & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
@@ -228,6 +228,23 @@ We define \emph{unbound} send:
                            & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
                            & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
   \end{array}
+  \\
+  \inferrule*[lab=E-Res]{
+    \tm{P}\red\tm{P'}
+  }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
+
+  \inferrule*[lab=E-Par]{
+    \tm{P}\red\tm{P'}
+  }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
+
+  \inferrule*[lab=E-LiftSC]{
+    \tm{P}\equiv\tm{P'}
+    \\
+    \tm{P'}\red\tm{Q'}
+    \\
+    \tm{Q'}\equiv\tm{Q}
+  }{\tm{P}\red\tm{Q}}
+
 \end{mathpar}
 
 \end{document}
