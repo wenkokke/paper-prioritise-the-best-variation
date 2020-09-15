@@ -505,7 +505,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     \tm{M}\tred\tm{M'}
   }{\tm{\plug{\conf{F}}{M}}\tred\tm{\plug{\conf{F}}{M'}}}
 
-  \inferrule*[lab=E-LiftE]{
+  \inferrule*[lab=E-LiftSC]{
     \tm{\conf{C}}\equiv\tm{\conf{C'}}
     \\
     \tm{\conf{C'}}\cred\tm{\conf{D'}}
