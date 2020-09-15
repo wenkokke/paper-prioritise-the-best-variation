@@ -449,28 +449,31 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 \end{mathpar}
 
 \subsubsection{Structural congruence}
-\[
-\begin{array}{llcl}
-  \LabTirName{E-LnkComm}  & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
-                          & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
-  \\
-  \LabTirName{E-ResComm}  & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
-                          & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
-  \\
-  \LabTirName{E-ParAssoc} & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
-                          & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
-  \\
-  \LabTirName{E-ParComm}  & \tm{\ppar{\conf{C}}{\conf{D}}}
-                          & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
-  \\
-  \LabTirName{E-Garbage}  & \tm{\ppar{\conf{C}}{\child{\unit}}}
-                          & \equiv & \tm{\conf{C}}
-  \\
-  \LabTirName{E-ScopeExt} & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
-                          & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
-                                     \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
-\end{array}
-\]
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{SC-LnkSwp}   & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
+                             & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
+    \\
+    \LabTirName{SC-ResExt}   & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
+                             & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
+                                        \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
+    \\
+    \LabTirName{SC-ResSwp}   & \tm{\res{x}{y}{\conf{C}}}
+                             & \equiv & \tm{\res{y}{x}{\conf{C}}}
+    \\
+    \LabTirName{SC-ResCom}   & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
+                             & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
+    \\
+    \LabTirName{SC-ParNil}   & \tm{\ppar{\conf{C}}{\child{\unit}}}
+                             & \equiv & \tm{\conf{C}}
+    \\
+    \LabTirName{SC-ParCom}   & \tm{\ppar{\conf{C}}{\conf{D}}}
+                             & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
+    \\
+    \LabTirName{SC-ParAsc}   & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
+                             & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
+  \end{array}
+\end{mathpar}
 
 \subsubsection{Configuration reduction}
 \begin{mathpar}

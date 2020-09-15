@@ -178,6 +178,36 @@ We define \emph{unbound} send:
 
 \subsection{Operational Semantics}
 
+\subsubsection{Structural congruence}
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{SC-LnkSwp}   & \tm{\link{x}{y}}
+                             & \equiv & \tm{\link{y}{x}}
+    \\
+    \LabTirName{SC-ResLnk}   & \tm{\res{x}{y}{\link{x}{y}}}
+                             & \equiv & \tm{\halt}
+    \\
+    \LabTirName{SC-ResExt}   & \tm{\res{x}{y}{(\ppar{P}{Q})}}
+                             & \equiv & \tm{\ppar{\res{x}{y}{P}}{Q}},
+                                        \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{Q})}
+    \\
+    \LabTirName{SC-ResSwp}   & \tm{\res{x}{y}{P}}
+                             & \equiv & \tm{\res{y}{x}{P}}
+    \\
+    \LabTirName{SC-ResCom}   & \tm{\res{x}{y}{\res{z}{w}{P}}}
+                             & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
+    \\
+    \LabTirName{SC-ParNil}   & \tm{\ppar{P}{\halt}}
+                             & \equiv & \tm{P}
+    \\
+    \LabTirName{SC-ParCom}   & \tm{\ppar{P}{Q}}
+                             & \equiv & \tm{\ppar{Q}{P}}
+    \\
+    \LabTirName{SC-ParAsc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
+                             & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
+  \end{array}
+\end{mathpar}
+
 \end{document}
 
 %%% Local Variables:

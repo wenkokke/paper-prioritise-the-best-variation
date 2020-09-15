@@ -90,30 +90,6 @@
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
 \end{proof}
 
-\begin{restatablelemma}{lempcptopgvotermsoperationalcorrespondencesoundness}%
-  [Operational Correspondence, Soundness, $\cpgvM{\cdot}$]
-  \label{lem:pcp-to-pgv-terms-operational-correspondence-soundness}
-  \hfill\\%newline before lemma statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$,
-  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red\tm{Q}}$ and $\pgv{\tm{\conf{C}}\equiv\tm{\cpgvC{Q}}}$
-\end{restatablelemma}
-\begin{proof}
-  By induction on the derivation of $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$.
-  \todo{Write proof.}
-\end{proof}
-
-\begin{restatablelemma}{lempcptopgvotermsoperationalcorrespondencecompleteness}%
-  [Operational Correspondence, Completeness, $\cpgvM{\cdot}$]
-  \label{lem:pcp-to-pgv-terms-operational-correspondence-completeness}
-  \hfill\\%newline before lemma statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$ in PCP,
-  then $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\cpgvC{Q}}}$.
-\end{restatablelemma}
-\begin{proof}
-  By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-  \todo{Write proof.}
-\end{proof}
-
 \begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencesoundness}%
   [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
   \label{thm:pcp-to-pgv-confs-operational-correspondence-soundness}
