@@ -208,6 +208,28 @@ We define \emph{unbound} send:
   \end{array}
 \end{mathpar}
 
+\subsubsection{Reduction}
+\begin{mathpar}
+  \begin{array}{llcl}
+    \LabTirName{E-Lnk}     & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
+                           & \red & \tm{\subst{P}{w}{x}}
+    \\
+    \LabTirName{E-Snd}     & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}})}}
+                           & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
+    \\
+    \LabTirName{E-End}     & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
+                           & \red & \tm{\ppar{P}{Q}}
+    \\
+    \LabTirName{E-Sel\textsubscript{1}}
+                           & \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
+                           & \red & \tm{\res{x}{y}{(\ppar{P}{Q})}}
+    \\
+    \LabTirName{E-Sel\textsubscript{2}}
+                           & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
+                           & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
+  \end{array}
+\end{mathpar}
+
 \end{document}
 
 %%% Local Variables:

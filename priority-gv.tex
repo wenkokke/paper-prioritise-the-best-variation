@@ -481,17 +481,17 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
                          & \cred & \tm{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}
     \\
-    \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{\spawn\;V}}
+    \LabTirName{E-Spn}   & \tm{\plug{\conf{F}}{\spawn\;V}}
                          & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child{(V\;\unit)}}}
     \\
-    \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
+    \LabTirName{E-Snd}   & \tm{\res{x}{y}{(\ppar
                            {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
                            {\plug{\conf{F'}}{\recv\;{y}}})}}
                          & \cred & \tm{\res{x}{y}{(\ppar
                                    {\plug{\conf{F}}{x}}
                                    {\plug{\conf{F'}}{\pair{V}{y}}})}}
     \\
-    \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
+    \LabTirName{E-End}   & \tm{\res{x}{y}{(\ppar
                            {\plug{\conf{F}}{\wait\;{x}}}
                            {\plug{\conf{F'}}{\close\;{y}}})}}
                          & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
