@@ -217,8 +217,8 @@ We define \emph{unbound} send:
                                & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
     \\
     \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-                               & \equiv & \tm{\ppar{\res{x}{y}{P}}{Q}},
-                                          \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{Q})}
+                               & \equiv & \tm{\ppar{P}{\res{x}{y}{Q}}},
+                                          \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{P})}
     \\
     \LabTirName{SC-ParNil}     & \tm{\ppar{P}{\halt}}
                                & \equiv & \tm{P}
@@ -252,11 +252,11 @@ We define \emph{unbound} send:
                            & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
   \end{array}
   \\
-  \inferrule*[lab=E-Res]{
+  \inferrule*[lab=E-LiftRes]{
     \tm{P}\red\tm{P'}
   }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
 
-  \inferrule*[lab=E-Par]{
+  \inferrule*[lab=E-LiftPar]{
     \tm{P}\red\tm{P'}
   }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
 

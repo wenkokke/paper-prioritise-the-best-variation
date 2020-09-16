@@ -478,6 +478,9 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 \subsubsection{Configuration reduction}
 \begin{mathpar}
   \begin{array}{llcl}
+    \LabTirName{E-Link}  & \tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
+                         & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}
+    \\
     \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
                          & \cred & \tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}}
     \\
@@ -581,7 +584,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
   \end{description}
 \end{restatablelemma}
 \begin{proof}
-  \todo{Write proof.}
+  \admit
 \end{proof}
 
 \begin{restatabletheorem}{thmpgvopenprogressconfs}[Open Progress, $\cred$]
@@ -597,7 +600,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
   \end{description}
 \end{restatabletheorem}
 \begin{proof}
-  \todo{Write proof.}
+  \admit
 \end{proof}
 
 \end{document}
