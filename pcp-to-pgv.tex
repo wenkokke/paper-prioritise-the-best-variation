@@ -38,8 +38,14 @@
   & = & \tm{\pgv{\res{x}{y}{\cpgvC{P}}}} \\
   \tm{\cpgvC{\pcp{\ppar{P}{Q}}}}
   & = & \tm{\pgv{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
+  \tm{\cpgvC{\pcp{\send{x}{y}{P}}}}
+  & = & \tm{\pgv{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}} \\
+  \tm{\cpgvC{\pcp{\inl{x}{P}}}}
+  & = & \tm{\pgv{\res{y}{z}{(\ppar{\child\;\send\;\pair{\inl{y}}{x}}{\child\;\cpgvM{P}})}}} \\
+  \tm{\cpgvC{\pcp{\inr{x}{P}}}}
+  & = & \tm{\pgv{\res{y}{z}{(\ppar{\child\;\send\;\pair{\inr{y}}{x}}{\child\;\cpgvM{P}})}}} \\
   \tm{\cpgvC{P}}
-  & = & \tm{\pgv{\child{\cpgvM{P}}}} \\
+  & = & \tm{\pgv{\child{\cpgvM{P}}}}\quad\text{(if none of the above applies)}\\
   \\
   \tm{\cpgvM{\pcp{\link{x}{y}}}}
   & = & \tm{\pgv{\link\;{\pair{x}{y}}}} \\
@@ -88,6 +94,8 @@
 \begin{proof}
   By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
+
+  \todo{Update proof.}
 \end{proof}
 
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
@@ -99,7 +107,62 @@
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-  \admit
+
+  \todo{Finish proof.}
+
+  \begin{case*}[\LabTirName{E-Link}]
+    \begin{mathpar}
+      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}}
+      \pgv{\cred}
+      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}}
+    \end{mathpar}
+    Translated from link.
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-New}]
+    \begin{mathpar}
+      \pgv{\tm{\plug{\conf{F}}{\new\;\unit}}}
+      \pgv{\cred}
+      \pgv{\tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}}}
+    \end{mathpar}
+    Translated from send or select.
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-Spawn}]
+    \begin{mathpar}
+      \pgv{\tm{\plug{\conf{F}}{\spawn\;V}}}
+      \pgv{\cred}
+      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}}
+    \end{mathpar}
+    Translated from select.
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-Send}]
+    \begin{mathpar}
+      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{y}}})}}}
+      \pgv{\cred}
+      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{x}}{\plug{\conf{F'}}{\pair{V}{y}}})}}}
+    \end{mathpar}
+    Translated from send/recv, or select/offer.
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-Close}]
+    \begin{mathpar}
+      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\wait\;{x}}}{\plug{\conf{F'}}{\close\;{y}}})}}}
+      \pgv{\cred}
+      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
+    \end{mathpar}
+    Translated from close/wait.
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-LiftC}]
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-LiftM}]
+  \end{case*}
+
+  \begin{case*}[\LabTirName{E-LiftSC}]
+  \end{case*}
 \end{proof}
 
 \begin{restatablelemma}{lempcptopgvcpgvMcpgvCcompleteness}
@@ -109,6 +172,8 @@
 \begin{proof}
   By induction on the structure of $\pcp{\tm{P}}$.
   (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}.)
+  
+  \todo{Update proof.}
 \end{proof}
 
 \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
@@ -136,6 +201,8 @@
   We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
   \LabTirName{E-LiftSC}. 
   (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
+  
+  \todo{Update proof.}
 \end{proof}
 
 \end{document}

@@ -141,14 +141,14 @@ We define types for internal and external choice, and their corresponding commun
 \end{array}
 \]
 \[
-\begin{array}{lcl}
+\begin{array}{l}
   \tm{\select{\ell}}
-  & \elabarrow & \tm{\lambda x.\fork\;{(\lambda y.\send\;{\pair{\ell\;y}{x}})}} \\
+  \\
+  \qquad\elabarrow\tm{\lambda x.\fork\;{(\lambda y.\send\;{\pair{\ell\;y}{x}})}}
+  \\
   \tm{\offer{L}{x}{M}{y}{N}}
-  & \elabarrow & \tm{\letpair{z}{w}{\recv\;{L}}{\wait\;{w};}} \\
-  &            & \quad\tm{\casesum{z}{x}{M}{y}{N}} \\
-  \tm{\offeremp{L}}
-  & \elabarrow & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
+  \\
+  \qquad\elabarrow\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}
 \end{array}
 \]
 
