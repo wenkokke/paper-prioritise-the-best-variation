@@ -112,9 +112,7 @@
 \end{proof}
 
 \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
-  [Operational Correspondence, $\equiv$]
   \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
-  \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
 \end{restatablelemma}
@@ -132,6 +130,11 @@
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
+  We apply \cref{lem:pcp-to-pgv-cpgvM-cpgvC-completeness} for the cases in which
+  the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$,
+  \ie under actions.
+  We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
+  \LabTirName{E-LiftSC}. 
   (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
 \end{proof}
 
