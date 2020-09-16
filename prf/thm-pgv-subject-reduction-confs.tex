@@ -28,7 +28,7 @@
       }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}}
   \end{mathpar}
   \end{case*}
-  \begin{case*}[\LabTirName{E-Spn}]
+  \begin{case*}[\LabTirName{E-Spawn}]
     \small
     \begin{mathpar}
       \inferrule*{
@@ -60,10 +60,10 @@
       }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\plug{\conf{F}}{\unit}}{\child\;(V\;\unit)}}}
     \end{mathpar}
   \end{case*}
-  \begin{case*}[\LabTirName{E-Snd}]
+  \begin{case*}[\LabTirName{E-Send}]
     See \cref{fig:pgv-subject-reduction-cred-send}.
   \end{case*}
-  \begin{case*}[\LabTirName{E-End}]
+  \begin{case*}[\LabTirName{E-Close}]
     See \cref{fig:pgv-subject-reduction-cred-close}.
   \end{case*}
   \begin{case*}[\LabTirName{E-LiftC}]
@@ -155,7 +155,7 @@
             {\plug{\conf{F}}{x}}
             {\plug{\conf{F'}}{\pair{V}{y}}})}}}
     \end{mathpar}
-  \caption{Subject Reduction (\LabTirName{E-Snd})}
+  \caption{Subject Reduction (\LabTirName{E-Send})}
   \label{fig:pgv-subject-reduction-cred-send}
 \end{figure}
 \begin{figure}[ht!]
@@ -216,7 +216,7 @@
         {\ty{\Gamma},\ty{\Delta}}
         {\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
     \end{mathpar}
-  \caption{Subject Reduction (\LabTirName{E-Cls})}
+  \caption{Subject Reduction (\LabTirName{E-Close})}
   \label{fig:pgv-subject-reduction-cred-close}
 \end{figure}
 \end{landscape}

@@ -2,6 +2,7 @@
 
 % Document preparation
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO:}~#1}}
+\newcommand{\admit}{\textcolor{red}{\textit{Admitted.}}}
 
 % Typesetting
 \usepackage[all]{foreign}
@@ -19,6 +20,8 @@
 \usepackage{cmll}
 \usepackage{mathtools}
 \usepackage{environ}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows,automata,shapes,shapes.geometric}
 
 % Subfiles and namespaces
 \usepackage{subfiles}
@@ -294,6 +297,9 @@ To be written last\dots
 
   \restatetheorem{thmpcptopgvconfspreservation}
   \input{prf/thm-pcp-to-pgv-confs-preservation}
+
+  \restatelemma{lempcptopgvcpgvMcpgvCcompleteness}
+  \input{prf/lem-pcp-to-pgv-cpgvM-cpgvC-completeness}
 
   \restatetheorem{thmpcptopgvoconfsoperationalcorrespondencesoundness}
 

@@ -2,7 +2,7 @@
   \label{prf:lem-pgv-subject-congruence}
   By induction on the derivation of $\tm{\conf{C}}\equiv\tm{\conf{C'}}$.
 
-  \begin{case*}[\LabTirName{SC-LnkSwp}]
+  \begin{case*}[\LabTirName{SC-LinkSwap}]
     \begin{mathpar}
       \inferrule*{
         \inferrule*[vdots=1.5em]{
@@ -60,11 +60,11 @@
     \end{mathpar}
   \end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResSwp}]
+  \begin{case*}[\LabTirName{SC-ResSwap}]
     \todo{Write proof.}
   \end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResCom}]
+  \begin{case*}[\LabTirName{SC-ResComm}]
     \begin{mathpar}
       \inferrule*{
         \inferrule*{
@@ -95,7 +95,7 @@
     \end{mathpar}
   \end{case*}
 
-  \begin{case*}[\LabTirName{SC-ParCom}]
+  \begin{case*}[\LabTirName{SC-ParComm}]
     \begin{mathpar}
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
@@ -111,8 +111,7 @@
     \end{mathpar}
   \end{case*}
 
-
-  \begin{case*}[\LabTirName{SC-ParAsc}]
+  \begin{case*}[\LabTirName{SC-ParAssoc}]
     \begin{mathpar}
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}

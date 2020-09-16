@@ -61,7 +61,7 @@
   & = & \tm{\pgv{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
   \tm{\cpgvM{\pcp{\inr{x}{P}}}}
   & = & \tm{\pgv{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}
+  \multicolumn{3}{l}{\tm{\cpgvM{\pcp{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
   & = & \tm{\pgv{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}}
 \end{array}
 \]
@@ -99,7 +99,16 @@
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-  \todo{Write proof.}
+  \admit
+\end{proof}
+
+\begin{restatablelemma}{lempcptopgvcpgvMcpgvCcompleteness}
+  \label{lem:pcp-to-pgv-cpgvM-cpgvC-completeness}
+  $\pgv{\tm{\child\;\cpgvM{P}}\cred^\star\tm{\cpgvC{P}}}$.
+\end{restatablelemma}
+\begin{proof}
+  By induction on the structure of $\pcp{\tm{P}}$.
+  (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}.)
 \end{proof}
 
 \begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencecompleteness}%
@@ -107,11 +116,80 @@
   \label{thm:pcp-to-pgv-confs-operational-correspondence-completeness}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$ in PCP,
-  then $\pgv{\tm{\cpgvC{P}}\cred\tm{\cpgvC{Q}}}$.
+  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-  \todo{Write proof.}
+  \begin{case*}[\LabTirName{E-Lnk}]
+    \begin{mathpar}
+      \begin{tikzcd}[cramped, column sep=small]
+        \pcp{\tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}}
+        \arrow[r, "\pcp{\red}"]
+        &
+        \pcp{\tm{\subst{P}{w}{x}}}
+      \end{tikzcd}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Snd}]
+    \[\pcp{%
+      \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
+      \red
+      \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-End}]
+    \[\pcp{%
+      \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
+      \red
+      \tm{\ppar{P}{Q}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Sel\textsubscript{1}}]
+    \[\pcp{%
+      \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
+      \red
+      \tm{\res{x}{y}{(\ppar{P}{Q})}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Sel\textsubscript{2}}]
+    \[\pcp{%
+      \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
+      \red
+      \tm{\res{x}{y}{(\ppar{P}{R})}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Res}]
+    \[\pcp{%
+      \inferrule*{
+        \tm{P}\red\tm{P'}
+      }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Par}]
+    \[\pcp{%
+      \inferrule*{
+        \tm{P}\red\tm{P'}
+      }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
+    }\]
+    \admit
+  \end{case*}
+  \begin{case*}[\LabTirName{E-LiftSC}]
+    \[\pcp{%
+      \inferrule*{
+        \tm{P}\equiv\tm{P'}
+        \\
+        \tm{P'}\red\tm{Q'}
+        \\
+        \tm{Q'}\equiv\tm{Q}
+      }{\tm{P}\red\tm{Q}}
+    }\]
+    \admit
+  \end{case*}
 \end{proof}
 
 \end{document}
@@ -119,3 +197,4 @@
 %%% Local Variables:
 %%% TeX-master: "priorities"
 %%% End:
+ 

@@ -1,7 +1,7 @@
 \begin{proof}
   \label{prf:lem-pcp-to-pgv-terms-preservation}
   By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
-  \begin{case*}[\LabTirName{T-Ax}, \LabTirName{T-Cut}, \LabTirName{T-Mix}, and \LabTirName{T-Halt}]
+  \begin{case*}[\LabTirName{T-Link}, \LabTirName{T-Res}, \LabTirName{T-Par}, and \LabTirName{T-Halt}]
     See \cref{fig:pcp-to-pgv-preservation}.
   \end{case*}
   \begin{case*}[\LabTirName{T-Close}, and \LabTirName{T-Wait}]
@@ -21,8 +21,8 @@
 \begin{figure}
 \small
 \begin{mathpar}
-  % Translation for Ax
-  \pcp{\inferrule*[lab=T-Ax]{
+  % Translation for Link
+  \pcp{\inferrule*[lab=T-Link]{
     }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A}, \tmty{y}{\co{A}}}}}
   \cpgvMarrow
   \pgv{\inferrule*{
@@ -50,8 +50,8 @@
       {\link\;{\pair{x}{y}}}
       {\tyunit}}}
 
-  % Translation for Cut
-  \pcp{\inferrule*[lab=T-Cut]{
+  % Translation for Res
+  \pcp{\inferrule*[lab=T-Res]{
       \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
     }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}}
   \cpgvMarrow
@@ -82,7 +82,7 @@
       {\tyunit}}}
 
   % Translation for Mix
-  \pcp{\inferrule*[lab=T-Mix]{
+  \pcp{\inferrule*[lab=T-Par]{
       \seq{\tm{P}}{\ty{\Gamma}}
       \\
       \seq{\tm{Q}}{\ty{\Delta}}
@@ -123,7 +123,7 @@
   \pgv{\inferrule*{
     }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}}
 \end{mathpar}
-\caption{Translation $\cpgvM{\cdot}$ preserves typing (\LabTirName{T-Ax}, \LabTirName{T-Cut}, \LabTirName{T-Mix}, and \LabTirName{T-Halt}).}
+\caption{Translation $\cpgvM{\cdot}$ preserves typing (\LabTirName{T-Link}, \LabTirName{T-Res}, \LabTirName{T-Par}, and \LabTirName{T-Halt}).}
 \label{fig:pcp-to-pgv-preservation}
 \end{figure}
 \begin{figure}
