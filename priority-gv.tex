@@ -454,6 +454,9 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     \LabTirName{SC-LinkSwap}   & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
                                & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
     \\
+    \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{(\phi\;\link\;\pair{x}{y})}}
+                               & \equiv & \tm{\phi\;\unit}
+    \\
     \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{\conf{C}}}
                                & \equiv & \tm{\res{y}{x}{\conf{C}}}
     \\

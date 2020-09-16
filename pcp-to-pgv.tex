@@ -90,7 +90,7 @@
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
 \end{proof}
 
-\begin{restatabletheorem}{thmpcptopgvooperationalcorrespondencesoundness}%
+\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
   [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
   \label{thm:pcp-to-pgv-operational-correspondence-soundness}
   \hfill\\%newline before theorem statement
@@ -113,14 +113,14 @@
 
 \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
   [Operational Correspondence, $\equiv$]
-  \hfill\\%newline before theorem statement
   \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
+  \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
 \end{restatablelemma}
 \begin{proof}
-  By induction on the derivation of $\pcp{\tm{P}\equiv\tm{Q}}$.
-  \admit
+  \label{prf:lem-pcp-to-pgv-confs-operational-correspondence-equiv}
+  Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
 \end{proof}
 
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
