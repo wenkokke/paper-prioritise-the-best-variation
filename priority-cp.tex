@@ -103,7 +103,6 @@ Both functions are defined as expected below.
   \\   & \sep & \tm{\inl{x}{P}}
          \sep   \tm{\inr{x}{P}}
          \sep   \tm{\offer{x}{P}{Q}}
-         \sep   \tm{\absurd{x}}
 \end{array}
 \]
 
@@ -120,7 +119,7 @@ We define \emph{unbound} send:
   \inferrule*[lab=T-Link]{
   }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A},\tmty{y}{\co{A}}}}
 
-  \inferrule*[lab=T-New]{
+  \inferrule*[lab=T-Res]{
     \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
   }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
   \\
@@ -180,10 +179,6 @@ We define \emph{unbound} send:
     \\
     \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
   }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Offer-Absurd]{
-    \cs{o}<\pr(\ty{\Gamma})
-  }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
 \end{mathpar}
 
 \subsubsection{Typing Rules for Syntactic Sugar}
@@ -209,50 +204,50 @@ We define \emph{unbound} send:
 \subsubsection{Structural congruence}
 \begin{mathpar}
   \begin{array}{llcl}
-    \LabTirName{SC-LnkSwp}   & \tm{\link{x}{y}}
-                             & \equiv & \tm{\link{y}{x}}
+    \LabTirName{SC-LinkSwap}   & \tm{\link{x}{y}}
+                               & \equiv & \tm{\link{y}{x}}
     \\
-    \LabTirName{SC-ResLnk}   & \tm{\res{x}{y}{\link{x}{y}}}
-                             & \equiv & \tm{\halt}
+    \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{\link{x}{y}}}
+                               & \equiv & \tm{\halt}
     \\
-    \LabTirName{SC-ResExt}   & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-                             & \equiv & \tm{\ppar{\res{x}{y}{P}}{Q}},
-                                        \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{Q})}
+    \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{P}}
+                               & \equiv & \tm{\res{y}{x}{P}}
     \\
-    \LabTirName{SC-ResSwp}   & \tm{\res{x}{y}{P}}
-                             & \equiv & \tm{\res{y}{x}{P}}
+    \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{P}}}
+                               & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
     \\
-    \LabTirName{SC-ResCom}   & \tm{\res{x}{y}{\res{z}{w}{P}}}
-                             & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
+    \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{P}{Q})}}
+                               & \equiv & \tm{\ppar{\res{x}{y}{P}}{Q}},
+                                          \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{Q})}
     \\
-    \LabTirName{SC-ParNil}   & \tm{\ppar{P}{\halt}}
-                             & \equiv & \tm{P}
+    \LabTirName{SC-ParNil}     & \tm{\ppar{P}{\halt}}
+                               & \equiv & \tm{P}
     \\
-    \LabTirName{SC-ParCom}   & \tm{\ppar{P}{Q}}
-                             & \equiv & \tm{\ppar{Q}{P}}
+    \LabTirName{SC-ParComm}    & \tm{\ppar{P}{Q}}
+                               & \equiv & \tm{\ppar{Q}{P}}
     \\
-    \LabTirName{SC-ParAsc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
-                             & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
+    \LabTirName{SC-ParAssoc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
+                               & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
   \end{array}
 \end{mathpar}
 
 \subsubsection{Reduction}
 \begin{mathpar}
   \begin{array}{llcl}
-    \LabTirName{E-Lnk}     & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
+    \LabTirName{E-Link}    & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
                            & \red & \tm{\subst{P}{w}{x}}
     \\
-    \LabTirName{E-Snd}     & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
+    \LabTirName{E-Send}    & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
                            & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
     \\
-    \LabTirName{E-End}     & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
+    \LabTirName{E-Close}   & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
                            & \red & \tm{\ppar{P}{Q}}
     \\
-    \LabTirName{E-Sel\textsubscript{1}}
+    \LabTirName{E-Select-Inl}
                            & \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
                            & \red & \tm{\res{x}{y}{(\ppar{P}{Q})}}
     \\
-    \LabTirName{E-Sel\textsubscript{2}}
+    \LabTirName{E-Select-Inr}
                            & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
                            & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
   \end{array}
@@ -272,7 +267,6 @@ We define \emph{unbound} send:
     \\
     \tm{Q'}\equiv\tm{Q}
   }{\tm{P}\red\tm{Q}}
-
 \end{mathpar}
 
 \end{document}

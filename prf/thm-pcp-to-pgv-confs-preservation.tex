@@ -2,11 +2,11 @@
   \label{prf:thm-pcp-to-pgv-confs-preservation}
   By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
 
-  \begin{case*}[\LabTirName{T-Cut}]
+  \begin{case*}[\LabTirName{T-Res}]
     Immediately, from the induction hypothesis.
     \small
     \begin{mathpar}
-      \pcp{\inferrule*[lab=T-Cut]{
+      \pcp{\inferrule*[lab=T-Res]{
           \seq{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}{\tm{P}}
         }{\seq{\ty{\Gamma}}{\tm{\res{x}{y}{P}}}}}
       \cpgvCarrow
@@ -15,10 +15,10 @@
         }{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\res{x}{y}{\cpgvC{P}}}}}}
     \end{mathpar}
   \end{case*}
-  \begin{case*}[\LabTirName{T-Mix}]
+  \begin{case*}[\LabTirName{T-Par}]
     Immediately, from the induction hypotheses.
     \begin{mathpar}
-      \pcp{\inferrule*[lab=T-Mix]{
+      \pcp{\inferrule*[lab=T-Par]{
           \seq{\ty{\Gamma}}{\tm{P}}
           \\
           \seq{\ty{\Delta}}{\tm{Q}}

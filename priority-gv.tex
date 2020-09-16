@@ -451,27 +451,27 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 \subsubsection{Structural congruence}
 \begin{mathpar}
   \begin{array}{llcl}
-    \LabTirName{SC-LnkSwp}   & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
-                             & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
+    \LabTirName{SC-LinkSwap}   & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
+                               & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
     \\
-    \LabTirName{SC-ResExt}   & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
-                             & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
-                                        \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
+    \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{\conf{C}}}
+                               & \equiv & \tm{\res{y}{x}{\conf{C}}}
     \\
-    \LabTirName{SC-ResSwp}   & \tm{\res{x}{y}{\conf{C}}}
-                             & \equiv & \tm{\res{y}{x}{\conf{C}}}
+    \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
+                               & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
     \\
-    \LabTirName{SC-ResCom}   & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
-                             & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
+    \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
+                               & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
+                                          \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
     \\
-    \LabTirName{SC-ParNil}   & \tm{\ppar{\conf{C}}{\child{\unit}}}
-                             & \equiv & \tm{\conf{C}}
+    \LabTirName{SC-ParNil}     & \tm{\ppar{\conf{C}}{\child{\unit}}}
+                               & \equiv & \tm{\conf{C}}
     \\
-    \LabTirName{SC-ParCom}   & \tm{\ppar{\conf{C}}{\conf{D}}}
-                             & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
+    \LabTirName{SC-ParComm}    & \tm{\ppar{\conf{C}}{\conf{D}}}
+                               & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
     \\
-    \LabTirName{SC-ParAsc}   & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
-                             & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
+    \LabTirName{SC-ParAssoc}   & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
+                               & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
   \end{array}
 \end{mathpar}
 
@@ -479,19 +479,19 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
 \begin{mathpar}
   \begin{array}{llcl}
     \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
-                         & \cred & \tm{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}
+                         & \cred & \tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}}
     \\
-    \LabTirName{E-Spn}   & \tm{\plug{\conf{F}}{\spawn\;V}}
-                         & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child{(V\;\unit)}}}
+    \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{\spawn\;V}}
+                         & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}
     \\
-    \LabTirName{E-Snd}   & \tm{\res{x}{y}{(\ppar
+    \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
                            {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
                            {\plug{\conf{F'}}{\recv\;{y}}})}}
                          & \cred & \tm{\res{x}{y}{(\ppar
                                    {\plug{\conf{F}}{x}}
                                    {\plug{\conf{F'}}{\pair{V}{y}}})}}
     \\
-    \LabTirName{E-End}   & \tm{\res{x}{y}{(\ppar
+    \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
                            {\plug{\conf{F}}{\wait\;{x}}}
                            {\plug{\conf{F'}}{\close\;{y}}})}}
                          & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
@@ -505,7 +505,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     \tm{M}\tred\tm{M'}
   }{\tm{\plug{\conf{F}}{M}}\tred\tm{\plug{\conf{F}}{M'}}}
 
-  \inferrule*[lab=E-LiftE]{
+  \inferrule*[lab=E-LiftSC]{
     \tm{\conf{C}}\equiv\tm{\conf{C'}}
     \\
     \tm{\conf{C'}}\cred\tm{\conf{D'}}
@@ -576,7 +576,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
     $\tm{M}$ is a value;
   \item[Step]
     There exists some $\tm{N}$ such that $\tm{M}\tred\tm{N}$; or
-  \item[Blocked] \label{lem:pgv-progress-terms:blocked}
+  \item[Blocked]
     There exists some $\tm{E}$ and $\tm{R}$ such that $\tm{M}=\tm{\plug{E}{R}}$.
   \end{description}
 \end{restatablelemma}
@@ -589,7 +589,7 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
   If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, then either:
   \begin{description}[labelwidth=8ex]
   \item[Done]
-    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\main\;V}$;
+    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$;
   \item[Step]
     There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
   \item[Blocked]

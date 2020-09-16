@@ -1,0 +1,48 @@
+\begin{proof}
+  \label{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}
+  By induction on the structure of $\pcp{\tm{P}}$.
+
+  \begin{case*}[$\pcp{\tm{\res{x}{y}{P}}}$]
+    \begin{mathpar}
+      \begin{array}{lrll}
+        \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
+        & =
+        & \pgv{\tm{\child\;\letpair{x}{y}{\new}{\cpgvM{P}}}}
+        \\
+        & \pgv{\cred^+}
+        & \pgv{\tm{\res{x}{y}{(\child\;\cpgvM{P})}}}
+        \\
+        & \pgv{\cred^\star}
+        & \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
+        \\
+        & =
+        & \pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+      \end{array}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[$\pcp{\tm{\ppar{P}{Q}}}$]
+    \begin{mathpar}
+      \begin{array}{lrll}
+        \pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
+        & =
+        & \pgv{\tm{\child\;\andthen{\spawn\;(\lambda\unit.\cpgvM{P})}{\cpgvM{Q}}}}
+        \\
+        & \pgv{\cred^+}
+        & \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
+        \\
+        & \pgv{\cred^\star}
+        & \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+        \\
+        & =
+        & \pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+      \end{array}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[$\pcp{\tm{P}}$]
+    By reflexivity.
+  \end{case*}
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:
