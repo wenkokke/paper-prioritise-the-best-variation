@@ -14,9 +14,23 @@
   \vspace{-4mm}
   \end{figure}
 
-\subsection{Syntax}
+In this section we present an updated version of Priority CP \cite{DardhaG18}, which is Wadler's Classical Processes \cite{W12} with \emph{priorities}.
+Some details of the calculus are inspired by Carbone \emph{et al.} \cite{CLMSW16} and Caires and P\'{e}rez \cite{CP17}.
 
+\subsection{Syntax}
 \subsubsection{Priorities, types, and environments}
+Types are based on CLL and range over $\ty{A}, \ty{B}, \ty{C}$.
+Types are annotated with priorities which range over $\cs{o} \in \mathbb{N} \sqcup \{\omega\}$.
+Let $\omega$ be a special element such that $\cs{o}<\omega$ for all $\cs{o}\in \mathbb{N}$.
+Often, we will omit $\omega$ when not necessary.
+\todo{check the omega thing is also part of our presentation}
+Types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$
+are used to type channel endpoints which are ready to be closed.
+Types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ are used to... 
+Type $\ty{\tytens[\cs{o}]{A}{B}}$ (respectively, $\ty{\typarr[\cs{o}]{A}{B}}$) is used to type a channel endpoint that first {outputs} (respectively, {inputs}) a channel of type $\ty A$ and then proceeds as $\ty B$.
+$\ty{\typlus[\cs{o}]{A}{B}}$ is used to type a channel endpoint over which we can {select} either the \emph{left} branch and proceed as $\ty A$ or the \emph{right} branch and proceed as $\ty B$.
+$\ty{\tywith[\cs{o}]{A}{B}}$ is used to type a channel endpoint that can offer a both $\ty A$ and $\ty B$.
+A typing context $\ty\Gamma$ is a partial function associating channel names to types.
 \[
 \begin{array}{lcl}
   \ty{A}, \ty{B}, \ty{C}
@@ -34,6 +48,8 @@
     \sep        \ty{\Gamma}, \tmty{x}{A}
 \end{array}
 \]
+
+Duality on types is a total function and is defined below. It preserves priorities of types.
 \[
 \begin{array}{lcl}
   \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
@@ -49,6 +65,9 @@
   \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
 \end{array}
 \]
+
+Finally, function $\pr(\cdot)$ defined over types returns the priority of that type; function $\minpr(\cdot)$ defined over typing contexts returns the \emph{minimum} priority of all types in that context.
+Both functions are defined as expected below.
 \[
 \begin{array}{lclclcl}
   \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o}  \\
