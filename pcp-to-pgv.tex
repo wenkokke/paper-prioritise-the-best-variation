@@ -90,9 +90,9 @@
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
 \end{proof}
 
-\begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencesoundness}%
+\begin{restatabletheorem}{thmpcptopgvooperationalcorrespondencesoundness}%
   [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-confs-operational-correspondence-soundness}
+  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
   there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red\tm{Q}}$ and $\pgv{\tm{\conf{C}}\equiv\tm{\cpgvC{Q}}}$
@@ -111,7 +111,7 @@
   (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}.)
 \end{proof}
 
-\begin{restatablelemma}{lempcptopgvconfsoperationalcorrespondenceequiv}%
+\begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
   [Operational Correspondence, $\equiv$]
   \hfill\\%newline before theorem statement
   \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
@@ -123,16 +123,16 @@
   \admit
 \end{proof}
 
-\begin{restatabletheorem}{thmpcptopgvoconfsoperationalcorrespondencecompleteness}%
+\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
   [Operational Correspondence, Completeness, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-confs-operational-correspondence-completeness}
+  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-  (Details in \cref{prf:thm-pcp-to-pgv-confs-operational-correspondence-completeness}.)
+  (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
 \end{proof}
 
 \end{document}
