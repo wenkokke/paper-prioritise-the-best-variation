@@ -190,62 +190,7 @@
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinl}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S}}}
   \elabarrow
   \\
-  \inferrule*[lab=(a)]{
-    \inferrule*{
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]
-        {\tmty{y}{\co{S}}}
-        {y}
-        {\co{S}}}
-      \\
-      \inferrule*{
-      }{\pr(\ty{\co{S}})=\pr(\ty{\co{S'}})}
-    }{\tseq[\cs{\pbot}]
-      {\tmty{y}{\co{S}}}
-      {\inl{y}}
-      {\tysum{\co{S}}{\co{S'}}}}
-    \\
-    \inferrule*{
-    }{\tseq[\cs{\pbot}]
-      {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-      {x}
-      {\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-  }{\tseq[\cs{\pbot}]
-    {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}},\tmty{y}{\co{S}}}
-    {\pair{\inl{y}}{x}}
-    {\typrod{(\tysum{\co{S}}{\co{S'}})}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}}
-  \\
-  \inferrule*{
-    \inferrule*{
-      \inferrule*{
-      }{\tmty{\fork}{\tylolli[]
-          {(\tylolli[\cs{o},\cs{o}]{\co{S}}{\tyunit})}
-          {S}}}
-      \\
-      \inferrule*{
-        \inferrule*{
-          \inferrule*{
-          }{\tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]
-              {\typrod{(\tysum{\co{S}}{\co{S'}})}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-              {\tyends[\cs{o+1}]}}}
-          \\
-          \LabTirName{(a)}
-        }{\tseq[\cs{o}]
-          {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}},\tmty{y}{\co{S}}}
-          {\send\;{\pair{\inl{y}}{x}}}
-          {\tyunit}}
-      }{\tseq[\cs{\pbot}]
-        {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-        {\lambda y.\send\;{\pair{\inl{y}}{x}}}
-        {\tylolli[\cs{o},\cs{o}]{\co{S}}{\tyunit}}}
-    }{\tseq[\cs{o}]
-      {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-      {\fork\;{(\lambda y.\send\;{\pair{\inl{y}}{x}})}}
-      {S}}
-  }{\tseq[\cs{\pbot}]
-    {\emptyenv}
-    {\lambda x.\fork\;{(\lambda y.\send\;{\pair{\inl{y}}{x}})}}
-    {\tylolli[\cs{\ptop},\cs{o}]{\tysend[\cs{o}]{(\tysum{S}{S'})}{\tyends[\cs{o+1}]}}{S}}}
+  \admit
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Select-Inl}).}
 \label{fig:pgv-typing-sugar-select-inl}
@@ -261,61 +206,7 @@
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinr}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S'}}}
   \elabarrow
   \\
-  \inferrule*[lab=(a)]{
-    \inferrule*{
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]
-        {\tmty{y}{\co{S'}}}
-        {y}
-        {\co{S'}}}
-    }{\tseq[\cs{\pbot}]
-      {\tmty{y}{\co{S'}}}
-      {\inr{y}}
-      {\tysum{\co{S}}{\co{S'}}}}
-    \\
-    \inferrule*{
-    }{\tseq[\cs{\pbot}]
-      {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-      {x}
-      {\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-  }{\tseq[\cs{\pbot}]
-    {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}},\tmty{y}{\co{S'}}}
-    {\pair{\inr{y}}{x}}
-    {\typrod{(\tysum{\co{S}}{\co{S'}})}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}}
-  \\
-  \inferrule*{
-    \inferrule*{
-      \inferrule*{
-      }{\tmty{\fork}
-        {\tylolli[]
-          {(\tylolli[\cs{o},\cs{o}]{\co{S'}}{\tyunit})}
-          {S'}}}
-      \\
-      \inferrule*{
-        \inferrule*{
-          \inferrule*{
-          }{\tmty{\send}
-            {\tylolli[\cs{\ptop},\cs{o}]
-              {\typrod{(\tysum{\co{S}}{\co{S'}})}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-              {\tyends[\cs{o+1}]}}}
-          \\
-          \LabTirName{(a)}
-        }{\tseq[\cs{o}]
-          {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}},\tmty{y}{\co{S'}}}
-          {\send\;{\pair{\inr{y}}{x}}}
-          {\tyunit}}
-      }{\tseq[\cs{\pbot}]
-        {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-        {\lambda y.\send\;{\pair{\inr{y}}{x}}}
-        {\tylolli[\cs{o},\cs{o}]{\co{S'}}{\tyunit}}}
-    }{\tseq[\cs{o}]
-      {\tmty{x}{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}}
-      {\fork\;{(\lambda y.\send\;{\pair{\inr{y}}{x}})}}
-      {S'}}
-  }{\tseq[\cs{\pbot}]
-      {\emptyenv}
-      {\lambda x.\fork\;{(\lambda y.\send\;{\pair{\inr{y}}{x}})}}
-      {\tylolli[\cs{\ptop},\cs{o}]{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}}{S'}}}
+  \admit
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Select-Inr}).}
 \label{fig:pgv-typing-sugar-select-inr}

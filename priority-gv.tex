@@ -100,13 +100,20 @@
 
 \subsubsection{Syntactic Sugar}%
 \label{sec:pgv-syntax-sugar}
-We define the type of pure functions, \ie functions which perform no communication:
-\[
-  \ty{\tylolli{T}{U}} \elabarrow \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}
-\]
-We define sequential composition, let-binding, and various pattern matching lambda abstractions:
+We define the type of pure functions, \ie functions which perform no communication, and types for internal and external choice. Furthermore, we define term constructs for sequential composition, let-binding, various pattern matching lambda abstractions, fork, which combines channel creation and thread spawning in one construct, and internal and external choice.
 \[
 \begin{array}{lcl}
+  \ty{\tylolli{T}{U}}
+  & \elabarrow & \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}} \\
+  \ty{\tyselect[\cs{o}]{S}{S'}}
+  & \elabarrow & \ty{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}} \\
+  \ty{\tyoffer[\cs{o}]{S}{S'}}
+  & \elabarrow & \ty{\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}} \\
+  \ty{\tyselectemp[\cs{o}]}
+  & \elabarrow & \ty{\tysend[\cs{o}]{\tyvoid}{\tyends[\cs{o+1}]}} \\
+  \ty{\tyofferemp[\cs{o}]}
+  & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
+  \\
   \tm{\andthen{M}{N}}
   & \elabarrow & \tm{\letunit{M}{N}} \\
   \tm{\letbind{x}{M}{N}}
@@ -114,41 +121,16 @@ We define sequential composition, let-binding, and various pattern matching lamb
   \tm{\lambda\unit.M}
   & \elabarrow & \tm{\lambda z.\letunit{z}{M}} \\
   \tm{\lambda\pair{x}{y}.M}
-  & \elabarrow & \tm{\lambda z.\letpair{x}{y}{z}{M}}
-\end{array}
-\]
-We define fork, which combines channel creation and thread spawning in one construct:
-\[
-\begin{array}{lcl}
+  & \elabarrow & \tm{\lambda z.\letpair{x}{y}{z}{M}} \\
   \tm{\fork}
-  & \elabarrow & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
-\end{array}
-\]
-We define types for internal and external choice, and their corresponding communication constructs:
-\[
-\begin{array}{lcl}
-  \ty{\tyselect[\cs{o}]{S}{S'}}
-  & \elabarrow & \ty{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}} \\
-  \ty{\tyoffer[\cs{o}]{S}{S'}}
-  & \elabarrow & \ty{\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}
-\end{array}
-\qquad
-\begin{array}{lcl}
-  \ty{\tyselectemp[\cs{o}]}
-  & \elabarrow & \ty{\tysend[\cs{o}]{\tyvoid}{\tyends[\cs{o+1}]}} \\
-  \ty{\tyofferemp[\cs{o}]}
-  & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
-\end{array}
-\]
-\[
-\begin{array}{l}
+  & \elabarrow & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}} \\
   \tm{\select{\ell}}
-  \\
-  \qquad\elabarrow\tm{\lambda x.\fork\;{(\lambda y.\send\;{\pair{\ell\;y}{x}})}}
-  \\
-  \tm{\offer{L}{x}{M}{y}{N}}
-  \\
-  \qquad\elabarrow\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}
+  & \elabarrow & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\ell\;y}{x}})}{z}}} \\
+  \multicolumn{3}{l}{\tm{\offer{L}{x}{M}{y}{N}}\elabarrow} \\
+  \multicolumn{3}{l}{
+  \qquad\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}} \\
+  \tm{\offeremp{L}}
+  & \elabarrow & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
 \end{array}
 \]
 
@@ -599,7 +581,8 @@ We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing deriva
   \item[Step]
     There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
   \item[Blocked]
-    There exist $\tm{x_i}$ and $\tm{y_i}$ for $0\leq{i}\leq{n}$, and $\tm{\phi_j}$ and $\tm{R_j}$ for $0\leq{j}\leq{m}$, such that $\tm{\conf{C}}=\tm{\res{x_1y_1\dots x_ny_n}{}{(\phi_1R_1 \parallel\dots\parallel \phi_mR_m)}}$ and for each $\tm{R_j}$ there exists some $\tm{a_j}\in\fn(\ty{\Gamma})$ such that $\blocked(\tm{a_j},\tm{R_j})$.
+    We have $\tm{\conf{C}}\equiv\tm{\res{x_1y_1\dots x_ny_n}{}{(\phi_1R_1 \parallel\dots\parallel \phi_mR_m)}}$,\\
+    and for some $\tm{R_j}$ and $\tm{a_j}\in\fn(\ty{\Gamma})$, $\blocked(\tm{a_j},\tm{R_j})$.
   \end{description}
 \end{restatabletheorem}
 \begin{proof}

@@ -103,6 +103,7 @@ Both functions are defined as expected below.
   \\   & \sep & \tm{\inl{x}{P}}
          \sep   \tm{\inr{x}{P}}
          \sep   \tm{\offer{x}{P}{Q}}
+         \sep   \tm{\absurd{x}}
 \end{array}
 \]
 
@@ -179,6 +180,10 @@ We define \emph{unbound} send:
     \\
     \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
   }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
+
+  \inferrule*[lab=T-Offer-Absurd]{
+    \cs{o}<\pr(\ty{\Gamma})
+  }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
 \end{mathpar}
 
 \subsubsection{Typing Rules for Syntactic Sugar}

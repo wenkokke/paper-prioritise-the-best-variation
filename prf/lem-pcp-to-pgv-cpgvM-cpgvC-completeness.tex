@@ -38,6 +38,57 @@
       \end{array}
     \end{mathpar}
   \end{case*}
+  \begin{case*}[$\pcp{\tm{\send{x}{y}{P}}}$]
+    \begin{mathpar}
+      \begin{array}{lrll}
+        \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+        & =
+        & \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}}
+        \\
+        & \pgv{\cred^+}
+        & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
+        \\
+        & =
+        & \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+      \end{array}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[$\pcp{\tm{\inl{x}{P}}}$]
+    \begin{mathpar}
+      \begin{array}{lrll}
+        \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+        & =
+        & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}}
+        \\
+        & \elabarrow
+        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}}{\cpgvM{P}}}}
+        \\
+        & \pgv{\cred^+}
+        & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
+        \\
+        & =
+        & \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+      \end{array}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[$\pcp{\tm{\inr{x}{P}}}$]
+    \begin{mathpar}
+      \begin{array}{lrll}
+        \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+        & =
+        & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}}
+        \\
+        & \elabarrow
+        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}}{\cpgvM{P}}}}
+        \\
+        & \pgv{\cred^+}
+        & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
+        \\
+        & =
+        & \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+      \end{array}
+    \end{mathpar}
+  \end{case*}
   \begin{case*}[$\pcp{\tm{P}}$]
     By reflexivity.
   \end{case*}

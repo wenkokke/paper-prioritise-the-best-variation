@@ -34,41 +34,43 @@
 \paragraph{Translation on terms}
 \[
 \begin{array}{lcl}
-  \tm{\cpgvC{\pcp{\res{x}{y}{P}}}}
-  & = & \tm{\pgv{\res{x}{y}{\cpgvC{P}}}} \\
-  \tm{\cpgvC{\pcp{\ppar{P}{Q}}}}
-  & = & \tm{\pgv{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
-  \tm{\cpgvC{\pcp{\send{x}{y}{P}}}}
-  & = & \tm{\pgv{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}} \\
-  \tm{\cpgvC{\pcp{\inl{x}{P}}}}
-  & = & \tm{\pgv{\res{y}{z}{(\ppar{\child\;\send\;\pair{\inl{y}}{x}}{\child\;\cpgvM{P}})}}} \\
-  \tm{\cpgvC{\pcp{\inr{x}{P}}}}
-  & = & \tm{\pgv{\res{y}{z}{(\ppar{\child\;\send\;\pair{\inr{y}}{x}}{\child\;\cpgvM{P}})}}} \\
-  \tm{\cpgvC{P}}
-  & = & \tm{\pgv{\child{\cpgvM{P}}}}\quad\text{(if none of the above applies)}\\
+  \pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+  & = & \pgv{\tm{\res{x}{y}{\cpgvC{P}}}} \\
+  \pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+  & = & \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
+  \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}} \\
+  \pcp{\tm{\cpgvC{\inl{x}{P}}}}
+  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}} \\
+  \pcp{\tm{\cpgvC{\inr{x}{P}}}}
+  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}} \\
+  \pcp{\tm{\cpgvC{P}}}
+  & = & \pgv{\tm{\child{\cpgvM{P}}}},\hfill\textit{if none of the above apply}\\
   \\
-  \tm{\cpgvM{\pcp{\link{x}{y}}}}
-  & = & \tm{\pgv{\link\;{\pair{x}{y}}}} \\
-  \tm{\cpgvM{\pcp{\res{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\ppar{P}{Q}}}}
-  & = & \tm{\pgv{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
-  \tm{\cpgvM{\pcp{\halt}}}
-  & = & \tm{\pgv{\unit}} \\
-  \tm{\cpgvM{\pcp{\close{x}{P}}}}
-  & = & \tm{\pgv{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\wait{x}{P}}}}
-  & = & \tm{\pgv{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\send{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
-  \tm{\cpgvM{\pcp{\recv{x}{y}{P}}}}
-  & = & \tm{\pgv{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\inl{x}{P}}}}
-  & = & \tm{\pgv{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
-  \tm{\cpgvM{\pcp{\inr{x}{P}}}}
-  & = & \tm{\pgv{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-  \multicolumn{3}{l}{\tm{\cpgvM{\pcp{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
-  & = & \tm{\pgv{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}}
+  \pcp{\tm{\cpgvM{\link{x}{y}}}}
+  & = & \pgv{\tm{\link\;{\pair{x}{y}}}} \\
+  \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
+  & = & \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
+  \pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
+  & = & \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
+  \pcp{\tm{\cpgvM{\halt}}}
+  & = & \pgv{\tm{\unit}} \\
+  \pcp{\tm{\cpgvM{\close{x}{P}}}}
+  & = & \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
+  \pcp{\tm{\cpgvM{\wait{x}{P}}}}
+  & = & \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
+  \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+  & = & \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+  \pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
+  & = & \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
+  \pcp{\tm{\cpgvM{\inl{x}{P}}}}
+  & = & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
+  \pcp{\tm{\cpgvM{\inr{x}{P}}}}
+  & = & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
+  \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
+  & = & \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
+  \pcp{\tm{\cpgvM{\absurd{x}}}}
+  & = & \pgv{\tm{\offeremp{x}}} \\
 \end{array}
 \]
 
@@ -94,8 +96,6 @@
 \begin{proof}
   By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
-
-  \todo{Update proof.}
 \end{proof}
 
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
@@ -117,24 +117,6 @@
       \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}}
     \end{mathpar}
     Translated from link.
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-New}]
-    \begin{mathpar}
-      \pgv{\tm{\plug{\conf{F}}{\new\;\unit}}}
-      \pgv{\cred}
-      \pgv{\tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}}}
-    \end{mathpar}
-    Translated from send or select.
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-Spawn}]
-    \begin{mathpar}
-      \pgv{\tm{\plug{\conf{F}}{\spawn\;V}}}
-      \pgv{\cred}
-      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}}
-    \end{mathpar}
-    Translated from select.
   \end{case*}
 
   \begin{case*}[\LabTirName{E-Send}]
@@ -172,8 +154,6 @@
 \begin{proof}
   By induction on the structure of $\pcp{\tm{P}}$.
   (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}.)
-  
-  \todo{Update proof.}
 \end{proof}
 
 \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
@@ -201,8 +181,6 @@
   We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
   \LabTirName{E-LiftSC}. 
   (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
-  
-  \todo{Update proof.}
 \end{proof}
 
 \end{document}
