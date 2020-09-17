@@ -1,0 +1,24 @@
+\begin{figure}[h]
+  \begin{mathpar}
+    \inferrule*[lab=T-Unbound-Send]{
+      \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+    }{\seq{\usend{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
+    \elabarrow
+    \inferrule*{
+      \inferrule*{
+        \inferrule*{
+        }{\seq{\link{y}{z}}{\tmty{y}{\co{A}},\tmty{z}{A}}}
+        \\
+        \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+      }{\seq{\ppar{\link{y}{z}}{P}}{\ty{\Gamma},\tmty{x}{B},\tmty{y}{\co{A}},\tmty{z}{A}}}
+      \\
+      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B},\ty{\co{A}})
+    }{\seq{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
+  \end{mathpar}
+  \caption{Typing Rules for Syntactic Sugar for PCP.}
+  \label{fig:pcp-typing-sugar}
+\end{figure}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

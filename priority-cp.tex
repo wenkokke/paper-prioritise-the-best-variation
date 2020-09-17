@@ -14,23 +14,10 @@
   \vspace{-4mm}
   \end{figure}
 
-In this section we present an updated version of Priority CP \cite{DardhaG18}, which is Wadler's Classical Processes \cite{W12} with \emph{priorities}.
-Some details of the calculus are inspired by Carbone \emph{et al.} \cite{CLMSW16} and Caires and P\'{e}rez \cite{CP17}.
+In this section we present an updated version of Priority CP~\cite{DardhaG18}, which is Wadler's Classical Processes~\cite{W12} with \emph{priorities}. Some details of the calculus are inspired by Carbone \emph{et al.}~\cite{CLMSW16} and Caires and P\'{e}rez~\cite{CP17}.
 
-\subsection{Syntax}
-\subsubsection{Priorities, types, and environments}
-Types are based on CLL and range over $\ty{A}, \ty{B}, \ty{C}$.
-Types are annotated with priorities which range over $\cs{o} \in \mathbb{N} \sqcup \{\omega\}$.
-Let $\omega$ be a special element such that $\cs{o}<\omega$ for all $\cs{o}\in \mathbb{N}$.
-Often, we will omit $\omega$ when not necessary.
-\todo{check the omega thing is also part of our presentation}
-Types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$
-are used to type channel endpoints which are ready to be closed.
-Types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ are used to... 
-Type $\ty{\tytens[\cs{o}]{A}{B}}$ (respectively, $\ty{\typarr[\cs{o}]{A}{B}}$) is used to type a channel endpoint that first {outputs} (respectively, {inputs}) a channel of type $\ty A$ and then proceeds as $\ty B$.
-$\ty{\typlus[\cs{o}]{A}{B}}$ is used to type a channel endpoint over which we can {select} either the \emph{left} branch and proceed as $\ty A$ or the \emph{right} branch and proceed as $\ty B$.
-$\ty{\tywith[\cs{o}]{A}{B}}$ is used to type a channel endpoint that can offer a both $\ty A$ and $\ty B$.
-A typing context $\ty\Gamma$ is a partial function associating channel names to types.
+\paragraph*{Priorities, types, and environments}
+Types are based on CLL and range over $\ty{A}, \ty{B}, \ty{C}$. Types are annotated with priorities which range over $\cs{o} \in \mathbb{N} \sqcup \{\omega\}$. Let $\omega$ be a special element such that $\cs{o}<\omega$ for all $\cs{o}\in \mathbb{N}$. Often, we will omit $\omega$ when not necessary. \todo{check the omega thing is also part of our presentation} Types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ are used to type channel endpoints which are ready to be closed. Types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ are used to... Type $\ty{\tytens[\cs{o}]{A}{B}}$ (respectively, $\ty{\typarr[\cs{o}]{A}{B}}$) is used to type a channel endpoint that first {outputs} (respectively, {inputs}) a channel of type $\ty A$ and then proceeds as $\ty B$. $\ty{\typlus[\cs{o}]{A}{B}}$ is used to type a channel endpoint over which we can {select} either the \emph{left} branch and proceed as $\ty A$ or the \emph{right} branch and proceed as $\ty B$. $\ty{\tywith[\cs{o}]{A}{B}}$ is used to type a channel endpoint that can offer a both $\ty A$ and $\ty B$. A typing context $\ty\Gamma$ is a partial function associating channel names to types.
 \[
 \begin{array}{lcl}
   \ty{A}, \ty{B}, \ty{C}
@@ -88,7 +75,7 @@ Both functions are defined as expected below.
 \end{array}
 \]
 
-\subsubsection{Terms}
+\paragraph*{Terms}
 \[
 \begin{array}[t]{lcl}
   \tm{P}, \tm{Q}
@@ -107,172 +94,17 @@ Both functions are defined as expected below.
 \end{array}
 \]
 
-\subsubsection{Syntactic Sugar}
+\paragraph*{Syntactic Sugar}
 We define \emph{unbound} send:
 \[
   \tm{\usend{x}{y}{P}}\elabarrow\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}
 \]
 
 \subsection{Typing}
-
-\subsubsection{Typing Rules}
-\begin{mathpar}
-  \inferrule*[lab=T-Link]{
-  }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A},\tmty{y}{\co{A}}}}
-
-  \inferrule*[lab=T-Res]{
-    \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
-  }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
-  \\
-  \inferrule*[lab=T-Par]{
-    \seq{P}{\ty{\Gamma}}
-    \\
-    \seq{Q}{\ty{\Delta}}
-  }{\seq{\ppar{P}{Q}}{\ty{\Gamma},\ty{\Delta}}}
-
-  \inferrule*[lab=T-Halt]{
-  }{\seq{\halt}{\emptyenv}}
-  \\
-  \inferrule*[lab=T-Send]{
-    \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-  }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Close]{
-    \seq{P}{\ty{\Gamma}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma})
-  }{\seq{\close{x}{P}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}
-  \\
-  \inferrule*[lab=T-Recv]{
-    \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-  }{\seq{\recv{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\typarr[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Wait]{
-    \seq{P}{\ty{\Gamma}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma})
-  }{\seq{\wait{x}{P}}{\ty{\Gamma},\tmty{x}{\tybot[\cs{o}]}}}
-  \\
-  \inferrule*[lab=T-Select-Inl]{
-    \seq{P}{\ty{\Gamma},\tmty{x}{A}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-    \\
-    \pr(\ty{A})=\pr(\ty{B})
-  }{\seq{\inl{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Select-Inr]{
-    \seq{P}{\ty{\Gamma},\tmty{x}{B}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-    \\
-    \pr(\ty{A})=\pr(\ty{B})
-  }{\seq{\inr{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Offer]{
-    \seq{P}{\ty{\Gamma},\tmty{x}{A}}
-    \\
-    \seq{Q}{\ty{\Gamma},\tmty{x}{B}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-  }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
-
-  \inferrule*[lab=T-Offer-Absurd]{
-    \cs{o}<\pr(\ty{\Gamma})
-  }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
-\end{mathpar}
-
-\subsubsection{Typing Rules for Syntactic Sugar}
-\begin{mathpar}
-  \inferrule*[lab=T-Unbound-Send]{
-    \seq{P}{\ty{\Gamma},\tmty{x}{B}}
-  }{\seq{\usend{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
-  \elabarrow
-  \inferrule*{
-    \inferrule*{
-      \inferrule*{
-      }{\seq{\link{y}{z}}{\tmty{y}{\co{A}},\tmty{z}{A}}}
-      \\
-      \seq{P}{\ty{\Gamma},\tmty{x}{B}}
-    }{\seq{\ppar{\link{y}{z}}{P}}{\ty{\Gamma},\tmty{x}{B},\tmty{y}{\co{A}},\tmty{z}{A}}}
-    \\
-    \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B},\ty{\co{A}})
-  }{\seq{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}},\tmty{y}{\co{A}}}}
-\end{mathpar}
+\input{fig/pcp-typing}
 
 \subsection{Operational Semantics}
-
-\subsubsection{Structural congruence}
-\begin{mathpar}
-  \begin{array}{llcl}
-    \LabTirName{SC-LinkSwap}   & \tm{\link{x}{y}}
-                               & \equiv & \tm{\link{y}{x}}
-    \\
-    \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{\link{x}{y}}}
-                               & \equiv & \tm{\halt}
-    \\
-    \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{P}}
-                               & \equiv & \tm{\res{y}{x}{P}}
-    \\
-    \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{P}}}
-                               & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
-    \\
-    \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-                               & \equiv & \tm{\ppar{P}{\res{x}{y}{Q}}},
-                                          \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{P})}
-    \\
-    \LabTirName{SC-ParNil}     & \tm{\ppar{P}{\halt}}
-                               & \equiv & \tm{P}
-    \\
-    \LabTirName{SC-ParComm}    & \tm{\ppar{P}{Q}}
-                               & \equiv & \tm{\ppar{Q}{P}}
-    \\
-    \LabTirName{SC-ParAssoc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
-                               & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
-  \end{array}
-\end{mathpar}
-
-\subsubsection{Reduction}
-\begin{mathpar}
-  \begin{array}{llcl}
-    \LabTirName{E-Link}    & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
-                           & \red & \tm{\subst{P}{w}{x}}
-    \\
-    \LabTirName{E-Send}    & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
-                           & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
-    \\
-    \LabTirName{E-Close}   & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
-                           & \red & \tm{\ppar{P}{Q}}
-    \\
-    \LabTirName{E-Select-Inl}
-                           & \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
-                           & \red & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-    \\
-    \LabTirName{E-Select-Inr}
-                           & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
-                           & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
-  \end{array}
-  \\
-  \inferrule*[lab=E-LiftRes]{
-    \tm{P}\red\tm{P'}
-  }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
-
-  \inferrule*[lab=E-LiftPar]{
-    \tm{P}\red\tm{P'}
-  }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
-
-  \inferrule*[lab=E-LiftSC]{
-    \tm{P}\equiv\tm{P'}
-    \\
-    \tm{P'}\red\tm{Q'}
-    \\
-    \tm{Q'}\equiv\tm{Q}
-  }{\tm{P}\red\tm{Q}}
-\end{mathpar}
+\input{fig/pcp-operational-semantics}
 
 \end{document}
 
