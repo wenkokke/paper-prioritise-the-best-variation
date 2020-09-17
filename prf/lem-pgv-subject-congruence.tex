@@ -41,7 +41,92 @@
   \end{case*}
 
   \begin{case*}[\LabTirName{SC-ResLink}]
-    \admit
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \inferrule*{
+            \tmty
+            {\link}
+            {\tylolli[\cs{\ptop},\cs{o}]{\typrod{S}{\co{S}}}{\tyunit}}
+            \\
+            \inferrule*{
+              \inferrule*{
+                \inferrule*{
+                }{\tseq
+                  {\tmty{x}{S}}
+                  {x}
+                  {S}}
+                \\
+                \inferrule*{
+                }{\tseq
+                  {\tmty{y}{\co{S}}}
+                  {y}
+                  {\co{S}}}
+              }{\tseq
+                {\tmty{x}{S},\tmty{y}{\co{S}}}
+                {\pair{x}{y}}
+                {\typrod{S}{\co{S}}}}
+            }{\tseq
+              {\tmty{x}{S},\tmty{y}{\co{S}}}
+              {\link\;\pair{x}{y}}
+              {\tyunit}}
+          }{\tseq
+            {\tmty{x}{S},\tmty{y}{\co{S}}}
+            {\link\;\pair{x}{y}}
+            {\tyunit}}
+        }{\cseq
+          {\tmty{x}{S},\tmty{y}{\co{S}}}
+          {\phi\;\link\;\pair{x}{y}}}
+      }{\cseq
+        {\emptyenv}
+        {\res{x}{y}{(\phi\;\link\;\pair{x}{y})}}}
+      \equiv
+      \inferrule*{
+        \inferrule*{
+        }{\tseq
+          {\emptyenv}
+          {\unit}
+          {\tyunit}}
+      }{\cseq
+        {\emptyenv}
+        {\phi\;\unit}}
+    \end{mathpar}
+  \end{case*}
+
+  \begin{case*}[\LabTirName{SC-ResSwap}]
+    \begin{mathpar}
+      \inferrule*{
+        \cseq
+        {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
+        {\conf{C}}
+      }{\cseq
+        {\ty{\Gamma}}
+        {\res{x}{y}{\conf{C}}}}
+      \equiv
+      \inferrule*{
+        \cseq
+        {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
+        {\conf{C}}
+      }{\cseq
+        {\ty{\Gamma}}
+        {\res{y}{x}{\conf{C}}}}
+    \end{mathpar}
+  \end{case*}
+
+  \begin{case*}[\LabTirName{SC-ResComm}]
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
+        }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\res{z}{w}{\conf{C}}}}
+      }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\res{z}{w}{\conf{C}}}}}
+      \equiv
+      \inferrule*{
+        \inferrule*{
+          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
+        }{\cseq[\phi]{\ty{\Gamma},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\res{x}{y}{\conf{C}}}}
+      }{\cseq[\phi]{\ty{\Gamma}}{\cseq{}{\res{z}{w}{\res{x}{y}{\conf{C}}}}}}
+    \end{mathpar}
   \end{case*}
 
   \begin{case*}[\LabTirName{SC-ResExt}]
@@ -61,26 +146,6 @@
           \cseq{\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{D}}
         }{\cseq{\ty{\Delta}}{\res{x}{y}{\conf{D}}}}
       }{\cseq{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}}}
-    \end{mathpar}
-  \end{case*}
-
-  \begin{case*}[\LabTirName{SC-ResSwap}]
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{SC-ResComm}]
-    \begin{mathpar}
-      \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
-        }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\res{z}{w}{\conf{C}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\res{z}{w}{\conf{C}}}}}
-      \equiv
-      \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
-        }{\cseq[\phi]{\ty{\Gamma},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\res{x}{y}{\conf{C}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\cseq{}{\res{z}{w}{\res{x}{y}{\conf{C}}}}}}
     \end{mathpar}
   \end{case*}
 
