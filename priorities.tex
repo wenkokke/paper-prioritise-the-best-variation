@@ -8,7 +8,7 @@
 \usepackage[all]{foreign}
 \usepackage{etoolbox}
 \usepackage{rotating}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{enumitem}
 \setlist[description]{style=unboxed,font=\normalfont\itshape}
 
@@ -254,15 +254,14 @@ To be written last\dots
 \keywords{Session types \and Process calculus}
 \end{abstract}
 
-\subfile{priority-cp}
 \subfile{priority-gv}
+\subfile{priority-cp}
 \subfile{pcp-to-pgv}
 
+\bibliographystyle{splncs04}
+\bibliography{main}
+
 \appendix
-\section{Priority CP}
-{
-  \usingnamespace{pcp}
-}
 \section{Priority GV}
 {
   \usingnamespace{pgv}
@@ -303,14 +302,9 @@ To be written last\dots
   \restatelemma{lempcptopgvcpgvMcpgvCcompleteness}
   \input{prf/lem-pcp-to-pgv-cpgvM-cpgvC-completeness}
 
-  \restatelemma{lempcptopgvoperationalcorrespondenceequiv}
-
   \restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
   \input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}
 }
-
-\bibliographystyle{splncs04}
-\bibliography{main}
 
 \end{document}
 

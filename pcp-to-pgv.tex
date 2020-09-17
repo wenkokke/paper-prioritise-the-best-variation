@@ -70,7 +70,7 @@
   \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
   & = & \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
   \pcp{\tm{\cpgvM{\absurd{x}}}}
-  & = & \pgv{\tm{\offeremp{x}}} \\
+  & = & \pgv{\tm{\offeremp{x}}}
 \end{array}
 \]
 
@@ -108,8 +108,6 @@
 \begin{proof}
   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
 
-  \todo{Finish proof.}
-
   \begin{case*}[\LabTirName{E-Link}]
     \begin{mathpar}
       \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}}
@@ -117,6 +115,7 @@
       \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}}
     \end{mathpar}
     Translated from link.
+    \admit
   \end{case*}
 
   \begin{case*}[\LabTirName{E-Send}]
@@ -126,6 +125,7 @@
       \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{x}}{\plug{\conf{F'}}{\pair{V}{y}}})}}}
     \end{mathpar}
     Translated from send/recv, or select/offer.
+    \admit
   \end{case*}
 
   \begin{case*}[\LabTirName{E-Close}]
@@ -135,15 +135,19 @@
       \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
     \end{mathpar}
     Translated from close/wait.
+    \admit
   \end{case*}
 
   \begin{case*}[\LabTirName{E-LiftC}]
+    \admit
   \end{case*}
 
   \begin{case*}[\LabTirName{E-LiftM}]
+    \admit
   \end{case*}
 
   \begin{case*}[\LabTirName{E-LiftSC}]
+    \admit
   \end{case*}
 \end{proof}
 
