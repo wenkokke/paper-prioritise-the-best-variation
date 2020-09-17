@@ -32,66 +32,29 @@ See \cref{fig:pcp-to-pgv}.
   (Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.)
 \end{proof}
 
+\begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
+  \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
+  For any $\pcp{\tm{P}}$, either:
+  \begin{itemize}
+  \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
+  \item   $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
+  \end{itemize}
+\end{restatablelemma}
+\begin{proof}
+  By induction on the structure of $\pcp{\tm{P}}$.
+  (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.)
+\end{proof}
+
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
   [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
   \label{thm:pcp-to-pgv-operational-correspondence-soundness}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
-  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red\tm{Q}}$ and $\pgv{\tm{\conf{C}}\equiv\tm{\cpgvC{Q}}}$
+  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-
-  \begin{case*}[\LabTirName{E-Link}]
-    \begin{mathpar}
-      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}}
-      \pgv{\cred}
-      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}}
-    \end{mathpar}
-    Translated from link.
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-Send}]
-    \begin{mathpar}
-      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{y}}})}}}
-      \pgv{\cred}
-      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{x}}{\plug{\conf{F'}}{\pair{V}{y}}})}}}
-    \end{mathpar}
-    Translated from send/recv, or select/offer.
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-Close}]
-    \begin{mathpar}
-      \pgv{\tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\wait\;{x}}}{\plug{\conf{F'}}{\close\;{y}}})}}}
-      \pgv{\cred}
-      \pgv{\tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
-    \end{mathpar}
-    Translated from close/wait.
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-LiftC}]
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-LiftM}]
-    \admit
-  \end{case*}
-
-  \begin{case*}[\LabTirName{E-LiftSC}]
-    \admit
-  \end{case*}
-\end{proof}
-
-\begin{restatablelemma}{lempcptopgvcpgvMcpgvCcompleteness}
-  \label{lem:pcp-to-pgv-cpgvM-cpgvC-completeness}
-  $\pgv{\tm{\child\;\cpgvM{P}}\cred^\star\tm{\cpgvC{P}}}$.
-\end{restatablelemma}
-\begin{proof}
-  By induction on the structure of $\pcp{\tm{P}}$.
-  (Details in \cref{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}.)
+  (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.)
 \end{proof}
 
 \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
@@ -100,7 +63,6 @@ See \cref{fig:pcp-to-pgv}.
   then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
 \end{restatablelemma}
 \begin{proof}
-  \label{prf:lem-pcp-to-pgv-confs-operational-correspondence-equiv}
   Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
 \end{proof}
 
@@ -113,7 +75,7 @@ See \cref{fig:pcp-to-pgv}.
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-  We apply \cref{lem:pcp-to-pgv-cpgvM-cpgvC-completeness} for the cases in which
+  We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which
   the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$,
   \ie under actions.
   We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for

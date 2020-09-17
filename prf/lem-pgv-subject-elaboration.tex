@@ -190,7 +190,88 @@
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinl}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S}}}
   \elabarrow
   \\
-  \admit
+  \inferrule*{
+    \inferrule*{
+      \inferrule*{
+        \LabTirName{(a)}
+        \\
+        \inferrule*{
+        }{\tseq
+          {\emptyenv}
+          {\unit}
+          {\tyunit}}
+      }{\tseq
+        {\emptyenv}
+        {\new\;\unit}
+        {\typrod{\co{S}}{S}}}
+      \\
+      \inferrule*{
+        \inferrule*{
+          \LabTirName{(b)}
+          \\
+          \inferrule*{
+            \LabTirName{(c)}
+            \\
+            \inferrule*{
+              \inferrule*{
+                \inferrule*{
+                }{\tseq
+                  {\tmty{y}{\co{S}}}
+                  {y}
+                  {\co{S}}}
+              }{\tseq
+                {\tmty{y}{\co{S}}}
+                {\inl{y}}
+                {\tysum{\co{S}}{\co{S'}}}}
+              \\
+              \inferrule*{
+              }{\tseq
+                {\tmty{x}{\tyselect[\cs{o}]{S}{S'}}}
+                {x}
+                {\tyselect[\cs{o}]{S}{S'}}}
+            }{\tseq
+              {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S}}}
+              {\pair{\inl{y}}{x}}
+              {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}}
+          }{\tseq
+            {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S}}}
+            {\send\;{\pair{\inl{y}}{x}}}
+            {\tyends[\cs{o+1}]}}
+        }{\tseq
+          {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S}}}
+          {\close\;(\send\;{\pair{\inl{y}}{x}})}
+          {\tyunit}}
+        \\
+        \inferrule*{
+        }{\tseq
+          {\tmty{z}{S}}
+          {z}
+          {S}}
+      }{\tseq
+        {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S}},\tmty{z}{S}}
+        {\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}
+        {S}}
+    }{\tseq
+      {\tmty{x}{\tyselect[\cs{o}]{S}{S'}}}
+      {\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}}
+      {S}}
+  }{\tseq
+    {\emptyenv}
+    {\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}}
+    {\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S}}}
+  \\
+  \LabTirName{(a)} = 
+  \tmty{\new}
+  {\tylolli[\cs{\ptop},\cs{o}]{\tyunit}{\typrod{\co{S}}{S}}}
+
+  \LabTirName{(b)} =
+  \tmty{\close}
+  {\tylolli[\cs{\ptop},\cs{o+1}]{\tyends[\cs{o+1}]}{\tyunit}}
+
+  \LabTirName{(c)} =
+  \tmty{\send}
+  {\tylolli[\cs{\ptop},\cs{o}]
+    {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}{\tyends[\cs{o+1}]}}
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inl}).}
 \label{fig:pgv-typing-sugar-select-inl}
@@ -206,7 +287,88 @@
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinr}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S'}}}
   \elabarrow
   \\
-  \admit
+  \inferrule*{
+    \inferrule*{
+      \inferrule*{
+        \LabTirName{(a)}
+        \\
+        \inferrule*{
+        }{\tseq
+          {\emptyenv}
+          {\unit}
+          {\tyunit}}
+      }{\tseq
+        {\emptyenv}
+        {\new\;\unit}
+        {\typrod{\co{S'}}{S'}}}
+      \\
+      \inferrule*{
+        \inferrule*{
+          \LabTirName{(b)}
+          \\
+          \inferrule*{
+            \LabTirName{(c)}
+            \\
+            \inferrule*{
+              \inferrule*{
+                \inferrule*{
+                }{\tseq
+                  {\tmty{y}{\co{S'}}}
+                  {y}
+                  {\co{S'}}}
+              }{\tseq
+                {\tmty{y}{\co{S'}}}
+                {\inr{y}}
+                {\tysum{\co{S}}{\co{S'}}}}
+              \\
+              \inferrule*{
+              }{\tseq
+                {\tmty{x}{\tyselect[\cs{o}]{S}{S'}}}
+                {x}
+                {\tyselect[\cs{o}]{S}{S'}}}
+            }{\tseq
+              {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S'}}}
+              {\pair{\inr{y}}{x}}
+              {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}}
+          }{\tseq
+            {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S'}}}
+            {\send\;{\pair{\inr{y}}{x}}}
+            {\tyends[\cs{o+1}]}}
+        }{\tseq
+          {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S'}}}
+          {\close\;(\send\;{\pair{\inr{y}}{x}})}
+          {\tyunit}}
+        \\
+        \inferrule*{
+        }{\tseq
+          {\tmty{z}{S'}}
+          {z}
+          {S'}}
+      }{\tseq
+        {\tmty{x}{\tyselect[\cs{o}]{S}{S'}},\tmty{y}{\co{S'}},\tmty{z}{S'}}
+        {\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}
+        {S'}}
+    }{\tseq
+      {\tmty{x}{\tyselect[\cs{o}]{S}{S'}}}
+      {\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}}
+      {S'}}
+  }{\tseq
+    {\emptyenv}
+    {\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}}
+    {\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S'}}}
+  \\
+  \LabTirName{(a)} = 
+  \tmty{\new}
+  {\tylolli[\cs{\ptop},\cs{o}]{\tyunit}{\typrod{\co{S'}}{S'}}}
+
+  \LabTirName{(b)} =
+  \tmty{\close}
+  {\tylolli[\cs{\ptop},\cs{o+1}]{\tyends[\cs{o+1}]}{\tyunit}}
+
+  \LabTirName{(c)} =
+  \tmty{\send}
+  {\tylolli[\cs{\ptop},\cs{o}]
+    {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}{\tyends[\cs{o+1}]}}
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inr}).}
 \label{fig:pgv-typing-sugar-select-inr}

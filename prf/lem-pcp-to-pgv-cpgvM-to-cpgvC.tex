@@ -1,8 +1,9 @@
 \begin{proof}
-  \label{prf:lem-pcp-to-pgv-cpgvM-cpgvC-completeness}
+  \label{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}
   By induction on the structure of $\pcp{\tm{P}}$.
 
   \begin{case*}[$\pcp{\tm{\res{x}{y}{P}}}$]
+    We have:
     \begin{mathpar}
       \begin{array}{lrll}
         \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
@@ -89,8 +90,8 @@
       \end{array}
     \end{mathpar}
   \end{case*}
-  \begin{case*}[$\pcp{\tm{P}}$]
-    By reflexivity.
+  \begin{case*}[$(*)$]
+    In all other cases, $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$.
   \end{case*}
 \end{proof}
 
