@@ -203,12 +203,12 @@
 \]
 
 \subsection{Typing}
-\input{fig/pgv-typing}
 See \cref{fig:pgv-typing}.
+\input{fig/pgv-typing}
 
 \subsection{Operational Semantics}
-\input{fig/pgv-operational-semantics}
 See \cref{fig:pgv-operational-semantics}.
+\input{fig/pgv-operational-semantics}
 
 \subsection{Metatheory}
 
@@ -299,12 +299,12 @@ See \cref{fig:pgv-operational-semantics}.
 
 \begin{corollary}[Closed Progress, $\cred$]
   \label{thm:pgv-closed-progress-confs}
-  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, then either:
+  If $\cseq[\phi]{\emptyenv}{\conf{C}}$, then either:
   \begin{description}[labelwidth=8ex]
   \item[Done]
-    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$;
+    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$; or
   \item[Step]
-    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
+    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$.
   \end{description}
 \end{corollary}
 
