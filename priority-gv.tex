@@ -297,6 +297,17 @@ See \cref{fig:pgv-operational-semantics}.
   \admit
 \end{proof}
 
+\begin{corollary}[Closed Progress, $\cred$]
+  \label{thm:pgv-closed-progress-confs}
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, then either:
+  \begin{description}[labelwidth=8ex]
+  \item[Done]
+    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$;
+  \item[Step]
+    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
+  \end{description}
+\end{corollary}
+
 \end{document}
 
 %%% Local Variables:

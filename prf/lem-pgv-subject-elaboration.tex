@@ -93,7 +93,7 @@
     {(\lambda x.N)\;M}
     {U}}
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar.}
+\caption{Typing Rules for Syntactic Sugar for PGV.}
 \label{fig:pgv-typing-sugar}
 \end{figure}
 \end{landscape}
@@ -176,7 +176,7 @@
     {\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
     {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{S}{\tyunit})}{\co{S}}}}
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Fork}).}
+\caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Fork}).}
 \label{fig:pgv-typing-sugar-fork}
 \end{figure}
 \end{landscape}
@@ -192,7 +192,7 @@
   \\
   \admit
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Select-Inl}).}
+\caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inl}).}
 \label{fig:pgv-typing-sugar-select-inl}
 \end{figure}
 \end{landscape}
@@ -208,7 +208,7 @@
   \\
   \admit
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Select-Inr}).}
+\caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inr}).}
 \label{fig:pgv-typing-sugar-select-inr}
 \end{figure}
 \end{landscape}
@@ -311,7 +311,7 @@
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}
     {T}}
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Offer}).}
+\caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer}).}
 \label{fig:pgv-typing-sugar-offer}
 \end{figure}
 \end{landscape}
@@ -389,7 +389,7 @@
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\absurd{z}}}}
     {T}}
 \end{mathpar}
-\caption{Typing Rules for Syntactic Sugar (\LabTirName{T-Offer-Absurd}).}
+\caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer-Absurd}).}
 \label{fig:pgv-typing-sugar-offer-absurd}
 \end{figure}
 \end{landscape}

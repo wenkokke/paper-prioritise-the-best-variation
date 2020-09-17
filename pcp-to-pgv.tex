@@ -5,74 +5,8 @@
 \section{Priority CP to Priority GV}
 
 \subsection{Translation}
-
-\paragraph{Translation on types}
-\[
-\begin{array}{lcl}
-  \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgvT{A}}}{\cpgvT{B}}}} \\
-  \ty{\cpgvT{\pcp{\typarr[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}} \\
-  \ty{\cpgvT{\pcp{\typlus[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}} \\
-  \ty{\cpgvT{\pcp{\tywith[\cs{o}]{A}{B}}}}
-  & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
-\end{array}
-\quad
-\begin{array}{lcl}
-  \ty{\cpgvT{\pcp{\tyone[\cs{o}]}}}
-  & = & \ty{\pgv{\tyends[\cs{o}]}} \\
-  \ty{\cpgvT{\pcp{\tybot[\cs{o}]}}}
-  & = & \ty{\pgv{\tyendr[\cs{o}]}} \\
-  \ty{\cpgvT{\pcp{\tynil[\cs{o}]}}}
-  & = & \pgv{\ty{\tyselectemp[\cs{o}]}} \\
-  \ty{\cpgvT{\pcp{\tytop[\cs{o}]}}}
-  & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
-\end{array}
-\]
-
-\paragraph{Translation on terms}
-\[
-\begin{array}{lcl}
-  \pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
-  & = & \pgv{\tm{\res{x}{y}{\cpgvC{P}}}} \\
-  \pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
-  & = & \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
-  \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
-  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}} \\
-  \pcp{\tm{\cpgvC{\inl{x}{P}}}}
-  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}} \\
-  \pcp{\tm{\cpgvC{\inr{x}{P}}}}
-  & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}} \\
-  \pcp{\tm{\cpgvC{P}}}
-  & = & \pgv{\tm{\child{\cpgvM{P}}}},\hfill\textit{if none of the above apply}\\
-  \\
-  \pcp{\tm{\cpgvM{\link{x}{y}}}}
-  & = & \pgv{\tm{\link\;{\pair{x}{y}}}} \\
-  \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
-  & = & \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
-  \pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
-  & = & \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
-  \pcp{\tm{\cpgvM{\halt}}}
-  & = & \pgv{\tm{\unit}} \\
-  \pcp{\tm{\cpgvM{\close{x}{P}}}}
-  & = & \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
-  \pcp{\tm{\cpgvM{\wait{x}{P}}}}
-  & = & \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
-  \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
-  & = & \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
-  \pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
-  & = & \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
-  \pcp{\tm{\cpgvM{\inl{x}{P}}}}
-  & = & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
-  \pcp{\tm{\cpgvM{\inr{x}{P}}}}
-  & = & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-  \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
-  & = & \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
-  \pcp{\tm{\cpgvM{\absurd{x}}}}
-  & = & \pgv{\tm{\offeremp{x}}}
-\end{array}
-\]
+\input{fig/pcp-to-pgv}
+See \cref{fig/pcp-to-pgv}.
 
 \subsection{Metatheory}
 
