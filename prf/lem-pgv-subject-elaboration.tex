@@ -1,4 +1,3 @@
-\begin{landscape}
 \begin{figure}
 \small
 \begin{mathpar}
@@ -96,8 +95,7 @@
 \caption{Typing Rules for Syntactic Sugar for PGV.}
 \label{fig:pgv-typing-sugar}
 \end{figure}
-\end{landscape}
-\begin{landscape}
+
 \begin{figure}
 \small
 \begin{mathpar}
@@ -108,13 +106,13 @@
     {\fork}
     {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{S}{\tyunit})}{\co{S}}}}
   \elabarrow
+  \\
   \inferrule*{
     \inferrule*{
       \inferrule*{
+        \LabTirName{(a)}
         \inferrule*{
-        }{\tmty
-          {\new}
-          {\tylolli{\tyunit}{{\typrod{S}{\co{S}}}}}}
+        }{}
         \\
         \inferrule*{
         }{\tseq[\cs{\pbot}]
@@ -128,10 +126,7 @@
       \\
       \inferrule*{
         \inferrule*{
-          \inferrule*{
-          }{\tmty{\spawn}{\tylolli[]
-              {(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}
-              {\tyunit}}}
+          \LabTirName{(b)}
           \\
           \inferrule*{
             \inferrule*{
@@ -175,11 +170,19 @@
     {\emptyenv}
     {\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
     {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{S}{\tyunit})}{\co{S}}}}
+  \\
+  \LabTirName{(a)} =
+  \tmty{\new}
+  {\tylolli{\tyunit}{{\typrod{S}{\co{S}}}}}
+
+  \LabTirName{(b)} =
+  \tmty{\spawn}
+  {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Fork}).}
 \label{fig:pgv-typing-sugar-fork}
 \end{figure}
-\end{landscape}
+
 \begin{landscape}
 \begin{figure}
 \small
@@ -402,27 +405,11 @@
     {T}}
   \elabarrow
   \\
-  \inferrule*[lab=(a)]{
-    \inferrule*{
-    }{\tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]
-        {\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}
-        {\typrod{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}}
-    \\
-    {\tseq[\cs{p}]
-      {\ty{\Gamma}}
-      {L}
-      {\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
-  }{\tseq[\cs{o}\sqcup\cs{p}]
-    {\ty{\Gamma}}
-    {\recv\;{L}}
-    {\typrod{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
+  
   \\
-  \inferrule*[lab=(b)]{
+  \inferrule*[lab=(c)]{
     \inferrule*{
-      \inferrule*{
-      }{\tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]
-          {\tyendr[\cs{o+1}]}
-          {\tyunit}}}
+      \LabTirName{(b)}
       \\
       \inferrule*{
       }{\tseq[\cs{\pbot}]
@@ -463,15 +450,37 @@
     {T}}
   \\
   \inferrule*{
-    \LabTirName{(a)}
+    \inferrule*{
+      \LabTirName{(a)}
+      \inferrule*{
+      }{}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\Gamma}}
+        {L}
+        {\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\Gamma}}
+      {\recv\;{L}}
+      {\typrod{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
     \\
-    \LabTirName{(b)}
+    \LabTirName{(c)}
     \\
    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
   }{\tseq[\cs{o}\sqcup\cs{p}\sqcup\cs{q}]
     {\ty{\Gamma},\ty{\Delta}}
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}
     {T}}
+  \\
+  \LabTirName{(a)} =
+  \tmty{\recv}
+  {\tylolli[\cs{\ptop},\cs{o}]
+    {\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}
+    {\typrod{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
+
+  \LabTirName{(b)} =
+  \tmty{\wait}
+  {\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o+1}]}{\tyunit}} 
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer}).}
 \label{fig:pgv-typing-sugar-offer}
@@ -494,62 +503,64 @@
     {T}}
   \elabarrow
   \\
-  \inferrule*[lab=(a)]{
-    \inferrule*{
-    }{\tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]
-        {\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}}
-        {\typrod{\tyvoid}{\tyendr[\cs{o+1}]}}}}
-    \\
-    {\tseq[\cs{p}]
-      {\ty{\Gamma}}
-      {L}
-      {\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}}}
-  }{\tseq[\cs{o}\sqcup\cs{p}]
-    {\ty{\Gamma}}
-    {\recv\;{L}}
-    {\typrod{\tyvoid}{\tyendr[\cs{o+1}]}}}
   \\
-  \inferrule*[lab=(b)]{
-    \inferrule*{
-      \inferrule*{
-      }{\tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]
-          {\tyendr[\cs{o+1}]}
-          {\tyunit}}}
-      \\
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]
-        {\tmty{w}{\tyendr[\cs{o+1}]}}
-        {w}
-        {\tyendr[\cs{o+1}]}}
-    }{\tseq[\cs{o}]
-      {\tmty{w}{\tyendr[\cs{o+1}]}}
-      {\wait\;{w}}
-      {\tyunit}}
-    \\
-    \inferrule*{
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]{\tmty{z}{\tyvoid}}{z}{\tyvoid}}
-    }{\tseq[\cs{\pbot}]
-      {\ty{\Delta},\tmty{z}{\tyvoid}}
-      {\absurd{z}}
-      {T}}
-    \\
-    \cs{o}<\pr(\ty{\Delta})
-  }{\tseq[\cs{o}]
-    {\ty{\Delta},\tmty{z}{\tyvoid},\tmty{w}{\tyendr[\cs{o+1}]}}
-    {\andthen{\wait\;{w}}{\absurd{z}}}
-    {T}}
   \\
   \inferrule*{
-    \LabTirName{(a)}
+    \inferrule*{
+      \LabTirName{(a)}
+      \\
+      {\tseq[\cs{p}]
+        {\ty{\Gamma}}
+        {L}
+        {\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}}}
+    }{\tseq[\cs{o}\sqcup\cs{p}]
+      {\ty{\Gamma}}
+      {\recv\;{L}}
+      {\typrod{\tyvoid}{\tyendr[\cs{o+1}]}}}
     \\
-    \LabTirName{(b)}
+    \inferrule*{
+      \inferrule*{
+        \LabTirName{(b)}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]
+          {\tmty{w}{\tyendr[\cs{o+1}]}}
+          {w}
+          {\tyendr[\cs{o+1}]}}
+      }{\tseq[\cs{o}]
+        {\tmty{w}{\tyendr[\cs{o+1}]}}
+        {\wait\;{w}}
+        {\tyunit}}
+      \\
+      \inferrule*{
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]{\tmty{z}{\tyvoid}}{z}{\tyvoid}}
+      }{\tseq[\cs{\pbot}]
+        {\ty{\Delta},\tmty{z}{\tyvoid}}
+        {\absurd{z}}
+        {T}}
+      \\
+      \cs{o}<\pr(\ty{\Delta})
+    }{\tseq[\cs{o}]
+      {\ty{\Delta},\tmty{z}{\tyvoid},\tmty{w}{\tyendr[\cs{o+1}]}}
+      {\andthen{\wait\;{w}}{\absurd{z}}}
+      {T}}
     \\
     \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
   }{\tseq[\cs{o}\sqcup\cs{p}]
     {\ty{\Gamma},\ty{\Delta}}
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\absurd{z}}}}
     {T}}
+  \\
+  \LabTirName{(a)} =
+  \tmty{\recv}
+  {\tylolli[\cs{\ptop},\cs{o}]
+    {\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}}
+    {\typrod{\tyvoid}{\tyendr[\cs{o+1}]}}}
+
+  \LabTirName{(b)} =
+  \tmty{\wait}
+  {\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o+1}]}{\tyunit}}
 \end{mathpar}
 \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer-Absurd}).}
 \label{fig:pgv-typing-sugar-offer-absurd}
