@@ -69,6 +69,7 @@
 \]
 
 \paragraph*{Static Term Syntax}
+We use $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, and $\tm{c}$ to range over \emph{free} channel endpoints.
 \[
 \begin{array}{lcl}
   \tm{L}, \tm{M}, \tm{N}
@@ -152,20 +153,16 @@
     \sep        \tm{\child}
   \\
   \tm{V}, \tm{W}
-  & \coloneqq & \tm{\lambda x.M}
+  & \coloneqq & \tm{x}
+    \sep        \tm{K}
+    \sep        \tm{\lambda x.M}
     \sep        \tm{\unit}
     \sep        \tm{\pair{M}{N}}
     \sep        \tm{\inl{M}}
     \sep        \tm{\inr{M}}
   \\
   \tm{R}
-  & \coloneqq & \tm{\link\;\pair{V}{W}}
-    \sep        \tm{\new}
-    \sep        \tm{\spawn\;V} \\
-  & \sep      & \tm{\send\;\pair{V}{W}}
-    \sep        \tm{\recv\;V}
-    \sep        \tm{\close\;V}
-    \sep        \tm{\wait\;V}
+  & \coloneqq & \tm{K\;V}
   \\
   \tm{E}
   & \coloneqq & \tm{\hole} \\
@@ -178,6 +175,7 @@
   & \sep      & \tm{\inl{E}}
     \sep        \tm{\inr{E}}
     \sep        \tm{\casesum{E}{x}{M}{y}{N}} \\
+  & \sep      & \tm{\absurd{E}} \\
   \\
   \tm{\conf{F}}
   & \coloneqq & \tm{\phi\;E}
@@ -277,32 +275,68 @@ See \cref{fig:pgv-operational-semantics}.
   \end{description}
 \end{restatablelemma}
 \begin{proof}
-  \admit
+  By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$.
 \end{proof}
+
+\begin{definition}[Canonical Forms]
+  \label{def:pgv-canonical-forms}
+  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
+  \(
+    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
+  \)
+  and no $\tm{M_i}$ is a value.
+\end{definition}
+
+\begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
+  \label{lem:pgv-canonical-forms}
+  If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
+\end{restatablelemma}
+\begin{proof}
+  We move all $\nu$-binders to the top using \LabTirName{SC-ResExt}, move the main thread to the right using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}, and if any thread is of the form $\tm{\child\;\unit}$, we discard it using \LabTirName{SC-ParNil}.
+\end{proof}
+
+\begin{definition}[Ready Terms]
+  A~term $\tm{M}$ is ready on a variable $\tm{x}$, written $\ready\pair{\tm{M},\tm{x}}$, if $\tm{M}$ is of the form $\tm{\plug{E}{R}}$, where $\tm{E}$ is an evaluation context and $\tm{R}$ is $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;x}$, $\tm{\close\;x}$, or $\tm{\wait\;x}$.
+\end{definition}
+
+%%% <VERY UNDER CONSTRUCTION>
+
+\begin{definition}
+  A~term $\tm{M}$ is in a configuration $\tm{\conf{C}}$, written $\tm{M}\in\tm{\conf{C}}$, if there exists a configuration context $\tm{\conf{G}}$ such that $\tm{\conf{C}}=\tm{\plug{\conf{G}}{M}}$.
+\end{definition}
+
+\begin{definition}[Blocked Terms]
+  A~term $\tm{M}\in\tm{\conf{C}}$ is blocked on a variable $\tm{x}$, written $\blocked_{\tm{\conf{C}}}\pair{\tm{M},\tm{x}}$, if $\ready\pair{\tm{M}}{\tm{x}}$, and no other term is ready on the dual of $\tm{x}$, \ie there exist no $\tm{\conf{G}}$, $\tm{\conf{D}}$, and $\tm{N}$ such that $\tm{C}=\tm{\plug{\conf{G}}{\res{x}{x'}{\conf{D}}}}$, $\tm{M},\tm{N}\in\tm{\conf{D}}$, and $\ready\pair{\tm{N}}{\tm{x'}}$. We omit the subscript $\tm{\conf{C}}$ if the configuration is clear from context.
+\end{definition}
 
 \begin{restatabletheorem}{thmpgvopenprogressconfs}[Open Progress, $\cred$]
   \label{thm:pgv-open-progress-confs}
-  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, then either:
+  Suppose $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, where $\tm{\conf{C}}$ is in canonical form.
+  Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$.
+  Either:
   \begin{description}[labelwidth=8ex]
   \item[Done]
-    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$;
+    $\tm{N}$ is a value, and each $\tm{M_i}$ is either blocked, or a link on two free endpoints, \ie either $\blocked\pair{\tm{M_i}}{\tm{z}}$ for some $\tm{z}\in\{\tm{x_1},\tm{x'_1},\dots,\tm{x_n},\tm{x'_n}\}\cup\fv(\ty{\Gamma})$, or $\tm{M}=\tm{\plug{E}{\link\;\pair{a}{b}}}$ for some $\tm{a},\tm{b}\in\fv(\ty{\Gamma})$.
   \item[Step]
-    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$; or
+    There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$.
   \item[Blocked]
-    We have $\tm{\conf{C}}\equiv\tm{\res{x_1y_1\dots x_ny_n}{}{(\phi_1R_1 \parallel\dots\parallel \phi_mR_m)}}$,\\
-    and for some $\tm{R_j}$ and $\tm{a_j}\in\fn(\ty{\Gamma})$, $\blocked(\tm{a_j},\tm{R_j})$.
+    $\tm{N}$ and each $\tm{M_i}$ is either blocked, or a link on two free endpoints, \ie either $\blocked\pair{\tm{M_i}}{\tm{z}}$ for some $\tm{z}\in\{\tm{x_1},\tm{x'_1},\dots,\tm{x_n},\tm{x'_n}\}\cup\fv(\ty{\Gamma})$, or $\tm{M}=\tm{\plug{E}{\link\;\pair{a}{b}}}$ for some $\tm{a},\tm{b}\in\fv(\ty{\Gamma})$.
   \end{description}
 \end{restatabletheorem}
 \begin{proof}
-  \admit
+  We apply \cref{lem:pgv-canonical-forms} to $\tm{\conf{C}}$ to get an equivalent configuration in canonical form with flag $\phi$, $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\phi\;N)}}}$.
+  We apply \cref{lem:pgv-open-progress-terms} to each term $\tm{M_i}$ and $\tm{N}$.
 \end{proof}
+
+%%% </VERY UNDER CONSTRUCTION>
 
 \begin{corollary}[Closed Progress, $\cred$]
   \label{thm:pgv-closed-progress-confs}
-  If $\cseq[\phi]{\emptyenv}{\conf{C}}$, then either:
+  Suppose $\cseq[\main]{\emptyenv}{\conf{C}}$, where $\tm{\conf{C}}$ is in canonical form.
+  Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$.
   \begin{description}[labelwidth=8ex]
   \item[Done]
-    There exists some $\tm{V}$ such that $\tm{\conf{C}}=\tm{\phi\;V}$; or
+    $\tm{N}$ is a value, and for each $\tm{M_i}$, $\blocked\pair{\tm{M_i}}{\tm{z}}$ for some $\tm{z}\in\{\tm{x_1},\tm{x'_1},\dots,\tm{x_n},\tm{x'_n}\}$.
   \item[Step]
     There exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}} \cred \tm{\conf{D}}$.
   \end{description}
