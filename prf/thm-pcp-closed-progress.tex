@@ -1,0 +1,18 @@
+\begin{proof}
+  \label{prf:thm-pcp-closed-progress}
+  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, $\tm{P}$ is of the form
+  \[
+    \seq{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}{\emptyenv}
+  \]
+  where $m>0$ and each $\seq{P_i}{\ty{\Gamma_i}}$ is an action.
+
+  Pick the process $\tm{P_i}$ with the smallest priority $\minpr{(\ty{\Gamma_i})}$. $\tm{P_i}$ acts on some endpoint $\tmty{y}{A}\in\ty{\Gamma_i}$. We must have $\minpr{(\ty{\Gamma_i})}=\pr{(\ty{A})}$, since the other actions in $\tm{P_i}$ are guarded by the action on $\tmty{y}{A}$.
+
+  If $\tm{P_j}$ is a link $\tm{\link{y}{z}}$ or $\tm{\link{z}{y}}$, we apply \LabTirName{E-Link}.
+
+  Otherwise, there must be a process $\seq{P_j}{\ty{\Gamma_j}}$ where $\tmty{y'}{\co{A}}\in\ty{\Gamma_j}$ and $\tm{y}$ and $\tm{y'}$ are dual endpoints of the same channel, since $\tm{y}$ is bound. By duality, $\pr{(\ty{A})}=\pr{(\ty{\co{A}})}$. We must have $\pr{(\ty{\co{A}})}=\minpr{(\ty{\Gamma_j})}$, since we chose $\tm{P_i}$ to have the smallest priority $\minpr{(\Gamma_i)}$. We cannot have $\tm{P_i}=\tm{P_j}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr{(\ty{A})}<\pr{(\ty{\co{A}})}$. The process $\tm{P_j}$ must act on $\tm{y'}$, otherwise the action on $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{A})}$. We have two processes, acting on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send}, \LabTirName{E-Close}, \LabTirName{E-Select-Inl}, or \LabTirName{E-Select-Inr}.
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:
