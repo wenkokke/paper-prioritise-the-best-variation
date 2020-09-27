@@ -19,26 +19,35 @@
 In this section we present an updated version of Priority CP~\cite{dardha2018}, which is Wadler's Classical Processes~\cite{wadler2012} with \emph{priorities}. Some details of the calculus are inspired by Carbone \emph{et al.}~\cite{carbone2016} and Caires and P\'{e}rez~\cite{caires2017}.
 
 \paragraph*{Priorities, types, and environments}
-Types are based on CLL and range over $\ty{A}, \ty{B}, \ty{C}$. Types are annotated with priorities which range over $\cs{o} \in \mathbb{N} \sqcup \{\omega\}$. Let $\omega$ be a special element such that $\cs{o}<\omega$ for all $\cs{o}\in \mathbb{N}$. Often, we will omit $\omega$ when not necessary. \todo{check the omega thing is also part of our presentation} Types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ are used to type channel endpoints which are ready to be closed. Types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ are used to... Type $\ty{\tytens[\cs{o}]{A}{B}}$ (respectively, $\ty{\typarr[\cs{o}]{A}{B}}$) is used to type a channel endpoint that first {outputs} (respectively, {inputs}) a channel of type $\ty A$ and then proceeds as $\ty B$. $\ty{\typlus[\cs{o}]{A}{B}}$ is used to type a channel endpoint over which we can {select} either the \emph{left} branch and proceed as $\ty A$ or the \emph{right} branch and proceed as $\ty B$. $\ty{\tywith[\cs{o}]{A}{B}}$ is used to type a channel endpoint that can offer a both $\ty A$ and $\ty B$. A typing context $\ty\Gamma$ is a partial function associating channel names to types.
+Types are based on classical linear logic formulas, and are annotated with priorities $\cs{o}\in\mathbb{N}$.
+
+The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as $\ty{B}$.
+The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel over which we send or receive a ping, and then close the channel. These act as the units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$.
+
+The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can make or offer a choice between two options $\ty{A}$ or $\ty{B}$.
+The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can make offer a choice between \emph{no options}. These act as the units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$.
 \[
 \begin{array}{lcl}
   \ty{A}, \ty{B}, \ty{C}
-  & \coloneqq & \ty{\tyone[\cs{o}]}
-    \sep        \ty{\tybot[\cs{o}]}
-    \sep        \ty{\tynil[\cs{o}]}
-    \sep        \ty{\tytop[\cs{o}]}
-    \sep        \ty{\tytens[\cs{o}]{A}{B}}
+  & \coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
     \sep        \ty{\typarr[\cs{o}]{A}{B}}
+    \sep        \ty{\tyone[\cs{o}]}
+    \sep        \ty{\tybot[\cs{o}]}
     \sep        \ty{\typlus[\cs{o}]{A}{B}}
     \sep        \ty{\tywith[\cs{o}]{A}{B}}
-  \\
+    \sep        \ty{\tynil[\cs{o}]}
+    \sep        \ty{\tytop[\cs{o}]}
+\end{array}
+\]
+A typing context $\ty\Gamma$ is a partial function associating channel names to types.
+\[
+\begin{array}{lcl}
   \ty{\Gamma}, \ty{\Delta}
   & \coloneqq & \ty{\emptyenv}
     \sep        \ty{\Gamma}, \tmty{x}{A}
 \end{array}
 \]
-
-Duality on types is a total function and is defined below. It preserves priorities of types.
+Duality on types is an involutive function which preserves the priorities of types.
 \[
 \begin{array}{lcl}
   \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
@@ -54,9 +63,7 @@ Duality on types is a total function and is defined below. It preserves prioriti
   \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
 \end{array}
 \]
-
-Finally, function $\pr(\cdot)$ defined over types returns the priority of that type; function $\minpr(\cdot)$ defined over typing contexts returns the \emph{minimum} priority of all types in that context.
-Both functions are defined as expected below.
+The function $\pr(\cdot)$ returns the priority of a type. The function $\minpr(\cdot)$ returns the \emph{minimum} priority of all types a typing context.
 \[
 \begin{array}{lclclcl}
   \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o}  \\
@@ -168,7 +175,7 @@ See \cref{fig:pcp-operational-semantics}.
   If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
 \end{restatablelemma}
 \begin{proof}
-  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
 \end{proof}
 
 \begin{restatabletheorem}{thmpcpclosedprogress}[Closed Progress, $\red$]
