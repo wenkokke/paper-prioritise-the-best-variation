@@ -8,9 +8,11 @@
 \subsection{Syntax}
 
 \paragraph*{Priorities, types, and environments}
-\[
-  \cs{o}, \cs{p}, \cs{q}, \cs{r} \in \mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}
-\]
+Types are divided into \emph{session types} $\ty{S}$ and \emph{value types} $\ty{T}$, $\ty{U}$.
+
+Session types are annotated with \emph{priorities} $\cs{o}\in\mathbb{N}$.
+The types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ type the endpoints of a channel over which we send or receive a value of type $\ty{T}$, and then proceed as $\ty{S}$.
+The types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ type endpoints of a channel whose session has finished, and over which we send or receive a ping before closing the channel.
 \[
 \begin{array}{lcl}
   \ty{S}
@@ -18,15 +20,32 @@
     \sep        \ty{\tyrecv[\cs{o}]{T}{S}}
     \sep        \ty{\tyends[\cs{o}]}
     \sep        \ty{\tyendr[\cs{o}]}
-  \\
+\end{array}
+\]
+Value types are based on the types of the linear $\lambda$-calculus.
+The types $\ty{\typrod{T}{U}}$, $\ty{\tyunit}$, $\ty{\tysum{T}{U}}$, and $\ty{\tyvoid}$ are the standard linear $\lambda$-calculus product type, unit type, sum type, and empty type.
+The type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ is the standard linear function type, annotated with \emph{priority bounds} $\cs{p},\cs{q}\in\mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}$.
+Session types are value types, as endpoints are values.
+\[
+\begin{array}{lcl}
   \ty{T}, \ty{U}
-  & \coloneqq & \ty{\tyunit}
-    \sep        \ty{\tyvoid}
-    \sep        \ty{\typrod{T}{U}}
+  & \coloneqq & \ty{\typrod{T}{U}}
+    \sep        \ty{\tyunit}
     \sep        \ty{\tysum{T}{U}}
+    \sep        \ty{\tyvoid}
     \sep        \ty{\tylolli[\cs{p},\cs{q}]{T}{U}}
     \sep        \ty{S}
-  \\
+\end{array}
+\]
+Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, the priority bound $\cs{p}$ is a \emph{lower bound} on the priorities of the channel names captured by the body of the function, and the priority bound $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function.
+We discuss this in more detail when we give the typing rules.
+We define syntactic sugar for the type of \emph{pure functions}.
+\[
+  \ty{\tylolli{T}{U}} \elabarrow \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}
+\]
+A typing context $\ty\Gamma$ is a partial function associating names to types.
+\[
+\begin{array}{lcl}
   \ty{\Gamma}, \ty{\Delta}
   & \coloneqq & \ty{\emptyenv}
     \sep        \ty{\Gamma}, \tmty{x}{T}
@@ -45,27 +64,31 @@
 \]
 \[
 \begin{array}{lcl}
-  \pr(\ty{\tysend[\cs{o}]{T}{S}}) & = & \cs{o} \\
-  \pr(\ty{\tyrecv[\cs{o}]{T}{S}}) & = & \cs{o} \\
-  \pr(\ty{\typrod{T}{U}}) & = & \pr({\ty{T}})\sqcap\pr({\ty{U}}) \\
-  \pr(\ty{\tysum{T}{U}})  & = & \pr({\ty{T}})\sqcap\pr({\ty{U}}) \\
-  \pr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p} \\
-  \pr(\ty{\Gamma}, \tmty{x}{A}) & = & \pr(\ty{\Gamma})\sqcap\pr(\ty{A})
+  \pr(\ty{\tysend[\cs{o}]{T}{S}})            & = & \cs{o} \\
+  \pr(\ty{\tyrecv[\cs{o}]{T}{S}})            & = & \cs{o} \\
 \end{array}
 \qquad
 \begin{array}{lcl}
-  \pr(\ty{\tyends[\cs{o}]}) & = & \cs{o} \\
-  \pr(\ty{\tyendr[\cs{o}]}) & = & \cs{o} \\
-  \pr(\ty{\tyunit})         & = & \ptop \\
-  \pr(\ty{\tyvoid})         & = & \ptop \\
-  \pr(\ty{S})               & = & \pr(\ty{S}) \\
-  \pr(\ty{\emptyenv})       & = & \ptop
+  \pr(\ty{\tyends[\cs{o}]})                  & = & \cs{o} \\
+  \pr(\ty{\tyendr[\cs{o}]})                  & = & \cs{o} \\
 \end{array}
 \]
-
-\paragraph*{Syntactic Sugar for Types}
 \[
-  \ty{\tylolli{T}{U}} \elabarrow \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}
+\begin{array}{lcl}
+  \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
+  \minpr(\ty{\tysum{T}{U}})                  & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
+  \minpr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p} \\
+  \\
+  \minpr(\ty{\Gamma}, \tmty{x}{A})           & = & \minpr(\ty{\Gamma})\sqcap\pr(\ty{A})
+\end{array}
+\qquad
+\begin{array}{lcl}
+  \minpr(\ty{\tyunit})                       & = & \ptop \\
+  \minpr(\ty{\tyvoid})                       & = & \ptop \\
+  \minpr(\ty{S})                             & = & \pr(\ty{S}) \\
+  \\
+  \minpr(\ty{\emptyenv})                     & = & \ptop
+\end{array}
 \]
 
 \paragraph*{Static Term Syntax}
@@ -161,9 +184,6 @@ We use $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. 
     \sep        \tm{\inl{M}}
     \sep        \tm{\inr{M}}
   \\
-  \tm{R}
-  & \coloneqq & \tm{K\;V}
-  \\
   \tm{E}
   & \coloneqq & \tm{\hole} \\
   & \sep      & \tm{E\;M}
@@ -212,10 +232,10 @@ See \cref{fig:pgv-operational-semantics}.
 
 \begin{restatablelemma}{lempgvvaluedone}
   \label{lem:pgv-value-done}
-  If $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$, then $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$.
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
 \end{restatablelemma}
 \begin{proof}
-  By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$.
+  By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$.
   (Details in \cref{prf:lem-pgv-value-done}.)
 \end{proof}
 
@@ -232,8 +252,8 @@ See \cref{fig:pgv-operational-semantics}.
 \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
   \label{lem:pgv-subject-reduction-terms}
   \hfill\\%newline before theorem statement
-  If $\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
-  then $\tseq[\cs{o}]{\ty{\Gamma}}{M'}{T}$.
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
+  then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
 \end{restatablelemma}
 \begin{proof}
   By induction on the derivation of $\tm{M}\tred\tm{M'}$.
@@ -261,6 +281,64 @@ See \cref{fig:pgv-operational-semantics}.
   By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
   (Details in \cref{prf:thm-pgv-subject-reduction-confs}.)
 \end{proof}
+
+\begin{definition}[Actions]
+  \label{def:pgv-actions}
+  A~term acts on an endpoint $\tm{x}$ if it is in one of the following forms:
+  \begin{multicols}{3}
+    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+    \item $\tm{\link\;\pair{x}{y}}$ 
+    \item $\tm{\link\;\pair{y}{x}}$
+    \item $\tm{\send\;\pair{x}{y}}$
+    \item $\tm{\recv\;{x}}$
+    \item $\tm{\close\;{x}}$
+    \item $\tm{\wait\;{x}}$
+    \end{itemize}
+  \end{multicols}
+  \noindent
+  A~term is an action if it acts on some endpoint $\tm{x}$.
+\end{definition}
+
+\begin{definition}[Ready Actions]
+  \label{def:pgv-ready-actions}
+  A~term is ready to act on an endpoint $\tm{x}$ if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ acts on $\tm{x}$. A~term is ready if it is ready to act on some endpoint $\tm{x}$.
+\end{definition}
+
+\begin{restatablelemma}{lempgvprogressterms}[Open Progress, $\tred$]
+
+\end{restatablelemma}
+
+\begin{definition}[Canonical Forms]
+  \label{def:pgv-canonical-forms}
+  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form:
+  \[
+    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
+  \]
+\end{definition}
+
+\begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
+  \label{lem:pgv-canonical-forms}
+  If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
+\end{restatablelemma}
+\begin{proof}
+  We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+\end{proof}
+
+\begin{restatabletheorem}{thmpgvclosedprogressconfs}[Closed Progress, $\cred$]
+  \label{lem:pgv-closed-progress-confs}
+  If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}=\tm{\main\;V}$ or there exists a $\tm{\conf{D}}$ such that $\tm{\conf{C}}\cred\tm{\conf{D}}$.
+\end{restatabletheorem}
+\begin{proof}
+  \label{prf:thm-pgv-closed-progress}
+  Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$. If any term $\tm{M_i}$ or $\tm{N}$ is \emph{not} ready, 
+\end{proof}
+
+  % Pick the process $\tm{P_i}$ with the smallest priority $\minpr{(\ty{\Gamma_i})}$. $\tm{P_i}$ acts on some endpoint $\tmty{y}{A}\in\ty{\Gamma_i}$. We must have $\minpr{(\ty{\Gamma_i})}=\pr{(\ty{A})}$, since the other actions in $\tm{P_i}$ are guarded by the action on $\tmty{y}{A}$.
+
+  % If $\tm{P_j}$ is a link $\tm{\link{y}{z}}$ or $\tm{\link{z}{y}}$, we apply \LabTirName{E-Link}.
+
+  % Otherwise, there must be a process $\seq{P_j}{\ty{\Gamma_j}}$ where $\tmty{y'}{\co{A}}\in\ty{\Gamma_j}$ and $\tm{y}$ and $\tm{y'}$ are dual endpoints of the same channel, since $\tm{y}$ is bound. By duality, $\pr{(\ty{A})}=\pr{(\ty{\co{A}})}$. We must have $\pr{(\ty{\co{A}})}=\minpr{(\ty{\Gamma_j})}$, since we chose $\tm{P_i}$ to have the smallest priority $\minpr{(\Gamma_i)}$. We cannot have $\tm{P_i}=\tm{P_j}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr{(\ty{A})}<\pr{(\ty{\co{A}})}$. The process $\tm{P_j}$ must act on $\tm{y'}$, otherwise the action on $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{A})}$. We have two processes, acting on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send}, \LabTirName{E-Close}, \LabTirName{E-Select-Inl}, or \LabTirName{E-Select-Inr}.
+
 
 \end{document}
 

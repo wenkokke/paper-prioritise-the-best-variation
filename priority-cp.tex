@@ -16,16 +16,14 @@
 
 \subsection{Syntax}
 
-In this section we present an updated version of Priority CP~\cite{dardha2018}, which is Wadler's Classical Processes~\cite{wadler2012} with \emph{priorities}.
-
-% Wen: Do we have to mention this? I'm assuming this was mentioned in~\cite{dardha2018}?
-% "Some details of the calculus are inspired by Carbone \emph{et al.}~\cite{carbone2016} and Caires and P\'{e}rez~\cite{caires2017}."
+We present an updated version of Priority CP~\cite[PCP]{dardha2018}, which is Wadler's Classical Processes~\cite[CP]{wadler2012} with \emph{priorities}.
+The main change is the move away from a reduction strategy based on cut elimination using commuting conversions, and towards a reduction strategy using the structural congruence.
 
 \paragraph*{Priorities, types, and environments}
-Types are based on classical linear logic formulas, and are annotated with priorities $\cs{o}\in\mathbb{N}$.
+Types are based on classical linear logic connectives, and are annotated with priorities $\cs{o}\in\mathbb{N}$.
 
 The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as $\ty{B}$.
-The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel over which we send or receive a ping, and then close the channel. These act as the units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$.
+The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel whose session has finished, and over which we send or receive a ping before closing the channel. These act as the units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$.
 
 The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can make or offer a choice between two options $\ty{A}$ or $\ty{B}$.
 The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can make offer a choice between \emph{no options}. These act as the units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$.
