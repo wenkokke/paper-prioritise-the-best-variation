@@ -15,16 +15,16 @@
     By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Gamma},\ty{\Theta})=\pr(\ty{\Gamma},\ty{U'})$.
     \begin{mathpar}
       \inferrule*{
-        \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{U'},\tmty{y}{T}}{M}{U}
+        \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{U'},\tmty{y}{T}}{M}{U}
       }{\tseq[\cs{\pbot}]{\ty{\Gamma},\tmty{x}{U'}}
         {\lambda y.M}
-        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{U'})},\cs{o}]{T}{U}}}
+        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{U'})},\cs{q}]{T}{U}}}
       \substarrow{V}{x}
       \inferrule*{
-        \tseq[\cs{o}]{\ty{\Gamma},\ty{\Theta},\tmty{y}{T}}{\subst{M}{V}{x}}{U}
+        \tseq[\cs{q}]{\ty{\Gamma},\ty{\Theta},\tmty{y}{T}}{\subst{M}{V}{x}}{U}
       }{\tseq[\cs{\pbot}]{\ty{\Gamma},\ty{\Theta}}
         {\lambda y.\subst{M}{V}{x}}
-        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{\Theta})},\cs{o}]{T}{U}}}
+        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{\Theta})},\cs{q}]{T}{U}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-App}]
@@ -33,48 +33,48 @@
       Immediately, from the induction hypothesis.
       \begin{mathpar}
         \inferrule*{
-          \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+          \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
           \\
           \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
           \\
           \cs{p}<\pr(\ty{\Delta})
           \\
-          \cs{q}<\cs{o}
-        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{r}]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{M\;N}{U}}
+          \cs{q}<\cs{p'}
+        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{M\;N}{U}}
         \substarrow{V}{x}
         \inferrule*{
-          \tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+          \tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
           \\
           \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
           \\
           \cs{p}<\pr(\ty{\Delta})
           \\
-          \cs{q}<\cs{o}
-        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{r}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{(\subst{M}{V}{x})\;N}{U}}
+          \cs{q}<\cs{p'}
+        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{(\subst{M}{V}{x})\;N}{U}}
       \end{mathpar}
     \end{subcase*}
     \begin{subcase*}[$\tm{x}\in\tm{N}$]
       By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Delta},\ty{\Theta})=\pr(\ty{\Delta},\ty{U'})$.
       \begin{mathpar}
         \inferrule*{
-          \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+          \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
           \\
           \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{U'}}{N}{T}
           \\
           \cs{p}<\pr(\ty{\Delta},\ty{U'})
           \\
-          \cs{q}<\cs{o}
-        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{r}]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{M\;N}{U}}
+          \cs{q}<\cs{p'}
+        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{M\;N}{U}}
         \substarrow{V}{x}
         \inferrule*{
-          \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+          \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
           \\
           \tseq[\cs{q}]{\ty{\Delta},\ty{\Theta}}{\subst{N}{V}{x}}{T}
           \\
           \cs{p}<\pr(\ty{\Delta},\ty{\Theta})
           \\
-          \cs{q}<\cs{o}
-        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{r}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{M\;(\subst{N}{V}{x})}{U}}
+          \cs{q}<\cs{p'}
+        }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{M\;(\subst{N}{V}{x})}{U}}
       \end{mathpar}
     \end{subcase*}
   \end{case*}
@@ -210,42 +210,42 @@
   \begin{case*}[\LabTirName{T-Absurd}]
     \begin{mathpar}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\tmty{x}{U'}}{M}{\tyvoid}
-      }{\tseq[o]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{\absurd{M}}{T}}
+        \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{\tyvoid}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta},\tmty{x}{U'}}{\absurd{M}}{T}}
       \substarrow{V}{x}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{\tyvoid}
-      }{\tseq[o]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\absurd{\subst{M}{V}{x}}}{T}}
+        \tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{\tyvoid}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\absurd{\subst{M}{V}{x}}}{T}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Inl}]
     \begin{mathpar}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}
+        \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma},\tmty{x}{U'}}{\inl{M}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{\inl{M}}{\tysum{T}{U}}}
       \substarrow{V}{x}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}
+        \tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma},\ty{\Theta}}{\inl{\subst{M}{V}{x}}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\inl{\subst{M}{V}{x}}}{\tysum{T}{U}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Inr}]
     \begin{mathpar}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\tmty{x}{U'}}{M}{U}
+        \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{U}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma},\tmty{x}{U'}}{\inr{M}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{\inr{M}}{\tysum{T}{U}}}
       \substarrow{V}{x}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{U}
+        \tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{U}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma},\ty{\Theta}}{\inr{\subst{M}{V}{x}}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\inr{\subst{M}{V}{x}}}{\tysum{T}{U}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-CaseSum}]

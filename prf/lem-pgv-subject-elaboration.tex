@@ -7,7 +7,7 @@
     \\
     \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
     \\
-    \cs{p}<\pr(\ty{\Delta})
+    \cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\andthen{M}{N}}{T}}
   \elabarrow
   \inferrule*{
@@ -15,57 +15,57 @@
     \\
     \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
     \\
-    \cs{p}<\pr(\ty{\Delta})
+    \cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letunit{M}{N}}{T}}
   \\
   % Preservation for T-LamUnit
   \inferrule*[lab=T-LamUnit]{
-    {\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}}
+    {\tseq[\cs{q}]{\ty{\Gamma}}{M}{T}}
   }{\tseq[\cs{\pbot}]
     {\ty{\Gamma}}
     {\lambda\unit.M}
-    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\tyunit}{T}}}
+    {\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{\tyunit}{T}}}
   \elabarrow
   \inferrule*{
     \inferrule*{
       \inferrule*{
       }{\tseq[\cs{\pbot}]{\tmty{z}{\tyunit}}{z}{\tyunit}}
       \\
-      \tseq[\cs{o}]{\ty{\Gamma}}{M}{T}
-    }{\tseq[\cs{o}]
+      \tseq[\cs{q}]{\ty{\Gamma}}{M}{T}
+    }{\tseq[\cs{q}]
       {\ty{\Gamma},\tmty{z}{\tyunit}}
       {\letunit{z}{M}}
       {T}}
   }{\tseq[\cs{\pbot}]
     {\ty{\Gamma}}
     {\lambda z.\letunit{z}{M}}
-    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\tyunit}{T}}}
+    {\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{\tyunit}{T}}}
   \\
   % Preservation for T-LamPair
   \inferrule*[lab=T-LamPair]
-  {\tseq[\cs{o}]
+  {\tseq[\cs{q}]
     {\ty{\Gamma},\tmty{x}{T},\tmty{y}{T'}}
     {M}
     {U}}
   {\tseq[\cs{\pbot}]
     {\ty{\Gamma}}
     {\lambda\pair{x}{y}.M}
-    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\typrod{T}{T'}}{U}}}
+    {\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{\typrod{T}{T'}}{U}}}
   \elabarrow
   \inferrule*{
     \inferrule*{
       \inferrule*{
       }{\tseq[\cs{\pbot}]{\tmty{z}{\typrod{T}{T'}}}{z}{\typrod{T}{T'}}}
       \\
-      \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{T},\tmty{y}{T'}}{M}{U}
-    }{\tseq[\cs{o}]
+      \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T},\tmty{y}{T'}}{M}{U}
+    }{\tseq[\cs{q}]
       {\ty{\Gamma},\tmty{z}{\typrod{T}{T'}}}
       {\letpair{x}{y}{z}{M}}
       {T}}
   }{\tseq[\cs{\pbot}]
     {\ty{\Gamma}}
     {\lambda z.\letpair{x}{y}{z}{M}}
-    {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\typrod{T}{T'}}{U}}}
+    {\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{\typrod{T}{T'}}{U}}}
   \\
   % Preservation for T-Let
   \inferrule*[lab=T-Let]{
@@ -73,7 +73,7 @@
     \\
     \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T}}{N}{U}
     \\
-    \cs{p}<\pr(\ty{\Delta})
+    \cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letbind{x}{M}{N}}{U}}
   \elabarrow
   \inferrule*{
@@ -82,11 +82,11 @@
     }{\tseq[\cs{\pbot}]
       {\ty{\Delta}}
       {\lambda x.N}
-      {\tylolli[\cs{\pr(\ty{\Delta})},\cs{q}]{T}{U}}}
+      {\tylolli[\cs{\minpr(\ty{\Delta})},\cs{q}]{T}{U}}}
     \\
     \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
     \\
-    \cs{p}<\pr(\ty{\Delta})
+    \cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{q}\sqcup\cs{p}]
     {\ty{\Gamma},\ty{\Delta}}
     {(\lambda x.N)\;M}
@@ -189,7 +189,7 @@
 \begin{mathpar}
   % Preservation for T-Select-Inl
   \inferrule*[lab=T-Select-Inl]{
-    \pr(\ty{S})=\pr(\ty{S'})
+    \minpr(\ty{S})=\minpr(\ty{S'})
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinl}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S}}}
   \elabarrow
   \\
@@ -286,7 +286,7 @@
 \begin{mathpar}
   % Preservation for T-Select-Inr
   \inferrule*[lab=T-Select-Inr]{
-    \pr(\ty{S})=\pr(\ty{S'})
+    \minpr(\ty{S})=\minpr(\ty{S'})
   }{\tseq[\cs{\pbot}]{\emptyenv}{\select{\labinr}}{\tylolli[\cs{\ptop},\cs{o}]{\tyselect[\cs{o}]{S}{S'}}{S'}}}
   \elabarrow
   \\
@@ -398,7 +398,7 @@
       {N}
       {T}}
     \\
-    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta},\ty{S},\ty{S'})
+    \cs{o}\sqcup\cs{p}<\minpr(\ty{\Delta},\ty{S},\ty{S'})
   }{\tseq[\cs{o}\sqcup\cs{p}\sqcup\cs{q}]
     {\ty{\Gamma},\ty{\Delta}}
     {\offer{L}{x}{M}{y}{N}}
@@ -442,7 +442,7 @@
       {\casesum{z}{x}{M}{y}{N}}
       {T}}
     \\
-    \cs{o}<\pr(\ty{\Delta},\ty{\tysum{S}{S'}})
+    \cs{o}<\minpr(\ty{\Delta},\ty{\tysum{S}{S'}})
   }{
     \tseq[\cs{o}\sqcup\cs{q}]
     {\ty{\Delta},\tmty{z}{\tysum{S}{S'}},\tmty{w}{\tyendr[\cs{o+1}]}}
@@ -466,7 +466,7 @@
     \\
     \LabTirName{(c)}
     \\
-   \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
+   \cs{o}\sqcup\cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{o}\sqcup\cs{p}\sqcup\cs{q}]
     {\ty{\Gamma},\ty{\Delta}}
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}
@@ -496,7 +496,7 @@
     {L}
     {\tyofferemp[\cs{o}]}
     \\
-    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
+    \cs{o}\sqcup\cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{o}\sqcup\cs{p}]
     {\ty{\Gamma},\ty{\Delta}}
     {\offeremp{L}}
@@ -540,13 +540,13 @@
         {\absurd{z}}
         {T}}
       \\
-      \cs{o}<\pr(\ty{\Delta})
+      \cs{o}<\minpr(\ty{\Delta})
     }{\tseq[\cs{o}]
       {\ty{\Delta},\tmty{z}{\tyvoid},\tmty{w}{\tyendr[\cs{o+1}]}}
       {\andthen{\wait\;{w}}{\absurd{z}}}
       {T}}
     \\
-    \cs{o}\sqcup\cs{p}<\pr(\ty{\Delta})
+    \cs{o}\sqcup\cs{p}<\minpr(\ty{\Delta})
   }{\tseq[\cs{o}\sqcup\cs{p}]
     {\ty{\Gamma},\ty{\Delta}}
     {\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\absurd{z}}}}

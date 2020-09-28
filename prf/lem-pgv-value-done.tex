@@ -6,8 +6,8 @@
     Immediately.
     \begin{mathpar}
       \inferrule*{
-        \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
-      }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{T}{U}}}
+        \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+      }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{q}]{T}{U}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Unit}]
@@ -30,23 +30,23 @@
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Inl}]
-    The induction hypothesis gives us $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{\ty{T}}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
+    The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{\ty{T}}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
     \begin{mathpar}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma}}{V}{T}
+        \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
     \end{mathpar}
   \end{case*}
   \begin{case*}[\LabTirName{T-Inr}]
-    The induction hypothesis gives us $\cs{o}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{\ty{U}}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
+    The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{\ty{U}}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
     \begin{mathpar}
       \inferrule*{
-        \tseq[o]{\ty{\Gamma}}{V}{U}
+        \tseq[\cs{p}]{\ty{\Gamma}}{V}{U}
         \\
         \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[o]{\ty{\Gamma}}{\inr{V}}{\tysum{T}{U}}}
+      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{V}}{\tysum{T}{U}}}
     \end{mathpar}
   \end{case*}
 \end{proof}
