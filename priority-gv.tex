@@ -51,6 +51,7 @@ A typing context $\ty\Gamma$ is a partial function associating names to types.
     \sep        \ty{\Gamma}, \tmty{x}{T}
 \end{array}
 \]
+Duality plays a crucial role in session types. The two endpoints of a channel are assigned dual types, which ensures that, for instances, whenever one program \emph{sends} a value on a channel, the program on the other end is waiting to \emph{receive}. Each \emph{session type} $\ty{T}$ has a dual, written $\ty{\co{T}}$. Duality is an involutive function which preserves priorities.
 \[
 \begin{array}{lcl}
   \ty{\co{\tysend[\cs{o}]{T}{S}}} & = & \ty{\tyrecv[\cs{o}]{T}{\co{S}}} \\
@@ -62,6 +63,7 @@ A typing context $\ty\Gamma$ is a partial function associating names to types.
   \ty{\co{\tyendr[\cs{o}]}} & = & \ty{\co{\tyends[\cs{o}]}}
 \end{array}
 \]
+The function $\pr$ returns the smallest priority of a session type. The type system guarantees that the top-most connective always holds the smallest priority, so we simply return the priority of the top-most connective.
 \[
 \begin{array}{lcl}
   \pr(\ty{\tysend[\cs{o}]{T}{S}})            & = & \cs{o} \\
@@ -73,6 +75,8 @@ A typing context $\ty\Gamma$ is a partial function associating names to types.
   \pr(\ty{\tyendr[\cs{o}]})                  & = & \cs{o} \\
 \end{array}
 \]
+We extend the function $\pr$ to value types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority.
+\todo{explain function type.}
 \[
 \begin{array}{lcl}
   \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
@@ -92,7 +96,7 @@ A typing context $\ty\Gamma$ is a partial function associating names to types.
 \]
 
 \paragraph*{Static Term Syntax}
-We use $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, and $\tm{c}$ to range over \emph{free} channel endpoints.
+Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$ to range over \emph{free} channel endpoints. The term language is the linear $\lambda$-calculus, extended with constants for the communication primitives.
 \[
 \begin{array}{lcl}
   \tm{L}, \tm{M}, \tm{N}
