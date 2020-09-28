@@ -224,6 +224,8 @@ We use $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. 
 See \cref{fig:pgv-typing}.
 \input{fig/pgv-typing}
 
+\todo{Define the ``priority bound of a term $\tm{M}$'' as $\cs{p}$ where $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$.}
+
 \subsection{Operational Semantics}
 See \cref{fig:pgv-operational-semantics}.
 \input{fig/pgv-operational-semantics}
@@ -289,7 +291,7 @@ See \cref{fig:pgv-operational-semantics}.
     \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
     \item $\tm{\link\;\pair{x}{y}}$ 
     \item $\tm{\link\;\pair{y}{x}}$
-    \item $\tm{\send\;\pair{x}{y}}$
+    \item $\tm{\send\;\pair{V}{x}}$
     \item $\tm{\recv\;{x}}$
     \item $\tm{\close\;{x}}$
     \item $\tm{\wait\;{x}}$
@@ -299,18 +301,35 @@ See \cref{fig:pgv-operational-semantics}.
   A~term is an action if it acts on some endpoint $\tm{x}$.
 \end{definition}
 
-\begin{definition}[Ready Actions]
+\begin{definition}[Ready Terms]
   \label{def:pgv-ready-actions}
-  A~term is ready to act on an endpoint $\tm{x}$ if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ acts on $\tm{x}$. A~term is ready if it is ready to act on some endpoint $\tm{x}$.
+  A~term $\tm{L}$ is ready if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}=\tm{\new}$, $\tm{M}=\tm{\spawn\;N}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is ready to act on $\tm{x}$.
 \end{definition}
 
-\begin{restatablelemma}{lempgvprogressterms}[Open Progress, $\tred$]
-
+\begin{restatablelemma}{lempgvreadypriority}
+  \label{lem:pgv-ready-priority}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ is ready, then $\cs{p}=\cs{o}$ for some priority $\cs{o}$.
 \end{restatablelemma}
+\begin{proof}
+  \admit
+\end{proof}
+
+\begin{restatablelemma}{lempgvopenprogressterms}[Open Progress, $\tred$]
+  \label{lem:pgv-open-progress-terms}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, then:
+  \begin{itemize}
+  \item $\tm{M}$ is a value;
+  \item $\tm{M}\tred\tm{N}$ for some term $\tm{N}$; or
+  \item $\tm{M}$ is ready.
+  \end{itemize}
+\end{restatablelemma}
+\begin{proof}
+  \admit
+\end{proof}
 
 \begin{definition}[Canonical Forms]
   \label{def:pgv-canonical-forms}
-  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form:
+  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
   \[
     \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
   \]
@@ -326,19 +345,17 @@ See \cref{fig:pgv-operational-semantics}.
 
 \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Closed Progress, $\cred$]
   \label{lem:pgv-closed-progress-confs}
-  If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}=\tm{\main\;V}$ or there exists a $\tm{\conf{D}}$ such that $\tm{\conf{C}}\cred\tm{\conf{D}}$.
+  If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or
+  \[
+    \tm{\conf{C}}
+    =
+    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}},
+  \]
+  where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
 \end{restatabletheorem}
 \begin{proof}
-  \label{prf:thm-pgv-closed-progress}
-  Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$. If any term $\tm{M_i}$ or $\tm{N}$ is \emph{not} ready, 
+  Details in \cref{prf:thm-pgv-closed-progress-confs}.
 \end{proof}
-
-  % Pick the process $\tm{P_i}$ with the smallest priority $\minpr{(\ty{\Gamma_i})}$. $\tm{P_i}$ acts on some endpoint $\tmty{y}{A}\in\ty{\Gamma_i}$. We must have $\minpr{(\ty{\Gamma_i})}=\pr{(\ty{A})}$, since the other actions in $\tm{P_i}$ are guarded by the action on $\tmty{y}{A}$.
-
-  % If $\tm{P_j}$ is a link $\tm{\link{y}{z}}$ or $\tm{\link{z}{y}}$, we apply \LabTirName{E-Link}.
-
-  % Otherwise, there must be a process $\seq{P_j}{\ty{\Gamma_j}}$ where $\tmty{y'}{\co{A}}\in\ty{\Gamma_j}$ and $\tm{y}$ and $\tm{y'}$ are dual endpoints of the same channel, since $\tm{y}$ is bound. By duality, $\pr{(\ty{A})}=\pr{(\ty{\co{A}})}$. We must have $\pr{(\ty{\co{A}})}=\minpr{(\ty{\Gamma_j})}$, since we chose $\tm{P_i}$ to have the smallest priority $\minpr{(\Gamma_i)}$. We cannot have $\tm{P_i}=\tm{P_j}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr{(\ty{A})}<\pr{(\ty{\co{A}})}$. The process $\tm{P_j}$ must act on $\tm{y'}$, otherwise the action on $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{A})}$. We have two processes, acting on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send}, \LabTirName{E-Close}, \LabTirName{E-Select-Inl}, or \LabTirName{E-Select-Inr}.
-
 
 \end{document}
 

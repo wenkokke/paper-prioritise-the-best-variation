@@ -1,7 +1,7 @@
 \documentclass[citecolor=red,linkcolor=blue,runningheads]{llncs}
 
 % Document preparation
-\newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO:}~#1}}
+\newcommand{\todo}[1]{\noindent\textcolor{red}{\textbf{TODO:}~#1}}
 \newcommand{\admit}{\textcolor{red}{\textit{Admitted.}}}
 
 % Typesetting
@@ -285,6 +285,9 @@ To be written last\dots
 
   \restatetheorem{thmpgvsubjectreductionconfs}
   \input{prf/thm-pgv-subject-reduction-confs}
+
+  \restatetheorem{thmpgvclosedprogressconfs}
+  \input{prf/thm-pgv-closed-progress-confs}
 }
 \section{Priority CP}
 {
