@@ -17,16 +17,16 @@
 \subsection{Syntax}
 
 We present an updated version of Priority CP~\cite[PCP]{dardha2018}, which is Wadler's Classical Processes~\cite[CP]{wadler2012} with \emph{priorities}.
-The main change is the move away from a reduction strategy based on cut elimination using commuting conversions, and towards a reduction strategy using the structural congruence.
+The main difference with respect to PCP by Dardha and Gay \cite{dardha2018} is moving away from a reduction strategy based on cycle elimination using commuting conversions, and towards a reduction strategy using structural congruence.
 
 \paragraph*{Priorities, types, and environments}
-Types are based on classical linear logic connectives, and are annotated with priorities $\cs{o}\in\mathbb{N}$.
+Types are based on classical linear logic propositions, and are annotated with priorities ranging over $\cs{o}\in\mathbb{N}$. We let $\ty{A}, \ty{B}, \ty{C}$ range over types, produced by the following grammar.
 
-The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as $\ty{B}$.
-The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel whose session has finished, and over which we send or receive a ping before closing the channel. These act as the units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$.
+The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as type $\ty{B}$.
+The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$, respectively.
 
-The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can make or offer a choice between two options $\ty{A}$ or $\ty{B}$.
-The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can make offer a choice between \emph{no options}. These act as the units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$.
+The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\ty{A}$ or $\ty{B}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler2012}, however types $\oplus$ and $\with$ can be trivially generalised to $\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}$ and $\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}$, respectively as in the original PCP \cite{dardha2018}.
+The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$, respectively.
 \[
 \begin{array}{lcl}
   \ty{A}, \ty{B}, \ty{C}
@@ -86,11 +86,19 @@ The function $\pr(\cdot)$ returns the priority of a type. The function $\minpr(\
 \]
 
 \paragraph*{Terms}
+We let $\tm{P}, \tm{Q}$ range over processes, produced by the following grammar.
+
+Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. Processes $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm x$ and $\tm y$ are bound together and with scope $\tm P$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
+
+Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm x$ a value $\tm y$ and proceed as process $\tm P$. Processes $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm x$, and continue as $\tm P$.
+
+Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm P$. Process $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm P$ and $\tm Q$. Process $\tm{\absurd{x}}$ denotes the empty offer.
+
 \[
 \begin{array}[t]{lcl}
   \tm{P}, \tm{Q}
   & \coloneqq & \tm{\link{x}{y}}
-         \sep   \tm{\res{x}{x'}{P}}
+         \sep   \tm{\res{x}{y}{P}}
          \sep   \tm{(\ppar{P}{Q})}
          \sep   \tm{\halt}
   \\   & \sep & \tm{\send{x}{y}{P}}
@@ -103,7 +111,6 @@ The function $\pr(\cdot)$ returns the priority of a type. The function $\minpr(\
          \sep   \tm{\absurd{x}}
 \end{array}
 \]
-
 \paragraph*{Syntactic Sugar}
 We define \emph{unbound} send:
 \[
