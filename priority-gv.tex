@@ -286,32 +286,20 @@ See \cref{fig:pgv-operational-semantics}.
 
 \begin{definition}[Actions]
   \label{def:pgv-actions}
-  A~term acts on an endpoint $\tm{x}$ if it is in one of the following forms:
-  \begin{multicols}{3}
-    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-    \item $\tm{\link\;\pair{x}{y}}$ 
-    \item $\tm{\link\;\pair{y}{x}}$
-    \item $\tm{\send\;\pair{V}{x}}$
-    \item $\tm{\recv\;{x}}$
-    \item $\tm{\close\;{x}}$
-    \item $\tm{\wait\;{x}}$
-    \end{itemize}
-  \end{multicols}
-  \noindent
-  A~term is an action if it acts on some endpoint $\tm{x}$.
+  A~term acts on an endpoint $\tm{x}$ if it is of the form $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;{x}}$, $\tm{\close\;{x}}$, or $\tm{\wait\;{x}}$. A~term is an action if it acts on some endpoint $\tm{x}$.
 \end{definition}
 
 \begin{definition}[Ready Terms]
   \label{def:pgv-ready-actions}
-  A~term $\tm{L}$ is ready if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}=\tm{\new}$, $\tm{M}=\tm{\spawn\;N}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is ready to act on $\tm{x}$.
+  A~term $\tm{L}$ is ready if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$ or $\tm{\link\;\pair{y}{x}}$, or $\tm{M}$ acts on $\tm{x}$. In the last case, we say that $\tm{L}$ is ready to act on $\tm{x}$.
 \end{definition}
 
 \begin{restatablelemma}{lempgvreadypriority}
   \label{lem:pgv-ready-priority}
-  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ is ready, then $\cs{p}=\cs{o}$ for some priority $\cs{o}$.
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
 \end{restatablelemma}
 \begin{proof}
-  \admit
+  Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
 \end{proof}
 
 \begin{restatablelemma}{lempgvopenprogressterms}[Open Progress, $\tred$]

@@ -18,21 +18,21 @@
     }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letbind{x}{M}{N}}{U}}
     \\
     \inferrule*[lab=T-LamUnit]{
-      {\tseq[\cs{o}]{\ty{\Gamma}}{M}{T}}
+      {\tseq[\cs{q}]{\ty{\Gamma}}{M}{T}}
     }{\tseq[\cs{\pbot}]
       {\ty{\Gamma}}
       {\lambda\unit.M}
-      {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\tyunit}{T}}}
+      {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{q}]{\tyunit}{T}}}
     
     \inferrule*[lab=T-LamPair]
-    {\tseq[\cs{o}]
+    {\tseq[\cs{q}]
       {\ty{\Gamma},\tmty{x}{T},\tmty{y}{T'}}
       {M}
       {U}}
     {\tseq[\cs{\pbot}]
       {\ty{\Gamma}}
       {\lambda\pair{x}{y}.M}
-      {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{\typrod{T}{T'}}{U}}}
+      {\tylolli[\cs{\pr(\ty{\Gamma})},\cs{q}]{\typrod{T}{T'}}{U}}}
     \\
     \inferrule*[lab=T-Fork]{
     }{\tseq[\cs{\pbot}]
@@ -85,6 +85,7 @@
   \caption{Typing Rules for Syntactic Sugar for PGV.}
   \label{fig:pgv-typing-sugar}
 \end{figure}
+
 %%% Local Variables:
 %%% TeX-master: "../priorities"
 %%% End:

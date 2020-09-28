@@ -5,21 +5,21 @@
     }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
     
     \inferrule*[lab=T-Lam]{
-      \tseq[\cs{o}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
-    }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{o}]{T}{U}}}
+      \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+    }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{T}{U}}}
     
     \inferrule*[lab=T-Const]{
     }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
     
     \inferrule*[lab=T-App]{
-      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{o},\cs{r}]{T}{U}}
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
       \\
       \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
       \\
-      \cs{p}<\pr(\ty{\Delta})
+      \cs{p}<\minpr(\ty{\Delta})
       \\
-      \cs{q}<\cs{o}
-    }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{o}]{\ty{\Gamma},\ty{\Delta}}{M\;N}{U}}
+      \cs{q}<\cs{p'}
+    }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{p'}]{\ty{\Gamma},\ty{\Delta}}{M\;N}{U}}
     \\
     \inferrule*[lab=T-Unit]{
     }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
@@ -29,7 +29,7 @@
       \\
       \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
       \\
-      \cs{p}<\pr(\ty{\Delta})
+      \cs{p}<\minpr(\ty{\Delta})
     }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letunit{M}{N}}{T}}
     
     \inferrule*[lab=T-Pair]{
@@ -37,7 +37,7 @@
       \\
       \tseq[\cs{q}]{\ty{\Delta}}{N}{U}
       \\
-      \cs{p}<\pr(\ty{\Delta})
+      \cs{p}<\minpr(\ty{\Delta})
     }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{M}{N}}{\typrod{T}{U}}}
     
     \inferrule*[lab=T-LetPair]{
@@ -45,20 +45,20 @@
       \\
       \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T},\tmty{y}{T'}}{N}{U}
       \\
-      \cs{p}<\pr(\ty{\Delta},\ty{T},\ty{T'})
+      \cs{p}<\minpr(\ty{\Delta},\ty{T},\ty{T'})
     }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letpair{x}{y}{M}{N}}{U}}
     
     \inferrule*[lab=T-Inl]{
-      \tseq[o]{\ty{\Gamma}}{M}{T}
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
       \\
-      \pr(\ty{T})=\pr(\ty{U})
-    }{\tseq[o]{\ty{\Gamma}}{\inl{M}}{\tysum{T}{U}}}
+      \minpr(\ty{T})=\minpr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{M}}{\tysum{T}{U}}}
     
     \inferrule*[lab=T-Inr]{
-      \tseq[o]{\ty{\Gamma}}{M}{U}
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{U}
       \\
-      \pr(\ty{T})=\pr(\ty{U})
-    }{\tseq[o]{\ty{\Gamma}}{\inr{M}}{\tysum{T}{U}}}
+      \minpr(\ty{T})=\minpr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{M}}{\tysum{T}{U}}}
     
     \inferrule*[lab=T-CaseSum]{
       \tseq[\cs{p}]{\ty{\Gamma}}{L}{\tysum{T}{T'}}
@@ -67,12 +67,12 @@
       \\
       \tseq[\cs{q}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
       \\
-      \cs{p}<\pr(\ty{\Delta})
+      \cs{p}<\minpr(\ty{\Delta})
     }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\casesum{L}{x}{M}{y}{N}}{U}}
     
     \inferrule*[lab=T-Absurd]{
-      \tseq[o]{\ty{\Gamma}}{M}{\tyvoid}
-    }{\tseq[o]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyvoid}
+    }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
   \end{mathpar}
   We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations.
   \\
