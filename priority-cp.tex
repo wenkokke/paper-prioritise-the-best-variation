@@ -1,3 +1,4 @@
+% !TeX root = priorities.tex
 \documentclass[main.tex]{subfiles}
 
 \begin{document}
@@ -93,7 +94,6 @@ Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication
 Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm x$ a value $\tm y$ and proceed as process $\tm P$. Processes $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm x$, and continue as $\tm P$.
 
 Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm P$. Process $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm P$ and $\tm Q$. Process $\tm{\absurd{x}}$ denotes the empty offer.
-
 \[
 \begin{array}[t]{lcl}
   \tm{P}, \tm{Q}
@@ -118,7 +118,16 @@ We define \emph{unbound} send:
 \]
 
 \subsection{Typing}
-See \cref{fig:pcp-typing}.
+Typing rules for our version of PCP are given in \cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm P$ is well typed under the typing context $\ty \Gamma$".
+
+\textsc{T-Link} states that the link process $\tm{\link{x}{y}}$ is well typed under channels $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Res} sates that the restriction process $\tm{\res{x}{y}{P}}$ is well typed under typing context $\ty\Gamma$ if process $\tm P$ is well typed in $\ty\Gamma$ augmented with channel endpoints $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Par} states that the parallel composition of processes $\tm P$ and $\tm Q$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\tm{\halt}$ is well typed in the empty context.
+
+\textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\tm y$ over a channel $\tm x$ is well typed under $\ty\Gamma$ and $\tm x$ of type $\tytens[\cs{o}]{A}{B}$, respectively ${\typarr[\cs{o}]{A}{B}}$. Priority $\cs o$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
+
+Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm x$ and are in the same lines as the previous two rules, requiring that the priority of channel $\tm x$ is the smallest among all priorites in $\tm\Gamma$.
+
+\textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm x$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm x$. In all the above rules the priority $\cs o$ of channel $\tm x$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
+ 
 \input{fig/pcp-typing}
 
 \subsection{Operational Semantics}
