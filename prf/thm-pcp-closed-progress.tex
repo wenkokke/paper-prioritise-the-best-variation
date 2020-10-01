@@ -11,6 +11,7 @@
   If $\tm{P_j}$ is a link $\tm{\link{y}{z}}$ or $\tm{\link{z}{y}}$, we apply \LabTirName{E-Link}.
 
   Otherwise, there must be a process $\seq{P_j}{\ty{\Gamma_j}}$ where $\tmty{y'}{\co{A}}\in\ty{\Gamma_j}$ and $\tm{y}$ and $\tm{y'}$ are dual endpoints of the same channel, since $\tm{y}$ is bound. By duality, $\pr{(\ty{A})}=\pr{(\ty{\co{A}})}$. We must have $\pr{(\ty{\co{A}})}=\minpr{(\ty{\Gamma_j})}$, since we chose $\tm{P_i}$ to have the smallest priority $\minpr{(\Gamma_i)}$. We cannot have $\tm{P_i}=\tm{P_j}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr{(\ty{A})}<\pr{(\ty{\co{A}})}$. The process $\tm{P_j}$ must act on $\tm{y'}$, otherwise the action on $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{A})}$. We have two processes, acting on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send}, \LabTirName{E-Close}, \LabTirName{E-Select-Inl}, or \LabTirName{E-Select-Inr}.
+  \todo{Refer to the laws on priorities here to justify the "there must be" parts. I have added them explicitly in typing rules section.}
 \end{proof}
 
 %%% Local Variables:

@@ -22,12 +22,6 @@ The main difference with respect to PCP by Dardha and Gay \cite{dardha2018} is m
 
 \paragraph*{Priorities, types, and environments}
 Types are based on classical linear logic propositions, and are annotated with priorities ranging over $\cs{o}\in\mathbb{N}$. We let $\ty{A}, \ty{B}, \ty{C}$ range over types, produced by the following grammar.
-
-The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as type $\ty{B}$.
-The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$, respectively.
-
-The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\ty{A}$ or $\ty{B}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler2012}, however types $\oplus$ and $\with$ can be trivially generalised to $\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}$ and $\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}$, respectively as in the original PCP \cite{dardha2018}.
-The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$, respectively.
 \[
 \begin{array}{lcl}
   \ty{A}, \ty{B}, \ty{C}
@@ -41,6 +35,12 @@ The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of 
     \sep        \ty{\tytop[\cs{o}]}
 \end{array}
 \]
+The types $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we send or receive a channel of type $\ty{A}$, and then proceed as type $\ty{B}$.
+The types $\ty{\tyone[\cs{o}]}$ and $\ty{\tybot[\cs{o}]}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\ty{\tytens[\cs{o}]{A}{B}}$ and $\ty{\typarr[\cs{o}]{A}{B}}$, respectively.
+
+The types $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\ty{A}$ or $\ty{B}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler2012}, however types $\oplus$ and $\with$ can be trivially generalised to $\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}$ and $\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}$, respectively as in the original PCP \cite{dardha2018}.
+The types $\ty{\tynil[\cs{o}]}$ and $\ty{\tytop[\cs{o}]}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\ty{\typlus[\cs{o}]{A}{B}}$ and $\ty{\tywith[\cs{o}]{A}{B}}$, respectively.
+
 A typing context $\ty\Gamma$ is a partial function associating channel names to types.
 \[
 \begin{array}{lcl}
@@ -88,12 +88,6 @@ The function $\pr(\cdot)$ returns the priority of a type. The function $\minpr(\
 
 \paragraph*{Terms}
 We let $\tm{P}, \tm{Q}$ range over processes, produced by the following grammar.
-
-Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. Processes $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm x$ and $\tm y$ are bound together and with scope $\tm P$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
-
-Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm x$ a value $\tm y$ and proceed as process $\tm P$. Processes $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm x$, and continue as $\tm P$.
-
-Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm P$. Process $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm P$ and $\tm Q$. Process $\tm{\absurd{x}}$ denotes the empty offer.
 \[
 \begin{array}[t]{lcl}
   \tm{P}, \tm{Q}
@@ -111,8 +105,13 @@ Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, 
          \sep   \tm{\absurd{x}}
 \end{array}
 \]
-\paragraph*{Syntactic Sugar}
-We define \emph{unbound} send:
+Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm x$ and $\tm y$ are bound together and with scope $\tm P$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
+
+Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm x$ a value $\tm y$ and proceed as process $\tm P$. $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm x$, and continue as $\tm P$.
+
+Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm P$. $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm P$ and $\tm Q$. $\tm{\absurd{x}}$ denotes the empty offer.
+
+Finally, we define \emph{unbound} send as syntactic sugar:
 \[
   \tm{\usend{x}{y}{P}}\elabarrow\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}
 \]
@@ -120,6 +119,11 @@ We define \emph{unbound} send:
 \subsection{Typing}
 Typing rules for our version of PCP are given in \cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm P$ is well typed under the typing context $\ty \Gamma$".
 
+Typing rules make use of priorities, defined in the previous section. Priorities are based on \emph{obligations/capabilities} used by Kobayashi \cite{kobayashi2006}, and simplified to single priorities following Padovani \cite{padovani2014}. Recalling PCP \cite{dardha2018}, priorities obey the following two laws:
+\begin{enumerate}
+  \item [(i)] an action of priority $\cs o$ must be prefixed only by actions of priorities \emph{strictly smaller} than $\cs o$.
+  \item [(ii)] communication requires \emph{equal} priorities for the dual actions.
+\end{enumerate}
 \textsc{T-Link} states that the link process $\tm{\link{x}{y}}$ is well typed under channels $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Res} sates that the restriction process $\tm{\res{x}{y}{P}}$ is well typed under typing context $\ty\Gamma$ if process $\tm P$ is well typed in $\ty\Gamma$ augmented with channel endpoints $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Par} states that the parallel composition of processes $\tm P$ and $\tm Q$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\tm{\halt}$ is well typed in the empty context.
 
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\tm y$ over a channel $\tm x$ is well typed under $\ty\Gamma$ and $\tm x$ of type $\tytens[\cs{o}]{A}{B}$, respectively ${\typarr[\cs{o}]{A}{B}}$. Priority $\cs o$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
@@ -152,7 +156,7 @@ See \cref{fig:pcp-operational-semantics}.
   If $\seq{P}{\ty{\Gamma}}$ and $\tm{P}\red\tm{Q}$, then $\seq{Q}{\ty{\Gamma}}$.
 \end{restatabletheorem}
 \begin{proof}
-  See~\cite{dardha2018}.
+  See~\cite{dardha2018}. \todo{SR in \cite{dardha2018} uses commuting conversions. I guess here the result follows as we are simply considering a subset of reductions?}
 \end{proof}
 
 \begin{definition}[Actions]
@@ -172,7 +176,8 @@ See \cref{fig:pcp-operational-semantics}.
     \end{itemize}
   \end{multicols}
   \noindent
-  A~process is an action if it acts on on some endpoint $\tm{x}$.
+  A~process is an action if it acts on some endpoint $\tm{x}$.
+  \todo{Can't we simplify this def and say that every process is an action except restriction, par and zero.}
 \end{definition}
 
 \begin{definition}[Canonical Forms]
@@ -194,7 +199,7 @@ See \cref{fig:pcp-operational-semantics}.
 \begin{proof}
   If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
 \end{proof}
-
+\todo{We need to comment here why it is that we presented canonical forms, to start with...}
 \begin{restatabletheorem}{thmpcpclosedprogress}[Closed Progress, $\red$]
   \label{thm:pcp-closed-progress}
   \hfill\\%newline before theorem statement
