@@ -3,4 +3,21 @@
 
 \begin{document}
 \section{Related Work and Conclusion}
+
+\paragraph{On GV}
+
+\paragraph{On priorities}
+In Kobayashi's original type-theoretic approach to deadlock-freedom \cite{K98}, priorities were abstract tags from a partially ordered set. In later work abstract tags were simplified to natural numbers, and priorities were replaced by pairs of obligations and capabilities \cite{K02,K06}. The latter change allows more processes to be typed, at the expense of a more complex type system.
+Padovani \cite{P13} adapted Kobayashi's approach to session types, and later on he simplified it to a single priority for linear $\pi$-calculus \cite{P14}. Then, the single priority technique can be transferred to session types by the encoding of session types into linear types \cite{Koba07,DGS12,D14,Dardha16}.
+For simplicity, we have opted for single priorities, as Padovani \cite{P14}.
+
+\paragraph{On progress in session types}
+The first work on progress for session types, by Dezani-Ciancaglini \emph{et al.} \cite{DMYD06}, guaranteed the property by allowing only one active session at a time. Later work \cite{DLY07} introduced a partial order on channels in Kobayashi-style \cite{K98}.
+Bettini \emph{et al.} \cite{BCDDDY08} applied similar ideas to multiparty session types. The main difference with our work is that we associate priorities with individual communication operations, rather than with entire channels. Carbone \emph{et al.} \cite{CDM14} proved that progress is a compositional form of lock-freedom and introduced a new technique for progress in session types by adopting Kobayashi's type system and the encoding of session types \cite{DGS12}.  Vieira and Vasconcelos \cite{VieiraV13} used single priorities and an abstract partial order in session types to guarantee deadlock-freedom.
+
+\paragraph{On Curry-Howard correspondence}
+The linear logic approach to deadlock-free session types started with Caires and Pfenning \cite{CP10}, based on dual intuitionistic linear logic, and was later formulated for classical linear logic by Wadler \cite{wadler2012}. All subsequent work on linear logic and session types enforces deadlock-freedom by forbidding cyclic connections. In their original work, Caires and Pfenning commented that it would be interesting to compare process typability in their system with other approaches including Kobayashi's and Dezani-Ciancaglini's. However, we are aware of only one comparative study of the expressivity of type systems for deadlock-freedom, by Dardha and P\'{e}rez \cite{DardhaP15}. They compared Kobayashi-style typing and CLL typing, and proved that CLL corresponds to Kobayashi's system with the restriction that only single cuts, not multicuts, are allowed.
+
+\paragraph{Conclusion}
+In this paper...
 \end{document}
