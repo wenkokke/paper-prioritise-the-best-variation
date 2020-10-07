@@ -130,10 +130,30 @@ Typing rules make use of priorities, defined in the previous section. Priorities
 
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\tm y$ over a channel $\tm x$ is well typed under $\ty\Gamma$ and $\tm x$ of type $\tytens[\cs{o}]{A}{B}$, respectively ${\typarr[\cs{o}]{A}{B}}$. Priority $\cs o$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
 
-Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm x$ and are in the same lines as the previous two rules, requiring that the priority of channel $\tm x$ is the smallest among all priorites in $\tm\Gamma$.
+Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm x$ and are in the same lines as the previous two rules, requiring that the priority of channel $\tm x$ is the smallest among all priorities in $\tm\Gamma$.
 
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm x$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm x$. In all the above rules the priority $\cs o$ of channel $\tm x$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
- 
+
+
+\begin{example}[Milner's Cyclic Scheduler \Cref{fig:scheduler}]
+  % 
+  We will illustrate PCP with the cyclic scheduler \cite{milner99}. The full typing for $\tm {Sched}$ is given in \cite{dardha2018}.
+
+  We will consider a simplified version: a set of 3 agents $\tm {A_0}, \tm {A_1}, \tm {A_2}$ is scheduled to perform a certain task in cyclic order, starting with agent $\tm {A_0}$. Agents $\tm {A_1}$ and $\tm {A_2}$ will send the result of some computation a collector process, respectively $\tm {P_1}$ and $\tm {P_2}$, before transmitting data further to the next agent in the cycle, being $\tm {A_{(i+1)\texttt{ mod } 3}}$. At the end of the round, agent $\tm {A_0}$ will send the final result of the computation to its collector $\tm {P_0}$.
+
+  In line with the logical consistency requirements of the Curry-Howard correspondence, we define a finite version of Milner's scheduler, which executes one round of communication.
+  $$
+    \begin{array}{rcll}
+      \tm {Sched} & \defeq & ..\tm {(\nu {a_i}{b_i})}..\tm {(\nu {c_i}{d_{{(i+1)\texttt{ mod } n}}})} \tm {\big(A_0 \parallel A_1 \parallel A_2 \parallel P_0 \parallel P_1 \parallel P_2 \big)}\\
+      \tm{A_0} & \defeq & \tm{\send{c_0}{n_0}{\recv{d_0}{x_0}{\send{a_0}{m_0}{close_0}}}}\\
+      \tm{A_i} & \defeq & \tm{\recv{d_i}{x_i}{\send{a_i}{m_i}{\send{c_i}{n_i}{close_i}}}} &~~ i \in \{1,2\}\\
+      \tm {P_i} & \defeq & \tm{\recv{b_i}{y_i}{Q_i}} &~~ i \in \{0,1,2\}
+    \end{array}
+  $$
+
+  In the above process, channels $n_i$ and $m_i$ for all $i$, denote data being transmitted, and for simplicity we let them be channels of a terminated type. Process $\tm{close_i}$ for all $i$ closes all channels in $\tm{A_i}$. In particular, they are a sequence of $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ for all channels in the agent and terminating in $\tm{\halt}$.
+\end{example}
+
 \subsection{Operational Semantics}
 \input{fig/pcp-operational-semantics}
 
