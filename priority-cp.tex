@@ -117,7 +117,9 @@ Finally, we define \emph{unbound} send as syntactic sugar:
 \]
 
 \subsection{Typing}
-Typing rules for our version of PCP are given in \cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm P$ is well typed under the typing context $\ty \Gamma$".
+\input{fig/pcp-typing}
+
+Typing rules for our version of PCP are given in \Cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm P$ is well typed under the typing context $\ty \Gamma$".
 
 Typing rules make use of priorities, defined in the previous section. Priorities are based on \emph{obligations/capabilities} used by Kobayashi \cite{kobayashi2006}, and simplified to single priorities following Padovani \cite{padovani2014}. Recalling PCP \cite{dardha2018}, priorities obey the following two laws:
 \begin{enumerate}
@@ -132,11 +134,16 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm x$ a
 
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm x$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm x$. In all the above rules the priority $\cs o$ of channel $\tm x$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
  
-\input{fig/pcp-typing}
-
 \subsection{Operational Semantics}
-See \cref{fig:pcp-operational-semantics}.
 \input{fig/pcp-operational-semantics}
+
+The operational semantics for PCP given in \Cref{fig:pcp-operational-semantics} is defined as a reduction relation $\red$ on processes (bottom) and uses structural congruence (top).
+
+Structural congruence satisfies the following axioms. $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated proceess as the neutral element; it is commutative and associative.
+
+The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction following \cite{dardha2018} where channel endpoints are identified.
+$\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\tm x$ and $\tm y$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
+
 
 \subsection{Metatheory}
 
@@ -206,7 +213,7 @@ See \cref{fig:pcp-operational-semantics}.
   If $\seq{P}{\emptyenv}$ and $\tm{P}$ is in canonical form, then either $\tm{P}=\tm{\halt}$ or there exists a $\tm{Q}$ such that $\tm{P}\red\tm{Q}$.
 \end{restatabletheorem}
 \begin{proof}
-  Details in~\cref{prf:thm-pcp-closed-progress}.
+  Details in~\Cref{prf:thm-pcp-closed-progress}.
 \end{proof}
 
 \end{document}
