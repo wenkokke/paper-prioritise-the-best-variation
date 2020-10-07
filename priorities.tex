@@ -12,6 +12,7 @@
 \usepackage{enumitem}
 \usepackage{multicol}
 \setlist[description]{style=unboxed,font=\normalfont\itshape}
+\usepackage[strict]{changepage}
 
 % Math symbols
 \usepackage[fleqn]{amsmath}
@@ -264,6 +265,11 @@ To be written last\dots
 
 \bibliographystyle{splncs04}
 \bibliography{main}
+
+\clearpage
+%% changing the margins of appendix
+\appendix
+\changetext{}{10em}{-5em}{-5em}{}
 
 \appendix
 \section{Priority GV}
