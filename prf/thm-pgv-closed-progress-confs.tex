@@ -1,10 +1,12 @@
 \begin{proof}
+  \todo{Shouldn't the statement be such that the def of C comes right after stating C is in canonical form, rather than in the or branch?}
+
   \label{prf:thm-pgv-closed-progress-confs}
   Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$.
   We apply \cref{lem:pgv-open-progress-terms} to each $\tm{M_i}$ and $\tm{N}$. If for any $\tm{M_i}$ or $\tm{N}$ we obtain a reduction $\tm{M_i}\tred\tm{M'_i}$ or $\tm{N}\tred\tm{N'}$, we apply \LabTirName{E-LiftM} and \LabTirName{E-LiftC} to obtain a reduction on $\tm{\conf{C}}$.
   Otherwise, each term $\tm{M_i}$ is ready, and $\tm{N}$ is either ready or a value.
 
-  Pick the \emph{ready} term $\tm{L}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ with the smallest priority bound. There are four cases:
+  Pick the \emph{ready} term $\tm{L}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ with the smallest priority bound. There are four cases: \todo{the below is presented as if there are only 3 cases, not 4...}
   \begin{itemize}
   \item
     If $\tm{L}$ is a new $\tm{\plug{E}{\new}}$, we apply \LabTirName{E-New}.
@@ -13,7 +15,9 @@
   \item
     If $\tm{L}$ is a link $\tm{\plug{E}{\link\;\pair{y}{z}}}$ or $\tm{\plug{E}{\link\;\pair{z}{y}}}$, we apply \LabTirName{E-Link}.
   \end{itemize}
-  Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. There must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$. There are two cases:
+  Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. There must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$.
+  \todo{in the same lines as DF for PCP, justify here why it is true that "there must be a term..."}
+  There are two cases:
   \begin{itemize}
   \item
     $\tm{L'}$ is ready. By~\cref{lem:pgv-ready-priority}, the priority of $\tm{L}$ is $\pr(\ty{S})$. By duality, $\pr(\ty{\co{S}})=\pr(\ty{S})$.
