@@ -6,19 +6,42 @@
 
 Things to discuss in the intro:
 
--- talking about what is GV and its "benefits"
--- next, talking about deadlock freedom property, the benefits and the fact that the original GVs do not satisfy DF
--- in the meantime, in a concurrent setting based on pi-calculus there is a curry-howard correspondence of logic and session typed pi, where DF holds
--- talk about CP here
--- \cite{dardha2018} brought the research fwd and added priorities a la Kobayashi and Padovani to CP, producing PCP
--- following that lead, we present PGV
--- running example of the scheduler in PGV (hopefully)
--- translation of PCP to PGV and what it means to have that.
+\begin{itemize}
+\item GV is a session-typed functional language.
+\item
+  The benefits of using a functional language as opposed to a process calculus are that:
+  \begin{itemize}
+  \item 
+    it supports higher-order functions (and therefore abstraction) not usually present in process calculi; and
+  \item
+    it allows us to derive extensions of the communication fragment of the language via well-understood extensions of the functional fragment, i.e., deriving internal/external choice from sum types.
+  \end{itemize}
+\item
+  The benefits of using GV over other session-typed functional languages are that:
+  \begin{itemize}
+  \item
+    GV has strong ties to linear logic~\cite{wadler15}.
+  \end{itemize}
+\item
+  Historically, calculi in the GV family~\cite{wadler15,lindley15} have achieved deadlock freedom via a syntactic restriction, i.e., by combining channel creation and thread creation into a single operation, called fork. Unfortunately, this is overly restrictive, as it limits the possible communication structures to trees. The calculus GV is based on, on the other hand, did not satisfy deadlock freedom~\cite{GAY2019}.
+\end{itemize}
 
-a contribution paragraph with the following
--- PGV and what are the benefits
--- updated PCP
--- encoding PCP to PGV
--- technical results to be referred to explicitly
+\begin{itemize}
+\item talking about what is GV and its "benefits"
+\item next, talking about deadlock freedom property, the benefits and the fact that the original GVs do not satisfy DF
+\item in the meantime, in a concurrent setting based on pi-calculus there is a curry-howard correspondence of logic and session typed pi, where DF holds
+\item talk about CP here
+\item \cite{dardha2018} brought the research fwd and added priorities a la Kobayashi and Padovani to CP, producing PCP
+\item following that lead, we present PGV
+\item running example of the scheduler in PGV (hopefully)
+\item translation of PCP to PGV and what it means to have that.
+\item a contribution paragraph with the following
+  \begin{itemize}
+  \item PGV and what are the benefits
+  \item updated PCP
+  \item encoding PCP to PGV
+  \item technical results to be referred to explicitly
+  \end{itemize}
+\end{itemize}
 
 \end{document}

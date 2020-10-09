@@ -1,8 +1,7 @@
 \begin{proof}
   \label{prf:thm-pcp-to-pgv-operational-correspondence-soundness}
   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-  We omit the cases which cannot occur, \ie \LabTirName{E-New}, \LabTirName{E-Spawn}, and \LabTirName{LiftM}.
-  \todo{why these cases do not occur? state explicitely.}
+  We omit the cases which cannot occur as their left-hand side term forms are not in the image of the translation function, \ie \LabTirName{E-New}, \LabTirName{E-Spawn}, and \LabTirName{E-LiftM}.
 
   \begin{case*}[\LabTirName{E-Link}]
     \[\pgv{%
