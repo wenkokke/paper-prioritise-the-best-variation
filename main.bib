@@ -1,3 +1,72 @@
+@article{kokkemontesi19popl,
+  abstract  = {We present Hypersequent Classical Processes (HCP), a revised
+                  interpretation of the "Proofs as Processes" correspondence
+                  between linear logic and the π-calculus initially proposed by
+                  Abramsky [1994], and later developed by Bellin and Scott
+                  [1994], Caires and Pfenning [2010], and Wadler [2014], among
+                  others. HCP mends the discrepancies between linear logic and
+                  the syntax and observable semantics of parallel composition in
+                  the π-calculus, by conservatively extending linear logic to
+                  hyperenvironments (collections of environments, inspired by
+                  the hypersequents by Avron [1991]). Separation of environments
+                  in hyperenvironments is internalised by ⊗ and corresponds to
+                  parallel process behaviour. Thanks to this property, for the
+                  first time we are able to extract a labelled transition system
+                  (lts) semantics from proof rewritings. Leveraging the
+                  information on parallelism at the level of types, we obtain a
+                  logical reconstruction of the delayed actions that Merro and
+                  Sangiorgi [2004] formulated to model non-blocking I/O in the
+                  π-calculus. We define a denotational semantics for processes
+                  based on Brzozowski derivatives, and uncover that
+                  non-interference in HCP corresponds to Fubini’s theorem of
+                  double antiderivation. Having an lts allows us to validate HCP
+                  using the standard toolbox of behavioural theory. We
+                  instantiate bisimilarity and barbed congruence for HCP, and
+                  obtain a full abstraction result: bisimilarity, denotational
+                  equivalence, and barbed congruence coincide.},
+  author    = {Wen Kokke and Fabrizio Montesi and Marco Peressotti},
+  title     = {Better Late Than Never: A fully-abstract semantics for Classical Processes},
+  journal   = {{Proceedings of the {ACM} on Programming Languages}},
+  volume    = 3,
+  number    = {{POPL}},
+  year      = 2019,
+  month     = jan,
+}
+@inproceedings{kokkemontesi19tlla,
+  abstract  = {Process calculi based on logic, such as πDILL and CP, provide a
+                  foundation for deadlock-free concurrent programming. However,
+                  in previous work, there is a mismatch between the rules for
+                  constructing proofs and the term constructors of the
+                  π-calculus: the fundamental operator for parallel composition
+                  does not correspond to any rule of linear logic. Kokke et al.
+                  (2019) introduced Hypersequent Classical Processes (HCP),
+                  which addresses this mismatch using hypersequents (collections
+                  of sequents) to register parallelism in the typing judgements.
+                  However, the step from CP to HCP is a big one. As of yet, HCP
+                  does not have reduction semantics, and the addition of delayed
+                  actions means that CP processes interpreted as HCP processes
+                  do not behave as they would in CP. We introduce HCP-, a
+                  variant of HCP with reduction semantics and without delayed
+                  actions. We prove progress, preservation, and termination, and
+                  show that HCP- supports the same communication protocols as
+                  CP.},
+  author    = {Wen Kokke and Fabrizio Montesi and Marco Peressotti},
+  title     = {Taking Linear Logic Apart},
+  year      = 2019,
+  month     = apr,
+  editor    = {Ehrhard, Thomas and Fern\'andez, Maribel and Paiva, Valeria de and Tortora de Falco, Lorenzo },
+  booktitle = {{Proceedings Joint International Workshop on}
+                  Linearity \& Trends in Linear Logic and Applications,
+                  {Oxford, UK, 7-8 July 2018}},
+  series    = {Electronic Proceedings in Theoretical Computer Science},
+  volume    = 292,
+  publisher = {Open Publishing Association},
+  pages     = {90-103},
+  doi       = {10.4204/EPTCS.292.5},
+  url       = {/public/pubs/eptcs2019a.pdf},
+  note      = {The EPTCS version has errors, which are fixed here},
+}
+
 @article{gayvasconcelos12,
   author       = {GAY, SIMON J. and VASCONCELOS, VASCO T.},
   publisher    = {Cambridge University Press ({CUP})},

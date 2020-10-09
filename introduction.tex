@@ -17,31 +17,26 @@ Things to discuss in the intro:
     it allows us to derive extensions of the communication fragment of the language via well-understood extensions of the functional fragment, i.e., deriving internal/external choice from sum types.
   \end{itemize}
 \item
-  The benefits of using GV over other session-typed functional languages are that:
-  \begin{itemize}
-  \item
-    GV has strong ties to linear logic~\cite{wadler12}.
-  \end{itemize}
+  The benefits of using GV over other session-typed functional languages are that GV has strong ties to linear logic, via its relation to CP~\cite{wadler12}, and consequently it has strong formal properties, e.g., deadlock freedom.
 \item
-  Historically, calculi in the GV family~\cite{wadler12,lindleymorris15} have achieved deadlock freedom via a syntactic restriction, i.e., by combining channel creation and thread creation into a single operation, called fork. Unfortunately, this is overly restrictive, as it limits the possible communication structures to trees. The calculus GV is based on, on the other hand, did not satisfy deadlock freedom~\cite{gayvasconcelos10}.
+  Historically, calculi in the GV family~\cite{wadler12,lindleymorris15} have achieved deadlock freedom via a syntactic restriction, i.e., by combining channel creation and thread creation into a single operation, called fork, corresponding to the logical cut in CP, itself the combination of a name restriction and a parallel composition.
+  Unfortunately, this is overly restrictive, as it limits the possible communication structures to trees. The calculus GV is based on, on the other hand, did not satisfy deadlock freedom~\cite{gayvasconcelos10}.
+\item
+  Recent developments in CP have led to various approaches to decoupling these constructs, either while maintaining the strong correspondence to logic, as in Hypersequent CP~\cite[HCP]{kokkemontesi19popl,kokkemontesi19tlla}, or by weakening the correspondence to logic in exchange for a more expressive language, as in Priority CP~\cite[PCP]{dardhagay18}.
+\item
+  PCP decouples CP's cut into separate constructs for name restriction and parallel composition, and restores deadlock freedom by adding priorities \`{a} la~\cite{kobayashi06}.
+\item
+  Following the example set by PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread creation, and restores deadlock freedom by adding priorities.
+\item
+  We demonstrate the correspondence between PGV and PCP by proving operational correspondence for a translation from PCP to PGV.
 \end{itemize}
 
+
+\paragraph*{Contributions}
 \begin{itemize}
-\item talking about what is GV and its "benefits"
-\item next, talking about deadlock freedom property, the benefits and the fact that the original GVs do not satisfy DF
-\item in the meantime, in a concurrent setting based on pi-calculus there is a curry-howard correspondence of logic and session typed pi, where DF holds
-\item talk about CP here
-\item \cite{dardhagay18} brought the research fwd and added priorities a la Kobayashi and Padovani to CP, producing PCP
-\item following that lead, we present PGV
-\item running example of the scheduler in PGV (hopefully)
-\item translation of PCP to PGV and what it means to have that.
-\item a contribution paragraph with the following
-  \begin{itemize}
-  \item PGV and what are the benefits
-  \item updated PCP
-  \item encoding PCP to PGV
-  \item technical results to be referred to explicitly
-  \end{itemize}
+\item PGV (typing rules, operational semantics, subject reduction, closed progress).
+\item An updated version of PCP, in which we remove the commuting conversions, moving away from reduction as cut elimination, and towards reduction as one would expect for a process calculus.
+\item A~translation from PCP into PGV (type preservation, operational correspondence).
 \end{itemize}
 
 \end{document}
