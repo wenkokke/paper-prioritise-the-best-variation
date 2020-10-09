@@ -6,7 +6,7 @@
   \]
   where $m>0$ and each $\seq{P_i}{\ty{\Gamma_i}}$ is an action.
 
-  Our proof follows the same reasoning by Kobayashi \cite{kobayashi2006} used in the proof of deadlock freedom for closed processes (Theorem 2). 
+  Our proof follows the same reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). 
 
   Consider processes $\tm {P_1 \parallel\dots\parallel P_m}$. Among them, we pick the process with the smallest priority $\minpr{(\ty{\Gamma_i})}$ for all $i$. Let this process be let this be $\tm{P_i}$ and the priority of the top prefix be $\cs o$. $\tm{P_i}$ acts on some endpoint $\tmty{y}{A}\in\ty{\Gamma_i}$. We must have $\minpr{(\ty{\Gamma_i})}=\pr{(\ty{A})} = \cs o$, since the other actions in $\tm{P_i}$ are guarded by the action on $\tmty{y}{A}$, thus satisfying law (i) of priorities.
 
