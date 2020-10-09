@@ -1,31 +1,27 @@
 \begin{proof}
-  \todo{Shouldn't the statement be such that the def of C comes right after stating C is in canonical form, rather than in the or branch?}
-
   \label{prf:thm-pgv-closed-progress-confs}
   Let $\tm{\conf{C}}=\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$.
   We apply \cref{lem:pgv-open-progress-terms} to each $\tm{M_i}$ and $\tm{N}$. If for any $\tm{M_i}$ or $\tm{N}$ we obtain a reduction $\tm{M_i}\tred\tm{M'_i}$ or $\tm{N}\tred\tm{N'}$, we apply \LabTirName{E-LiftM} and \LabTirName{E-LiftC} to obtain a reduction on $\tm{\conf{C}}$.
   Otherwise, each term $\tm{M_i}$ is ready, and $\tm{N}$ is either ready or a value.
-
-  Pick the \emph{ready} term $\tm{L}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ with the smallest priority bound. There are four cases: \todo{the below is presented as if there are only 3 cases, not 4...}
-  \begin{itemize}
+  Pick the \emph{ready} term $\tm{L}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ with the smallest priority bound. There are four cases:
+  \begin{enumerate}
   \item
     If $\tm{L}$ is a new $\tm{\plug{E}{\new}}$, we apply \LabTirName{E-New}.
   \item
     If $\tm{L}$ is a spawn $\tm{\plug{E}{\spawn\;M}}$, we apply \LabTirName{E-Spawn}.
   \item
     If $\tm{L}$ is a link $\tm{\plug{E}{\link\;\pair{y}{z}}}$ or $\tm{\plug{E}{\link\;\pair{z}{y}}}$, we apply \LabTirName{E-Link}.
-  \end{itemize}
-  Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. There must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$.
-  \todo{in the same lines as DF for PCP, justify here why it is true that "there must be a term..."}
-  There are two cases:
-  \begin{itemize}
   \item
-    $\tm{L'}$ is ready. By~\cref{lem:pgv-ready-priority}, the priority of $\tm{L}$ is $\pr(\ty{S})$. By duality, $\pr(\ty{\co{S}})=\pr(\ty{S})$.
-
-    We cannot have $\tm{L}=\tm{L'}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr(\ty{\co{S}})<\pr(\ty{S})$. The term $\tm{L'}$ must be ready to act on $\tm{y'}$, otherwise the action $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{S})}$, which contradicts our choice of $\tm{L}$ as having the smallest priority. Therefore, we have two terms ready to act on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send} or \LabTirName{E-Close}.
-  \item
-    $\tm{L'}=\tm{N}$ and is a value. We rewrite $\tm{\conf{C}}$ to put $\tm{L}$ in the position corresponding to the endpoint it is blocked on, using \LabTirName{SC-ParComm}, \LabTirName{SC-ParAssoc}, and optionally \LabTirName{SC-ResSwap}. We then repeat the steps above with the term with the next smallest priority, until either we find a reduction, or the configuration has reached the desired normal form. (The argument based on the priority being the smallest continues to hold, since we know that neither $\tm{L}$ nor $\tm{L'}$ will be picked, and no other term uses $\tm{y}$ or $\tm{y'}$.)
-  \end{itemize} 
+    Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. The typing rules enforce the linear use of endpoints, so there must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$. There are two cases:
+    \begin{enumerate}
+    \item
+      $\tm{L'}$ is ready. By~\cref{lem:pgv-ready-priority}, the priority of $\tm{L}$ is $\pr(\ty{S})$. By duality, $\pr(\ty{\co{S}})=\pr(\ty{S})$.
+      
+      We cannot have $\tm{L}=\tm{L'}$, otherwise the action on $\tm{y'}$ would be guarded by the action on $\tm{y}$, requiring $\pr(\ty{\co{S}})<\pr(\ty{S})$. The term $\tm{L'}$ must be ready to act on $\tm{y'}$, otherwise the action $\tm{y'}$ would be guarded by another action with priority smaller than $\pr{(\ty{S})}$, which contradicts our choice of $\tm{L}$ as having the smallest priority. Therefore, we have two terms ready to act on dual endpoints. We apply the appropriate reduction rule, \ie \LabTirName{E-Send} or \LabTirName{E-Close}.
+    \item
+      $\tm{L'}=\tm{N}$ and is a value. We rewrite $\tm{\conf{C}}$ to put $\tm{L}$ in the position corresponding to the endpoint it is blocked on, using \LabTirName{SC-ParComm}, \LabTirName{SC-ParAssoc}, and optionally \LabTirName{SC-ResSwap}. We then repeat the steps above with the term with the next smallest priority, until either we find a reduction, or the configuration has reached the desired normal form. (The argument based on the priority being the smallest continues to hold, since we know that neither $\tm{L}$ nor $\tm{L'}$ will be picked, and no other term uses $\tm{y}$ or $\tm{y'}$.)
+    \end{enumerate} 
+  \end{enumerate} 
 \end{proof}
 
 %%% Local Variables:
