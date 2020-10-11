@@ -5,14 +5,16 @@
 \section{Priority GV}
 \usingnamespace{pgv}
 
-\subsection{Syntax}
+This section presents Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15}, but with a twist: it enforces deadlock freedom through priorities \`{a} la Kobayashi~\cite{kobayashi06,padovaninovara15}.
 
-\paragraph*{Priorities, types, and environments}
-Types are divided into \emph{session types} $\ty{S}$ and \emph{value types} $\ty{T}$, $\ty{U}$.
+GV enforces deadlock freedom with a syntactic restriction: it fuses channel creation and thread spawning into a single function, called fork. This guarantees that if some term $\tm{L}$ has the means to communicate with both $\tm{M}$ and $\tm{N}$, then $\tm{M}$ and $\tm{N}$ cannot communicate amongst themselves. In other words, GV only allows tree-shaped communication structures, so it is trivially free from cycles, and therefore deadlocks. However, this is overly restrictive, as we rule out \emph{all} cyclic communication structures, not just those with deadlocks.
 
-Session types are annotated with \emph{priorities} $\cs{o}\in\mathbb{N}$.
-The types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ type the endpoints of a channel over which we send or receive a value of type $\ty{T}$, and then proceed as $\ty{S}$.
-The types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ type endpoints of a channel whose session has finished, and over which we send or receive a ping before closing the channel.
+Priority GV offers a more fine-grained analysis of the communication structure. It allows cyclic communication structures,  and as a result, it is more expressive. To illustrate this, we use PGV to implement an instance of Milner's Cyclic Scheduler in~\todo{Add reference}.
+
+\subsubsection{Types}
+Types in PGV are divided into \emph{session types} $\ty{S}$ and \emph{types} $\ty{T}$, $\ty{U}$.
+%
+Session types are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \ty{S}
@@ -22,10 +24,9 @@ The types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ type endpoints of a 
     \sep        \ty{\tyendr[\cs{o}]}
 \end{array}
 \]
-Value types are based on the types of the linear $\lambda$-calculus.
-The types $\ty{\typrod{T}{U}}$, $\ty{\tyunit}$, $\ty{\tysum{T}{U}}$, and $\ty{\tyvoid}$ are the standard linear $\lambda$-calculus product type, unit type, sum type, and empty type.
-The type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ is the standard linear function type, annotated with \emph{priority bounds} $\cs{p},\cs{q}\in\mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}$.
-Session types are value types, as endpoints are values.
+The session types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ describe the endpoints of a channel over which we send or receive a value of type $\ty{T}$, and then proceed as $\ty{S}$. The types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ describe endpoints of a channel whose communication has finished, and over which we must synchronise before closing the channel. Each connective in a session type is annotated with a \emph{priority} $\cs{o}\in\mathbb{N}$.
+
+Types are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \ty{T}, \ty{U}
@@ -37,13 +38,14 @@ Session types are value types, as endpoints are values.
     \sep        \ty{S}
 \end{array}
 \]
-Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, the priority bound $\cs{p}$ is a \emph{lower bound} on the priorities of the channel names captured by the body of the function, and the priority bound $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function.
-We discuss this in more detail when we give the typing rules.
-We define syntactic sugar for the type of \emph{pure functions}.
-\[
-  \ty{\tylolli{T}{U}} \elabarrow \ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}
-\]
-A typing context $\ty\Gamma$ is a partial function associating names to types.
+The types $\ty{\typrod{T}{U}}$, $\ty{\tyunit}$, $\ty{\tysum{T}{U}}$, and $\ty{\tyvoid}$ are the standard linear $\lambda$-calculus product type, unit type, sum type, and empty type.
+The type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ is the standard linear function type, annotated with \emph{priority bounds} $\cs{p},\cs{q}\in\mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}$.
+Every session type is also a type.
+
+Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of \emph{pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$.
+
+\subsubsection{Environments}
+Typing environments $\ty{\Gamma}$, $\ty{\Delta}$ associate names to types. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
 \[
 \begin{array}{lcl}
   \ty{\Gamma}, \ty{\Delta}
@@ -51,7 +53,9 @@ A typing context $\ty\Gamma$ is a partial function associating names to types.
     \sep        \ty{\Gamma}, \tmty{x}{T}
 \end{array}
 \]
-Duality plays a crucial role in session types. The two endpoints of a channel are assigned dual types, which ensures that, for instances, whenever one program \emph{sends} a value on a channel, the program on the other end is waiting to \emph{receive}. Each \emph{session type} $\ty{T}$ has a dual, written $\ty{\co{T}}$. Duality is an involutive function which preserves priorities.
+
+\subsubsection{Duality}
+Duality plays a crucial role in session types. The two endpoints of a channel are assigned dual types, which ensures that, for instance, whenever one program \emph{sends} a value on a channel, the program on the other end is waiting to \emph{receive}. Each session type $\ty{S}$ has a dual, written $\ty{\co{S}}$. Duality is an involutive function which preserves priorities.
 \[
 \begin{array}{lcl}
   \ty{\co{\tysend[\cs{o}]{T}{S}}} & = & \ty{\tyrecv[\cs{o}]{T}{\co{S}}} \\
@@ -63,6 +67,8 @@ Duality plays a crucial role in session types. The two endpoints of a channel ar
   \ty{\co{\tyendr[\cs{o}]}} & = & \ty{\co{\tyends[\cs{o}]}}
 \end{array}
 \]
+
+\subsubsection{Priorities}
 The function $\pr$ returns the smallest priority of a session type. The type system guarantees that the top-most connective always holds the smallest priority, so we simply return the priority of the top-most connective.
 \[
 \begin{array}{lcl}
@@ -76,7 +82,7 @@ The function $\pr$ returns the smallest priority of a session type. The type sys
 \end{array}
 \]
 We extend the function $\pr$ to value types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority.
-\todo{explain function type.}
+\todo{What about the function type?}
 \[
 \begin{array}{lcl}
   \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
@@ -95,8 +101,8 @@ We extend the function $\pr$ to value types and typing contexts by returning the
 \end{array}
 \]
 
-\paragraph*{Static Term Syntax}
-Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$ to range over \emph{free} channel endpoints. The term language is the linear $\lambda$-calculus, extended with constants for the communication primitives.
+\subsubsection{Terms}
+Terms are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \tm{L}, \tm{M}, \tm{N}
@@ -118,28 +124,18 @@ Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occ
     \sep        \tm{\spawn}
     \sep        \tm{\send}
     \sep        \tm{\recv}
-    \sep        \tm{\wait}
     \sep        \tm{\close}
+    \sep        \tm{\wait}
 \end{array}
 \]
+Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$, which range over \emph{free} endpoints. The term language is the standard linear $\lambda$-calculus with products, sums, and their units, extended with constants $\tm{K}$ for the communication primitives. 
 
-\paragraph*{Syntactic Sugar for Terms}
-\[
-\begin{array}{lcl}
-  \tm{\andthen{M}{N}}
-  & \elabarrow & \tm{\letunit{M}{N}} \\
-  \tm{\letbind{x}{M}{N}}
-  & \elabarrow & \tm{(\lambda x.N)\;M} \\
-  \tm{\lambda\unit.M}
-  & \elabarrow & \tm{\lambda z.\letunit{z}{M}} \\
-  \tm{\lambda\pair{x}{y}.M}
-  & \elabarrow & \tm{\lambda z.\letpair{x}{y}{z}{M}} \\
-  \tm{\fork}
-  & \elabarrow & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
-\end{array}
-\]
+The constants are best understood in conjunction with their typing and reduction rules in~\cref{fig:pgv-typing,fig:pgv-operational-semantics}. Briefly, $\tm{\link}$ links two endpoints together, forwarding messages from each to the other, $\tm{\new}$ creates a new channel and returns its endpoints, and $\tm{\spawn}$ spawns off its argument as a new thread. The $\tm{send}$ and $\tm{recv}$ functions send and receive values on a channel. However, since the typing rules for PGV ensure the linear usage of endpoints, they also return a new copy of the endpoint, to continue the session. The $\tm{close}$ and $\tm{wait}$ functions close a channel.
 
-\paragraph*{Syntactic Sugar for Internal and External Choice}
+We frequently use syntactic sugar to make terms more readable: we write $\tm{\andthen{M}{N}}$ in place of $\tm{\letunit{M}{N}}$, $\tm{\letbind{x}{M}{N}}$ in place of $\tm{(\lambda x.N)\;M}$, and pattern matching lambdas $\tm{\lambda\unit.M}$ and $\tm{\lambda\pair{x}{y}.M}$ in place of $\tm{\lambda z.\letunit{z}{M}}$ and $\tm{\lambda z.\letpair{x}{y}{z}{M}}$.
+
+\subsubsection{Internal and External Choice}
+Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
 \[
 \begin{array}{lcl}
   \ty{\tyselect[\cs{o}]{S}{S'}}
@@ -155,6 +151,9 @@ Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occ
   & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
 \end{array}
 \]
+As the syntax for units suggests, these are the binary and nullary forms of the more common n-ary choice constructs $\ty{{\oplus}^{\cs{o}}\{l_i:S_i\}_{i\in{I}}}$ and $\ty{{\with}^{\cs{o}}\{l_i:S_i\}_{i\in{I}}}$, which one may obtain generalising the sum types to variant types. For simplicity, we present only the binary and nullary forms.
+
+Similarly, we use syntactic sugar for the term forms of choice, which combine sending and receiving with the introduction and elimination forms for the sum and empty types. There are two constructs for binary internal choice, expressed using the meta-variable $\tm{\ell}$ which ranges over $\{\tm{\labinl},\tm{\labinr}\}$. As there is no introduction for the empty type, there is no construct for nullary internal choice:
 \[
 \begin{array}{lcl}
   \tm{\select{\ell}}
@@ -167,6 +166,7 @@ Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occ
 \end{array}
 \]
 
+\subsection{Operational Semantics}
 \paragraph*{Runtime Term Syntax}
 \[
 \begin{array}[t]{lcl}
@@ -223,16 +223,80 @@ Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ to range over variable names. Occ
   \tm{\main}  + \tm{\main} \; \text{undefined}
 \end{array}
 \]
+See \cref{fig:pgv-operational-semantics}.
+\input{fig/pgv-operational-semantics}
 
 \subsection{Typing}
-See \cref{fig:pgv-typing}.
+
 \input{fig/pgv-typing}
 
 \todo{Define the ``priority bound of a term $\tm{M}$'' as $\cs{p}$ where $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$.}
 
-\subsection{Operational Semantics}
-See \cref{fig:pgv-operational-semantics}.
-\input{fig/pgv-operational-semantics}
+\subsection{Example: A~Cyclic Scheduler}
+We illustrate the newfound ability of PGV by encoding a variant of Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Suppose three processes ($\tm{\collector0}$, $\tm{\collector1}$, and $\tm{\collector2}$) should be scheduled to perform their tasks in cyclic order, starting with $\tm{\collector1}$, and circling all the way around to $\tm{\collector0}$. We implement the scheduler with three agents ($\tm{\agent0}$, $\tm{\agent1}$, and $\tm{\agent2}$) which represent their respective processes in the scheduler.
+
+\begin{center}
+  \begin{tikzpicture}
+    \node[shape=circle,draw=black] (agent0) at ( 0.00, 0.00) {\tm{\agent0}};
+    \node[shape=circle,draw=black] (agent1) at ( 1.75,-1.75) {\tm{\agent1}};
+    \node[shape=circle,draw=black] (agent2) at (-1.75,-1.75) {\tm{\agent2}};
+    \node[shape=circle,draw=black] (proc0)  at ( 3.00, 0.00) {\tm{\collector0}};
+    \node[shape=circle,draw=black] (proc1)  at ( 4.50,-1.75) {\tm{\collector1}};
+    \node[shape=circle,draw=black] (proc2)  at (-4.50,-1.75) {\tm{\collector2}};
+    \node[draw=none]               (middle) at ( 0.00,-1.75) {};
+
+    \draw
+    (agent0) -- node[pos=0.35,above] {$c_0$}
+    node[pos=1.0,above] {$d_1$} ++ (agent1);
+    \draw
+    (agent1) -- node[pos=0.1,above] {$c_1$}
+    node[pos=0.9,above] {$d_2$} ++ (agent2);
+    \draw
+    (agent2) -- node[pos=0.0,above] {$c_2$}
+    node[pos=0.65,above] {$d_0$} ++ (agent0);
+
+    \draw
+    (agent0) -- node[pos=0.15,above] {$a_0$}
+    node[pos=0.85,above] {$b_0$} (proc0);
+    \draw
+    (agent1) -- node[pos=0.15,above] {$a_1$}
+    node[pos=0.85,above] {$b_1$} (proc1);
+    \draw
+    (agent2) -- node[pos=0.15,above] {$a_2$}
+    node[pos=0.85,above] {$b_2$} (proc2);
+  \end{tikzpicture}
+\end{center}
+\[
+  \begin{array}{lrlr}
+    \tm{\sched}
+    & \defeq & \tm{
+               \res{a_0}{b_0}{\res{a_1}{b_1}{\res{a_2}{b_2}{
+               \res{c_0}{d_1}{
+               \res{c_1}{d_2}{
+               \res{c_2}{d_0}{}}}}}}}
+    \\ &     & \multicolumn{2}{l}{%
+               \tm{(\ppar{\child\;\agent0}{\ppar{\child\;\agent1}{\child\;\ppar{\agent2}{
+               \ppar{\child\;\collector0}{\ppar{\child\;\collector1}{\child\;\collector2}}}}})}}
+    \\
+    \tm{\agent0}
+    & \defeq & \tm{\letbind{c_0}{\send\;\pair{\text{data}_0}{c_0}}{%
+               \letpair{\text{data}'_0}{d_0}{\recv\;d_0}{}}}
+    \\ &     & \tm{\letbind{a_0}{\send\;\pair{\text{data}_0}{a_0}}{}}
+    \\ &     & \tm{\andthen{\wait\;{d_i}}{\andthen{\close\;{c_i}}{\close\;{a_i}}}}
+    \\
+    \tm{\agent{i}}
+    & \defeq & \tm{\letpair{d_i}{d_i}{\recv\;d_i}{%
+               \letbind{a_i}{\send\;\pair{\text{data}_i}{a_i}}{}}}
+    \\ &     & \tm{\letpair{\text{data}'_i}{a_i}{\recv\;{a_i}}{%
+               \letbind{c_i}{\send\;\pair{\text{data}_i}{c_i}}{}}}
+    \\ &     & \tm{\andthen{\wait\;{d_i}}{\andthen{\close\;{c_i}}{\close\;{a_i}}}}
+       & i \in \{1,2\}
+    \\
+    \tm{\collector{i}}
+    & \defeq & \tm{\letpair{d'_i}{d_i}{\recv\;d_i}{M_i}}
+       & i \in \{0,1,2\}
+  \end{array}
+\]
 
 \subsection{Metatheory}
 
@@ -315,9 +379,6 @@ See \cref{fig:pgv-operational-semantics}.
   \item $\tm{M}$ is ready.
   \end{itemize}
 \end{restatablelemma}
-\begin{proof}
-  \admit
-\end{proof}
 
 \begin{definition}[Canonical Forms]
   \label{def:pgv-canonical-forms}

@@ -105,55 +105,66 @@ We let $\tm{P}, \tm{Q}$ range over processes, produced by the following grammar.
          \sep   \tm{\absurd{x}}
 \end{array}
 \]
-Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm x$ and $\tm y$ are bound together and with scope $\tm P$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
+Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm{x}$ and $\tm{y}$ are bound together and with scope $\tm{P}$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
 
-Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm x$ a value $\tm y$ and proceed as process $\tm P$. $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm x$, and continue as $\tm P$.
+Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm{x}$ a value $\tm{y}$ and proceed as process $\tm{P}$. $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm{x}$, and continue as $\tm{P}$.
 
-Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm P$. $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm P$ and $\tm Q$. $\tm{\absurd{x}}$ denotes the empty offer.
+Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, respectively and proceed as process $\tm{P}$. $\tm{\offer{x}{P}{Q}}$ dually offers both left and right branches, with continuations $\tm{P}$ and $\tm{Q}$. $\tm{\absurd{x}}$ denotes the empty offer.
 
-Finally, we define \emph{unbound} send as syntactic sugar:
-\[
-  \tm{\usend{x}{y}{P}}\elabarrow\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}
-\]
+We write \emph{unbound} send as $\tm{\usend{x}{y}{P}}$, which is syntactic sugar for $\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}$. Alternatively, we could take $\tm{\usend{x}{y}{P}}$ as primitive, and let $\tm{\send{x}{y}{P}}$ be syntactic sugar for $\tm{\res{y}{z}{(\usend{x}{z}{P})}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\tm{\res{y}{z}{(\usend{x}{z}{P})}}$, even with communting conversions. However, in our setting without commuting conversions and with more permissive normal forms, this is no longer an issue.
 
 \subsection{Typing}
 \input{fig/pcp-typing}
 
-Typing rules for our version of PCP are given in \Cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm P$ is well typed under the typing context $\ty \Gamma$".
+Typing rules for our version of PCP are given in \Cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm{P}$ is well typed under the typing context $\ty \Gamma$".
 
 Typing rules make use of priorities, defined in the previous section. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. Recalling PCP \cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate}
   \item [(i)] an action of priority $\cs o$ must be prefixed only by actions of priorities \emph{strictly smaller} than $\cs o$.
   \item [(ii)] communication requires \emph{equal} priorities for the dual actions.
 \end{enumerate}
-\textsc{T-Link} states that the link process $\tm{\link{x}{y}}$ is well typed under channels $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Res} sates that the restriction process $\tm{\res{x}{y}{P}}$ is well typed under typing context $\ty\Gamma$ if process $\tm P$ is well typed in $\ty\Gamma$ augmented with channel endpoints $\tm x$ and $\tm y$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Par} states that the parallel composition of processes $\tm P$ and $\tm Q$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\tm{\halt}$ is well typed in the empty context.
+\textsc{T-Link} states that the link process $\tm{\link{x}{y}}$ is well typed under channels $\tm{x}$ and $\tm{y}$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Res} sates that the restriction process $\tm{\res{x}{y}{P}}$ is well typed under typing context $\ty\Gamma$ if process $\tm{P}$ is well typed in $\ty\Gamma$ augmented with channel endpoints $\tm{x}$ and $\tm{y}$ having dual types, respectively $\ty A$ and $\ty {\co A}$. \textsc{T-Par} states that the parallel composition of processes $\tm{P}$ and $\tm{Q}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\tm{\halt}$ is well typed in the empty context.
 
-\textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\tm y$ over a channel $\tm x$ is well typed under $\ty\Gamma$ and $\tm x$ of type $\tytens[\cs{o}]{A}{B}$, respectively ${\typarr[\cs{o}]{A}{B}}$. Priority $\cs o$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
+\textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\tm{y}$ over a channel $\tm{x}$ is well typed under $\ty\Gamma$ and $\tm{x}$ of type $\tytens[\cs{o}]{A}{B}$, respectively ${\typarr[\cs{o}]{A}{B}}$. Priority $\cs o$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
 
-Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm x$ and are in the same lines as the previous two rules, requiring that the priority of channel $\tm x$ is the smallest among all priorities in $\tm\Gamma$.
+Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm{x}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\tm{x}$ is the smallest among all priorities in $\tm\Gamma$.
 
-\textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm x$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm x$. In all the above rules the priority $\cs o$ of channel $\tm x$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
+\textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm{x}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm{x}$. In all the above rules the priority $\cs o$ of channel $\tm{x}$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
 
 
-\begin{example}[Milner's Cyclic Scheduler \Cref{fig:scheduler}]
-  % 
-  We will illustrate PCP with the cyclic scheduler~\cite{milner89}. The full typing for $\tm {Sched}$ is given in \cite{dardhagay18}.
+\subsection{Example: Milner's Cyclic Scheduler}
+We illustrate PCP with the cyclic scheduler~\cite{milner89}. The full typing for $\tm{\sched}$ is given in \cite{dardhagay18}.
 
-  We will consider a simplified version: a set of 3 agents $\tm {A_0}, \tm {A_1}, \tm {A_2}$ is scheduled to perform a certain task in cyclic order, starting with agent $\tm {A_0}$. Agents $\tm {A_1}$ and $\tm {A_2}$ will send the result of some computation a collector process, respectively $\tm {P_1}$ and $\tm {P_2}$, before transmitting data further to the next agent in the cycle, being $\tm {A_{(i+1)\texttt{ mod } 3}}$. At the end of the round, agent $\tm {A_0}$ will send the final result of the computation to its collector $\tm {P_0}$.
+We consider a simplified version: a set of 3 agents $\tm{\agent0}, \tm{\agent1}, \tm{\agent2}$ is scheduled to perform a certain task in cyclic order, starting with $\tm{\agent0}$. $\tm{\agent1}$ and $\tm{\agent2}$ send the result of some computation a collector process, respectively $\tm{\collector1}$ and $\tm{\collector2}$, before transmitting data further to the next agent in the cycle, being $\tm{\agent{(i+1)\bmod 3}}$. At the end of the round, $\tm{\agent0}$ send the final result of the computation to its collector $\tm{\collector0}$.
 
-  In line with the logical consistency requirements of the Curry-Howard correspondence, we define a finite version of Milner's scheduler, which executes one round of communication.
-  $$
-    \begin{array}{rcll}
-      \tm {Sched} & \defeq & ..\tm {(\nu {a_i}{b_i})}..\tm {(\nu {c_i}{d_{{(i+1)\texttt{ mod } n}}})} \tm {\big(A_0 \parallel A_1 \parallel A_2 \parallel P_0 \parallel P_1 \parallel P_2 \big)}\\
-      \tm{A_0} & \defeq & \tm{\send{c_0}{n_0}{\recv{d_0}{x_0}{\send{a_0}{m_0}{close_0}}}}\\
-      \tm{A_i} & \defeq & \tm{\recv{d_i}{x_i}{\send{a_i}{m_i}{\send{c_i}{n_i}{close_i}}}} &~~ i \in \{1,2\}\\
-      \tm {P_i} & \defeq & \tm{\recv{b_i}{y_i}{Q_i}} &~~ i \in \{0,1,2\}
-    \end{array}
-  $$
-
-  In the above process, channels $n_i$ and $m_i$ for all $i$, denote data being transmitted, and for simplicity we let them be channels of a terminated type. Process $\tm{close_i}$ for all $i$ closes all channels in $\tm{A_i}$. In particular, they are a sequence of $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ for all channels in the agent and terminating in $\tm{\halt}$.
-\end{example}
-
+In line with the logical consistency requirements of the Curry-Howard correspondence, we define a finite version of Milner's scheduler, which executes one round of communication.
+$$
+\begin{array}{rcll}
+  \tm{\sched}
+  & \defeq
+  & \tm{
+    \res{x_0}{x'_0}{\res{x_1}{x'_1}{\res{x_2}{x'_2}{
+    \res{\overrightarrow{y_0}}{\overleftarrow{y_1}}{
+    \res{\overrightarrow{y_1}}{\overleftarrow{y_2}}{
+    \res{\overrightarrow{y_2}}{\overleftarrow{y_0}}{}}}}}}
+    }\\
+  &
+  & \tm{(\ppar{\agent0}{\ppar{\agent1}{\ppar{\agent2}{\ppar{\collector0}{\ppar{\collector1}{\collector2}}}}})}\\
+  \tm{\agent0}
+  & \defeq
+  & \tm{\usend{\overrightarrow{y_0}}{d_0}{\recv{\overleftarrow{y_0}}{d'_0}{\usend{x_0}{d'_0}{
+    \wait{\overleftarrow{y_0}}{\close{\overrightarrow{y_0}}{\close{x_0}{\halt}}}}}}} \\
+  \tm{\agent{i}}
+  & \defeq
+  & \tm{\recv{\overleftarrow{y_i}}{d_i}{\usend{x_i}{d_i}{\recv{x_i}{d'_i}{\usend{\overrightarrow{y_i}}{d'_i}{
+    \wait{\overleftarrow{y_i}}{\close{\overrightarrow{y_i}}{\close{x_i}{\halt}}}}}}}}
+  & i \in \{1,2\} \\
+  \tm{\collector{i}}
+  & \defeq & \tm{\recv{x'_i}{d_i}{Q_i}}
+  & i \in \{0,1,2\}
+\end{array}
+$$
+In the above process, channels $\tm{d_i}$ and $\tm{d'_i}$ represent the data being transmitted. For simplicity, let them be channels of a terminated type. The processes $\tm{Q_i}$ represent the inner workings of the collector processes, each of which must eventually send back a response over $\tm{x'_i}$ and close the channel.
 \subsection{Operational Semantics}
 \input{fig/pcp-operational-semantics}
 
@@ -162,7 +173,7 @@ The operational semantics for PCP given in \Cref{fig:pcp-operational-semantics} 
 Structural congruence satisfies the following axioms. $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated proceess as the neutral element; it is commutative and associative.
 
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction following \cite{dardhagay18} where channel endpoints are identified.
-$\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\tm x$ and $\tm y$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
+$\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\tm{x}$ and $\tm{y}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
 
 \subsection{Metatheory}

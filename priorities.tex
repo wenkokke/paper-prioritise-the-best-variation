@@ -9,11 +9,13 @@
 \usepackage[all]{foreign}
 \usepackage{etoolbox}
 \usepackage{rotating}
-\usepackage{pdflscape}
+% \usepackage{pdflscape} % activate for automatically rotated pages in PDF
+\usepackage{lscape}
 \usepackage{enumitem}
 \usepackage{multicol}
 \setlist[description]{style=unboxed,font=\normalfont\itshape}
 \usepackage[strict]{changepage}
+\usepackage{tikz}
 
 % Math symbols
 \usepackage[fleqn]{amsmath}
@@ -158,6 +160,10 @@
   \providecommand{\labselinr}[1]{\ensuremath{{#1}\triangleleft\text{inr}}}
   \providecommand{\laboffinl}[1]{\ensuremath{{#1}\triangleright\text{inl}}}
   \providecommand{\laboffinr}[1]{\ensuremath{{#1}\triangleright\text{inr}}}
+  % Cyclic Scheduler
+  \newcommand{\sched}{\ensuremath{Sched}}
+  \newcommand{\agent}[1]{\ensuremath{Agent_{#1}}}
+  \newcommand{\collector}[1]{\ensuremath{Proc_{#1}}}
 }{}
 \newcommand{\pcp}[1]{\namespace*{pcp}{}{#1}}
 
@@ -180,8 +186,8 @@
   \providecommand{\tyendr}[1][]{\ensuremath{\mathbf{end}_{?}^{#1}}}
   \providecommand{\tyselect}[3][]{\ensuremath{{#2}\mathbin{\oplus^{#1}}{#3}}}
   \providecommand{\tyoffer}[3][]{\ensuremath{{#2}\mathbin{\with^{#1}}{#3}}}
-  \providecommand{\tyselectemp}[1][]{\ensuremath{{\oplus}\{\}^{#1}}}
-  \providecommand{\tyofferemp}[1][]{\ensuremath{{\with}\{\}^{#1}}}
+  \providecommand{\tyselectemp}[1][]{\ensuremath{{\oplus}^{#1}\{\}}}
+  \providecommand{\tyofferemp}[1][]{\ensuremath{{\with}^{#1}\{\}}}
   % Terms
   \providecommand{\andthen}[2]{\ensuremath{#1;#2}}
   \providecommand{\letbind}[3]{\ensuremath{\mathbf{let}\;#1\mathbin{=}#2\;\mathbf{in}\;#3}}
@@ -219,6 +225,10 @@
   % Reduction relations
   \providecommand{\tred}[0]{\ensuremath{\longrightarrow_{M}}}
   \providecommand{\cred}[0]{\ensuremath{\longrightarrow_{\conf{C}}}}
+  % Cyclic Scheduler
+  \newcommand{\sched}{\ensuremath{\mathbf{sched}}}
+  \newcommand{\agent}[1]{\ensuremath{\mathbf{agent}_{#1}}}
+  \newcommand{\collector}[1]{\ensuremath{\mathbf{proc}_{#1}}}
 }{}
 \newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
 
