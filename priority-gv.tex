@@ -7,12 +7,12 @@
 
 This section presents Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15}, but with a twist: it enforces deadlock freedom through priorities \`{a} la Kobayashi~\cite{kobayashi06,padovaninovara15}.
 
-GV enforces deadlock freedom with a syntactic restriction: it fuses channel creation and thread spawning into a single function, called fork. This guarantees that if some term $\tm{L}$ has the means to communicate with both $\tm{M}$ and $\tm{N}$, then $\tm{M}$ and $\tm{N}$ cannot communicate amongst themselves. In other words, GV only allows tree-shaped communication structures, so it is trivially free from cycles, and therefore deadlocks. However, this is overly restrictive, as we rule out \emph{all} cyclic communication structures, not just those with deadlocks.
+GV enforces deadlock freedom with a syntactic restriction: it fuses channel creation and thread spawning into a single function, called fork. This guarantees that if some term $\tm{L}$ has the means to communicate with both $\tm{M}$ and $\tm{N}$, then $\tm{M}$ and $\tm{N}$ cannot communicate amongst themselves. In other words, GV only allows tree-shaped communication structures, so it is trivially free from cycles, and therefore deadlocks. However, this is overly restrictive, as it rules out \emph{all} cyclic communication structures, not just those with deadlocks.
 
-Priority GV offers a more fine-grained analysis of the communication structure. It allows cyclic communication structures,  and as a result, it is more expressive. To illustrate this, we use PGV to implement an instance of Milner's Cyclic Scheduler in~\todo{Add reference}.
+Priority GV offers a more fine-grained analysis of the communication structure, and allows cyclic communication structures. To illustrate this, we use PGV to implement a variant of Milner's cyclic scheduler in~\cref{sec:pgv-example}.
 
-\subsubsection{Types}
-Types in PGV are divided into \emph{session types} $\ty{S}$ and \emph{types} $\ty{T}$, $\ty{U}$.
+\paragraph{Types}
+Types in PGV are divided into session types ($\ty{S}$) and types ($\ty{T}$, $\ty{U}$).
 %
 Session types are defined by the following grammar:
 \[
@@ -44,7 +44,7 @@ Every session type is also a type.
 
 Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of \emph{pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$.
 
-\subsubsection{Environments}
+\paragraph{Environments}
 Typing environments $\ty{\Gamma}$, $\ty{\Delta}$ associate names to types. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
 \[
 \begin{array}{lcl}
@@ -54,7 +54,7 @@ Typing environments $\ty{\Gamma}$, $\ty{\Delta}$ associate names to types. Envir
 \end{array}
 \]
 
-\subsubsection{Duality}
+\paragraph{Duality}
 Duality plays a crucial role in session types. The two endpoints of a channel are assigned dual types, which ensures that, for instance, whenever one program \emph{sends} a value on a channel, the program on the other end is waiting to \emph{receive}. Each session type $\ty{S}$ has a dual, written $\ty{\co{S}}$. Duality is an involutive function which preserves priorities.
 \[
 \begin{array}{lcl}
@@ -68,8 +68,8 @@ Duality plays a crucial role in session types. The two endpoints of a channel ar
 \end{array}
 \]
 
-\subsubsection{Priorities}
-The function $\pr$ returns the smallest priority of a session type. The type system guarantees that the top-most connective always holds the smallest priority, so we simply return the priority of the top-most connective.
+\paragraph{Priorities}
+The function $\pr$ returns the smallest priority of a session type. The type system guarantees that the top-most connective always holds the smallest priority, so we simply return the priority of the top-most connective:
 \[
 \begin{array}{lcl}
   \pr(\ty{\tysend[\cs{o}]{T}{S}})            & = & \cs{o} \\
@@ -81,14 +81,12 @@ The function $\pr$ returns the smallest priority of a session type. The type sys
   \pr(\ty{\tyendr[\cs{o}]})                  & = & \cs{o} \\
 \end{array}
 \]
-We extend the function $\pr$ to value types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority.
-\todo{What about the function type?}
+We extend the function $\pr$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority:
 \[
 \begin{array}{lcl}
   \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
   \minpr(\ty{\tysum{T}{U}})                  & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
   \minpr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p} \\
-  \\
   \minpr(\ty{\Gamma}, \tmty{x}{A})           & = & \minpr(\ty{\Gamma})\sqcap\pr(\ty{A})
 \end{array}
 \qquad
@@ -96,13 +94,12 @@ We extend the function $\pr$ to value types and typing contexts by returning the
   \minpr(\ty{\tyunit})                       & = & \ptop \\
   \minpr(\ty{\tyvoid})                       & = & \ptop \\
   \minpr(\ty{S})                             & = & \pr(\ty{S}) \\
-  \\
   \minpr(\ty{\emptyenv})                     & = & \ptop
 \end{array}
 \]
 
-\subsubsection{Terms}
-Terms are defined by the following grammar:
+\paragraph{Terms}
+Terms ($\tm{L}$, $\tm{M}$, $\tm{N}$) are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \tm{L}, \tm{M}, \tm{N}
@@ -134,7 +131,7 @@ The constants are best understood in conjunction with their typing and reduction
 
 We frequently use syntactic sugar to make terms more readable: we write $\tm{\andthen{M}{N}}$ in place of $\tm{\letunit{M}{N}}$, $\tm{\letbind{x}{M}{N}}$ in place of $\tm{(\lambda x.N)\;M}$, and pattern matching lambdas $\tm{\lambda\unit.M}$ and $\tm{\lambda\pair{x}{y}.M}$ in place of $\tm{\lambda z.\letunit{z}{M}}$ and $\tm{\lambda z.\letpair{x}{y}{z}{M}}$.
 
-\subsubsection{Internal and External Choice}
+\paragraph{Internal and External Choice}
 Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
 \[
 \begin{array}{lcl}
@@ -166,19 +163,37 @@ Similarly, we use syntactic sugar for the term forms of choice, which combine se
 \end{array}
 \]
 
-\subsection{Operational Semantics}
-\paragraph*{Runtime Term Syntax}
+\paragraph{Operational Semantics}
+Priority GV terms are evaluated as part of a configuration of processes. Configurations are defined by the following grammar:
 \[
 \begin{array}[t]{lcl}
-  \tm{\conf{C}}, \tm{\conf{D}}, \tm{\conf{E}}
+    \tm{\conf{C}}, \tm{\conf{D}}, \tm{\conf{E}}
   & \coloneqq & \tm{\phi\;M}
     \sep        \tm{\ppar{\conf{C}}{\conf{D}}}
-    \sep        \tm{\res{x}{y}{\conf{C}}}
+    \sep        \tm{\res{x}{x'}{\conf{C}}}
   \\
   \tm{\phi}
   & \coloneqq & \tm{\main}
     \sep        \tm{\child}
+\end{array}
+\]
+Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of threads $\tm{\phi\;M}$, parallel compositions $\tm{\ppar{\conf{C}}{\conf{D}}}$, and name restrictions $\tm{\res{x}{x'}{\conf{C}}}$. To preserve the functional nature of PGV, where programs return a single value, we use flags ($\tm{\phi}$) to differentiate between the main thread, marked $\tm{\main}$, and child threads created by $\tm{\spawn}$, marked $\tm{\child}$. Only the main thread returns a value. We determine the flag of a configuration by combining the flags of all threads in that configuration:
+\[
+\begin{array}{ll}
+  \tm{\main}  + \tm{\child} = \tm{\main}
   \\
+  \tm{\child} + \tm{\main}  = \tm{\main}
+\end{array}
+\quad
+\begin{array}{ll}
+  \tm{\child} + \tm{\child} = \tm{\child}
+  \\
+  \tm{\main}  + \tm{\main} \; \text{undefined}
+\end{array}
+\]
+Values ($\tm{V}$, $\tm{W}$), ready terms ($\tm{R}$) evaluation contexts ($\tm{E}$), thread evaluation contexts ($\tm{\conf{F}}$), and configuration contexts ($\tm{\conf{G}}$) are defined by the following grammars:
+\[
+\begin{array}[t]{lcl}
   \tm{V}, \tm{W}
   & \coloneqq & \tm{x}
     \sep        \tm{K}
@@ -199,104 +214,91 @@ Similarly, we use syntactic sugar for the term forms of choice, which combine se
   & \sep      & \tm{\inl{E}}
     \sep        \tm{\inr{E}}
     \sep        \tm{\casesum{E}{x}{M}{y}{N}} \\
-  & \sep      & \tm{\absurd{E}} \\
+  & \sep      & \tm{\absurd{E}}
   \\
   \tm{\conf{F}}
   & \coloneqq & \tm{\phi\;E}
   \\
   \tm{\conf{G}}
-  & \coloneqq & \tm{\hole} \\
-  & \sep      & \tm{\ppar{\conf{G}}{\conf{C}}}
+  & \coloneqq & \tm{\hole}
+    \sep        \tm{\ppar{\conf{G}}{\conf{C}}}
     \sep        \tm{\res{x}{y}{\conf{G}}}
 \end{array}
 \]
-\[
-\begin{array}{ll}
-  \tm{\main}  + \tm{\child} = \tm{\main}
-  \\
-  \tm{\child} + \tm{\main}  = \tm{\main}
-\end{array}
-\quad
-\begin{array}{ll}
-  \tm{\child} + \tm{\child} = \tm{\child}
-  \\
-  \tm{\main}  + \tm{\main} \; \text{undefined}
-\end{array}
-\]
-See \cref{fig:pgv-operational-semantics}.
+We factor the reduction relation of PGV into a deterministic reduction on terms ($\tred$) and a non-deterministic reduction on configurations ($\cred$), see \cref{fig:pgv-operational-semantics}. We write $\tred^+$ and $\cred^+$ for the transitive closures, and $\tred^\star$ and $\cred^\star$ for the reflexive-transitive closures.
+
+Term reduction is the standard call-by-value, left-to-right evaluation for GV, and only deviates from reduction for the linear $\lambda$-calculus in that it reduces terms to values \emph{or} ready terms waiting to perform a communication action.
+
+Configuration reduction resembles evaluation for a process calculus: \LabTirName{E-Link}, \LabTirName{E-Send}, and \LabTirName{E-Close} perform communications, \LabTirName{E-LiftC} allows reduction under configuration contexts, and \LabTirName{E-LiftSC} embeds a structural congruence $\equiv$. The remaining rules mediate between the process calculus and the functional language: \LabTirName{E-New} and \LabTirName{E-Spawn} evaluate the $\tm{\new}$ and $\tm{\spawn}$ constructs, creating the equivalent configuration constructs, and \LabTirName{E-LiftM} embeds term reduction.
+
+While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts:
+
+Firstly, we decompose the $\tm{\fork}$ construct. In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct. In GV, $\tm{\link}$ needs to return a terminated channel after evaluating the link. In PGV, the behaviour matches that of link in CP.
+
+Secondly, our structural congruence is type preserving. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
+
 \input{fig/pgv-operational-semantics}
 
-\subsection{Typing}
+
+\paragraph{Typing}
+\Cref{fig:pgv-typing} gives the typing rules for PGV.
+
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}.
+
+The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing from Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
+\begin{enumerate}
+  \item an action with priority $\cs{o}$ happens before an action with priority $\cs{o+n}$;
+  \item communication requires \emph{equal} priorities for the dual actions.
+\end{enumerate}
+
+In PGV, Sequents are annotated by a priority bound $\cs{p}$, which is the \emph{upper bound} on the priority of the communication actions performed while evaluating the term. The \emph{lower bound} is obtained from the typing environment. Terms with sequential evaluation, such as \LabTirName{T-LetUnit}, have side conditions to ensure deadlock freedom. For instance, the side condition for typing $\tm{\letunit{M}{N}}$ requires that $\tm{M}$ has finished communicating before $\tm{N}$ starts communicating.
+
+Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further sequential actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
+
+While our configuration typing is based on the standard typing for GV, it differs on two counts:
+
+Firstly, we require that child threads return the unit value, as opposed to a terminated channel.
+
+Secondly, we simplify typing for parallel composition. In GV, each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$ across the parallel composition. Consequently, associativity of parallel composition violates type preservation. Unfortunately, the practice plays a crucial role in guaranteeing deadlock freedom. In PGV, we guarantee deadlock freedom through different means, which removes the channel pseudo-type $\ty{S^\sharp}$, simplifies typing for parallel composition, and restores type preservation for the structural congruence.
 
 \input{fig/pgv-typing}
 
-\todo{Define the ``priority bound of a term $\tm{M}$'' as $\cs{p}$ where $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$.}
 
-\subsection{Example: A~Cyclic Scheduler}
-We illustrate the newfound ability of PGV by encoding a variant of Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Suppose three processes ($\tm{\collector0}$, $\tm{\collector1}$, and $\tm{\collector2}$) should be scheduled to perform their tasks in cyclic order, starting with $\tm{\collector1}$, and circling all the way around to $\tm{\collector0}$. We implement the scheduler with three agents ($\tm{\agent0}$, $\tm{\agent1}$, and $\tm{\agent2}$) which represent their respective processes in the scheduler.
+\paragraph{Example: Milner's Cyclic Scheduler}\label{sec:pgv-example}
+We illustrate the newfound ability of PGV by encoding a variant of Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, and circling all the way around to $\tm{\proc{n}}$, notifying $\tm{\proc0}$ when every other process has finished their task.
 
-\begin{center}
-  \begin{tikzpicture}
-    \node[shape=circle,draw=black] (agent0) at ( 0.00, 0.00) {\tm{\agent0}};
-    \node[shape=circle,draw=black] (agent1) at ( 1.75,-1.75) {\tm{\agent1}};
-    \node[shape=circle,draw=black] (agent2) at (-1.75,-1.75) {\tm{\agent2}};
-    \node[shape=circle,draw=black] (proc0)  at ( 3.00, 0.00) {\tm{\collector0}};
-    \node[shape=circle,draw=black] (proc1)  at ( 4.50,-1.75) {\tm{\collector1}};
-    \node[shape=circle,draw=black] (proc2)  at (-4.50,-1.75) {\tm{\collector2}};
-    \node[draw=none]               (middle) at ( 0.00,-1.75) {};
-
-    \draw
-    (agent0) -- node[pos=0.35,above] {$c_0$}
-    node[pos=1.0,above] {$d_1$} ++ (agent1);
-    \draw
-    (agent1) -- node[pos=0.1,above] {$c_1$}
-    node[pos=0.9,above] {$d_2$} ++ (agent2);
-    \draw
-    (agent2) -- node[pos=0.0,above] {$c_2$}
-    node[pos=0.65,above] {$d_0$} ++ (agent0);
-
-    \draw
-    (agent0) -- node[pos=0.15,above] {$a_0$}
-    node[pos=0.85,above] {$b_0$} (proc0);
-    \draw
-    (agent1) -- node[pos=0.15,above] {$a_1$}
-    node[pos=0.85,above] {$b_1$} (proc1);
-    \draw
-    (agent2) -- node[pos=0.15,above] {$a_2$}
-    node[pos=0.85,above] {$b_2$} (proc2);
-  \end{tikzpicture}
-\end{center}
+Our scheduler consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for each other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start. The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:
+\input{fig/pgv-scheduler.tex}
+We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$:
 \[
   \begin{array}{lrlr}
     \tm{\sched}
-    & \defeq & \tm{
-               \res{a_0}{b_0}{\res{a_1}{b_1}{\res{a_2}{b_2}{
-               \res{c_0}{d_1}{
-               \res{c_1}{d_2}{
-               \res{c_2}{d_0}{}}}}}}}
-    \\ &     & \multicolumn{2}{l}{%
-               \tm{(\ppar{\child\;\agent0}{\ppar{\child\;\agent1}{\child\;\ppar{\agent2}{
-               \ppar{\child\;\collector0}{\ppar{\child\;\collector1}{\child\;\collector2}}}}})}}
-    \\
-    \tm{\agent0}
-    & \defeq & \tm{\letbind{c_0}{\send\;\pair{\text{data}_0}{c_0}}{%
-               \letpair{\text{data}'_0}{d_0}{\recv\;d_0}{}}}
-    \\ &     & \tm{\letbind{a_0}{\send\;\pair{\text{data}_0}{a_0}}{}}
-    \\ &     & \tm{\andthen{\wait\;{d_i}}{\andthen{\close\;{c_i}}{\close\;{a_i}}}}
+    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+               \tm{\res{d}{d'}{}}
+    \\ &     & \tm{\begin{array}{lll}
+                     (
+                     & \phi\;\proc1
+                     \parallel
+                     \child\;\andthen{\agent1}{\andthen{\wait\;{c'_3}}{\close\;{d}}}
+                     \\
+                     \parallel
+                     &
+                     \prod_{2\leq{i}\leq{n}}
+                     (\child\;\proc{i} \parallel \child\;\andthen{\wait\;{c'_{i-1}}}{\agent{i}})
+                     & )
+                   \end{array}}
     \\
     \tm{\agent{i}}
-    & \defeq & \tm{\letpair{d_i}{d_i}{\recv\;d_i}{%
-               \letbind{a_i}{\send\;\pair{\text{data}_i}{a_i}}{}}}
-    \\ &     & \tm{\letpair{\text{data}'_i}{a_i}{\recv\;{a_i}}{%
-               \letbind{c_i}{\send\;\pair{\text{data}_i}{c_i}}{}}}
-    \\ &     & \tm{\andthen{\wait\;{d_i}}{\andthen{\close\;{c_i}}{\close\;{a_i}}}}
-       & i \in \{1,2\}
+    & \defeq & \tm{\andthen{\close\;{a_i}}{\andthen{\wait\;{b_i}}{\close\;{c_i}}}}
     \\
-    \tm{\collector{i}}
-    & \defeq & \tm{\letpair{d'_i}{d_i}{\recv\;d_i}{M_i}}
-       & i \in \{0,1,2\}
+    \tm{\proc{i}}
+    & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
   \end{array}
 \]
+Each of the channels in the scheduler is has the terminated type, and is merely used to synchronise.
+For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equivalently have represented it as a function which takes three processes as arguments, and creates this configuration.
 
 \subsection{Metatheory}
 
@@ -306,7 +308,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 \end{restatablelemma}
 \begin{proof}
   By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$.
-  (Details in \cref{prf:lem-pgv-value-done}.)
+  Details in \cref{prf:lem-pgv-value-done}.
 \end{proof}
 
 \begin{restatablelemma}{lempgvsubstitution}[Substitution]
@@ -316,7 +318,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 \end{restatablelemma}
 \begin{proof}
   By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$. Whenever the contexts in the premises and conclusion differ, we use \cref{lem:pgv-value-done} to prove that the priorities are preserved.
-  (Details in \cref{prf:lem-pgv-substitution}.)
+  Details in \cref{prf:lem-pgv-substitution}.
 \end{proof}
 
 \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
@@ -327,7 +329,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 \end{restatablelemma}
 \begin{proof}
   By induction on the derivation of $\tm{M}\tred\tm{M'}$.
-  (Details in \cref{prf:lem-pgv-subject-reduction-terms}.)
+  Details in \cref{prf:lem-pgv-subject-reduction-terms}.
 \end{proof}
 
 \begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]
@@ -338,7 +340,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 \end{restatablelemma}
 \begin{proof}
   By induction on the derivation of $\tm{\conf{C}}\equiv\tm{\conf{C'}}$.
-  (Details in \cref{prf:lem-pgv-subject-congruence}.)
+  Details in \cref{prf:lem-pgv-subject-congruence}.
 \end{proof}
 
 \begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]
@@ -349,7 +351,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 \end{restatabletheorem}
 \begin{proof}
   By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
-  (Details in \cref{prf:thm-pgv-subject-reduction-confs}.)
+  Details in \cref{prf:thm-pgv-subject-reduction-confs}.
 \end{proof}
 
 \begin{definition}[Actions]
@@ -359,16 +361,8 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
 
 \begin{definition}[Ready Terms]
   \label{def:pgv-ready-actions}
-  A~term $\tm{L}$ is ready if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$ or $\tm{\link\;\pair{y}{x}}$, or $\tm{M}$ acts on $\tm{x}$. In the last case, we say that $\tm{L}$ is ready to act on $\tm{x}$.
+  A~term $\tm{L}$ is ready if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$ or $\tm{\link\;\pair{y}{x}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is ready to act on $\tm{x}$.
 \end{definition}
-
-\begin{restatablelemma}{lempgvreadypriority}
-  \label{lem:pgv-ready-priority}
-  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
-\end{restatablelemma}
-\begin{proof}
-  Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
-\end{proof}
 
 \begin{restatablelemma}{lempgvopenprogressterms}[Open Progress, $\tred$]
   \label{lem:pgv-open-progress-terms}
@@ -406,9 +400,7 @@ We illustrate the newfound ability of PGV by encoding a variant of Milner's cycl
   \]
   where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
 \end{restatabletheorem}
-\begin{proof}
-  Details in \cref{prf:thm-pgv-closed-progress-confs}.
-\end{proof}
+\input{prf/thm-pgv-closed-progress-confs}
 
 \end{document}
 

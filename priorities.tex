@@ -16,6 +16,7 @@
 \setlist[description]{style=unboxed,font=\normalfont\itshape}
 \usepackage[strict]{changepage}
 \usepackage{tikz}
+\usepackage{mdframed}
 
 % Math symbols
 \usepackage[fleqn]{amsmath}
@@ -163,7 +164,7 @@
   % Cyclic Scheduler
   \newcommand{\sched}{\ensuremath{Sched}}
   \newcommand{\agent}[1]{\ensuremath{Agent_{#1}}}
-  \newcommand{\collector}[1]{\ensuremath{Proc_{#1}}}
+  \newcommand{\proc}[1]{\ensuremath{Proc_{#1}}}
 }{}
 \newcommand{\pcp}[1]{\namespace*{pcp}{}{#1}}
 
@@ -228,7 +229,7 @@
   % Cyclic Scheduler
   \newcommand{\sched}{\ensuremath{\mathbf{sched}}}
   \newcommand{\agent}[1]{\ensuremath{\mathbf{agent}_{#1}}}
-  \newcommand{\collector}[1]{\ensuremath{\mathbf{proc}_{#1}}}
+  \newcommand{\proc}[1]{\ensuremath{\mathbf{proc}_{#1}}}
 }{}
 \newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
 
@@ -279,12 +280,9 @@ To be written last\dots
 \bibliographystyle{splncs04}
 \bibliography{main}
 
-\clearpage
-%% changing the margins of appendix
-\appendix
+\clearpage\appendix
+% change the margins of appendix
 \changetext{}{10em}{-5em}{-5em}{}
-
-\appendix
 \section{Priority GV}
 {
   \usingnamespace{pgv}
@@ -307,8 +305,13 @@ To be written last\dots
   \restatetheorem{thmpgvsubjectreductionconfs}
   \input{prf/thm-pgv-subject-reduction-confs}
 
-  \restatetheorem{thmpgvclosedprogressconfs}
-  \input{prf/thm-pgv-closed-progress-confs}
+  \begin{restatablelemma}{lempgvreadypriority}
+    \label{lem:pgv-ready-priority}
+    If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+  \end{restatablelemma}
+  \begin{proof}
+    Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+  \end{proof}
 }
 \section{Priority CP}
 {
@@ -316,6 +319,46 @@ To be written last\dots
 
   % Proofs that the syntactic sugar is well-typed.
   \input{fig/pcp-typing-sugar}
+
+  \begin{definition}[Actions]
+    A~process acts on an endpoint $\tm{x}$ if it is in one of the following forms:
+    \begin{multicols}{3}
+      \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+      \item $\tm{\link{x}{y}}$ 
+      \item $\tm{\link{y}{x}}$
+      \item $\tm{\send{x}{y}{P}}$
+      \item $\tm{\recv{x}{y}{P}}$
+      \item $\tm{\close{x}{P}}$
+      \item $\tm{\wait{x}{P}}$
+      \item $\tm{\inl{x}{P}}$
+      \item $\tm{\inr{x}{P}}$
+      \item $\tm{\offer{x}{P}{Q}}$
+      \item $\tm{\absurd{x}}$
+      \end{itemize}
+    \end{multicols}
+    \noindent
+    A~process is an action if it acts on some endpoint $\tm{x}$.
+  \end{definition}
+  
+  \begin{definition}[Canonical Forms]
+    \label{def:pcp-canonical-forms}
+    A~process $\tm{P}$ is in canonical form if it is in one of the following forms:
+    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+    \item
+      $\tm{\halt}$
+    \item
+      $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$
+      where $m>0$ and each $\tm{P_j}$ is an action.
+    \end{itemize}
+  \end{definition}
+  
+  \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
+    \label{lem:pcp-canonical-forms}
+    If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+  \end{restatablelemma}
+  \begin{proof}
+    If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+  \end{proof}
 
   \restatetheorem{thmpcpclosedprogress}
   \input{prf/thm-pcp-closed-progress}

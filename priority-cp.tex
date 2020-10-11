@@ -6,17 +6,6 @@
 \section{Priority CP}
 \usingnamespace{pcp}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{scheduler}
-  \vspace{-4mm}
-  \caption{Cyclic Scheduler from \cite{dardhagay18}}
-  \label{fig:scheduler}
-  \vspace{-4mm}
-  \end{figure}
-
-\subsection{Syntax}
-
 We present an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's Classical Processes~\cite[CP]{wadler12} with \emph{priorities}.
 The main difference with respect to PCP by Dardha and Gay \cite{dardhagay18} is moving away from a reduction strategy based on cycle elimination using commuting conversions, and towards a reduction strategy using structural congruence.
 
@@ -105,7 +94,7 @@ We let $\tm{P}, \tm{Q}$ range over processes, produced by the following grammar.
          \sep   \tm{\absurd{x}}
 \end{array}
 \]
-Process $\tm{\link{x}{y}}$ links channels $x$ and $y$ and forwards communication from one to the other. $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm{x}$ and $\tm{y}$ are bound together and with scope $\tm{P}$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
+The process $\tm{\link{x}{y}}$ links endpoints $x$ and $y$ and forwards communication from one to the other. $\tm{\res{x}{y}{P}}$, $\tm{(\ppar{P}{Q})}$ and $\tm{\halt}$ denote respectively the restriction processes where channel endpoints $\tm{x}$ and $\tm{y}$ are bound together and with scope $\tm{P}$, the parallel composition of processes $\tm{P}$ and $\tm{Q}$ and the terminated process.
 
 Processes $\tm{\send{x}{y}{P}}$ and $\tm{\recv{x}{y}{P}}$ send or receive over channel $\tm{x}$ a value $\tm{y}$ and proceed as process $\tm{P}$. $\tm{\close{x}{P}}$ and $\tm{\wait{x}{P}}$ send and receive an empty value -- denoting the closure of channel $\tm{x}$, and continue as $\tm{P}$.
 
@@ -113,7 +102,7 @@ Processes $\tm{\inl{x}{P}}$ and $\tm{\inr{x}{P}}$ make a left and right choice, 
 
 We write \emph{unbound} send as $\tm{\usend{x}{y}{P}}$, which is syntactic sugar for $\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}$. Alternatively, we could take $\tm{\usend{x}{y}{P}}$ as primitive, and let $\tm{\send{x}{y}{P}}$ be syntactic sugar for $\tm{\res{y}{z}{(\usend{x}{z}{P})}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\tm{\res{y}{z}{(\usend{x}{z}{P})}}$, even with communting conversions. However, in our setting without commuting conversions and with more permissive normal forms, this is no longer an issue.
 
-\subsection{Typing}
+\paragraph{Typing}
 \input{fig/pcp-typing}
 
 Typing rules for our version of PCP are given in \Cref{fig:pcp-typing}. A typing judgement $\seq{P}{\Gamma}$ states that "process $\tm{P}$ is well typed under the typing context $\ty \Gamma$".
@@ -132,40 +121,32 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm{x}$ 
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm{x}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm{x}$. In all the above rules the priority $\cs o$ of channel $\tm{x}$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
 
 
-\subsection{Example: Milner's Cyclic Scheduler}
-We illustrate PCP with the cyclic scheduler~\cite{milner89}. The full typing for $\tm{\sched}$ is given in \cite{dardhagay18}.
+\paragraph{Example: Milner's Cyclic Scheduler}
+\[
+  \begin{array}{lrlr}
+    \tm{\sched}
+    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+               \tm{\res{d}{d'}{}}
+    \\ &     & \tm{(
+               \ppar{\proc1}{\agent1}
+               \parallel
+               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
+               )}
+    \\
+    \tm{\agent1}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
+    \\
+    \tm{\agent{i}}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
+    \\
+    \tm{\proc{i}}
+    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
+  \end{array}
+\]
 
-We consider a simplified version: a set of 3 agents $\tm{\agent0}, \tm{\agent1}, \tm{\agent2}$ is scheduled to perform a certain task in cyclic order, starting with $\tm{\agent0}$. $\tm{\agent1}$ and $\tm{\agent2}$ send the result of some computation a collector process, respectively $\tm{\collector1}$ and $\tm{\collector2}$, before transmitting data further to the next agent in the cycle, being $\tm{\agent{(i+1)\bmod 3}}$. At the end of the round, $\tm{\agent0}$ send the final result of the computation to its collector $\tm{\collector0}$.
-
-In line with the logical consistency requirements of the Curry-Howard correspondence, we define a finite version of Milner's scheduler, which executes one round of communication.
-$$
-\begin{array}{rcll}
-  \tm{\sched}
-  & \defeq
-  & \tm{
-    \res{x_0}{x'_0}{\res{x_1}{x'_1}{\res{x_2}{x'_2}{
-    \res{\overrightarrow{y_0}}{\overleftarrow{y_1}}{
-    \res{\overrightarrow{y_1}}{\overleftarrow{y_2}}{
-    \res{\overrightarrow{y_2}}{\overleftarrow{y_0}}{}}}}}}
-    }\\
-  &
-  & \tm{(\ppar{\agent0}{\ppar{\agent1}{\ppar{\agent2}{\ppar{\collector0}{\ppar{\collector1}{\collector2}}}}})}\\
-  \tm{\agent0}
-  & \defeq
-  & \tm{\usend{\overrightarrow{y_0}}{d_0}{\recv{\overleftarrow{y_0}}{d'_0}{\usend{x_0}{d'_0}{
-    \wait{\overleftarrow{y_0}}{\close{\overrightarrow{y_0}}{\close{x_0}{\halt}}}}}}} \\
-  \tm{\agent{i}}
-  & \defeq
-  & \tm{\recv{\overleftarrow{y_i}}{d_i}{\usend{x_i}{d_i}{\recv{x_i}{d'_i}{\usend{\overrightarrow{y_i}}{d'_i}{
-    \wait{\overleftarrow{y_i}}{\close{\overrightarrow{y_i}}{\close{x_i}{\halt}}}}}}}}
-  & i \in \{1,2\} \\
-  \tm{\collector{i}}
-  & \defeq & \tm{\recv{x'_i}{d_i}{Q_i}}
-  & i \in \{0,1,2\}
-\end{array}
-$$
-In the above process, channels $\tm{d_i}$ and $\tm{d'_i}$ represent the data being transmitted. For simplicity, let them be channels of a terminated type. The processes $\tm{Q_i}$ represent the inner workings of the collector processes, each of which must eventually send back a response over $\tm{x'_i}$ and close the channel.
-\subsection{Operational Semantics}
+\paragraph{Operational Semantics}
 \input{fig/pcp-operational-semantics}
 
 The operational semantics for PCP given in \Cref{fig:pcp-operational-semantics} is defined as a reduction relation $\red$ on processes (bottom) and uses structural congruence (top).
@@ -176,7 +157,7 @@ The reduction relation is given by a set of axioms and inference rules for conte
 $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\tm{x}$ and $\tm{y}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
 
-\subsection{Metatheory}
+\paragraph{Metatheory}
 
 \begin{restatablelemma}{lempcpsubjectcongruence}[Subject Congruence, $\equiv$]
   \label{lem:pcp-subject-congruence}
@@ -197,50 +178,10 @@ $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitu
   See~\cite{dardhagay18}.
 \end{proof}
 
-\begin{definition}[Actions]
-  A~process acts on an endpoint $\tm{x}$ if it is in one of the following forms:
-  \begin{multicols}{3}
-    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-    \item $\tm{\link{x}{y}}$ 
-    \item $\tm{\link{y}{x}}$
-    \item $\tm{\send{x}{y}{P}}$
-    \item $\tm{\recv{x}{y}{P}}$
-    \item $\tm{\close{x}{P}}$
-    \item $\tm{\wait{x}{P}}$
-    \item $\tm{\inl{x}{P}}$
-    \item $\tm{\inr{x}{P}}$
-    \item $\tm{\offer{x}{P}{Q}}$
-    \item $\tm{\absurd{x}}$
-    \end{itemize}
-  \end{multicols}
-  \noindent
-  A~process is an action if it acts on some endpoint $\tm{x}$.
-\end{definition}
-
-\begin{definition}[Canonical Forms]
-  \label{def:pcp-canonical-forms}
-  A~process $\tm{P}$ is in canonical form if it is in one of the following forms:
-  \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-  \item
-    $\tm{\halt}$
-  \item
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$
-    where $m>0$ and each $\tm{P_j}$ is an action.
-  \end{itemize}
-\end{definition}
-
-\begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
-  \label{lem:pcp-canonical-forms}
-  If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
-\end{restatablelemma}
-\begin{proof}
-  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
-\end{proof}
-\todo{We need to comment here why it is that we presented canonical forms, to start with...}
 \begin{restatabletheorem}{thmpcpclosedprogress}[Closed Progress, $\red$]
   \label{thm:pcp-closed-progress}
   \hfill\\%newline before theorem statement
-  If $\seq{P}{\emptyenv}$ and $\tm{P}$ is in canonical form, then either $\tm{P}=\tm{\halt}$ or there exists a $\tm{Q}$ such that $\tm{P}\red\tm{Q}$.
+  If $\seq{P}{\emptyenv}$, then either $\tm{P}=\tm{\halt}$ or there exists a $\tm{Q}$ such that $\tm{P}\red\tm{Q}$.
 \end{restatabletheorem}
 \begin{proof}
   Details in~\Cref{prf:thm-pcp-closed-progress}.

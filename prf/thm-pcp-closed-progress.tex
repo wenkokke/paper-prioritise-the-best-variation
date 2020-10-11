@@ -1,6 +1,6 @@
 \begin{proof}
   \label{prf:thm-pcp-closed-progress}
-  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, $\tm{P}$ is of the form
+  By~\cref{lem:pcp-canonical-forms}, we rewrite $\tm{P}$ to canonical form. If the resulting process is $\tm{\halt}$, we are done. Otherwise, it is of the form
   \[
     \seq{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}{\emptyenv}
   \]
