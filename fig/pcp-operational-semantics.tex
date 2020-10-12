@@ -1,74 +1,76 @@
-\begin{figure}[t]
-  \small
-  \paragraph*{Structural congruence}
-  \begin{mathpar}
-    \begin{array}{llcl}
-      \LabTirName{SC-LinkSwap}   & \tm{\link{x}{y}}
-                                 & \equiv & \tm{\link{y}{x}}
+\begin{figure}[H]
+  \begin{mdframed}
+    \small
+    \paragraph*{Structural congruence}
+    \begin{mathpar}
+      \begin{array}{llcl}
+        \LabTirName{SC-LinkSwap}   & \tm{\link{x}{y}}
+                                   & \equiv & \tm{\link{y}{x}}
+        \\
+        \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{\link{x}{y}}}
+                                   & \equiv & \tm{\halt}
+        \\
+        \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{P}}
+                                   & \equiv & \tm{\res{y}{x}{P}}
+        \\
+        \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{P}}}
+                                   & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
+        \\
+        \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{P}{Q})}}
+                                   & \equiv & \tm{\ppar{P}{\res{x}{y}{Q}}},
+                                              \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{P})}
+        \\
+        \LabTirName{SC-ParNil}     & \tm{\ppar{P}{\halt}}
+                                   & \equiv & \tm{P}
+        \\
+        \LabTirName{SC-ParComm}    & \tm{\ppar{P}{Q}}
+                                   & \equiv & \tm{\ppar{Q}{P}}
+        \\
+        \LabTirName{SC-ParAssoc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
+                                   & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
+      \end{array}
+    \end{mathpar}
+    
+    \paragraph*{Reduction}
+    \begin{mathpar}
+      \begin{array}{llcl}
+        \LabTirName{E-Link}    & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
+                               & \red & \tm{\subst{P}{w}{x}}
+        \\
+        \LabTirName{E-Send}    & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
+                               & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
+        \\
+        \LabTirName{E-Close}   & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
+                               & \red & \tm{\ppar{P}{Q}}
+        \\
+        \LabTirName{E-Select-Inl}
+                               & \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
+                               & \red & \tm{\res{x}{y}{(\ppar{P}{Q})}}
+        \\
+        \LabTirName{E-Select-Inr}
+                               & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
+                               & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
+      \end{array}
       \\
-      \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{\link{x}{y}}}
-                                 & \equiv & \tm{\halt}
-      \\
-      \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{P}}
-                                 & \equiv & \tm{\res{y}{x}{P}}
-      \\
-      \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{P}}}
-                                 & \equiv & \tm{\res{z}{w}{\res{x}{y}{P}}}
-      \\
-      \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-                                 & \equiv & \tm{\ppar{P}{\res{x}{y}{Q}}},
-                                            \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{P})}
-      \\
-      \LabTirName{SC-ParNil}     & \tm{\ppar{P}{\halt}}
-                                 & \equiv & \tm{P}
-      \\
-      \LabTirName{SC-ParComm}    & \tm{\ppar{P}{Q}}
-                                 & \equiv & \tm{\ppar{Q}{P}}
-      \\
-      \LabTirName{SC-ParAssoc}   & \tm{\ppar{P}{(\ppar{Q}{R})}}
-                                 & \equiv & \tm{\ppar{(\ppar{P}{Q})}{R}}
-    \end{array}
-  \end{mathpar}
-  
-  \paragraph*{Reduction}
-  \begin{mathpar}
-    \begin{array}{llcl}
-      \LabTirName{E-Link}    & \tm{\res{x}{y}{(\ppar{\link{w}{x}}{P})}}
-                             & \red & \tm{\subst{P}{w}{x}}
-      \\
-      \LabTirName{E-Send}    & \tm{\res{x}{y}{(\ppar{\send{x}{z}{P}}{\recv{x}{w}{Q}})}}
-                             & \red & \tm{\res{x}{y}{\res{z}{w}{(\ppar{P}{Q})}}}
-      \\
-      \LabTirName{E-Close}   & \tm{\res{x}{y}{(\ppar{\close{x}{P}}{\wait{y}{Q}})}}
-                             & \red & \tm{\ppar{P}{Q}}
-      \\
-      \LabTirName{E-Select-Inl}
-                             & \tm{\res{x}{y}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}
-                             & \red & \tm{\res{x}{y}{(\ppar{P}{Q})}}
-      \\
-      \LabTirName{E-Select-Inr}
-                             & \tm{\res{x}{y}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}
-                             & \red & \tm{\res{x}{y}{(\ppar{P}{R})}}
-    \end{array}
-    \\
-    \inferrule*[lab=E-LiftRes]{
-      \tm{P}\red\tm{P'}
-    }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
-  
-    \inferrule*[lab=E-LiftPar]{
-      \tm{P}\red\tm{P'}
-    }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
-  
-    \inferrule*[lab=E-LiftSC]{
-      \tm{P}\equiv\tm{P'}
-      \\
-      \tm{P'}\red\tm{Q'}
-      \\
-      \tm{Q'}\equiv\tm{Q}
-    }{\tm{P}\red\tm{Q}}
-  \end{mathpar}
-  \caption{Operational Semantics for PCP.}
-  \label{fig:pcp-operational-semantics}
+      \inferrule*[lab=E-LiftRes]{
+        \tm{P}\red\tm{P'}
+      }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
+    
+      \inferrule*[lab=E-LiftPar]{
+        \tm{P}\red\tm{P'}
+      }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
+    
+      \inferrule*[lab=E-LiftSC]{
+        \tm{P}\equiv\tm{P'}
+        \\
+        \tm{P'}\red\tm{Q'}
+        \\
+        \tm{Q'}\equiv\tm{Q}
+      }{\tm{P}\red\tm{Q}}
+    \end{mathpar}
+    \caption{Operational Semantics for PCP.}
+    \label{fig:pcp-operational-semantics}
+  \end{mdframed}
 \end{figure}
 %%% Local Variables:
 %%% TeX-master: "../priorities"

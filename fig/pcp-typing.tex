@@ -1,75 +1,77 @@
-\begin{figure}[t]
-  \begin{mathpar}
-    \inferrule*[lab=T-Link]{
-    }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A},\tmty{y}{\co{A}}}}
-    
-    \inferrule*[lab=T-Res]{
-      \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
-    }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
-    \\
-    \inferrule*[lab=T-Par]{
-      \seq{P}{\ty{\Gamma}}
+\begin{figure}[H]
+  \begin{mdframed}
+    \begin{mathpar}
+      \inferrule*[lab=T-Link]{
+      }{\seq{\link[\ty{A}]{x}{y}}{\tmty{x}{A},\tmty{y}{\co{A}}}}
+      
+      \inferrule*[lab=T-Res]{
+        \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
+      }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
       \\
-      \seq{Q}{\ty{\Delta}}
-    }{\seq{\ppar{P}{Q}}{\ty{\Gamma},\ty{\Delta}}}
-    
-    \inferrule*[lab=T-Halt]{
-    }{\seq{\halt}{\emptyenv}}
-    \\
-    \inferrule*[lab=T-Send]{
-      \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+      \inferrule*[lab=T-Par]{
+        \seq{P}{\ty{\Gamma}}
+        \\
+        \seq{Q}{\ty{\Delta}}
+      }{\seq{\ppar{P}{Q}}{\ty{\Gamma},\ty{\Delta}}}
+      
+      \inferrule*[lab=T-Halt]{
+      }{\seq{\halt}{\emptyenv}}
       \\
-      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-    }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
-    
-    \inferrule*[lab=T-Close]{
-      \seq{P}{\ty{\Gamma}}
+      \inferrule*[lab=T-Send]{
+        \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+      }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
+      
+      \inferrule*[lab=T-Close]{
+        \seq{P}{\ty{\Gamma}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma})
+      }{\seq{\close{x}{P}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}
       \\
-      \cs{o}<\minpr(\ty{\Gamma})
-    }{\seq{\close{x}{P}}{\ty{\Gamma},\tmty{x}{\tyone[\cs{o}]}}}
-    \\
-    \inferrule*[lab=T-Recv]{
-      \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+      \inferrule*[lab=T-Recv]{
+        \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+      }{\seq{\recv{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\typarr[\cs{o}]{A}{B}}}}
+      
+      \inferrule*[lab=T-Wait]{
+        \seq{P}{\ty{\Gamma}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma})
+      }{\seq{\wait{x}{P}}{\ty{\Gamma},\tmty{x}{\tybot[\cs{o}]}}}
       \\
-      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-    }{\seq{\recv{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\typarr[\cs{o}]{A}{B}}}}
-    
-    \inferrule*[lab=T-Wait]{
-      \seq{P}{\ty{\Gamma}}
-      \\
-      \cs{o}<\minpr(\ty{\Gamma})
-    }{\seq{\wait{x}{P}}{\ty{\Gamma},\tmty{x}{\tybot[\cs{o}]}}}
-    \\
-    \inferrule*[lab=T-Select-Inl]{
-      \seq{P}{\ty{\Gamma},\tmty{x}{A}}
-      \\
-      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-      \\
-      \pr(\ty{A})=\pr(\ty{B})
-    }{\seq{\inl{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
-    
-    \inferrule*[lab=T-Select-Inr]{
-      \seq{P}{\ty{\Gamma},\tmty{x}{B}}
-      \\
-      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-      \\
-      \pr(\ty{A})=\pr(\ty{B})
-    }{\seq{\inr{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
-    
-    \inferrule*[lab=T-Offer]{
-      \seq{P}{\ty{\Gamma},\tmty{x}{A}}
-      \\
-      \seq{Q}{\ty{\Gamma},\tmty{x}{B}}
-      \\
-      \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
-    }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
-    
-    \inferrule*[lab=T-Offer-Absurd]{
-      \cs{o}<\pr(\ty{\Gamma})
-    }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
-  \end{mathpar}
-  \caption{Typing Rules for PCP.}
-  \label{fig:pcp-typing}
+      \inferrule*[lab=T-Select-Inl]{
+        \seq{P}{\ty{\Gamma},\tmty{x}{A}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+        \\
+        \pr(\ty{A})=\pr(\ty{B})
+      }{\seq{\inl{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
+      
+      \inferrule*[lab=T-Select-Inr]{
+        \seq{P}{\ty{\Gamma},\tmty{x}{B}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+        \\
+        \pr(\ty{A})=\pr(\ty{B})
+      }{\seq{\inr{x}{P}}{\ty{\Gamma},\tmty{x}{\typlus[\cs{o}]{A}{B}}}}
+      
+      \inferrule*[lab=T-Offer]{
+        \seq{P}{\ty{\Gamma},\tmty{x}{A}}
+        \\
+        \seq{Q}{\ty{\Gamma},\tmty{x}{B}}
+        \\
+        \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
+      }{\seq{\offer{x}{P}{Q}}{\ty{\Gamma},\tmty{x}{\tywith[\cs{o}]{A}{B}}}}
+      
+      \inferrule*[lab=T-Offer-Absurd]{
+        \cs{o}<\pr(\ty{\Gamma})
+      }{\seq{\absurd{x}}{\ty{\Gamma},\tmty{x}{\tytop[\cs{o}]}}}
+    \end{mathpar}
+    \caption{Typing Rules for PCP.}
+    \label{fig:pcp-typing}
+  \end{mdframed}
 \end{figure}
 %%% Local Variables:
 %%% TeX-master: "../priorities"
