@@ -23,7 +23,7 @@ Priority GV (PGV), a~variant of GV which decouples channel creation from thread 
 
 \paragraph*{Contributions and Structure of the Paper}
 \begin{itemize}
-\item \textbf{PGV}: we present Priority GV in sec ??, the syntax of types and terms, operational semantics and typing rules. We prove subject reduction (\Cref{thm:pgv-subject-reduction-confs}) and closed progress (\Cref{lem:pgv-closed-progress-confs})
+\item \textbf{PGV}: we present Priority GV in~\cref{sec:pgv}, the syntax of types and terms, operational semantics and typing rules. We prove subject reduction (\Cref{thm:pgv-subject-reduction-confs}) and closed progress (\Cref{lem:pgv-closed-progress-confs})
 \item \textbf{Milner's Cyclic Scheduler}: We present Milner's Cyclic Scheduler \cite{milner89} \cref{sec:pgv-example} for the first time in GV.
 \item \textbf{Updated PCP}: we present an updated version of PCP \cite{dardhagay18} where we remove the commuting conversions, moving away from reduction as cycle elimination, and towards reduction as one would expect for a process calculus. We report the Cyclic Scheduler from \cite{dardhagay18}.
 \item \textbf{PCP into PGV}: We present an encoding of PCP into PGV and show that it is sound and complete with respect to typing (\Cref{thm:pcp-to-pgv-confs-preservation}) and semantics, by proving operational correspondence (\Cref{thm:pcp-to-pgv-operational-correspondence-soundness} and \Cref{thm:pcp-to-pgv-operational-correspondence-completeness}).
