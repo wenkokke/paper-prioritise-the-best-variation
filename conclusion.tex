@@ -4,9 +4,8 @@
 \begin{document}
 \section{Related Work and Conclusion}
 
-\paragraph{On deadlock freedom and progress}
+\paragraph{On deadlock freedom and progress in $\pi$-calculus and $\lambda$-calculus}
 Deadlock freedom and progress have been studied thoroughly in the $\pi$-calculus with or without session types.
-
 In the standard typed $\pi$-calculus a foundational line of work is by Kobayashi and his original type-theoretic approach to deadlock-freedom~\cite{kobayashi98}, where priorities are abstract tags defined over a partially ordered set. Later on these abstract tags were simplified to natural numbers, and pairs of obligations and capabilities were used in the type system for deadlock or livelock freedom~\cite{kobayashi02,kobayashi06}. This allowed more $\pi$-calculus processes to be typed. Following, Kobayashi's line of work, Padovani~\cite{padovani13} adapted the obligation and capability pairs to session types, and later on he further simplified them to a single priority for linear $\pi$-calculus~\cite{padovani14}. As discussed by the author, by using the encoding of session types into linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat,dardha16}, the priority-based technique for deadlock freedom can be transferred onto the $\pi$-calculus with session types.
 
 The groundbreaking work on progress for session-typed $\pi$-calculus, by Dezani \emph{et al.}~\cite{dezani-ciancaglinimostrous06}, guarantees progress by allowing only one active session at a time. In~\cite{dezani-ciancagliniliguoro09progress} the authors introduce a partial order on channels in line with Kobayashi's work~\cite{kobayashi98}. Carbone and Debois~\cite{carbonedebois10} define progress for session typed $\pi$-calculus in terms of a \emph{catalyser} used to provide a missing counterpart to a process, thus guaranteeing progress.
