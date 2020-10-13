@@ -300,7 +300,8 @@ We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denot
 Each of the channels in the scheduler is has the terminated type, and is merely used to synchronise.
 For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equivalently have represented it as a function which takes three processes as arguments, and creates this configuration.
 
-\subsection{Metatheory}
+
+\paragraph{Subject reduction}
 
 \begin{restatablelemma}{lempgvvaluedone}
   \label{lem:pgv-value-done}
@@ -353,6 +354,9 @@ For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equiv
   By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
   Details in \cref{prf:thm-pgv-subject-reduction-confs}.
 \end{proof}
+
+
+\paragraph{Progress and deadlock freedom}
 
 \begin{definition}[Actions]
   \label{def:pgv-actions}
