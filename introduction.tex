@@ -21,7 +21,7 @@ Following the above observations, we aim to further investigate GV and deadlock 
 We address this research question by following the line of work from CP to Priority CP, and present
 Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, and restores deadlock freedom by adding priorities. This work closes the circle of the strong connection of CP and GV, together with their priority versions, PCP and PGV.
 
-\paragraph*{Contributions and Structure of the Paper}
+\subsubsection*{Contributions and Structure of the Paper}
 \begin{itemize}
 \item \emph{Priority GV} We present Priority GV (PGV) in~\Cref{sec:pgv}; we present the syntax of types and terms, operational semantics and typing rules. We show our type system for PGV is sound by proving subject reduction (\Cref{thm:pgv-subject-reduction-confs}) and closed progress (\Cref{lem:pgv-closed-progress-confs}).
 \item \emph{Milner's Cyclic Scheduler in PGV} We present, for the first time, Milner's Cyclic Scheduler \cite{milner89} (\Cref{sec:pgv-example}) as a GV term. This example illustrates how a cyclic structure can now be expressed in PGV thanks to the separation of channel creation and thread creation, and priorities.
