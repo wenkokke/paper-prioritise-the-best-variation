@@ -21,11 +21,10 @@ Following the above observations, we aim to further investigate GV and deadlock 
 We address this research question by following the line of work from CP to Priority CP, and presents 
 Priority GV (PGV), a~variant of GV which decouples channel creation from thread creation, and restores deadlock freedom by adding priorities. This work closes the circle of the strong connection of CP and GV, together with their priority versions, PCP and PGV.
 
-\noindent
-\textbf{Contributions and Structure of the Paper}
+\paragraph*{Contributions and Structure of the Paper}
 \begin{itemize}
 \item \textbf{Priority GV}: we present Priority GV (PGV) in~\Cref{sec:pgv}; we present the syntax of types and terms, operational semantics and typing rules. We show our type system for PGV is sound by proving subject reduction (\Cref{thm:pgv-subject-reduction-confs}) and closed progress (\Cref{lem:pgv-closed-progress-confs}).
-\item \textbf{Milner's Cyclic Scheduler in PGV}: to illustrate PGV, and following previous work \cite{dardhagay18} we present for the first time Milner's Cyclic Scheduler \cite{milner89} (in \Cref{sec:pgv-example}) as a term in GV. This example illustrates how a cyclic structure can now be expressed in GV thanks to the separation of channel creation and thread creation, and priorities.
+\item \textbf{Milner's Cyclic Scheduler in PGV}: we present for the first time Milner's Cyclic Scheduler \cite{milner89} (\Cref{sec:pgv-example}) as a GV term. This example illustrates how a cyclic structure can now be expressed in PGV thanks to the separation of channel creation and thread creation, and priorities.
 \item \textbf{Updated Priority CP}: we present an updated version of Priority CP (PCP) \cite{dardhagay18} in \Cref{sec:pcp} where we remove the commuting conversions and move away from a reduction relation as cycle elimination, and towards a reduction as one would expect for a process calculus. We then show Milner's Cyclic Scheduler in PCP (in \Cref{sec:pcp-example}) originally presented in \cite{dardhagay18}.
 \item \textbf{Encoding PCP into PGV}: we present an encoding of PCP into PGV in \Cref{sec:pcp-to-pgv}. We prove the encoding is sound and complete with respect to typing (\Cref{thm:pcp-to-pgv-confs-preservation}) and operational semantics (\Cref{thm:pcp-to-pgv-operational-correspondence-soundness} and \Cref{thm:pcp-to-pgv-operational-correspondence-completeness}). Finally, we can encode Milner's Cyclic Scheduler in PCP (\Cref{sec:pcp-example}) resulting in the Scheduler in PGV (\Cref{sec:pgv-example}).
 \end{itemize}
