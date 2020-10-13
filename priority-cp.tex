@@ -3,7 +3,7 @@
 
 \begin{document}
 
-\section{Priority CP}
+\section{Priority CP}\label{sec:pcp}
 \usingnamespace{pcp}
 
 We present an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's Classical Processes~\cite[CP]{wadler12} with \emph{priorities}.
@@ -121,7 +121,7 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\tm{x}$ 
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\tm{\inl{x}{P}}$ and right $\tm{\inr{x}{P}}$ choice performed on channel $\tm{x}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\tm{x}$. In all the above rules the priority $\cs o$ of channel $\tm{x}$ is the smallest with respect to the typing context $\cs{o}<\minpr(\ty{\Gamma})$ and types involved in the choice $\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})$.
 
 
-\paragraph{Example: Milner's Cyclic Scheduler}
+\paragraph{Example: Milner's Cyclic Scheduler}\label{sec:pcp-example}
 \[
   \begin{array}{lrlr}
     \tm{\sched}
