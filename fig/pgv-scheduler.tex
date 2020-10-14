@@ -7,23 +7,23 @@
     \node[shape=circle,draw=black] (proc2)  at ( 4.50,-1.75) {\tm{\proc2}};
     \node[shape=circle,draw=black] (proc3)  at (-4.50,-1.75) {\tm{\proc3}};
     
-    \draw
+    \draw[->]
     (agent1) -- node[pos=0.35,above] {$c_1$}
     node[pos=1.0,above] {$c'_1$} ++ (agent2);
-    \draw
+    \draw[->]
     (agent2) -- node[pos=0.1,above] {$c_2$}
     node[pos=0.9,above] {$c'_2$} ++ (agent3);
-    \draw
+    \draw[->]
     (agent3) -- node[pos=0.0,above] {$c_3$}
     node[pos=0.65,above] {$c'_3$} ++ (agent1);
     
-    \draw[double]
+    \draw[implies-implies,double]
     (agent1) -- node[pos=0.15,above] {$a_1$} node[pos=0.85,above] {$a'_1$}
     node[pos=0.15,below] {$b_1$} node[pos=0.85,below] {$b'_1$} ++ (proc1);
-    \draw[double]
+    \draw[implies-implies,double]
     (agent2) -- node[pos=0.15,above] {$a_2$} node[pos=0.85,above] {$a'_2$}
     node[pos=0.15,below] {$b_2$} node[pos=0.85,below] {$b'_2$} ++ (proc2);
-    \draw[double]
+    \draw[implies-implies,double]
     (agent3) -- node[pos=0.15,above] {$a_3$} node[pos=0.85,above] {$a'_3$}
     node[pos=0.15,below] {$b_3$} node[pos=0.85,below] {$b'_3$} ++ (proc3);
     
