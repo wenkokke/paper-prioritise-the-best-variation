@@ -88,9 +88,10 @@
 \newcommand{\emptyenv}{\varnothing}
 \newcommand{\subst}[4][]{\ifstrempty{#1}{\ensuremath{#2\{#3/#4\}}}{\ensuremath{#2(\{#3/#4\}\cup#1)}}}
 \newcommand{\plug}[2]{\ensuremath{#1[#2]}}
-% \newcommand{\minpr}[0]{\pr}
 \newcommand{\minpr}[0]{\ensuremath{\text{min}_{\pr}}}
 \newcommand{\maxpr}[0]{\ensuremath{\text{max}_{\pr}}}
+\providecommand{\pbot}[0]{\ensuremath{{\bot\!}}}
+\providecommand{\ptop}[0]{\ensuremath{{\top\!}}}
 \newcommand{\aleq}[0]{\mathbin{{=_{\alpha}}}}
 \newcommand{\defeq}[0]{\triangleq}
 \newcommand{\elabarrow}[0]{\triangleq}% deprecated
@@ -165,17 +166,14 @@
   \providecommand{\laboffinl}[1]{\ensuremath{{#1}\triangleright\text{inl}}}
   \providecommand{\laboffinr}[1]{\ensuremath{{#1}\triangleright\text{inr}}}
   % Cyclic Scheduler
-  \newcommand{\sched}{\ensuremath{Sched}}
-  \newcommand{\agent}[1]{\ensuremath{Agent_{#1}}}
-  \newcommand{\proc}[1]{\ensuremath{Proc_{#1}}}
+  \providecommand{\sched}{\ensuremath{Sched}}
+  \providecommand{\agent}[1]{\ensuremath{Agent_{#1}}}
+  \providecommand{\proc}[1]{\ensuremath{Proc_{#1}}}
 }{}
 \newcommand{\pcp}[1]{\namespace*{pcp}{}{#1}}
 
 % Priority GV
 \namespace*{pgv}{
-  % Priorities
-  \providecommand{\pbot}[0]{\ensuremath{{\bot\!}}}
-  \providecommand{\ptop}[0]{\ensuremath{{\top\!}}}
   % Types
   \providecommand{\tyunit}[0]{\ensuremath{\mathbf{1}}}
   \providecommand{\tyvoid}[0]{\ensuremath{\mathbf{0}}}
@@ -318,7 +316,7 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
     Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
   \end{proof}
 }
-\section{Priority CP}
+\section{Relation to Priority CP}
 {
   \usingnamespace{pcp}
 
@@ -368,7 +366,6 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
   \restatetheorem{thmpcpclosedprogress}
   \input{prf/thm-pcp-closed-progress}
 }
-\section{Priority CP to Priority GV}
 {
   \restatelemma{lempcptopgvtermspreservation}
   \input{prf/lem-pcp-to-pgv-terms-preservation}
@@ -381,6 +378,15 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
 
   \restatelemma{lempcptopgvcpgvMtocpgvC}
   \input{prf/lem-pcp-to-pgv-cpgvM-to-cpgvC}
+
+  \begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
+    \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
+    then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
+  \end{restatablelemma}
+  \begin{proof}
+    Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
+  \end{proof}
 
   \restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
   \input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}

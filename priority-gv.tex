@@ -231,6 +231,8 @@ Term reduction is the standard call-by-value, left-to-right evaluation for GV, a
 
 Configuration reduction resembles evaluation for a process calculus: \LabTirName{E-Link}, \LabTirName{E-Send}, and \LabTirName{E-Close} perform communications, \LabTirName{E-LiftC} allows reduction under configuration contexts, and \LabTirName{E-LiftSC} embeds a structural congruence $\equiv$. The remaining rules mediate between the process calculus and the functional language: \LabTirName{E-New} and \LabTirName{E-Spawn} evaluate the $\tm{\new}$ and $\tm{\spawn}$ constructs, creating the equivalent configuration constructs, and \LabTirName{E-LiftM} embeds term reduction.
 
+Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated proceess as the neutral element; it is commutative and associative.
+
 While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts:
 
 Firstly, we decompose the $\tm{\fork}$ construct. In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct. In GV, $\tm{\link}$ needs to return a terminated channel after evaluating the link. In PGV, the behaviour matches that of link in CP.
@@ -239,11 +241,10 @@ Secondly, our structural congruence is type preserving. Consequently, we can emb
 
 \input{fig/pgv-operational-semantics}
 
-
 \subsubsection*{Typing}
 \Cref{fig:pgv-typing} gives the typing rules for PGV.
 
-Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}.
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}.
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing from Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate}
@@ -253,7 +254,7 @@ The only non-standard feature of the typing rules is the priority annotations. P
 
 In PGV, Sequents are annotated by a priority bound $\cs{p}$, which is the \emph{upper bound} on the priority of the communication actions performed while evaluating the term. The \emph{lower bound} is obtained from the typing environment. Terms with sequential evaluation, such as \LabTirName{T-LetUnit}, have side conditions to ensure deadlock freedom. For instance, the side condition for typing $\tm{\letunit{M}{N}}$ requires that $\tm{M}$ has finished communicating before $\tm{N}$ starts communicating.
 
-Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further sequential actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
+Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, which states that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well-typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further sequential actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
 
 While our configuration typing is based on the standard typing for GV, it differs on two counts:
 
@@ -262,7 +263,6 @@ Firstly, we require that child threads return the unit value, as opposed to a te
 Secondly, we simplify typing for parallel composition. In GV, each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$ across the parallel composition. Consequently, associativity of parallel composition violates type preservation. Unfortunately, the practice plays a crucial role in guaranteeing deadlock freedom. In PGV, we guarantee deadlock freedom through different means, which removes the channel pseudo-type $\ty{S^\sharp}$, simplifies typing for parallel composition, and restores type preservation for the structural congruence.
 
 \input{fig/pgv-typing}
-
 
 \subsubsection*{Example: Milner's Cyclic Scheduler}\label{sec:pgv-example}
 We illustrate the newfound ability of PGV by encoding a variant of Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, and circling all the way around to $\tm{\proc{n}}$, notifying $\tm{\proc0}$ when every other process has finished their task.
