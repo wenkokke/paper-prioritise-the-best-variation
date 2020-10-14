@@ -44,13 +44,40 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
 \end{mathpar}
 Commuting conversions break our intuition for priorities, since ``if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority conditions in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$'' by $\cs{o+1}$~\cite{dardhagay18}. Consequently, the intuition that an action with lower priority occurs before an action with higher priority is shattered.
 
+\subsubsection*{Example}\label{sec:pcp-example}
+We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the version presented in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{i}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, and $\pcp{\plug{P}{Q}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process context $\pcp{\tm{P}}$:
+\[
+  \usingnamespace{pcp}
+  \begin{array}{lrlr}
+    \tm{\sched}
+    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+               \tm{\res{d}{d'}{}}
+    \\ &     & \tm{(
+               \ppar{\proc1}{\agent1}
+               \parallel
+               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
+               )}
+    \\
+    \tm{\agent1}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
+    \\
+    \tm{\agent{i}}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
+    \\
+    \tm{\proc{i}}
+    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
+  \end{array}
+\]
+
 \subsubsection*{Types}
 Types $\pcp{\ty{A}}$, $\pcp{\ty{B}}$, $\pcp{\ty{C}}$ in PCP are based on classical linear logic propositions, and are defined by the following grammar:
 \[
   \usingnamespace{pcp}
   \begin{array}{lcl}
     \ty{A}, \ty{B}, \ty{C}
-    & \coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
+    & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
       \sep        \ty{\typarr[\cs{o}]{A}{B}}
       \sep        \ty{\tyone[\cs{o}]}
       \sep        \ty{\tybot[\cs{o}]}
@@ -72,7 +99,7 @@ Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to 
   \usingnamespace{pcp}
   \begin{array}{lcl}
     \ty{\Gamma}, \ty{\Delta}
-    & \coloneqq & \ty{\emptyenv}
+    & \Coloneqq & \ty{\emptyenv}
       \sep        \ty{\Gamma}, \tmty{x}{A}
   \end{array}
 \]
@@ -126,7 +153,7 @@ We let $\pcp{\tm{P}}$, $\pcp{\tm{Q}}$ range over processes, produced by the foll
   \usingnamespace{pcp}
   \begin{array}[t]{lcl}
     \tm{P}, \tm{Q}
-    & \coloneqq & \tm{\link{x}{y}}
+    & \Coloneqq & \tm{\link{x}{y}}
            \sep   \tm{\res{x}{y}{P}}
            \sep   \tm{(\ppar{P}{Q})}
            \sep   \tm{\halt}
@@ -142,14 +169,14 @@ We let $\pcp{\tm{P}}$, $\pcp{\tm{Q}}$ range over processes, produced by the foll
 \]
 The process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
 
-Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value -- denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
+Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. The processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
 
-Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. $\pcp{\tm{\offer{x}{P}{Q}}}$ dually offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$. $\pcp{\tm{\absurd{x}}}$ denotes the empty offer.
+Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
 
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with communting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
 \subsubsection*{Operational Semantics}
-The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV.
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV.\simon{Maybe worth highlighting that it is an internal mobility calculus, for the pi calculus people.}
 
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
@@ -265,7 +292,7 @@ There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}
     & = & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
     \pcp{\tm{\cpgvM{\inr{x}{P}}}}
     & = & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-    \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{\cpgvM{P}}{\cpgvM{Q}}}}}} \\
+    \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}} \\
     & = & \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
     \pcp{\tm{\cpgvM{\absurd{x}}}}
     & = & \pgv{\tm{\offeremp{x}}}
@@ -274,36 +301,10 @@ There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}
 The third, fourth, and fifth cases for $\tm{\cpgvC{\cdot}}$ translate the $\nu$-binders implicit in the encoding of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
-\subsubsection*{Example: Milner's Cyclic Scheduler}\label{sec:pcp-example}
-We illustrate our translation by giving the PCP version of the cyclic scheduler in~\cref{sec:pgv-example}. We implement the scheduler as follows, using $\pcp{\tm{\prod_{i}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, and $\pcp{\plug{P}{Q}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process context $\pcp{\tm{P}}$:
-\[
-  \usingnamespace{pcp}
-  \begin{array}{lrlr}
-    \tm{\sched}
-    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
-               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
-               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
-               \tm{\res{d}{d'}{}}
-    \\ &     & \tm{(
-               \ppar{\proc1}{\agent1}
-               \parallel
-               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
-               )}
-    \\
-    \tm{\agent1}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
-    \\
-    \tm{\agent{i}}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
-    \\
-    \tm{\proc{i}}
-    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
-  \end{array}
-\]
-The translation of $\pcp{\sched}$ is exactly $\pgv{sched}$ where all processes are child processes.
+Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\sched}$, \cref{sec:pcp-example}) and PGV ($\pgv{\sched}$, \cref{sec:pgv-example}). The translation of $\pcp{\sched}$ is exactly $\pgv{sched}$ where all processes are child processes.
 
 \subsubsection*{Type preservation}
-The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing along $\ty{\cpgvT{\cdot}}$:
+The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing along $\ty{\cpgvT{\cdot}}$:\simon{This reads weirdly---what's the intuition?}
 \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, $\cpgvM{\cdot}$]
   \label{lem:pcp-to-pgv-terms-preservation}
   \hfill\\%newline before theorem statement
@@ -340,18 +341,6 @@ Finally, we show that PCP and PGV are in operational correspondence along our tr
   Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
 \end{proof}
 
-\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
-  [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
-  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
-\end{restatabletheorem}
-\begin{proof}
-  By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-  Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
-\end{proof}
-
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
   [Operational Correspondence, Completeness, $\cpgvC{\cdot}$]
   \label{thm:pcp-to-pgv-operational-correspondence-completeness}
@@ -367,6 +356,18 @@ Finally, we show that PCP and PGV are in operational correspondence along our tr
   We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
   \LabTirName{E-LiftSC}. 
   (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
+\end{proof}
+
+\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
+  [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
+  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
+  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
+\end{restatabletheorem}
+\begin{proof}
+  By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
+  Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
 \end{proof}
 
 \end{document}
