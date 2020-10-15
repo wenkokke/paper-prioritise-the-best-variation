@@ -11,7 +11,7 @@ We present Priority GV (PGV), a session-typed functional language based on GV~\c
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. We illustrate PGV with Milner's Cyclic Scheduler~\cite{milner89}.
 
 \begin{example}[Milner's Cyclic Scheduler in PGV]\label{sec:pgv-example}
-Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
+Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc1}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc1}$ when all processes have finished.
 % The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
 % \input{fig/pgv-scheduler.tex}
 We implement the scheduler as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$:
@@ -26,7 +26,7 @@ We implement the scheduler as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denot
                      (
                      & \phi\;\proc1
                      \parallel
-                     \child\;\andthen{\agent1}{\andthen{\wait\;{c'_3}}{\close\;{d}}}
+                     \child\;\andthen{\agent1}{\andthen{\wait\;{c'_n}}{\close\;{d}}}
                      \\
                      \parallel
                      &
@@ -42,7 +42,7 @@ We implement the scheduler as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denot
     & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
   \end{array}
 \]
-Our scheduler $\tm{\sched}$ consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start.
+Our scheduler $\tm{\sched}$ consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc1}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start.
 Each of the channels in the scheduler is of a terminated type, and is merely used to synchronise.
 For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equivalently have represented it as a function which takes three processes as arguments, and creates this configuration.
 \end{example}
@@ -228,21 +228,19 @@ Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation c
     \sep        \tm{\unit}
     \sep        \tm{\pair{V}{W}}
     \sep        \tm{\inl{V}}
-    \sep        \tm{\inr{V}}
-  \\
+    \sep        \tm{\inr{V}} \\
   \tm{E}
-  & \Coloneqq & \tm{\hole} \\
-  & \sep      & \tm{E\;M}
+  & \Coloneqq & \tm{\hole}
+    \sep        \tm{E\;M}
     \sep        \tm{V\;E} \\
-  & \sep      & \tm{\letunit{E}{N}} \\
-  & \sep      & \tm{\pair{E}{M}}
+  & \sep      & \tm{\letunit{E}{N}}
+    \sep        \tm{\pair{E}{M}}
     \sep        \tm{\pair{V}{E}}
     \sep        \tm{\letpair{x}{y}{E}{M}} \\
   & \sep      & \tm{\inl{E}}
     \sep        \tm{\inr{E}}
-    \sep        \tm{\casesum{E}{x}{M}{y}{N}} \\
-  & \sep      & \tm{\absurd{E}}
-  \\
+    \sep        \tm{\casesum{E}{x}{M}{y}{N}}
+    \sep        \tm{\absurd{E}} \\
   \tm{\conf{F}}
   & \Coloneqq & \tm{\phi\;E}
   \\
