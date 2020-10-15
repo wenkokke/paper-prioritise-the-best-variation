@@ -253,7 +253,7 @@ There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}
   &\pcp{\tm{\cpgvC{P}}}
   &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
 \end{align*}
-The third, fourth, and fifth cases translate the $\nu$-binders implicit in the encoding of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
+The third, fourth, and fifth cases translate the $\nu$-binders in the translation of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
 It translates as much as possible of the process to the corresponding configuration constructs. Once it hits the first action, it switches to the second translation, $\tm{\cpgvM{\cdot}}$, which translates processes to \emph{terms}:
 \begin{align*}
   &\pcp{\tm{\cpgvM{\link{x}{y}}}}
@@ -283,7 +283,7 @@ It translates as much as possible of the process to the corresponding configurat
 \end{align*}
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
-Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). The translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$ where all processes are child processes.
+Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). It follows immediately from the definition of our translation that the translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$, where all processes are child processes.
 
 The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ are preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
 \begin{compacttheorems}
