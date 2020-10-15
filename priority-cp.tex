@@ -5,11 +5,10 @@
 
 \section{Relation to Priority CP}\label{sec:pcp}
 
-This section presents an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's Classical Processes~\cite[CP]{wadler12} with \emph{priorities}, and a translation from PCP to PGV.
+We present an updated version of Priority CP (PCP)~\cite{dardhagay18}, which is Wadler's CP~\cite{wadler12} with {priorities}, and a translation from PCP to PGV.
+The main difference with respect to PCP~\cite{dardhagay18} is removing commuting conversions, in favour of using structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle as in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them. They show this by decomposing the reduction relation for CP into two phases: first, all $\beta$-reductions are performed, and second, commuting conversions are used to bring one particular action to the front, to eliminate the top-level cut.
 
-The main difference with respect to PCP by Dardha and Gay~\cite{dardhagay18} is the removal of commuting conversions, in favour of using the structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to standard cut elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them. They show this by decomposing the reduction relation for CP into two phases: first, all $\beta$-reductions are performed, and second, commuting conversions are used to bring one particular action to the front, to eliminate the top-level cut.
-
-From the perspective of process calculus, commuting conversions behave strangely. Let us consider the commuting conversion for $\pcp{\tm{\recv{x}{y}{P}}}$:
+From the perspective of process calculi, commuting conversions behave strangely. Let us consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
 \[
   \usingnamespace{pcp}
   (\kappa_{\parr})
@@ -36,10 +35,10 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
     {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{Q})}}}}
   \end{array}
 \end{mathpar}
-Commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority, since ``if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority conditions in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$'' by $\cs{o+1}$~\cite{dardhagay18}.
+Commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 
-\subsubsection*{Example}\label{sec:pcp-example}
-We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the version presented in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{I}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, $\tm{i}\in\tm{I}$, and $\pcp{\tm{\plug{P}{Q}}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process-context $\pcp{\tm{P}}$:
+\begin{example}[Milner's Cyclic Scheduler in PCP]\label{sec:pcp-example}
+We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the PGV version in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{I}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, $\tm{i}\in\tm{I}$, and $\pcp{\tm{\plug{P}{Q}}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process-context $\pcp{\tm{P}}$:
 \[
   \usingnamespace{pcp}
   \begin{array}{lrlr}
@@ -64,13 +63,14 @@ We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay1
     & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
   \end{array}
 \]
+\end{example}
 
 \subsubsection*{Types}
-Types $\pcp{\ty{A}}$, $\pcp{\ty{B}}$, $\pcp{\ty{C}}$ in PCP are based on classical linear logic propositions, and are defined by the following grammar:
+Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic propositions, and are defined by the following grammar:
 \[
   \usingnamespace{pcp}
   \begin{array}{lcl}
-    \ty{A}, \ty{B}, \ty{C}
+    \ty{A}, \ty{B}
     & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
       \sep        \ty{\typarr[\cs{o}]{A}{B}}
       \sep        \ty{\tyone[\cs{o}]}
@@ -82,10 +82,9 @@ Types $\pcp{\ty{A}}$, $\pcp{\ty{B}}$, $\pcp{\ty{C}}$ in PCP are based on classic
   \end{array}
 \]
 Each connective is annotated with a priority $\cs{o}\in\mathbb{N}$.
-The types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. The types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
-
-The types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler12}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18}.
-The types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
+Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. Types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
+Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler12}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18}.
+Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
 
 \subsubsection*{Environments}
 Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to types. Environments are linear, so two environments can only be combined as $\pcp{\ty{\Gamma}}, \pcp{\ty{\Delta}}$ if their names are distinct, \ie $\pcp{\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing}$.
@@ -158,7 +157,7 @@ The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the 
 \]
 
 \subsubsection*{Terms}
-We let $\pcp{\tm{P}}$, $\pcp{\tm{Q}}$ range over processes, produced by the following grammar.
+Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following grammar.
 \[
   \usingnamespace{pcp}
   \begin{array}[t]{lcl}
@@ -177,17 +176,13 @@ We let $\pcp{\tm{P}}$, $\pcp{\tm{Q}}$ range over processes, produced by the foll
            \sep   \tm{\absurd{x}}
   \end{array}
 \]
-The process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
-
-Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. The processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
-
+Process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
+Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. Processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
 Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
-
-We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with communting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
+We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
 \subsubsection*{Operational Semantics}
 The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
-
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
 \input{fig/pcp-operational-semantics}
@@ -195,19 +190,15 @@ The reduction relation is given by a set of axioms and inference rules for conte
 \subsubsection*{Typing}
 \Cref{fig:pcp-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
 
-Typing rules make use of priorities, defined in the previous section. \textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
-
+\textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
-
 Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm{x}}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\pcp{\tm{x}}$ is the smallest among all priorities in $\pcp{\ty{\Gamma}}$.
-
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
 
 \input{fig/pcp-typing}
 
 
-\subsubsection*{Metatheory}
-Reduction in our version of PCP preserve types. Since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
+Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
 
 \subsubsection*{Translation}
 We illustrate the relation between PCP and PGV by giving a translation from PCP to PGV. The translation on types is defined as follows:
