@@ -150,9 +150,11 @@ The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the 
   \end{array}
 \]
 \[
+  \begin{array}{l}
     \minpr(\ty{\emptyenv})          = \cs{\ptop}
-    \qquad
+    \\
     \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+  \end{array}
 \]
 
 \subsubsection*{Terms}
