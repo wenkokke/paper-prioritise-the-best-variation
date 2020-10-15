@@ -274,7 +274,7 @@ Session types are a type formalism used to specify and verify communication prot
 Session type systems guarantee communication safety and session fidelity, but cannot guarantee deadlock freedom and avoid bad interleaving of more than one session. Deadlock freedom in GV is guaranteed by combining channel creation and thread spawning under the same operation, called fork. This is in line with Classical Processes (CP), a~process calculus with strong ties to classical linear logic~\cite{wadler12}, which combines channel creation and parallel composition in the $\pi$-calculus under the same logical cut rule. In both GV and CP, deadlock freedom is achieved at the expense of expressivity as the only communication structures allowed are trees. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP) which allows for cyclic structures and restores deadlock freedom by adding priorities to types following Kobayashi~\cite{kobayashi06} and Padovani~\cite{padovani14}.
 
 Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, and restores deadlock freedom by adding priorities. We show our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics. We illustrate PGV and the encoding via Milner's Cyclic Scheduler~\cite{milner89}.
-\keywords{Session types \and $\pi$-calculus \and GV \and CP \and Deadlock Freedom}
+\keywords{Session types \and $\pi$-calculus \and GV \and CP \and Deadlock freedom}
 \end{abstract}
 
 \subfile{introduction}
