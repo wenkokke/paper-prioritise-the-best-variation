@@ -14,7 +14,7 @@ Priority GV offers a more fine-grained analysis of communication structures, and
 Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
 % The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
 % \input{fig/pgv-scheduler.tex}
-We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$:
+We implement the scheduler as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$:
 \[
   \begin{array}{lrlr}
     \tm{\sched}
@@ -278,7 +278,7 @@ The only non-standard feature of the typing rules is the priority annotations. P
   \item communication requires \emph{equal} priorities for the dual actions.
 \end{enumerate}
 
-In PGV\simon{I think the rules need more explanation than this---as someone who knows the basics of priorities but is not an expert, I found it difficult to understand the T-Lam rule for example}, sequents are annotated by a priority bound $\cs{p}$, which is the \emph{upper bound} on the priority of the communication actions performed while evaluating the term. The \emph{lower bound} is obtained from the typing environment. Terms with sequential evaluation, such as \LabTirName{T-LetUnit}, have side conditions to ensure deadlock freedom. For instance, the side condition for typing $\tm{\letunit{M}{N}}$ requires that $\tm{M}$ has finished communicating before $\tm{N}$ starts communicating.
+In PGV, sequents are annotated by a priority bound $\cs{p}$, which is the \emph{upper bound} on the priority of the communication actions performed while evaluating the term. The \emph{lower bound} is obtained from the typing environment. Terms with sequential evaluation, such as \LabTirName{T-LetUnit}, have side conditions to ensure deadlock freedom. For instance, the side condition for typing $\tm{\letunit{M}{N}}$ requires that $\tm{M}$ has finished communicating before $\tm{N}$ starts communicating. The rule \LabTirName{T-Lam} stores the lower and upper priority bound of the function body in the type.
 
 Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, which states that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well-typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
 
@@ -404,15 +404,13 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
     \label{def:pgv-canonical-forms}
     A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
     \[
-      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
+      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}.
     \]
   \end{definition}
   \begin{definition}[Normal Forms]
     A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
     \[
-      \tm{\conf{C}}
-      \equiv
-      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}},
+      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}.
     \]
   \end{definition}
   \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]
