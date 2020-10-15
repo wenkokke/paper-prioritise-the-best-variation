@@ -399,7 +399,11 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
     If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
   \end{proof}
 
-  \restatetheorem{thmpcpclosedprogress}
+  \begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]
+    \label{thm:pcp-closed-progress}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
+  \end{restatabletheorem}
   \input{prf/thm-pcp-closed-progress}
 }
 {
