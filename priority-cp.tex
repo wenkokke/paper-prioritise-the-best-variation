@@ -285,7 +285,7 @@ Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Ga
 
 Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). It follows immediately from the definition of our translation that the translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$, where all processes are child processes.
 
-The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ are preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
+The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]
     \label{lem:pcp-to-pgv-terms-preservation}
