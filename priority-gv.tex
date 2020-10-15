@@ -268,9 +268,7 @@ Secondly, our structural congruence is type preserving. Consequently, we can emb
 \input{fig/pgv-operational-semantics}
 
 \subsubsection*{Typing}
-\Cref{fig:pgv-typing} gives the typing rules for PGV.
-
-Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}.
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}. \Cref{fig:pgv-typing} gives the typing rules for PGV.
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate}
