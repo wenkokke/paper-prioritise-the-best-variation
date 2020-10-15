@@ -194,6 +194,7 @@ Similarly, we use syntactic sugar for the term forms of choice, which combine se
 \]
 
 \subsubsection*{Operational Semantics}
+
 Priority GV terms are evaluated as part of a configuration of processes. Configurations are defined by the following grammar:
 \[
 \begin{array}[t]{lcl}
@@ -251,6 +252,9 @@ Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation c
     \sep        \tm{\res{x}{y}{\conf{G}}}
 \end{array}
 \]
+
+\input{fig/pgv-operational-semantics}
+
 We factor the reduction relation of PGV into a deterministic reduction on terms ($\tred$) and a non-deterministic reduction on configurations ($\cred$), see \cref{fig:pgv-operational-semantics}. We write $\tred^+$ and $\cred^+$ for the transitive closures, and $\tred^\star$ and $\cred^\star$ for the reflexive-transitive closures.
 
 Term reduction is the standard call-by-value, left-to-right evaluation for GV, and only deviates from reduction for the linear $\lambda$-calculus in that it reduces terms to values \emph{or} ready terms waiting to perform a communication action.
@@ -263,10 +267,10 @@ While our configuration reduction is based on the standard evaluation for GV, th
 Firstly, we decompose the $\tm{\fork}$ construct. In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct. In GV, $\tm{\link}$ needs to return a terminated channel after evaluating the link. In PGV, the behaviour matches that of link in CP.
 Secondly, our structural congruence is type preserving. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
 
-\input{fig/pgv-operational-semantics}
-
 \subsubsection*{Typing}
 Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}. \Cref{fig:pgv-typing} gives the typing rules for PGV.
+
+\input{fig/pgv-typing}
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate}
@@ -281,8 +285,6 @@ Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, wh
 While our configuration typing is based on the standard typing for GV, it differs on two counts.
 Firstly, we require that child threads return the unit value, as opposed to a terminated channel.
 Secondly, we simplify typing for parallel composition. In GV, each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$ across the parallel composition. Consequently, associativity of parallel composition does not preserve typing. Unfortunately, splitting exactly one channel across a parallel composition in GV plays a crucial role in guaranteeing deadlock freedom. In PGV, we guarantee deadlock freedom using priorities, which removes the channel pseudo-type $\ty{S^\sharp}$, simplifies typing for parallel composition, and restores type preservation for the structural congruence.
-
-\input{fig/pgv-typing}
 
 
 \subsubsection*{Subject reduction}
