@@ -6,7 +6,6 @@
 \textit{Simon: I think you really need some mention of MPSTs here, since a key motivation for MPSTs is ensuring deadlock-freedom between participants in a single MPST session. You can then talk about the global progress work by Coppo~\etal, too, which incorporates an 'interaction typing system' (that few people understand). How does that relate?}
 
 \subsubsection*{Deadlock freedom}
-
 Deadlock freedom and progress are well-studied in the $\pi$-calculus.
 For the standard typed $\pi$-calculus, one line of work is Kobayashi's approach to deadlock-freedom~\cite{kobayashi98}, where priorities are abstract tags defined over a partially ordered set. These abstract tags were later simplified to natural numbers. Pairs of obligations and capabilities were used in the type system for lock freedom~\cite{kobayashi02,kobayashi06}, which allowed more $\pi$-calculus processes to be typed. Padovani~\cite{padovani13} adapted the obligation and capability pairs to session types, and later simplified them to a single priority for linear $\pi$-calculus~\cite{padovani14}. Using the encoding of session types into linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat,dardha16}, the priority-based technique for deadlock freedom can be transferred onto the $\pi$-calculus with session types.
 
