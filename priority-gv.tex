@@ -26,7 +26,7 @@ We implement the scheduler as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denot
                      (
                      & \phi\;\proc1
                      \parallel
-                     \child\;\andthen{\agent1}{\andthen{\wait\;{c'_3}}{\close\;{d}}}
+                     \child\;\andthen{\agent1}{\andthen{\wait\;{c'_n}}{\close\;{d}}}
                      \\
                      \parallel
                      &
@@ -228,21 +228,19 @@ Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation c
     \sep        \tm{\unit}
     \sep        \tm{\pair{V}{W}}
     \sep        \tm{\inl{V}}
-    \sep        \tm{\inr{V}}
-  \\
+    \sep        \tm{\inr{V}} \\
   \tm{E}
-  & \Coloneqq & \tm{\hole} \\
-  & \sep      & \tm{E\;M}
+  & \Coloneqq & \tm{\hole}
+    \sep        \tm{E\;M}
     \sep        \tm{V\;E} \\
-  & \sep      & \tm{\letunit{E}{N}} \\
-  & \sep      & \tm{\pair{E}{M}}
+  & \sep      & \tm{\letunit{E}{N}}
+    \sep        \tm{\pair{E}{M}}
     \sep        \tm{\pair{V}{E}}
     \sep        \tm{\letpair{x}{y}{E}{M}} \\
   & \sep      & \tm{\inl{E}}
     \sep        \tm{\inr{E}}
-    \sep        \tm{\casesum{E}{x}{M}{y}{N}} \\
-  & \sep      & \tm{\absurd{E}}
-  \\
+    \sep        \tm{\casesum{E}{x}{M}{y}{N}}
+    \sep        \tm{\absurd{E}} \\
   \tm{\conf{F}}
   & \Coloneqq & \tm{\phi\;E}
   \\
