@@ -39,7 +39,7 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
 Commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority, since ``if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority conditions in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$'' by $\cs{o+1}$~\cite{dardhagay18}.
 
 \subsubsection*{Example}\label{sec:pcp-example}
-We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the version presented in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{i}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, and $\pcp{\plug{P}{Q}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process context $\pcp{\tm{P}}$:
+We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the version presented in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{i}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, and $\pcp{\plug{P}{Q}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process-context $\pcp{\tm{P}}$:
 \[
   \usingnamespace{pcp}
   \begin{array}{lrlr}

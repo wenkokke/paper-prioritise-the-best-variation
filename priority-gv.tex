@@ -14,7 +14,7 @@ Priority GV offers a more fine-grained analysis of communication structures, and
 Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
 % The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
 % \input{fig/pgv-scheduler.tex}
-We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term context $\tm{M}$:
+We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$:
 \[
   \begin{array}{lrlr}
     \tm{\sched}
@@ -47,10 +47,8 @@ Each of the channels in the scheduler is of a terminated type, and is merely use
 For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equivalently have represented it as a function which takes three processes as arguments, and creates this configuration.
 \end{example}
 
-\subsubsection*{Types}
-Types in PGV are divided into session types ($\ty{S}$) and types ($\ty{T}$, $\ty{U}$).
-%
-Session types are defined by the following grammar:
+\subsubsection*{Session types}
+Session ($\ty{S}$) types are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \ty{S}
@@ -62,7 +60,8 @@ Session types are defined by the following grammar:
 \]
 The session types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ describe the endpoints of a channel over which we send or receive a value of type $\ty{T}$, and then proceed as $\ty{S}$. The types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ describe endpoints of a channel whose communication has finished, and over which we must synchronise before closing the channel. Each connective in a session type is annotated with a \emph{priority} $\cs{o}\in\mathbb{N}$.
 
-Types are defined by the following grammar:
+\subsubsection*{Types}
+Types ($\ty{T}$, $\ty{U}$) are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \ty{T}, \ty{U}
@@ -269,9 +268,7 @@ Secondly, our structural congruence is type preserving. Consequently, we can emb
 \input{fig/pgv-operational-semantics}
 
 \subsubsection*{Typing}
-\Cref{fig:pgv-typing} gives the typing rules for PGV.
-
-Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}.
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$, which states that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing is standard for the linear $\lambda$-calculus. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. The constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const}. \Cref{fig:pgv-typing} gives the typing rules for PGV.
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate}
