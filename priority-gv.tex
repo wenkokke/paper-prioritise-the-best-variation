@@ -1,3 +1,4 @@
+% !TeX root = priorities.tex
 \documentclass[main.tex]{subfiles}
 
 \begin{document}
@@ -5,16 +6,12 @@
 \section{Priority GV}\label{sec:pgv}
 \usingnamespace{pgv}
 
-This section presents Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15}, but with a twist: it enforces deadlock freedom through priorities \`{a} la Kobayashi~\cite{kobayashi06,padovaninovara15}.
+We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
+%The separation of channel creation and thread spawning in GV only allows tree-shaped communication structures, so it is trivially free from cycles, and therefore deadlocks. For e.g., if some term $\tm{L}$ has the means to communicate with both $\tm{M}$ and $\tm{N}$, then $\tm{M}$ and $\tm{N}$ cannot communicate amongst themselves. However, as with CP, this rules out \emph{all} cyclic communication structures, not just those with deadlocks.
+Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. We illustrate PGV with Milner's cyclic scheduler~\cite{milner89}.
 
-GV enforces deadlock freedom with a syntactic restriction: it fuses channel creation and thread spawning into a single function, called fork\simon{It feels like you've said this a *lot* at this point}. This guarantees that if some term $\tm{L}$ has the means to communicate with both $\tm{M}$ and $\tm{N}$, then $\tm{M}$ and $\tm{N}$ cannot communicate amongst themselves. In other words, GV only allows tree-shaped communication structures, so it is trivially free from cycles, and therefore deadlocks. However, this is overly restrictive, as it rules out \emph{all} cyclic communication structures, not just those with deadlocks.
-
-Priority GV offers a more fine-grained analysis of the communication structure, and allows cyclic communication structures. To illustrate this, we start by examining a variant of Milner's cyclic scheduler in PGV~\cite{milner89}.
-
-\subsubsection*{Example}\label{sec:pgv-example}
-Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
-
-Our scheduler consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start.
+\begin{example}[Milner's Cyclic Scheduler in PGV]\label{sec:pgv-example}
+Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
 % The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
 % \input{fig/pgv-scheduler.tex}
 We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term context $\tm{M}$:
@@ -45,8 +42,10 @@ We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denot
     & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
   \end{array}
 \]
-Each of the channels in the scheduler is has the terminated type, and is merely used to synchronise.
+Our scheduler $\tm{\sched}$ consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start.
+Each of the channels in the scheduler is of a terminated type, and is merely used to synchronise.
 For simplicity, we let $\tm{\sched}$ be a configuration. However, we could equivalently have represented it as a function which takes three processes as arguments, and creates this configuration.
+\end{example}
 
 \subsubsection*{Types}
 Types in PGV are divided into session types ($\ty{S}$) and types ($\ty{T}$, $\ty{U}$).
