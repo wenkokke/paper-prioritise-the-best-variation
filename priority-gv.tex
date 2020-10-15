@@ -398,7 +398,11 @@ Progress for the term language is standard for GV, and deviates from progress fo
   \end{itemize}
 \end{restatablelemma}
 
-Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition:
+Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
+
+A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
+Finally, as a corollary, we get that well-typed terms which do not return endpoints return \emph{just} a value:
+
 \begin{compacttheorems}
   \begin{definition}[Canonical Forms]
     \label{def:pgv-canonical-forms}
@@ -407,17 +411,6 @@ Canonical forms deviate from those for GV, in that we opt to move all $\nu$-bind
       \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
     \]
   \end{definition}
-  \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
-    \label{lem:pgv-canonical-forms}
-    If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
-  \end{restatablelemma}
-  \begin{proof}
-    We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
-  \end{proof}
-\end{compacttheorems}
-
-A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions:
-\begin{compacttheorems}
   \begin{definition}[Normal Forms]
     A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
     \[
@@ -427,17 +420,17 @@ A~configuration either reduces, or it is equivalent to configuration in normal f
     \]
   \end{definition}
   \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]
-    \label{lem:pgv-closed-progress-confs}
+    \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
   \end{restatabletheorem}
-  \input{prf/thm-pgv-closed-progress-confs}
+  \begin{proof}
+    Our proof follows the reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). Details are in~\Cref{prf:thm-pgv-closed-progress-confs}.
+  \end{proof}
+  \begin{corollary}
+    \label{cor:pgv-closed-progress}
+    If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value V.
+  \end{corollary}
 \end{compacttheorems}
-
-Finally, as a corollary from closed progress, we get that well-typed terms which do not return endpoints must return \emph{only} a value:
-\begin{corollary}
-  \label{cor:pgv-closed-progress}
-  If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value V.
-\end{corollary}
 
 \end{document}
 
