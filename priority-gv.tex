@@ -12,7 +12,7 @@ GV enforces deadlock freedom with a syntactic restriction: it fuses channel crea
 Priority GV offers a more fine-grained analysis of the communication structure, and allows cyclic communication structures. To illustrate this, we start by examining a variant of Milner's cyclic scheduler in PGV~\cite{milner89}.
 
 \subsubsection*{Example}\label{sec:pgv-example}
-Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, and circling all the way around to $\tm{\proc{n}}$, notifying $\tm{\proc0}$ when every other process has finished their task.
+Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
 
 Our scheduler consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start. The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
 \input{fig/pgv-scheduler.tex}
@@ -218,17 +218,13 @@ Priority GV terms are evaluated as part of a configuration of processes. Configu
 \]
 Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of threads $\tm{\phi\;M}$, parallel compositions $\tm{\ppar{\conf{C}}{\conf{D}}}$, and name restrictions $\tm{\res{x}{x'}{\conf{C}}}$. To preserve the functional nature of PGV, where programs return a single value, we use flags ($\tm{\phi}$) to differentiate between the main thread, marked $\tm{\main}$, and child threads created by $\tm{\spawn}$, marked $\tm{\child}$. Only the main thread returns a value. We determine the flag of a configuration by combining the flags of all threads in that configuration:
 \[
-\begin{array}{ll}
   \tm{\main}  + \tm{\child} = \tm{\main}
-  \\
+  \quad
   \tm{\child} + \tm{\main}  = \tm{\main}
-\end{array}
-\quad
-\begin{array}{ll}
+  \quad
   \tm{\child} + \tm{\child} = \tm{\child}
-  \\
-  \tm{\main}  + \tm{\main} \; \text{undefined}
-\end{array}
+  \quad
+  (\tm{\main}  + \tm{\main} \; \text{is undefined})
 \]
 Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation contexts ($\tm{\conf{F}}$), and configuration contexts ($\tm{\conf{G}}$) are defined by the following grammars:
 \[
@@ -272,10 +268,8 @@ Configuration reduction resembles evaluation for a process calculus: \LabTirName
 
 Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated proceess as the neutral element; it is commutative and associative.
 
-While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts:
-
+While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts.
 Firstly, we decompose the $\tm{\fork}$ construct. In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct. In GV, $\tm{\link}$ needs to return a terminated channel after evaluating the link. In PGV, the behaviour matches that of link in CP.
-
 Secondly, our structural congruence is type preserving. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
 
 \input{fig/pgv-operational-semantics}
@@ -295,10 +289,8 @@ In PGV\simon{I think the rules need more explanation than this---as someone who 
 
 Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$, which states that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well-typed under typing environment $\ty{\Gamma}$''\simon{I found it surprising that configuration typing doesn't need priority annotations. Can you give an intuitition why?}. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further sequential actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
 
-While our configuration typing is based on the standard typing for GV, it differs on two counts:
-
+While our configuration typing is based on the standard typing for GV, it differs on two counts.
 Firstly, we require that child threads return the unit value, as opposed to a terminated channel.
-
 Secondly, we simplify typing for parallel composition. In GV, each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$ across the parallel composition. Consequently, associativity of parallel composition does not preserve typing. Unfortunately, splitting exactly one channel across a parallel composition in GV plays a crucial role in guaranteeing deadlock freedom. In PGV, we guarantee deadlock freedom using priorities, which removes the channel pseudo-type $\ty{S^\sharp}$, simplifies typing for parallel composition, and restores type preservation for the structural congruence.
 
 \input{fig/pgv-typing}
@@ -383,11 +375,7 @@ Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\
 \[
   \tm{\main\;\letpair{x}{x'}{\new}{\andthen{\spawn\;(\lambda\unit.\echo_{x'})}}{x}}
 \]
-If we reduce the above program, we get the following normal form. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$:
-\[
-  \tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}
-\]
-In~\cref{cor:pgv-closed-progress} we show that if a term does not return an endpoint, it must produce \emph{only} a value.
+If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$. In~\cref{cor:pgv-closed-progress} we show that if a term does not return an endpoint, it must produce \emph{only} a value.
 
 \emph{Actions} are terms which perform communication actions which synchronisation between two threads:
 \begin{definition}[Actions]
@@ -412,7 +400,7 @@ Progress for the term language is standard for GV, and deviates from progress fo
   \end{itemize}
 \end{restatablelemma}
 
-Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV normal forms, alternating $\nu$-binders and their corresponding parallel compositions, do not work for PGV, since multiple channels may be split across a single parallel composition:
+Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition:
 \begin{definition}[Canonical Forms]
   \label{def:pgv-canonical-forms}
   A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
@@ -428,9 +416,7 @@ Canonical forms deviate from those for GV, in that we opt to move all $\nu$-bind
   We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
 \end{proof}
 
-% For simplicity, we only present progress for closed configurations. A~suitable notion of progress for open configurations does exist, but its normal forms are significantly more complex, as they may also contain threads which are blocked on free endpoints, threads blocked on endpoints for which the duals are still to be used in those threads blocked on free endpoints, \etc.
-
-The statement of closed progress is rather subtle. A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions:
+A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions:
 \begin{definition}[Normal Forms]
   A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
   \[

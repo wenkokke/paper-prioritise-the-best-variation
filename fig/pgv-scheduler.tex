@@ -27,7 +27,8 @@
     (agent3) -- node[pos=0.15,above] {$a_3$} node[pos=0.85,above] {$a'_3$}
     node[pos=0.15,below] {$b_3$} node[pos=0.85,below] {$b'_3$} ++ (proc3);
     
-    \draw (agent1) to[bend left] node[pos=0.15,above] {$d$} node[pos=0.85,above] {$d'$} (proc1);
+    \draw[->]
+    (agent1) to[bend left] node[pos=0.15,above] {$d$} node[pos=0.85,above] {$d'$} (proc1);
     
     \draw[->,dashed] (proc1) -- node[above right] {data transfer} (proc2);
     \node[draw=none] (proc2toproc3data1) at ( 3.25,-2.75) {};
