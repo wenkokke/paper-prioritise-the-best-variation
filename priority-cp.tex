@@ -170,7 +170,7 @@ Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and ri
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with communting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
 \subsubsection*{Operational Semantics}
-The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\tred^\star}$ for the reflexive-transitive closures.\simon{Maybe worth highlighting that it is an internal mobility calculus, for the pi calculus people.}
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.\simon{Maybe worth highlighting that it is an internal mobility calculus, for the pi calculus people.}
 
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
@@ -192,17 +192,19 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm
 
 \subsubsection*{Subject reduction}
 Reduction in our version of PCP preserve types. Since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18}, we defer to their proofs:
-\begin{restatablelemma}{lempcpsubjectcongruence}[Subject Congruence, $\pcp{\equiv}$]
-  \label{lem:pcp-subject-congruence}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
-  then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
-\end{restatablelemma}
-\begin{restatabletheorem}{thmpcpsubjectreduction}[Subject Reduction, $\pcp{\red}$]
-  \label{thm:pcp-subject-reduction}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$, then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
-\end{restatabletheorem}
+\begin{compacttheorems}
+  \begin{restatablelemma}{lempcpsubjectcongruence}[Subject Congruence, $\pcp{\equiv}$]
+    \label{lem:pcp-subject-congruence}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
+    then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
+  \end{restatablelemma}
+  \begin{restatabletheorem}{thmpcpsubjectreduction}[Subject Reduction, $\pcp{\red}$]
+    \label{thm:pcp-subject-reduction}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$, then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
+  \end{restatabletheorem}
+\end{compacttheorems}
 
 \subsubsection*{Progress}
 Reduction in our version of PCP satisfies progress. For simplicity, we only present closed progress:
@@ -295,74 +297,64 @@ There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}
 The third, fourth, and fifth cases for $\tm{\cpgvC{\cdot}}$ translate the $\nu$-binders implicit in the encoding of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
-Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\sched}$, \cref{sec:pcp-example}) and PGV ($\pgv{\sched}$, \cref{sec:pgv-example}). The translation of $\pcp{\sched}$ is exactly $\pgv{sched}$ where all processes are child processes.
+Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). The translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$ where all processes are child processes.
 
 \subsubsection*{Type preservation}
-The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing along $\ty{\cpgvT{\cdot}}$:\simon{This reads weirdly---what's the intuition?}
-\begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, $\cpgvM{\cdot}$]
-  \label{lem:pcp-to-pgv-terms-preservation}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
-  then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$ in PGV.
-\end{restatablelemma}
-\begin{proof}
-  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
-  Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.
-\end{proof}
-\begin{restatabletheorem}{thmpcptopgvconfspreservation}[Preservation, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-confs-preservation}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ in PCP,
-  then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$ in PGV.
-\end{restatabletheorem}
-\begin{proof}
-  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
-  Details in \cref{prf:lem-pcp-to-pgv-terms-preservation}.
-\end{proof}
+The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ are preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
+\begin{compacttheorems}
+  \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]
+    \label{lem:pcp-to-pgv-terms-preservation}
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$.
+  \end{restatablelemma}
+  \begin{restatabletheorem}{thmpcptopgvconfspreservation}[Preservation, ${\tm{\cpgvC{\cdot}}}$]
+    \label{thm:pcp-to-pgv-confs-preservation}
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$.
+  \end{restatabletheorem}
+\end{compacttheorems}
 
 \subsubsection*{Operational correspondence}
 Finally, we show that PCP and PGV are in operational correspondence along our translation. First, we link our two translations, and show that $\tm{\cpgvM{P}}$ \emph{must} reduce to $\tm{\cpgvC{P}}$, \ie $\tm{\cpgvC{\cdot}}$ is equivalent to translating with $\tm{\cpgvM{\cdot}}$ and performing several reduction steps:
-\begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
-  \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
-  For any $\pcp{\tm{P}}$, either:
-  \begin{itemize}
-  \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
-  \item   $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
-  \end{itemize}
-\end{restatablelemma}
-\begin{proof}
-  By induction on the structure of $\pcp{\tm{P}}$.
-  Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
-\end{proof}
-
-\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
-  [Operational Correspondence, Completeness, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
-  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
-\end{restatabletheorem}
-\begin{proof}
-  By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-  We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which
-  the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$,
-  \ie under actions.
-  We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
-  \LabTirName{E-LiftSC}. 
-  (Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.)
-\end{proof}
-
-\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
-  [Operational Correspondence, Soundness, $\cpgvC{\cdot}$]
-  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
-  there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
-\end{restatabletheorem}
-\begin{proof}
-  By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
-  Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
-\end{proof}
+\begin{compacttheorems}
+  \begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
+    \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
+    For any $\pcp{\tm{P}}$, either:
+    \begin{itemize}
+    \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
+    \item   $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
+    \end{itemize}
+  \end{restatablelemma}
+  \begin{proof}
+    By induction on the structure of $\pcp{\tm{P}}$.
+    Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
+  \end{proof}
+  \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
+    [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
+    \label{thm:pcp-to-pgv-operational-correspondence-completeness}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
+    then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
+  \end{restatabletheorem}
+  \begin{proof}
+    By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
+    We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which
+    the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$,
+    \ie under actions.
+    We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
+    \LabTirName{E-LiftSC}. 
+    Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
+  \end{proof}
+  \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
+    [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]
+    \label{thm:pcp-to-pgv-operational-correspondence-soundness}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
+    there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
+  \end{restatabletheorem}
+  \begin{proof}
+    By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
+    Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
+  \end{proof}
+\end{compacttheorems}
 
 \end{document}
 

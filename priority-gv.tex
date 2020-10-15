@@ -14,8 +14,9 @@ Priority GV offers a more fine-grained analysis of the communication structure, 
 \subsubsection*{Example}\label{sec:pgv-example}
 Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, should be scheduled to perform some tasks in cyclic order, starting with $\tm{\proc0}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc0}$ when all processes have finished.
 
-Our scheduler consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start. The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
-\input{fig/pgv-scheduler.tex}
+Our scheduler consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent0}$ initiates, then waits for every other process to finish, and signals $\tm{\proc0}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start.
+% The dotted lines represent the optional transfer of data between processes. With three processes, the scheduler looks as follows:\simon{Sorry, I found this diagram super confusing\dots Is there any way you could make it look more cyclic? Also, have the convention of a single annotation per channel, with the convention that the greater agent / proc gets the primed end of the previous channel?}
+% \input{fig/pgv-scheduler.tex}
 We implement the scheduler as follows, using $\tm{\prod_{i}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term context $\tm{M}$:
 \[
   \begin{array}{lrlr}
@@ -93,29 +94,25 @@ Typing environments $\ty{\Gamma}$, $\ty{\Delta}$ associate names to types. Envir
 \subsubsection*{Duality}
 Duality plays a crucial role in session types. The two endpoints of a channel are assigned dual types, which ensures that, for instance, whenever one program \emph{sends} a value on a channel, the program on the other end is waiting to \emph{receive}. Each session type $\ty{S}$ has a dual, written $\ty{\co{S}}$. Duality is an involutive function which preserves priorities.
 \[
-\begin{array}{lcl}
-  \ty{\co{\tysend[\cs{o}]{T}{S}}} & = & \ty{\tyrecv[\cs{o}]{T}{\co{S}}} \\
-  \ty{\co{\tyrecv[\cs{o}]{T}{S}}} & = & \ty{\tysend[\cs{o}]{T}{\co{S}}}
-\end{array}
-\qquad
-\begin{array}{lcl}
-  \ty{\co{\tyends[\cs{o}]}} & = & \ty{\co{\tyendr[\cs{o}]}} \\
-  \ty{\co{\tyendr[\cs{o}]}} & = & \ty{\co{\tyends[\cs{o}]}}
-\end{array}
+  \ty{\co{\tysend[\cs{o}]{T}{S}}} = \ty{\tyrecv[\cs{o}]{T}{\co{S}}}
+  \qquad
+  \ty{\co{\tyrecv[\cs{o}]{T}{S}}} = \ty{\tysend[\cs{o}]{T}{\co{S}}}
+  \qquad
+  \ty{\co{\tyends[\cs{o}]}} = \ty{\co{\tyendr[\cs{o}]}}
+  \qquad
+  \ty{\co{\tyendr[\cs{o}]}} = \ty{\co{\tyends[\cs{o}]}}
 \]
 
 \subsubsection*{Priorities}
 The function $\pr$ returns the smallest priority of a session type. The type system guarantees that the top-most connective always holds the smallest priority, so we simply return the priority of the top-most connective:
 \[
-\begin{array}{lcl}
-  \pr(\ty{\tysend[\cs{o}]{T}{S}})            & = & \cs{o} \\
-  \pr(\ty{\tyrecv[\cs{o}]{T}{S}})            & = & \cs{o} \\
-\end{array}
-\qquad
-\begin{array}{lcl}
-  \pr(\ty{\tyends[\cs{o}]})                  & = & \cs{o} \\
-  \pr(\ty{\tyendr[\cs{o}]})                  & = & \cs{o} \\
-\end{array}
+  \pr(\ty{\tysend[\cs{o}]{T}{S}}) = \cs{o}
+  \qquad
+  \pr(\ty{\tyrecv[\cs{o}]{T}{S}}) = \cs{o}
+  \qquad
+  \pr(\ty{\tyends[\cs{o}]})       = \cs{o}
+  \qquad
+  \pr(\ty{\tyendr[\cs{o}]})       = \cs{o}
 \]
 We extend the function $\pr$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority. We use $\sqcap$ and $\sqcup$ to denote the minimum and maximum:
 \[
@@ -144,13 +141,13 @@ Terms ($\tm{L}$, $\tm{M}$, $\tm{N}$) are defined by the following grammar:
     \sep        \tm{\lambda x.M}
     \sep        \tm{M\;N} \\
   & \sep      & \tm{\unit}
-    \sep        \tm{\letunit{M}{N}} \\
-  & \sep      & \tm{\pair{M}{N}}
+    \sep        \tm{\letunit{M}{N}}
+    \sep        \tm{\pair{M}{N}}
     \sep        \tm{\letpair{x}{y}{M}{N}} \\
   & \sep      & \tm{\inl{M}}
     \sep        \tm{\inr{M}}
-    \sep        \tm{\casesum{L}{x}{M}{y}{N}} \\
-  & \sep      & \tm{\absurd{M}} \\
+    \sep        \tm{\casesum{L}{x}{M}{y}{N}}
+    \sep        \tm{\absurd{M}} \\
   \tm{K}
   & \Coloneqq & \tm{\link}
     \sep        \tm{\new}
@@ -165,10 +162,8 @@ Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasi
 
 The constants are best understood in conjunction with their typing and reduction rules in~\cref{fig:pgv-typing,fig:pgv-operational-semantics}. Briefly, $\tm{\link}$ links two endpoints together, forwarding messages from each to the other, $\tm{\new}$ creates a new channel and returns a pair of its endpoints, and $\tm{\spawn}$ spawns off its argument as a new thread. The $\tm{\send}$ and $\tm{\recv}$ functions send and receive values on a channel. However, since the typing rules for PGV ensure the linear usage of endpoints, they also return a new copy of the endpoint, to continue the session. The $\tm{\close}$ and $\tm{\wait}$ functions close a channel.
 
-We frequently use syntactic sugar to make terms more readable: we write $\tm{\andthen{M}{N}}$ in place of $\tm{\letunit{M}{N}}$, $\tm{\letbind{x}{M}{N}}$ in place of $\tm{(\lambda x.N)\;M}$, and pattern matching lambdas $\tm{\lambda\unit.M}$ and $\tm{\lambda\pair{x}{y}.M}$ in place of $\tm{\lambda z.\letunit{z}{M}}$ and $\tm{\lambda z.\letpair{x}{y}{z}{M}}$. Finally, we recover $\tm{\fork}$:
-\[
-  \tm{\fork} \defeq \tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}
-\]
+We use syntactic sugar to make terms more readable: we write $\tm{\andthen{M}{N}}$ in place of $\tm{\letunit{M}{N}}$, $\tm{\letbind{x}{M}{N}}$ in place of $\tm{(\lambda x.N)\;M}$, and pattern matching functions $\tm{\lambda\unit.M}$ in place of $\tm{\lambda z.\letunit{z}{M}}$ and $\tm{\lambda\pair{x}{y}.M}$ in place of $\tm{\lambda z.\letpair{x}{y}{z}{M}}$.
+% We recover $\tm{\fork}$ as $\tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}$.
 
 \subsubsection*{Internal and External Choice}
 Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
@@ -299,7 +294,7 @@ Secondly, we simplify typing for parallel composition. In GV, each parallel comp
 \subsubsection*{Subject reduction}
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
-Most of the subject reduction proof is standard. Novel is that we must show that substitution preserves priority constraints. For this, it helps to prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication actions, and that any priorities present in the type of the value come from the typing environment.
+We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
 \begin{restatablelemma}{lempgvvaluedone}
   \label{lem:pgv-value-done}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
@@ -346,25 +341,26 @@ Most of the subject reduction proof is standard. Novel is that we must show that
   The complete proof can be found in~\cref{prf:lem-pgv-substitution}.
 \end{proof}
 The proofs for subject congruence and subject reduction are standard inductions. The details can be found in \cref{prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
-\begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
-  \label{lem:pgv-subject-reduction-terms}
-  \hfill\\%newline before theorem statement
-  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
-  then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
-\end{restatablelemma}
-\begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]
-  \label{lem:pgv-subject-congruence}
-  \hfill\\%newline before theorem statement
-  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
-  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-\end{restatablelemma}
-\begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]
-  \label{thm:pgv-subject-reduction-confs}
-  \hfill\\%newline before theorem statement
-  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
-  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-\end{restatabletheorem}
-
+\begin{compacttheorems}
+  \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
+    \label{lem:pgv-subject-reduction-terms}
+    \hfill\\%newline before theorem statement
+    If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
+    then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
+  \end{restatablelemma}
+  \begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]
+    \label{lem:pgv-subject-congruence}
+    \hfill\\%newline before theorem statement
+    If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
+    then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+  \end{restatablelemma}
+  \begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]
+    \label{thm:pgv-subject-reduction-confs}
+    \hfill\\%newline before theorem statement
+    If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
+    then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+  \end{restatabletheorem}
+\end{compacttheorems}
 
 \subsubsection*{Progress and deadlock freedom}
 PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged:
@@ -401,35 +397,39 @@ Progress for the term language is standard for GV, and deviates from progress fo
 \end{restatablelemma}
 
 Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition:
-\begin{definition}[Canonical Forms]
-  \label{def:pgv-canonical-forms}
-  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
-  \[
-    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
-  \]
-\end{definition}
-\begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
-  \label{lem:pgv-canonical-forms}
-  If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
-\end{restatablelemma}
-\begin{proof}
-  We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
-\end{proof}
+\begin{compacttheorems}
+  \begin{definition}[Canonical Forms]
+    \label{def:pgv-canonical-forms}
+    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
+    \[
+      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
+    \]
+  \end{definition}
+  \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
+    \label{lem:pgv-canonical-forms}
+    If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
+  \end{restatablelemma}
+  \begin{proof}
+    We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+  \end{proof}
+\end{compacttheorems}
 
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions:
-\begin{definition}[Normal Forms]
-  A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
-  \[
-    \tm{\conf{C}}
-    \equiv
-    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}},
-  \]
-\end{definition}
-\begin{restatabletheorem}{thmpgvclosedprogressconfs}[Closed Progress, $\cred$]
-  \label{lem:pgv-closed-progress-confs}
-  If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}}$ is equivalent to a configuration in normal form.
-\end{restatabletheorem}
-\input{prf/thm-pgv-closed-progress-confs}
+\begin{compacttheorems}
+  \begin{definition}[Normal Forms]
+    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
+    \[
+      \tm{\conf{C}}
+      \equiv
+      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}},
+    \]
+  \end{definition}
+  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Closed Progress, $\cred$]
+    \label{lem:pgv-closed-progress-confs}
+    If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}}$ is equivalent to a configuration in normal form.
+  \end{restatabletheorem}
+  \input{prf/thm-pgv-closed-progress-confs}
+\end{compacttheorems}
 
 Finally, as a corollary from closed progress, we get that well-typed terms which do not return endpoints must return \emph{only} a value:
 \begin{corollary}

@@ -7,7 +7,6 @@
 
 % Typesetting
 \usepackage[all]{foreign}
-\usepackage{etoolbox}
 \usepackage{rotating}
 % \usepackage{pdflscape} % activate for automatically rotated pages in PDF
 \usepackage{lscape}
@@ -21,7 +20,22 @@
 \usepackage{float}
 \floatplacement{figure}{tp}
 
-% Replace subsubsection
+% Formatting of theorem environments
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@spthm}
+  {\topsep 7\p@ \@plus 2\p@ \@minus 4\p@}
+  {\topsep\spthmsep}
+  {}{}
+\makeatother
+\newlength\spthmsep
+\setlength{\spthmsep}{\smallskipamount}
+\newenvironment{compacttheorems}
+ {\par\vspace{\spthmsep}\begingroup
+  \setlength{\spthmsep}{0pt}}
+ {\endgroup\vspace{\spthmsep}}
+
+% Formatting of \subsubsection
 \let\llncssubparagraph\subparagraph
 \let\subparagraph\paragraph
 \usepackage[compact]{titlesec}
