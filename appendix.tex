@@ -1,0 +1,131 @@
+% !TeX root = priorities.tex
+\section{Priority GV}
+\begingroup
+\usingnamespace{pgv}
+
+% Scheduler example
+\input{fig/pgv-scheduler}
+
+% Proofs that the syntactic sugar is well-typed.
+\input{fig/pgv-typing-sugar}
+
+\restatelemma{lempgvvaluedone}
+\input{prf/lem-pgv-value-done}
+
+\restatelemma{lempgvsubstitution}
+\input{prf/lem-pgv-substitution}
+
+\restatelemma{lempgvsubjectreductionterms}
+\input{prf/lem-pgv-subject-reduction-terms}
+
+\restatelemma{lempgvsubjectcongruence}
+\input{prf/lem-pgv-subject-congruence}
+
+\restatetheorem{thmpgvsubjectreductionconfs}
+\input{prf/thm-pgv-subject-reduction-confs}
+
+\begin{restatablelemma}{lempgvreadypriority}
+  \label{lem:pgv-ready-priority}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+\end{restatablelemma}
+\begin{proof}
+  Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+\end{proof}
+
+\begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
+  \label{lem:pgv-canonical-forms}
+  If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
+\end{restatablelemma}
+\begin{proof}
+  We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+\end{proof}
+
+\restatetheorem{thmpgvclosedprogressconfs}
+\input{prf/thm-pgv-closed-progress-confs}
+\endgroup
+
+\section{Relation to Priority CP}
+\begingroup
+\usingnamespace{pcp}
+
+% Proofs that the syntactic sugar is well-typed.
+\input{fig/pcp-typing-sugar}
+
+\begin{definition}[Actions]
+  A~process acts on an endpoint $\tm{x}$ if it is in one of the following forms:
+  \begin{multicols}{3}
+    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+    \item $\tm{\link{x}{y}}$ 
+    \item $\tm{\link{y}{x}}$
+    \item $\tm{\send{x}{y}{P}}$
+    \item $\tm{\recv{x}{y}{P}}$
+    \item $\tm{\close{x}{P}}$
+    \item $\tm{\wait{x}{P}}$
+    \item $\tm{\inl{x}{P}}$
+    \item $\tm{\inr{x}{P}}$
+    \item $\tm{\offer{x}{P}{Q}}$
+    \item $\tm{\absurd{x}}$
+    \end{itemize}
+  \end{multicols}
+  \noindent
+  A~process is an action if it acts on some endpoint $\tm{x}$.
+\end{definition}
+
+\begin{definition}[Canonical Forms]
+  \label{def:pcp-canonical-forms}
+  A~process $\tm{P}$ is in canonical form if it is in one of the following forms:
+  \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+  \item
+    $\tm{\halt}$
+  \item
+    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$
+    where $m>0$ and each $\tm{P_j}$ is an action.
+  \end{itemize}
+\end{definition}
+
+\begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
+  \label{lem:pcp-canonical-forms}
+  If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+\end{restatablelemma}
+\begin{proof}
+  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+\end{proof}
+
+\begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]
+  \label{thm:pcp-closed-progress}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
+\end{restatabletheorem}
+\input{prf/thm-pcp-closed-progress}
+\endgroup
+
+\begingroup
+\restatelemma{lempcptopgvtermspreservation}
+\input{prf/lem-pcp-to-pgv-terms-preservation}
+
+\restatetheorem{thmpcptopgvconfspreservation}
+\input{prf/thm-pcp-to-pgv-confs-preservation}
+
+\restatetheorem{thmpcptopgvoperationalcorrespondencesoundness}
+\input{prf/thm-pcp-to-pgv-operational-correspondence-soundness}
+
+\restatelemma{lempcptopgvcpgvMtocpgvC}
+\input{prf/lem-pcp-to-pgv-cpgvM-to-cpgvC}
+
+\begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
+  \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
+  then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
+\end{restatablelemma}
+\begin{proof}
+  Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
+\end{proof}
+
+\restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
+\input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}
+\endgroup
+
+%%% Local Variables:
+%%% TeX-master: "priorities"
+%%% End:
+
