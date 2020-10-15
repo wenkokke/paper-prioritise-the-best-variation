@@ -305,9 +305,9 @@ Secondly, we simplify typing for parallel composition. In GV, each parallel comp
 
 
 \subsubsection*{Subject reduction}
-Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving, though it is not entirely trivial to show.
+Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
-Specifically, we need to show that substitution preserves priority constraints. For this, it helps to prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication actions, and that any priorities present in the type of the value come from the typing environment.
+Most of the subject reduction proof is standard. Novel is that we must show that substitution preserves priority constraints. For this, it helps to prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication actions, and that any priorities present in the type of the value come from the typing environment.
 \begin{restatablelemma}{lempgvvaluedone}
   \label{lem:pgv-value-done}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
