@@ -295,51 +295,53 @@ Secondly, we simplify typing for parallel composition. In GV, each parallel comp
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
 We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
-\begin{restatablelemma}{lempgvvaluedone}
-  \label{lem:pgv-value-done}
-  If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
-\end{restatablelemma}
-\begin{proof}
-  By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$. We demonstrate the case for \LabTirName{T-Inl}, as it illustrates the need for the side conditions on \LabTirName{T-Inl} and \LabTirName{T-Inr}:
-  \begin{case*}[\LabTirName{T-Inl}]
-    The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{T})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
-    \begin{mathpar}
-      \small
-      \inferrule*{
-        \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
-        \\
-        \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-  The full proof can be found in~\cref{prf:lem-pgv-value-done}.
-\end{proof}
-\begin{restatablelemma}{lempgvsubstitution}[Substitution]
-  \label{lem:pgv-substitution}
-  \hfill\\%newline before theorem statement
-  If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
-\end{restatablelemma}
-\begin{proof}
-  By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$. Whenever the contexts in the premises and conclusion differ, we use \cref{lem:pgv-value-done} to prove that the priorities are preserved. We demonstrate the case for \LabTirName{T-Lam}:
-  \begin{case*}[\LabTirName{T-Lam}]
-    By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Gamma},\ty{\Theta})=\pr(\ty{\Gamma},\ty{U'})$.
-    \begin{mathpar}
-      \small
-      \inferrule*{
-        \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{U'},\tmty{y}{T}}{M}{U}
-      }{\tseq[\cs{\pbot}]{\ty{\Gamma},\tmty{x}{U'}}
-        {\lambda y.M}
-        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{U'})},\cs{q}]{T}{U}}}
-      \substarrow{V}{x}
-      \inferrule*{
-        \tseq[\cs{q}]{\ty{\Gamma},\ty{\Theta},\tmty{y}{T}}{\subst{M}{V}{x}}{U}
-      }{\tseq[\cs{\pbot}]{\ty{\Gamma},\ty{\Theta}}
-        {\lambda y.\subst{M}{V}{x}}
-        {\tylolli[\cs{\pr(\ty{\Gamma},\ty{\Theta})},\cs{q}]{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-  The complete proof can be found in~\cref{prf:lem-pgv-substitution}.
-\end{proof}
+\begin{compacttheorems}
+  \begin{restatablelemma}{lempgvvaluedone}
+    \label{lem:pgv-value-done}
+    If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
+  \end{restatablelemma}
+  \begin{proof}
+    By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$. We demonstrate the case for \LabTirName{T-Inl}, as it illustrates the need for the side conditions on \LabTirName{T-Inl} and \LabTirName{T-Inr}:
+    \begin{case*}[\LabTirName{T-Inl}]
+      The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{T})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
+      \begin{mathpar}
+        \small
+        \inferrule*{
+          \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
+          \\
+          \pr(\ty{T})=\pr(\ty{U})
+        }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
+      \end{mathpar}
+    \end{case*}
+    The full proof can be found in~\cref{prf:lem-pgv-value-done}.
+  \end{proof}
+  \begin{restatablelemma}{lempgvsubstitution}[Substitution]
+    \label{lem:pgv-substitution}
+    \hfill\\%newline before theorem statement
+    If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
+  \end{restatablelemma}
+  \begin{proof}
+    By induction on the derivation of $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$. Whenever the contexts in the premises and conclusion differ, we use \cref{lem:pgv-value-done} to prove that the priorities are preserved. We demonstrate the case for \LabTirName{T-Lam}:
+    \begin{case*}[\LabTirName{T-Lam}]
+      By \cref{lem:pgv-value-done}, $\pr(\ty{\Theta})=\pr(\ty{U'})$, hence $\pr(\ty{\Gamma},\ty{\Theta})=\pr(\ty{\Gamma},\ty{U'})$.
+      \begin{mathpar}
+        \small
+        \inferrule*{
+          \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{U'},\tmty{y}{T}}{M}{U}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma},\tmty{x}{U'}}
+          {\lambda y.M}
+          {\tylolli[\cs{\pr(\ty{\Gamma},\ty{U'})},\cs{q}]{T}{U}}}
+        \substarrow{V}{x}
+        \inferrule*{
+          \tseq[\cs{q}]{\ty{\Gamma},\ty{\Theta},\tmty{y}{T}}{\subst{M}{V}{x}}{U}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma},\ty{\Theta}}
+          {\lambda y.\subst{M}{V}{x}}
+          {\tylolli[\cs{\pr(\ty{\Gamma},\ty{\Theta})},\cs{q}]{T}{U}}}
+      \end{mathpar}
+    \end{case*}
+    The complete proof can be found in~\cref{prf:lem-pgv-substitution}.
+  \end{proof}
+\end{compacttheorems}
 The proofs for subject congruence and subject reduction are standard inductions. The details can be found in \cref{prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
@@ -386,7 +388,7 @@ If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\
 \end{definition}
 
 Progress for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}:
-\begin{restatablelemma}{lempgvopenprogressterms}[Open Progress, $\tred$]
+\begin{restatablelemma}{lempgvopenprogressterms}[Progress, $\tred$]
   \label{lem:pgv-open-progress-terms}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
   \begin{itemize}
@@ -424,9 +426,9 @@ A~configuration either reduces, or it is equivalent to configuration in normal f
       \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}},
     \]
   \end{definition}
-  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Closed Progress, $\cred$]
+  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]
     \label{lem:pgv-closed-progress-confs}
-    If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}}$ is equivalent to a configuration in normal form.
+    If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
   \end{restatabletheorem}
   \input{prf/thm-pgv-closed-progress-confs}
 \end{compacttheorems}

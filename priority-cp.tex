@@ -99,19 +99,26 @@ Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to 
 \]
 
 \subsubsection*{Duality}
-Duality on types is an involutive function which preserves the priorities of types:
+Duality is an involutive function on types which preserves priorities:
 \[
   \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
   \begin{array}{lcl}
     \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
-    \ty{\co{(\tybot[\cs{o}])}} & = & \ty{\tyone[\cs{o}]} \\
+    \ty{\co{(\tybot[\cs{o}])}} & = & \ty{\tyone[\cs{o}]}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\tytens[\cs{o}]{A}{B})}} & = & \ty{\typarr[\cs{o}]{\co{A}}{\co{B}}} \\
+    \ty{\co{(\typarr[\cs{o}]{A}{B})}} & = & \ty{\tytens[\cs{o}]{\co{A}}{\co{B}}}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
     \ty{\co{(\tynil[\cs{o}])}} & = & \ty{\tytop[\cs{o}]} \\
     \ty{\co{(\tytop[\cs{o}])}} & = & \ty{\tynil[\cs{o}]}
   \end{array}
-  \qquad
+  \quad
   \begin{array}{lcl}
-    \ty{\co{(\tytens[\cs{o}]{A}{B})}} & = & \ty{\typarr[\cs{o}]{\co{A}}{\co{B}}} \\
-    \ty{\co{(\typarr[\cs{o}]{A}{B})}} & = & \ty{\tytens[\cs{o}]{\co{A}}{\co{B}}} \\
     \ty{\co{(\typlus[\cs{o}]{A}{B})}} & = & \ty{\tywith[\cs{o}]{\co{A}}{\co{B}}} \\
     \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
   \end{array}
@@ -121,25 +128,32 @@ Duality on types is an involutive function which preserves the priorities of typ
 The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the type system guarantees that the top-most connective always holds the smallest priority.  The function $\minpr(\cdot)$ returns the \emph{minimum} priority of all types a typing context, or $\cs{\ptop}$ if the context is empty:
 \[
   \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
   \begin{array}{lclclcl}
-    \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o}  \\
-    \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}  \\
-    \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o}  \\
-    \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}  \\
-    \\
-    \minpr(\ty{\emptyenv})          & = & \cs{\ptop}
+    \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}
   \end{array}
   \qquad
   \begin{array}{lclclcl}
-    \pr(\ty{\tytens[\cs{o}]{A}{B}}) & = & \cs{o}  \\
-    \pr(\ty{\typarr[\cs{o}]{A}{B}}) & = & \cs{o}  \\
-    \pr(\ty{\typlus[\cs{o}]{A}{B}}) & = & \cs{o}  \\
-    \pr(\ty{\tywith[\cs{o}]{A}{B}}) & = & \cs{o}  \\
-    \\
-    \minpr(\ty{\Gamma},\tmty{x}{A}) & = & \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+    \pr(\ty{\tytens[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\typarr[\cs{o}]{A}{B}}) & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\typlus[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\tywith[\cs{o}]{A}{B}}) & = & \cs{o} 
   \end{array}
 \]
-
+\[
+    \minpr(\ty{\emptyenv})          = \cs{\ptop}
+    \qquad
+    \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+\]
 
 \subsubsection*{Terms}
 We let $\pcp{\tm{P}}$, $\pcp{\tm{Q}}$ range over processes, produced by the following grammar.
@@ -195,26 +209,24 @@ Reduction in our version of PCP preserve types. Since our reduction relation is 
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcpsubjectcongruence}[Subject Congruence, $\pcp{\equiv}$]
     \label{lem:pcp-subject-congruence}
-    \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
     then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
   \end{restatablelemma}
   \begin{restatabletheorem}{thmpcpsubjectreduction}[Subject Reduction, $\pcp{\red}$]
     \label{thm:pcp-subject-reduction}
-    \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$, then $\pcp{\seq{Q}{\ty{\Gamma}}}$.
   \end{restatabletheorem}
 \end{compacttheorems}
 
 \subsubsection*{Progress}
-Reduction in our version of PCP satisfies progress. For simplicity, we only present closed progress:
-\begin{restatabletheorem}{thmpcpclosedprogress}[Closed Progress, $\pcp{\red}$]
+Reduction in our version of PCP satisfies progress:
+\begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]
   \label{thm:pcp-closed-progress}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
 \end{restatabletheorem}
 \begin{proof}
-    Our proof follows the same reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). The details can be found in~\Cref{prf:thm-pcp-closed-progress}.
+    Our proof follows the reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). The details can be found in~\Cref{prf:thm-pcp-closed-progress}.
 \end{proof}
 
 \subsubsection*{Translation}
@@ -324,8 +336,7 @@ Finally, we show that PCP and PGV are in operational correspondence along our tr
     \end{itemize}
   \end{restatablelemma}
   \begin{proof}
-    By induction on the structure of $\pcp{\tm{P}}$.
-    Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
+    By induction on the structure of $\pcp{\tm{P}}$. Details in \cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
   \end{proof}
   \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
     [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
@@ -335,20 +346,13 @@ Finally, we show that PCP and PGV are in operational correspondence along our tr
     then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
   \end{restatabletheorem}
   \begin{proof}
-    By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
-    We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which
-    the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$,
-    \ie under actions.
-    We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for
-    \LabTirName{E-LiftSC}. 
-    Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
+    By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$. We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$, \ie under actions. We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for \LabTirName{E-LiftSC}. Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
   \end{proof}
   \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
     [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]
     \label{thm:pcp-to-pgv-operational-correspondence-soundness}
     \hfill\\%newline before theorem statement
-    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$,
-    there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$, there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
   \end{restatabletheorem}
   \begin{proof}
     By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
