@@ -37,6 +37,8 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
 \end{mathpar}
 Commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 
+\input{fig/pcp-operational-semantics-and-typing}
+
 \begin{example}[Milner's Cyclic Scheduler in PCP]\label{sec:pcp-example}
 We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the PGV version in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{I}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, $\tm{i}\in\tm{I}$, and $\pcp{\tm{\plug{P}{Q}}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process-context $\pcp{\tm{P}}$:
 \[
@@ -182,21 +184,17 @@ Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and ri
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
 \subsubsection*{Operational Semantics}
-The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics-and-typing}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
+
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
-\input{fig/pcp-operational-semantics}
-
 \subsubsection*{Typing}
-\Cref{fig:pcp-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
+\Cref{fig:pcp-operational-semantics-and-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
 
 \textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
 Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm{x}}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\pcp{\tm{x}}$ is the smallest among all priorities in $\pcp{\ty{\Gamma}}$.
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
-
-\input{fig/pcp-typing}
-
 
 Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
 
@@ -235,49 +233,54 @@ We illustrate the relation between PCP and PGV by giving a translation from PCP 
     & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
   \end{array}
 \]
-There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}$, translates processes to \emph{configurations}. It translates as much as possible of the process to the corresponding configuration constructs. Once it hits the first action, it switches to the second translation, $\tm{\cpgvM{\cdot}}$, which translates processes to \emph{terms}:
-\[
-  \begin{array}{lcl}
-    \pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
-    & = & \pgv{\tm{\res{x}{y}{\cpgvC{P}}}} \\
-    \pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
-    & = & \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}} \\
-    \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
-    & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}} \\
-    \pcp{\tm{\cpgvC{\inl{x}{P}}}}
-    & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}} \\
-    \pcp{\tm{\cpgvC{\inr{x}{P}}}}
-    & = & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}} \\
-    \pcp{\tm{\cpgvC{P}}}
-    & = & \pgv{\tm{\child{\cpgvM{P}}}},\hfill\text{if none of the above apply}\\
-    \\
-    \pcp{\tm{\cpgvM{\link{x}{y}}}}
-    & = & \pgv{\tm{\link\;{\pair{x}{y}}}} \\
-    \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
-    & = & \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
-    \pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
-    & = & \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
-    \pcp{\tm{\cpgvM{\halt}}}
-    & = & \pgv{\tm{\unit}} \\
-    \pcp{\tm{\cpgvM{\close{x}{P}}}}
-    & = & \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
-    \pcp{\tm{\cpgvM{\wait{x}{P}}}}
-    & = & \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
-    \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
-    & = & \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
-    \pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
-    & = & \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
-    \pcp{\tm{\cpgvM{\inl{x}{P}}}}
-    & = & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
-    \pcp{\tm{\cpgvM{\inr{x}{P}}}}
-    & = & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-    \multicolumn{3}{l}{\pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}} \\
-    & = & \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
-    \pcp{\tm{\cpgvM{\absurd{x}}}}
-    & = & \pgv{\tm{\offeremp{x}}}
-  \end{array}
-\]
-The third, fourth, and fifth cases for $\tm{\cpgvC{\cdot}}$ translate the $\nu$-binders implicit in the encoding of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
+There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}$, translates processes to \emph{configurations}:
+\begin{align*}
+  &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+  &&= \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inl{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inr{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{P}}}
+  &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
+\end{align*}
+The third, fourth, and fifth cases translate the $\nu$-binders implicit in the encoding of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
+It translates as much as possible of the process to the corresponding configuration constructs. Once it hits the first action, it switches to the second translation, $\tm{\cpgvM{\cdot}}$, which translates processes to \emph{terms}:
+\begin{align*}
+  &\pcp{\tm{\cpgvM{\link{x}{y}}}}
+  &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
+  &\pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
+  &&= \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
+  &\pcp{\tm{\cpgvM{\halt}}}
+  &&= \pgv{\tm{\unit}} \\
+  &\pcp{\tm{\cpgvM{\close{x}{P}}}}
+  &&= \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\wait{x}{P}}}}
+  &&= \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+  &\pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\inl{x}{P}}}}
+  &&= \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\inr{x}{P}}}}
+  &&= \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}
+  &&= \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
+  &\pcp{\tm{\cpgvM{\absurd{x}}}}
+  &&= \pgv{\tm{\offeremp{x}}}
+\end{align*}
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
 Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). The translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$ where all processes are child processes.
