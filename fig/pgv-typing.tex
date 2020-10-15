@@ -1,6 +1,6 @@
 \begin{figure}
   \begin{mdframed}
-    \paragraph*{Static Typing Rules}
+    \textbf{Static Typing Rules.}
     \begin{mathpar}
       \inferrule*[lab=T-Var]{
       }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
@@ -76,8 +76,8 @@
       }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
     \end{mathpar}
     We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations.
-    \\
-    \paragraph*{Type Schemas for Constants}
+    \\[1\smallskipamount]
+    \textbf{Type Schemas for Constants.}
     \begin{mathpar}
       \tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}
       
@@ -93,8 +93,7 @@
       
       \tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}
     \end{mathpar}
-  
-    \paragraph*{Runtime Typing Rules}
+    \textbf{Runtime Typing Rules.}
     \begin{mathpar}
       \inferrule*[lab=T-Main]{
         \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
