@@ -12,6 +12,7 @@
 % \usepackage{pdflscape} % activate for automatically rotated pages in PDF
 \usepackage{lscape}
 \usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \usepackage{multicol}
 \setlist[description]{style=unboxed,font=\normalfont\itshape}
 \usepackage[strict]{changepage}
@@ -19,6 +20,14 @@
 \usepackage{mdframed}
 \usepackage{float}
 \floatplacement{figure}{tp}
+
+% Replace subsubsection
+\let\llncssubparagraph\subparagraph
+\let\subparagraph\paragraph
+\usepackage[compact]{titlesec}
+\let\subparagraph\llncssubparagraph
+\titleformat{\subsubsection}[runin]{\normalfont\bfseries}{}{1em}{}[.]
+\titlespacing{\subsubsection}{0pt}{\medskipamount}{1ex}
 
 % Math symbols
 \usepackage[fleqn]{amsmath}
