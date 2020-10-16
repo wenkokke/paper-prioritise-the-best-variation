@@ -7,7 +7,7 @@
 \usingnamespace{pgv}
 
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
-Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. We illustrate PGV with Milner's Cyclic Scheduler~\cite{milner89}.
+Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. We start by illustrating PGV with Milner's Cyclic Scheduler~\cite{milner89}.
 
 \begin{example}[Milner's Cyclic Scheduler in PGV]\label{sec:pgv-example}
 Suppose a set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc1}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc1}$ when all processes have finished.
@@ -371,7 +371,7 @@ If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\
 \emph{Actions} are terms which perform communication actions and which synchronise between two threads.
 \begin{definition}[Actions]
   \label{def:pgv-actions}
-  A~term \emph{acts on} an endpoint $\tm{x}$ if it is of the form $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;{x}}$, $\tm{\close\;{x}}$, or $\tm{\wait\;{x}}$. A~term is an \emph{action} if it acts on some endpoint $\tm{x}$.
+  A~term \emph{acts on} an endpoint $\tm{x}$ if it is $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;{x}}$, $\tm{\close\;{x}}$, or $\tm{\wait\;{x}}$. A~term is an \emph{action} if it acts on some endpoint $\tm{x}$.
 \end{definition}
 
 \emph{Ready terms} are terms which are ready to perform a communication action, either by themselves, \eg creating a new channel or thread, or with another thread, \eg sending or receiving.
@@ -422,7 +422,7 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
     If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value V.
   \end{corollary}
 \end{compacttheorems}
-
+\Cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} state that a configuration in PGV will complete all its communication actions, thus satisfying deadlock freedom or reduce to a term which is a value in PGV and contains no channel endpoints.
 \end{document}
 
 %%% Local Variables:

@@ -297,7 +297,7 @@
 \maketitle
 %
 \begin{abstract}
-Session types are a type formalism used to specify and verify communication protocols in concurrent settings. They have been successfully integrated in the $\pi$-calculus~\cite{honda93,takeuchihonda94,hondavasconcelos98} and a concurrent $\lambda$-calculus, named Good Variation (GV)~\cite{wadler15,lindleymorris15}, among other paradigms.
+Session types are a type formalism used to specify and verify communication protocols in concurrent settings. They have been successfully integrated in the $\pi$-calculus~\cite{honda93,takeuchihonda94,hondavasconcelos98} and a linear concurrent $\lambda$-calculus, named Good Variation (GV)~\cite{wadler15,lindleymorris15}, among other paradigms.
 
 Session type systems guarantee communication safety and session fidelity, but cannot guarantee deadlock freedom and avoid bad interleaving of more than one session. Deadlock freedom in GV is guaranteed by combining channel creation and thread spawning under the same operation, called fork. This is in line with Classical Processes (CP), a~process calculus with strong ties to classical linear logic~\cite{wadler12}, which combines channel creation and parallel composition in the $\pi$-calculus under the same logical cut rule. In both GV and CP, deadlock freedom is achieved at the expense of expressivity as the only communication structures allowed are trees. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP) which allows for cyclic structures and restores deadlock freedom by adding priorities to types following Kobayashi~\cite{kobayashi06} and Padovani~\cite{padovani14}.
 

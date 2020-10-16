@@ -6,7 +6,7 @@
 \section{Relation to Priority CP}\label{sec:pcp}
 
 We present an updated version of Priority CP (PCP)~\cite{dardhagay18}, which is Wadler's CP~\cite{wadler12} with {priorities}, and a translation from PCP to PGV.
-The main difference with respect to PCP~\cite{dardhagay18} is removing commuting conversions, in favour of using structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle as in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them. They show this by decomposing the reduction relation for CP into two phases: first, all $\beta$-reductions are performed, and second, commuting conversions are used to bring one particular action to the front, to eliminate the top-level cut.
+The main difference with respect to PCP~\cite{dardhagay18} is removing commuting conversions and using structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them. %They show this by decomposing the reduction relation for CP into two phases: first, all $\beta$-reductions are performed, and second, commuting conversions are used to bring one particular action to the front, to eliminate the top-level cut.
 
 From the perspective of process calculi, commuting conversions behave strangely. Let us consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
 \[
@@ -283,7 +283,7 @@ It translates as much as possible of the process to the corresponding configurat
 \end{align*}
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
-Recall our implementations of Milner's cyclic scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). It follows immediately from the definition of our translation that the translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$, where all processes are child processes.
+Recall our implementations of Milner's Cyclic Scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). It follows immediately from the definition of our translation that the translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$, where all processes are child processes.
 
 The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
 \begin{compacttheorems}
@@ -307,16 +307,6 @@ Our translation satisfies operational correspondence. We link our translations, 
     \item   $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
     \end{itemize}
   \end{restatablelemma}
-  \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
-    [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
-    \label{thm:pcp-to-pgv-operational-correspondence-completeness}
-    \hfill\\%newline before theorem statement
-    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
-    then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$. Details in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
-  \end{restatabletheorem}
-  % \begin{proof}
-  %   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$. We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$, \ie under actions. We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for \LabTirName{E-LiftSC}. Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
-  % \end{proof}
   \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
     [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]
     \label{thm:pcp-to-pgv-operational-correspondence-soundness}
@@ -328,7 +318,16 @@ Our translation satisfies operational correspondence. We link our translations, 
   %   Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
   % \end{proof}
 \end{compacttheorems}
-
+\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
+  [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
+  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
+  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$. Details in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
+\end{restatabletheorem}
+% \begin{proof}
+%   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$. We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$, \ie under actions. We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for \LabTirName{E-LiftSC}. Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
+% \end{proof}
 \end{document}
 
 %%% Local Variables:
