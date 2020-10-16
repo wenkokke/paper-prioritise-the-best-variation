@@ -297,8 +297,7 @@ The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. 
   \end{restatabletheorem}
 \end{compacttheorems}
 
-Our translation satisfies operational correspondence. We link our translations, and show that $\tm{\cpgvM{P}}$ \emph{must} reduce to $\tm{\cpgvC{P}}$, \ie $\tm{\cpgvC{\cdot}}$ is equivalent to translating with $\tm{\cpgvM{\cdot}}$ and performing several reduction steps. We use this fact to prove operational correspondence. The details are in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-completeness,prf:thm-pcp-to-pgv-operational-correspondence-soundness}:
-\begin{compacttheorems}
+Our translation satisfies soundness and completeness of operational correspondence. We link ${\tm{\cpgvM{\cdot}}}$ and ${\tm{\cpgvC{\cdot}}}$ and show that $\tm{\cpgvM{P}}$ \emph{must} reduce to $\tm{\cpgvC{P}}$, \ie $\tm{\cpgvC{\cdot}}$ is equivalent to translating with $\tm{\cpgvM{\cdot}}$ and performing several reduction steps. We use this fact to prove the results below. The details are in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-completeness,prf:thm-pcp-to-pgv-operational-correspondence-soundness}:
   \begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
     \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
     For any $\pcp{\tm{P}}$, either:
@@ -317,13 +316,12 @@ Our translation satisfies operational correspondence. We link our translations, 
   %   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
   %   Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
   % \end{proof}
-\end{compacttheorems}
 \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
   [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
   \label{thm:pcp-to-pgv-operational-correspondence-completeness}
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
-  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$. Details in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC}.
+  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
 \end{restatabletheorem}
 % \begin{proof}
 %   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$. We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$, \ie under actions. We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for \LabTirName{E-LiftSC}. Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.

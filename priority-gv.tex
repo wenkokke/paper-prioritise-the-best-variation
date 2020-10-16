@@ -290,7 +290,6 @@ In order to guarantee deadlock freedom, in GV each parallel composition must spl
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
 We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
-\begin{compacttheorems}
   \begin{restatablelemma}{lempgvvaluedone}
     \label{lem:pgv-value-done}
     If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
@@ -336,9 +335,7 @@ We must show that substitution preserves priority constraints. For this, we prov
     \end{case*}
     The complete proof can be found in~\cref{prf:lem-pgv-substitution}.
   \end{proof}
-\end{compacttheorems}
 The proofs for subject congruence and subject reduction are standard inductions. The details can be found in \cref{prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
-\begin{compacttheorems}
   \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
     \label{lem:pgv-subject-reduction-terms}
     \hfill\\%newline before theorem statement
@@ -357,7 +354,6 @@ The proofs for subject congruence and subject reduction are standard inductions.
     If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
   \end{restatabletheorem}
-\end{compacttheorems}
 
 \subsubsection*{Progress and deadlock freedom}
 PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged:
