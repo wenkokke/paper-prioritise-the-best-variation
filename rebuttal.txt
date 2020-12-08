@@ -1,3 +1,9 @@
+TODO:
+
+- a word of thanks;
+- acknowledge the lack of examples, and commit to addressing that;
+- clarify our contribution: priority gv is the first session-typed functional language which with priorities and strong ties to linear logic via its correspondence with PCP and its relation to the original CP and GV languages;
+
 ----------------------- REVIEW 1 ---------------------
 
 > Also, I don't understand what M_i and N_i are (similarly for P_i and Q_i in the PCP version of the example). Maybe the authors imply that the actual system is more complex that the one shown here, where M_i and N_i contain unspecified parts of the system. However, I think that the example is already more complex than necessary, and that it would be fine to simply state that all that matters is the communication structure being modeled.
