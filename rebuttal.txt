@@ -1,18 +1,5 @@
 ----------------------- REVIEW 1 ---------------------
 
-> The key elements of the type system, particularly the annotations in arrow types, the shape of typing judgments, the typing of communication primitives, are basically taken from [37]. The authors also move away from a calculus strictly justified by logic, e.g. by resorting to traditional process-algebraic structural congruence and reduction relations, and they work with a hybrid form of (partially encoded) session types. Overall, I see a substantial overlap between this paper and [37], which somehow lessens the depth of the contribution.
-
-> I appreciate the effort made by the authors of tackling an example from the bibliography (Milner's cyclic scheduler), but I'm not convinced that presenting that particular example alone, without even trying to showcase a typing derivation, is an effective strategy. I gained more insights about the key aspects of the typing discipline by looking at [37], in which many (small) examples are used to illustrate the type system.
-
-
-* Otherwise, the paper is technically sound as far as I checked, it is well-written and quite accessible.
-
-In summary, this is a fine paper that continues an established investigation on the use of priorities for enabling a more flexible use of session channels, but it lacks a particularly compelling message to convey.
-
-## On the choice of the example(s)
-
-As presented, Example 1 (also the PCP version) is ill-typed and, I think, not self contained. Note that d is used while d' is not and there is a restriction for d and d'. I think a wait d' is missing somewhere, possibly next to proc‚ÇÅ if I interpret the diagram in the Appendix correctly.
-
 > Also, I don't understand what M_i and N_i are (similarly for P_i and Q_i in the PCP version of the example). Maybe the authors imply that the actual system is more complex that the one shown here, where M_i and N_i contain unspecified parts of the system. However, I think that the example is already more complex than necessary, and that it would be fine to simply state that all that matters is the communication structure being modeled.
 
 That’s exactly what they’re meant to convey, yes.
