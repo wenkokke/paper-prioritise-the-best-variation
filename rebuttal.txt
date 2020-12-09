@@ -1,32 +1,41 @@
 We thank the reviewers for their thorough reviews and very useful feedback, which we'll address as follows.
 
-First of all, we acknowledge the lack of examples and we commit to adding them to the (potential) final version.
+First of all, we acknowledge the lack of examples and we commit to adding them to the potential final version.
 We will illustrate PGV by adding examples for each of the following:
--- deadlock-free processes (including the streamlined version with two processes connected by two sessions, suggested by Reviewer 1) together with their typing derivations;
--- deadlocked processes that cannot be typed, thus illustrating how priorities work, suggested by Reviewers 1 and 2;
--- processes which use closures, thus illustrating the relevance of annotations on arrow types, suggested by Reviewer 1;
--- processes demonstrating the interaction between higher order and deadlock freedom, suggested by Reviewer 2.
 
-Regarding the cyclic scheduler, we included it to deliberately connect our work to the previous FoSSaCS work on PCP. We wanted to show how the well-known Milner's scheduler can be written in PGV (for the first time) and use it to illustrate our encoding of PCP to PGV, thus closing this circle on the cyclic scheduler. We will make this clearer in the paper.
+  - deadlock-free processes—including the streamlined version with two processes connected by two sessions, suggested by Reviewer 1—together with their typing derivations;
+  - deadlocked processes that cannot be typed, thus illustrating how priorities work, suggested by Reviewers 1 and 2;
+  - processes which use closures, thus illustrating the relevance of annotations on arrow types, suggested by Reviewer 1;
+  - processes demonstrating the interaction between higher order and deadlock freedom, suggested by Reviewer 2.
 
-Regarding our contributions, we will highlight them better in the introduction.
-Summing them up here: PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+Regarding the cyclic scheduler, we included it to deliberately connect our work to the previous FoSSaCS work on PCP.
+We wanted to show how the well-known Milner's scheduler can be written in PGV (for the first time) and use it to illustrate our encoding of PCP to PGV, thus closing this circle on the cyclic scheduler.
+We will make this clearer in the paper.
+
+Regarding our contributions, we will highlight them better in the introduction. Summing them up here:
+  - PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+  - PGV addresses several problems in the original GV language, most notably:
+    * our version does not have the pseudo-type S^#; and
+    * our structural congruence is type preserving.
 
 Lastly, we will implement all minor comments by all reviewers, thanks for pointing them out.
 
-
 ----------------------- REVIEW 1 ---------------------
 Regarding the overlap with [37] we would like to mention that our work was developed completely independently of [37] as the authors came to know this work only during the writing up of the paper while working on related works.
-We still want to emphasise the differences between our work and [37]: i) our work has strong ties to logic, hence why we also present the encoding PGV->PCP; ii) COMPLETE... 
+We still want to emphasise the differences between our work and [37]:
+
+  - PGV has a clear correspondence with a process calculus, PCP;
+  - PGV has strong ties to linear logic, via its correspondence to PCP and its transitive relation to CP;
+
 We will state the above clearly in the paper.
 
-> As presented, Example 1 (also the PCP version) is ill-typed and, I think, not self contained. Note that d is used while d' is not and there is a restriction for d and d'. I think a wait d' is missing somewhere, possibly next to proc‚ÇÅ if I interpret the diagram in the Appendix correctly.
+> As presented, Example 1 (also the PCP version) is ill-typed and, I think, not self contained.
+> Note that d is used while d' is not and there is a restriction for d and d'.
+> I think a `wait d'` is missing somewhere, possibly next to proc_1 if I interpret the diagram in the Appendix correctly.
 
+Regarding M_i and N_i in the PCP cyclic scheduler, the reviewer understood this correctly and we will simply state that what matters is the communication structure being modelled. The missing `wait d'` should be in N_1, as the reviewer correctly inferred. We will mention this clearly in the paper.
 
-Regarding M_i and N_i in the PCP cyclic scheduler, the reviewer understood this correctly and we will simply state that what matters is the communication structure being modelled.
-
-
-Regarding the encoding of PCP to PGV and presenting only the encoding to the functional fragment, we have thought about this too. However, such encoding is complete but not sound. The reason being... 
+Regarding the encoding of PCP to PGV and presenting only the encoding to the functional fragment, we have thought about this too. Such an encoding is complete but not sound, as the translation to configurations does some evaluation of top-level new/spawn constructs. For instance, the process ‘x[y].P’ has no reductions. Similarly, its translation to a configuration has no reductions. However, its translation to a term, ‘o let (y,z) = new in let x = send (z,x) in ((P))_M’ can reduce to ‘(vyz)(o let x = send (z,x) in ((P))_M)’.
 
 Minor:
 
