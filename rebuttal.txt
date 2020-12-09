@@ -1,54 +1,53 @@
-We thank the reviewers for their thorough reviews and very useful feedback.
+We thank the reviewers for their thorough reviews and very useful feedback, which we'll address as follows.
 
-First of all, we acknowledge the lack of examples and we commit to adding them. We will illustrate PGV with further well-typed programs together with type derivation; and deadlocked programs (including the example by Reviewer 1).
+First of all, we acknowledge the lack of examples and we commit to adding them to the (potential) final version.
+We will illustrate PGV by adding examples for each of the following:
+-- deadlock-free processes (including the streamlined version with two processes connected by two sessions, suggested by Reviewer 1) together with their typing derivations;
+-- deadlocked processes that cannot be typed, thus illustrating how priorities work, suggested by Reviewers 1 and 2;
+-- processes which use closures, thus illustrating the relevance of annotations on arrow types, suggested by Reviewer 1;
+-- processes demonstrating the interaction between higher order and deadlock freedom, suggested by Reviewer 2.
 
-The reason for including cyclic scheduler was deliberately to connect our work to the previous FoSSaCS work on PCP. We wanted to show how the well-known Milner's scheduler can be written in PGV (for the first time) and use it to illustrate our encoding of PGV to PCP, thus closing this circle.
+Regarding the cyclic scheduler, we included it to deliberately connect our work to the previous FoSSaCS work on PCP. We wanted to show how the well-known Milner's scheduler can be written in PGV (for the first time) and use it to illustrate our encoding of PCP to PGV, thus closing this circle on the cyclic scheduler. We will make this clearer in the paper.
 
-We will clarify our contributions in the introduction. Summing them up here: PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+Regarding our contributions, we will highlight them better in the introduction.
+Summing them up here: PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+
+Lastly, we will implement all minor comments by all reviewers, thanks for pointing them out.
 
 
 ----------------------- REVIEW 1 ---------------------
+Regarding the overlap with [37] we would like to mention that our work was developed completely independently of [37] as the authors came to know this work only during the writing up of the paper while working on related works.
+We still want to emphasise the differences between our work and [37]: i) our work has strong ties to logic, hence why we also present the encoding PGV->PCP; ii) COMPLETE... 
+We will state the above clearly in the paper.
 
-> Also, I don't understand what M_i and N_i are (similarly for P_i and Q_i in the PCP version of the example). Maybe the authors imply that the actual system is more complex that the one shown here, where M_i and N_i contain unspecified parts of the system. However, I think that the example is already more complex than necessary, and that it would be fine to simply state that all that matters is the communication structure being modeled.
+> As presented, Example 1 (also the PCP version) is ill-typed and, I think, not self contained. Note that d is used while d' is not and there is a restriction for d and d'. I think a wait d' is missing somewhere, possibly next to proc‚ÇÅ if I interpret the diagram in the Appendix correctly.
 
-That’s exactly what they’re meant to convey, yes.
 
-> Speaking of complexity, the case for PGV can be made by considering
->
->  	(aa')(bb') (close a; wait b' || wait a'; close b)
->
-> which is a streamlined version of the example in which there are just two processes connected by two sessions. This is the essential configuration that cannot be modeled by the calculi strictly based on linear logic, since the two threads share two channels. Yet, this configuration is well typed in the presented type system and therefore is deadlock free.
->
-> This example is simple enough that a full typing derivation can be shown in the paper, possibly at the expense of the few proof sketched which can be moved in the appendix anyway.
+Regarding M_i and N_i in the PCP cyclic scheduler, the reviewer understood this correctly and we will simply state that what matters is the communication structure being modelled.
 
-That’s probably a good call.
 
-> At the same time, the example given by the authors does not make use of any interesting function (apart from the constants wait and close) and therefore it fails to illustrate the relevance of annotations on arrow types.
+Regarding the encoding of PCP to PGV and presenting only the encoding to the functional fragment, we have thought about this too. However, such encoding is complete but not sound. The reason being... 
 
-We should probably add an example which uses closures.
+Minor:
 
-> I presume there are side conditions in SC-RESCOMM requiring that {z,w} \cap {x,y} = \emptyset.
-> I presume there are side conditions in E-NEW requiring that x,y do not occur free in F
+Regarding side conditions in SC-RESCOMM and E-NEW, the reviewer is right and we will add them.
 
-Yes, to both.
-
-> The encoding from PCP to PGV is routine and does not reveal particularly challenging or surprising aspects given the expressiveness of PGV. In fact, I suspect it can be further simplified (at least in its presentation) by considering only the encoding into the functional fragment of PGV. Clearly the translation to configurations deals with a subset of cases compared to the translation to terms. I wonder if it's possible to *present* the second translation only, which alone is complete as far as the encoding goes.
-
-Such a translation would be complete, but not sound.
-
+Regarding T-VAR and T-CONST we will mention your suggestion.
 
 ----------------------- REVIEW 2 ---------------------
 
-The paper fits well the scope of FOSSACS.
+As mentioned at the top, we will add more examples to the paper.
 
-> Counter-examples, i.e., deadlocking processes that cannot be typed, such as dining philosophers.
+Regarding the presentation of the main sections: we will explain more in detail how priorities work, especially with the aid of the aforementioned examples. We will systematise the the prevention of CP, PCP, GV and PGV, by dedicating subsections to each of them before diving into the details of our work.
 
-Yes.
-
-> At least one example demonstrating the interaction between higher order and deadlock-freedom, i.e., an example in which a function is sent and applied and where the actions present in the function's body are controlled by the latent effect of the arrow type.
-
-Yes.
+Regarding our contribution, we will make them clearer for non-experts by first illustrating the use and benefits of GV and then the benefits of splitting new and spawn in PGV and its ties to logic (this will relate to the CP,PCP,GV,PGV explanations above).
 
 ----------------------- REVIEW 3 ---------------------
 
-> As a non-expert reviewing the paper, my main concern is the amount of novel technical content: the technique in use has been developed by one of the authors in the context of a process calculus and is adapted here to a known linear concurrent λ-calculus. This would not be an issue if the attempt exposed some technical difficulties in adapting the technique to the setting of GV or uncovered some important insights; however, this does not seem to be the case. Thus, from the perspective of a non-expert, this paper seems to be too closely related to prior work to warrant an acceptance recommendation. Still, particularly as a non-expert, I would welcome any comments that would highlight the significance of technical contributions of the paper, and if so, would be happy to adjust my assessment.
+We will clarify the contributions better, this was also suggested by other reviewers.
+
+It is true that priorities are not new and they were already used in PCP, which is a process calculus ties to logic. However, PGV is the first functional calculus with priorities that also ties to logic as PCP.
+
+We are in fact making this connection to linear logic explicit by defining a sound encoding of PCP to PGV. Furthermore, as a case study for PGV and the encoding, we deliberately chose Milner's cyclic scheduler presented in PCP previously. The reason for this choice is to show how a process in the literature of PCP can be translated using our encoding into PGV.
+
+However, in addition to the cyclic scheduler, we will add the examples mentioned at the top of this letter to better illustrate PGV and its type system.
