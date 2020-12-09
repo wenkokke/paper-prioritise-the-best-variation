@@ -28,8 +28,8 @@ Lastly, we will implement all "minor comments" by all reviewers, thanks for poin
 Regarding the overlap with [37] we would like to point out that our work was developed completely independently of [37]. The authors were not aware of[37] until working on the related work of this paper.
 We still want to emphasise the differences between our work and [37], which we will also state in the paper:
 
-  - PGV has a clear correspondence with a process calculus, PCP;
-  - PGV has strong ties to linear logic, via its correspondence to PCP and its transitive relation to CP;
+  - PGV has a clear correspondence with a *process calculus*, PCP;
+  - PGV has strong ties to *linear logic*, via its correspondence to PCP and its transitive relation to CP;
 
 
 Regarding M_i and N_i in the PCP cyclic scheduler, the reviewer understood this correctly and we will simply state that what matters is the communication structure being modelled.
