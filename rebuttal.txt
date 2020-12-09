@@ -1,8 +1,11 @@
-TODO:
+We thank the reviewers for their thorough reviews and very useful feedback.
 
-- a word of thanks;
-- acknowledge the lack of examples, and commit to addressing that;
-- clarify our contribution: priority gv is the first session-typed functional language which with priorities and strong ties to linear logic via its correspondence with PCP and its relation to the original CP and GV languages;
+First of all, we acknowledge the lack of examples and we commit to adding them. We will illustrate PGV with further well-typed programs together with type derivation; and deadlocked programs (including the example by Reviewer 1).
+
+The reason for including cyclic scheduler was deliberately to connect our work to the previous FoSSaCS work on PCP. We wanted to show how the well-known Milner's scheduler can be written in PGV (for the first time) and use it to illustrate our encoding of PGV to PCP, thus closing this circle.
+
+We will clarify our contributions in the introduction. Summing them up here: PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+
 
 ----------------------- REVIEW 1 ---------------------
 
