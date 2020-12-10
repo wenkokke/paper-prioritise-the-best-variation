@@ -26,7 +26,7 @@ Lastly, we will implement all "minor comments" by all reviewers, thanks for poin
 
 ----------------------- REVIEW 1 ---------------------
 Regarding the overlap with [37] we would like to point out that our work was developed completely independently of [37]. The authors were not aware of[37] until working on the related work of this paper.
-We still want to emphasise the differences between our work and [37], which we will also state in the paper:
+We still want to emphasise the differences between our work and [37], which we will also state in the paper. PGV stems from GV differently from [37] and:
 
   - PGV has a clear correspondence with a *process calculus*, PCP;
   - PGV has strong ties to *linear logic*, via its correspondence to PCP and its transitive relation to CP;
