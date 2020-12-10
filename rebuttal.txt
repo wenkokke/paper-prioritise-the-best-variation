@@ -15,8 +15,8 @@ We will make this more explicit in the paper.
 Regarding our contributions, we will highlight them better in the introduction. Summing them up here:
   1. PGV is the first session-typed functional language with priorities *and* strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
   2. PGV addresses several problems in the original GV language, most notably:
-    a. our version does not have the pseudo-type S^#; and
-    b. our structural congruence is type preserving.
+     a. our version does not have the pseudo-type S^#; and
+     b. our structural congruence is type preserving.
   3. The connection of PGV to logic is given via a sound and complete encoding of PCP to PGV and showcase it with the encoding of cyclic scheduler to PGV.
 
 We would like to draw attention to a. and b. above.
@@ -25,6 +25,7 @@ Previous work on GV does not satisfy a. and the pseudo-type S^# is explicitly in
 Lastly, we will implement all "minor comments" by all reviewers, thanks for pointing them out.
 
 ----------------------- REVIEW 1 ---------------------
+
 Regarding the overlap with [37] we would like to point out that our work was developed completely independently of [37]. The authors were not aware of[37] until working on the related work of this paper.
 We still want to emphasise the differences between our work and [37], which we will also state in the paper. PGV stems from GV differently from [37] and:
 
