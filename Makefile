@@ -1,9 +1,10 @@
+MAIN ?= priorities
 SOURCES := $(shell find . -type f -and \( -name '*.tex' -or -name '*.bib' \))
 
 default: build
 
 .PHONY: build
-build: priorities.pdf
+build: $(MAIN).pdf
 
 .PHONY: watch
 watch:
@@ -11,8 +12,12 @@ watch:
 
 .PHONY: clean
 clean:
-	@latexmk -C priorities
+	@latexmk -C $(MAIN)
 
-priorities.pdf: $(SOURCES)
-	@latexmk -pdf priorities -halt-on-error
+.PHONY: view
+view:
+	@open -a Skim $(MAIN).pdf
+
+$(MAIN).pdf: $(SOURCES)
+	@latexmk -pdf $(MAIN) -halt-on-error
 

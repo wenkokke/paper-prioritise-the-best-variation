@@ -1,10 +1,17 @@
 \documentclass[citecolor=red,linkcolor=blue,runningheads]{llncs}
 \usepackage[english]{babel}
 
+% Comments and TODOs
+\usepackage{todonotes,regexpatch}
+\makeatletter
+\xpatchcmd{\@todo}{\setkeys{todonotes}{#1}}{\setkeys{todonotes}{inline,#1}}{}{}
+\makeatother
+
 % Typesetting
 \usepackage[all]{foreign}
 \usepackage{rotating}
-\usepackage{pdflscape}
+\usepackage{lscape}
+% \usepackage{pdflscape}
 \usepackage[inline]{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \usepackage{multicol}

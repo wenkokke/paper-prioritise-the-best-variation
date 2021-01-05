@@ -36,7 +36,8 @@
                                    & \equiv & \tm{\res{y}{x}{\conf{C}}}
         \\
         \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
-                                   & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}}
+                                   & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}},
+                                              \text{ if }{\{\tm{x},\tm{y}\}\cap\{\tm{z},\tm{w}\}=\varnothing}
         \\
         \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
                                    & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
@@ -54,27 +55,32 @@
     \end{mathpar}
     \textbf{Configuration reduction.}
     \begin{mathpar}
-      \begin{array}{llcl}
-        \LabTirName{E-Link}  & \tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
-                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}
+      \begin{array}{l}
+        \begin{array}{llcl}
+          \LabTirName{E-Link}  & \tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
+                               & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}
+          \\
+          \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
+                               & \cred & \tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}},
+                                         \text{ if }\tm{x},\tm{y}\notin\fv(\tm{\conf{F}})
+          \\
+          \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{(\spawn\;V)}}
+                               & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}
+        \end{array}
         \\
-        \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
-                             & \cred & \tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}}
-        \\
-        \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{(\spawn\;V)}}
-                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}
-        \\
-        \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
-                               {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
-                               {\plug{\conf{F'}}{\recv\;{y}}})}}
-                             & \cred & \tm{\res{x}{y}{(\ppar
-                                       {\plug{\conf{F}}{x}}
-                                       {\plug{\conf{F'}}{\pair{V}{y}}})}}
-        \\
-        \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
-                               {\plug{\conf{F}}{\wait\;{x}}}
-                               {\plug{\conf{F'}}{\close\;{y}}})}}
-                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
+        \begin{array}{llcl}
+          \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
+                                 {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
+                                 {\plug{\conf{F'}}{\recv\;{y}}})}}
+                               & \cred & \tm{\res{x}{y}{(\ppar
+                                         {\plug{\conf{F}}{x}}
+                                         {\plug{\conf{F'}}{\pair{V}{y}}})}}
+          \\
+          \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
+                                 {\plug{\conf{F}}{\wait\;{x}}}
+                                 {\plug{\conf{F'}}{\close\;{y}}})}}
+                               & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
+        \end{array}
       \end{array}
       \\
       \inferrule*[lab=E-LiftC]{

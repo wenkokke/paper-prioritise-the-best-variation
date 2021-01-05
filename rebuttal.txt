@@ -32,7 +32,6 @@ We still want to emphasise the differences between our work and [37], which we w
   - PGV has a clear correspondence with a *process calculus*, PCP;
   - PGV has strong ties to *linear logic*, via its correspondence to PCP and its transitive relation to CP;
 
-
 Regarding M_i and N_i in the PCP cyclic scheduler, the reviewer understood this correctly and we will simply state that what matters is the communication structure being modelled.
 The missing `wait d'` should be in N_1, as the reviewer correctly inferred. Moreover, with this change the process is well typed. We will clarify this in the paper.
 
