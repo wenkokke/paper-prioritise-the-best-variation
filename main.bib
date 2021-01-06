@@ -1,97 +1,50 @@
 @inproceedings{lindleymorris16,
-  doi       = {10.1145/2951913.2951921},
   year      = 2016,
   publisher = {Association for Computing Machinery ({ACM})},
   author    = {Sam Lindley and J. Garrett Morris},
   title     = {Talking bananas: structural recursion for session types},
-  booktitle = {Proceedings of the 21st {ACM} {SIGPLAN} International Conference on Functional Programming - {ICFP} 2016}
+  booktitle = {Proc.\ of {ICFP}}
 }
 @article{kokkemontesi19popl,
-  abstract  = {We present Hypersequent Classical Processes (HCP), a revised
-                  interpretation of the "Proofs as Processes" correspondence
-                  between linear logic and the π-calculus initially proposed by
-                  Abramsky [1994], and later developed by Bellin and Scott
-                  [1994], Caires and Pfenning [2010], and Wadler [2014], among
-                  others. HCP mends the discrepancies between linear logic and
-                  the syntax and observable semantics of parallel composition in
-                  the π-calculus, by conservatively extending linear logic to
-                  hyperenvironments (collections of environments, inspired by
-                  the hypersequents by Avron [1991]). Separation of environments
-                  in hyperenvironments is internalised by ⊗ and corresponds to
-                  parallel process behaviour. Thanks to this property, for the
-                  first time we are able to extract a labelled transition system
-                  (lts) semantics from proof rewritings. Leveraging the
-                  information on parallelism at the level of types, we obtain a
-                  logical reconstruction of the delayed actions that Merro and
-                  Sangiorgi [2004] formulated to model non-blocking I/O in the
-                  π-calculus. We define a denotational semantics for processes
-                  based on Brzozowski derivatives, and uncover that
-                  non-interference in HCP corresponds to Fubini’s theorem of
-                  double antiderivation. Having an lts allows us to validate HCP
-                  using the standard toolbox of behavioural theory. We
-                  instantiate bisimilarity and barbed congruence for HCP, and
-                  obtain a full abstraction result: bisimilarity, denotational
-                  equivalence, and barbed congruence coincide.},
   author    = {Wen Kokke and Fabrizio Montesi and Marco Peressotti},
   title     = {Better Late Than Never: A fully-abstract semantics for Classical Processes},
-  journal   = {{Proceedings of the {ACM} on Programming Languages}},
+  journal   = {Proc.\ of {POPL}},
   volume    = 3,
   number    = {{POPL}},
   year      = 2019,
   month     = jan,
 }
 @inproceedings{kokkemontesi19tlla,
-  abstract  = {Process calculi based on logic, such as πDILL and CP, provide a
-                  foundation for deadlock-free concurrent programming. However,
-                  in previous work, there is a mismatch between the rules for
-                  constructing proofs and the term constructors of the
-                  π-calculus: the fundamental operator for parallel composition
-                  does not correspond to any rule of linear logic. Kokke et al.
-                  (2019) introduced Hypersequent Classical Processes (HCP),
-                  which addresses this mismatch using hypersequents (collections
-                  of sequents) to register parallelism in the typing judgements.
-                  However, the step from CP to HCP is a big one. As of yet, HCP
-                  does not have reduction semantics, and the addition of delayed
-                  actions means that CP processes interpreted as HCP processes
-                  do not behave as they would in CP. We introduce HCP-, a
-                  variant of HCP with reduction semantics and without delayed
-                  actions. We prove progress, preservation, and termination, and
-                  show that HCP- supports the same communication protocols as
-                  CP.},
   author    = {Wen Kokke and Fabrizio Montesi and Marco Peressotti},
   title     = {Taking Linear Logic Apart},
   year      = 2019,
   month     = apr,
   editor    = {Ehrhard, Thomas and Fern\'andez, Maribel and Paiva, Valeria de and Tortora de Falco, Lorenzo },
-  booktitle = {{Proceedings Joint International Workshop on}
-                  Linearity \& Trends in Linear Logic and Applications,
-                  {Oxford, UK, 7-8 July 2018}},
-  series    = {Electronic Proceedings in Theoretical Computer Science},
+  booktitle = {Proc.\ of {Linearity \& TLLA}},
+  series    = {{EPTCS}},
   volume    = 292,
   publisher = {Open Publishing Association},
   pages     = {90-103},
-  doi       = {10.4204/EPTCS.292.5},
-  note      = {The EPTCS version has errors, which are fixed here},
 }
 
 @article{gayvasconcelos12,
   author       = {Gay, Simon J. and Vasconcelos, Vasco T.},
   title        = {Linear type theory for asynchronous session types},
-  journal      = {Journal of Functional Programming},
+  journal      = {JFP},
   publisher    = {Cambridge University Press ({CUP})},
   year         = 2012,
   volume       = 20,
   number       = 1,
   pages        = {19--50},
   note         = {Extended version of \cite{gayvasconcelos10}},
-  doi          = {10.1017/s0956796809990268},
 }
+
 @inproceedings{dardhagay18extended,
   author    = {Dardha, Ornela and Gay, Simon J.},
-  booktitle = {21st International Conference on Foundations of Software Science and Computation Structures, {FoSSaCS}},
+  booktitle = {Proc.\ of {FoSSaCS}},
   year      = 2018,
-  note      = {(Extended {V}ersion) \url{http://www.dcs.gla.ac.uk/~ornela/publications/DG18-Extended.pdf}},
-  title     = {A {N}ew {L}inear {L}ogic for {D}eadlock-{F}ree {S}ession {T}yped {P}rocesses},
+  note      = {(Extended {V}ersion)},
+  title     = {A New Linear Logic for Deadlock-Free Session Typed Processes},
 }
 
 @book{girardtaylor89,
@@ -106,9 +59,8 @@
 @inproceedings{cairesperez17,
   author    = {Caires, Lu\`{i}s and P\'{e}rez, Jorge A.},
   publisher = {Springer},
-  booktitle = {ESOP},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2017,
-  doi       = {10.1007/978-3-662-54434-1\_9},
   pages     = {229--259},
   series    = {LNCS},
   title     = {Linearity, Control Effects, and Behavioral Types},
@@ -118,9 +70,8 @@
 @inproceedings{carbonelindley16,
   author    = {Carbone, Marco and Lindley, Sam and Montesi, Fabrizio and Sch\"{u}rmann, Carsten and Wadler, Philip},
   publisher = {Schloss Dagstuhl---Leibniz-Zentrum für Informatik},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2016,
-  doi       = {10.4230/LIPIcs.CONCUR.2016.33},
   pages     = {33:1--33:15},
   series    = {LIPIcs},
   title     = {Coherence Generalises Duality: A Logical Explanation of Multiparty Session Types},
@@ -129,9 +80,8 @@
 
 @inproceedings{lindleymorris15,
   author    = {Lindley, Sam and Morris, J. Garrett},
-  booktitle = {ESOP},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2015,
-  doi       = {10.1007/978-3-662-46669-8\_23},
   pages     = {560--584},
   title     = {A Semantics for Propositions as Sessions},
 }
@@ -139,7 +89,6 @@
 @article{costastirling87,
   author       = {Costa, Gerardo and Stirling, Colin},
   year         = 1987,
-  doi          = {10.1016/0890-5401(87)90013-7},
   journal      = {Inf. Comput.},
   number       = 3,
   pages        = {207--244},
@@ -150,9 +99,8 @@
 @inproceedings{cairespfenning10,
   author    = {Caires, Lu\`{i}s and Pfenning, Frank},
   publisher = {Springer},
-  booktitle = {Proc. of {CONCUR} 2010},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2010,
-  doi       = {10.1007/978-3-642-15375-4\_16},
   pages     = {222--236},
   series    = {LNCS},
   title     = {Session Types as Intuitionistic Linear Propositions},
@@ -162,9 +110,8 @@
 @inproceedings{toninhocaires11,
   author    = {Toninho, Bernardo and Caires, Lu\`{i}s and Pfenning, Frank},
   publisher = {ACM},
-  booktitle = {PPDP},
+  booktitle = {Proc.\ of {PPDP}},
   year      = 2011,
-  doi       = {10.1145/2003476.2003499},
   pages     = {161--172},
   title     = {Dependent session types via intuitionistic linear type theory},
 }
@@ -173,7 +120,6 @@
   author    = {Dardha, Ornela},
   publisher = {Springer / Atlantis Press},
   year      = 2016,
-  doi       = {10.2991/978-94-6239-204-5},
   isbn      = {978-94-6239-203-8},
   series    = {Atlantis Studies in Computing},
   title     = {Type Systems for Distributed Programs: Components and Sessions},
@@ -183,9 +129,8 @@
 @inproceedings{toninhocaires14,
   author    = {Toninho, Bernardo and Caires, Lu\`{i}s and Pfenning, Frank},
   publisher = {Springer},
-  booktitle = {Proc. of {TGC} 2014},
+  booktitle = {Proc.\ of {TGC}},
   year      = 2014,
-  doi       = {10.1007/978-3-662-45917-1\_11},
   pages     = {159--175},
   series    = {LNCS},
   title     = {Corecursion and Non-divergence in Session-Typed Processes},
@@ -195,9 +140,8 @@
 @inproceedings{vieiravasconcelos13,
   author    = {Vieira, Hugo Torres and Vasconcelos, Vasco Thudichum},
   publisher = {Springer},
-  booktitle = {COORDINATION},
+  booktitle = {Proc.\ of {COORDINATION}},
   year      = 2013,
-  doi       = {10.1007/978-3-642-38493-6\_17},
   pages     = {236--250},
   series    = {LNCS},
   title     = {Typing Progress in Communication-Centred Systems},
@@ -213,9 +157,8 @@
 
 @inproceedings{hondatokoro91,
   author    = {Honda, Kohei and Tokoro, Mario},
-  booktitle = {Object-Based Concurrent Computing, ECOOP'91 Workshop, Proceedings},
+  booktitle = {Proc.\ of Object-Based Concurrent Computing},
   year      = 1991,
-  doi       = {10.1007/3-540-55613-3\_2},
   pages     = {21--51},
   title     = {On Asynchronous Communication Semantics},
 }
@@ -235,16 +178,15 @@
 @inproceedings{padovani14,
   author    = {Padovani, Luca},
   publisher = {ACM},
-  booktitle = {CSL-LICS},
+  booktitle = {Proc.\ of {CSL-LICS}},
   year      = 2014,
-  doi       = {10.1145/2603088.2603116},
   pages     = {72:1--72:10},
   title     = {{Deadlock and Lock Freedom in the Linear $\pi$-Calculus}},
 }
 
 @inproceedings{giuntiravara13,
   author    = {Giunti, Marco and Ravara, Ant{ó}nio},
-  booktitle = {TGC},
+  booktitle = {Proc.\ of {TGC}},
   year      = 2013,
   pages     = {136--155},
   title     = {Towards Static Deadlock Resolution in the -Calculus},
@@ -253,16 +195,14 @@
 @article{cairespfenning14,
   author       = {Caires, Luı́s and Pfenning, Frank and Toninho, Bernardo},
   year         = 2014,
-  doi          = {10.1017/S0960129514000218},
   journal      = {MSCS},
   title        = {Linear Logic Propositions as Session Types},
 }
 
 @inproceedings{wadler12,
   author    = {Wadler, Philip},
-  booktitle = {Proc. of {ICFP}'12},
+  booktitle = {Proc.\ of {ICFP}},
   year      = 2012,
-  doi       = {10.1145/2364527.2364568},
   pages     = {273--286},
   title     = {Propositions as sessions},
 }
@@ -275,13 +215,11 @@
   pages        = {75--84},
   title        = {Propositions as types},
   volume       = 58,
-  note         = {Extended version of \cite{wadler12}},
 }
 
 @article{gorla10,
   author       = {Gorla, Daniele},
   year         = 2010,
-  doi          = {10.1016/j.ic.2010.05.002},
   journal      = {Inf. Comput.},
   number       = 9,
   pages        = {1031--1053},
@@ -291,9 +229,8 @@
 
 @inproceedings{dardhaperez15,
   author    = {Dardha, Ornela and P\'{e}rez, Jorge A.},
-  booktitle = {EXPRESS/SOS},
+  booktitle = {Proc.\ of {EXPRESS/SOS}},
   year      = 2015,
-  doi       = {10.4204/EPTCS.190.1},
   pages     = {1--15},
   series    = {EPTCS},
   title     = {Comparing Deadlock-Free Session Typed Processes},
@@ -303,43 +240,34 @@
 @misc{carbonedardha14progress,
   author = {Carbone, Marco and Dardha, Ornela and Montesi, Fabrizio},
   year   = 2014,
-  note   = {\url{http://www.dcs.gla.ac.uk/~ornela/my_papers/CDM-Extended.pdf}},
   title  = {Progress as Compositional Lock-freedom},
-  type   = {Online version.},
 }
 
 @misc{carbonedardha14recursive,
   author = {Dardha, Ornela},
   year   = 2014,
-  note   = {\url{http://www.dcs.gla.ac.uk/~ornela/my_papers/D14-Extended.pdf}},
   title  = {Recursive Session Types Revisited},
-  type   = {Online version.},
 }
 
 @phdthesis{dardha14phd,
   author      = {Dardha, Ornela},
   school      = {University of Bologna},
   year        = 2014,
-  note        = {\url{http://www.dcs.gla.ac.uk/~ornela/my_papers/DardhaPhDThesis.pdf}},
   title       = {Type Systems for Distributed Programs: Components and Sessions},
-  type        = {phdthesis},
 }
 
 @misc{bernardidardha14,
   author       = {Bernardi, Giovanni and Dardha, Ornela and Gay, Simon J. and Kouzapas, Dimitrios},
   year         = 2014,
-  howpublished = {To appear in Proc. of TGC},
-  note         = {\url{http://www.dcs.gla.ac.uk/~ornela/my_papers/BDGK14-Extended.pdf}},
+  howpublished = {Proc.\ of {TGC}},
   title        = {On duality relations for session types},
-  type         = {Online version.},
 }
 
 @inproceedings{carbonedardha14,
   author    = {Carbone, Marco and Dardha, Ornela and Montesi, Fabrizio},
   publisher = {Springer},
-  booktitle = {COORDINATION},
+  booktitle = {Proc.\ of {COORDINATION}},
   year      = 2014,
-  doi       = {10.1007/978-3-662-43376-8\_4},
   pages     = {49--64},
   series    = {LNCS},
   title     = {Progress as Compositional Lock-Freedom},
@@ -348,7 +276,7 @@
 
 @inproceedings{dardhagiachino13,
   author    = {Dardha, Ornela and Giachino, Elena and Lienhardt, Michael},
-  booktitle = {SEFM},
+  booktitle = {Proc.\ of {SEFM}},
   year      = 2013,
   pages     = {167--181},
   title     = {A Type System for Components},
@@ -356,7 +284,7 @@
 
 @inproceedings{dardhagorla13,
   author    = {Dardha, Ornela and Gorla, Daniele and Varacca, Daniele},
-  booktitle = {FMOODS/FORTE},
+  booktitle = {Proc.\ of {FMOODS/FORTE}},
   year      = 2013,
   pages     = {66--82},
   title     = {Semantic Subtyping for Objects and Classes},
@@ -365,18 +293,16 @@
 @inproceedings{dardhagiachino12,
   author    = {Dardha, Ornela and Giachino, Elena and Sangiorgi, Davide},
   publisher = {ACM},
-  booktitle = {PPDP},
+  booktitle = {Proc.\ of {PPDP}},
   year      = 2012,
-  doi       = {10.1145/2370776.2370794},
   pages     = {139--150},
   title     = {Session types revisited},
 }
 
 @inproceedings{dardha14beat,
   author    = {Dardha, Ornela},
-  booktitle = {BEAT},
+  booktitle = {Proc.\ of {BEAT}},
   year      = 2014,
-  doi       = {10.4204/EPTCS.162.4},
   pages     = {27--34},
   series    = {{EPTCS}},
   title     = {Recursive Session Types Revisited},
@@ -404,7 +330,7 @@
   author    = {Vieira, Hugo Torres and Caires, Luı́s and Seco, Jo{ã}o Costa},
   location  = {Heidelberg, Germany},
   publisher = {Springer-Verlag},
-  booktitle = {ESOP'08},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2008,
   pages     = {269--283},
   title     = {The Conversation Calculus: A Model of Service-Oriented Computation},
@@ -415,7 +341,7 @@
   author    = {Caires, Luı́s and Vieira, Hugo Torres},
   location  = {Heidelberg, Germany},
   publisher = {Springer-Verlag},
-  booktitle = {ESOP'09},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2009,
   pages     = {285--300},
   series    = {LNCS},
@@ -445,7 +371,7 @@
 
 @inproceedings{gorla08,
   author    = {Gorla, Daniele},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2008,
   pages     = {492--507},
   title     = {Towards a Unified Approach to Encodability and Separation Results for Process Calculi},
@@ -453,7 +379,7 @@
 
 @inproceedings{carbonemontesi13,
   author    = {Carbone, Marco and Montesi, Fabrizio},
-  booktitle = {POPL},
+  booktitle = {Proc.\ of {POPL}},
   year      = 2013,
   pages     = {263--274},
   title     = {Deadlock-freedom-by-design: multiparty asynchronous global programming},
@@ -461,7 +387,7 @@
 
 @inproceedings{montesicarbone11,
   author    = {Montesi, Fabrizio and Carbone, Marco},
-  booktitle = {ICSOC},
+  booktitle = {Proc.\ of {ICSOC}},
   year      = 2011,
   pages     = {125--141},
   title     = {Programming Services with Correlation Sets},
@@ -469,7 +395,7 @@
 
 @inproceedings{montesiyoshida13,
   author    = {Montesi, Fabrizio and Yoshida, Nobuko},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2013,
   pages     = {425--439},
   title     = {Compositional Choreographies},
@@ -492,7 +418,6 @@
   location     = {Duluth, MN, USA},
   publisher    = {Academic Press, Inc.},
   year         = 2006,
-  doi          = {10.1016/j.ic.2006.03.002},
   issn         = {0890-5401},
   journal      = {Inf. Comput.},
   number       = 7,
@@ -506,31 +431,6 @@
   location     = {New York, NY, USA},
   publisher    = {Cambridge University Press},
   year         = 2006,
-  doi          = {10.1017/S0960129505004810},
-  issn         = {0960-1295},
-  journal      = {Mathematical. Structures in Comp. Sci.},
-  number       = 1,
-  pages        = {1--39},
-  title        = {Termination of processes},
-  volume       = 16,
-}
-
-@article{sangiorgi98,
-  author       = {Sangiorgi, Davide},
-  year         = 1998,
-  journal      = {Inf. Comput.},
-  number       = 1,
-  pages        = {34--73},
-  title        = {An Interpretation of Typed Objects into Typed pi-Calculus},
-  volume       = 143,
-}
-
-@article{yoshidaberger04,
-  author       = {Yoshida, Nobuko and Berger, Martin and Honda, Kohei},
-  location     = {Duluth, MN, USA},
-  publisher    = {Academic Press, Inc.},
-  year         = 2004,
-  doi          = {10.1016/j.ic.2003.08.004},
   issn         = {0890-5401},
   journal      = {Inf. Comput.},
   number       = 2,
@@ -544,7 +444,6 @@
   location     = {New York, NY, USA},
   publisher    = {ACM},
   year         = 1998,
-  doi          = {10.1145/276393.278524},
   issn         = {0164-0925},
   journal      = {ACM Transactions on Programming Languages and Systems},
   number       = 2,
@@ -555,7 +454,7 @@
 
 @inproceedings{kobayashisaito00,
   author    = {Kobayashi, Naoki and Saito, Shin and Sumii, Eijiro},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2000,
   pages     = {489--503},
   title     = {An Implicitly-Typed Deadlock-Free Process Calculus},
@@ -563,13 +462,12 @@
 
 @misc{kobayashi98typical,
   author       = {Kobayashi, Naoki},
-  howpublished = {\url{www-kb.is.s.u-tokyo.ac.jp/~koba/typical}},
   title        = {{TyPiCal}: Type-Based Static Analyzer for the Pi-Calculus},
 }
 
 @inproceedings{kobayashi00,
   author    = {Kobayashi, Naoki},
-  booktitle = {IFIP TCS},
+  booktitle = {Proc.\ of {IFIP TCS}},
   year      = 2000,
   pages     = {365--389},
   title     = {Type Systems for Concurrent Processes: From Deadlock-Freedom to Livelock-Freedom, Time-Boundedness},
@@ -578,7 +476,6 @@
 @article{kobayashi02infcom,
   author       = {Kobayashi, Naoki},
   year         = 2002,
-  doi          = {10.1006/inco.2002.3171},
   journal      = {Information and Computation},
   number       = 2,
   pages        = {122--159},
@@ -598,7 +495,7 @@
 @inproceedings{kobayashi06,
   author    = {Kobayashi, Naoki},
   publisher = {Springer},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2006,
   pages     = {233--247},
   series    = {LNCS},
@@ -609,9 +506,8 @@
 @inproceedings{giachinokobayashi14,
   author    = {Giachino, Elena and Kobayashi, Naoki and Laneve, Cosimo},
   publisher = {Springer},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2014,
-  doi       = {10.1007/978-3-662-44584-6\_6},
   pages     = {63--77},
   series    = {LNCS},
   title     = {Deadlock Analysis of Unbounded Process Networks},
@@ -628,18 +524,10 @@
   volume       = 42,
 }
 
-@inproceedings{kobayashi02unuiist,
-  author    = {Kobayashi, Naoki},
-  booktitle = {10th Anniversary Colloquium of UNU/IIST},
-  year      = 2002,
-  pages     = {439--453},
-  title     = {Type Systems for Concurrent Programs},
-}
-
 @unpublished{kobayashi07,
   author = {Kobayashi, Naoki},
   year   = 2007,
-  note   = {Extended version of \cite{kobayashi02}, Tohoku University},
+  note   = {Extended version of \cite{kobayashi02}},
   title  = {Type Systems for Concurrent Programs},
 }
 
@@ -647,7 +535,7 @@
   author    = {Igarashi, Atsushi and Kobayashi, Naoki},
   location  = {New York, NY, USA},
   publisher = {ACM Press},
-  booktitle = {Proc. of the 28th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (POPL'01)},
+  booktitle = {Proc.\ of {POPL}},
   year      = 2001,
   pages     = {128--141},
   title     = {A Generic Type System for the Pi-Calculus},
@@ -656,28 +544,16 @@
 
 @inproceedings{kobayashi02,
   author    = {Kobayashi, Naoki},
-  booktitle = {10th Anniversary Colloquium of UNU/IIST},
+  booktitle = {Proc.\ of {UNU/IIST}},
   year      = 2002,
   pages     = {439--453},
   title     = {Type Systems for Concurrent Programs},
 }
 
-@inproceedings{kobayashi03,
-  author    = {Kobayashi, Naoki},
-  publisher = {Springer},
-  booktitle = {Formal Methods at the Crossroads},
-  year      = 2003,
-  doi       = {10.1007/978-3-540-40007-3\_26},
-  pages     = {439--453},
-  series    = {LNCS},
-  title     = {Type Systems for Concurrent Programs},
-  volume    = 2757,
-}
-
 @inproceedings{padovani13,
   author    = {Padovani, Luca},
   title     = {From Lock Freedom to Progress Using Session Types},
-  booktitle = {PLACES},
+  booktitle = {Proc.\ of {PLACES}},
   year      = 2013,
   pages     = {3--19},
   volume    = 137,
@@ -688,7 +564,6 @@
   author       = {Palamidessi, Catuscia and Valencia, Frank, D.},
   publisher    = {ENTCS},
   year         = 2005,
-  file         = {http://hal.inria.fr/inria-00201158/PDF/recrep.pdf},
   journal      = {Bulletin of the European Association for Theoretical Computer Science},
   pages        = {105--125},
   title        = {Recursion vs Replication in Process Calculi: Expressiveness},
@@ -697,7 +572,7 @@
 
 @inproceedings{montesisangiorgi10,
   author    = {Montesi, Fabrizio and Sangiorgi, Davide},
-  booktitle = {TGC},
+  booktitle = {Proc.\ of {TGC}},
   year      = 2010,
   pages     = {153--171},
   title     = {A Model of Evolvable Components},
@@ -705,9 +580,8 @@
 
 @inproceedings{carbonedebois10,
   author    = {Carbone, Marco and Debois, S{ø}ren},
-  booktitle = {Proc. of {ICE} 2010, Amsterdam, The Netherlands, 10th of June 2010.},
+  booktitle = {Proc.\ of {ICE}},
   year      = 2010,
-  doi       = {10.4204/EPTCS.38.4},
   pages     = {13--27},
   series    = {{EPTCS}},
   title     = {A Graphical Approach to Progress for Structured Communication in Web Services},
@@ -717,7 +591,7 @@
 @inproceedings{hondayoshida08,
   author    = {Honda, Kohei and Yoshida, Nobuko and Carbone, Marco},
   publisher = {ACM},
-  booktitle = {Proc. of POPL},
+  booktitle = {Proc.\ of {POPL}},
   year      = 2008,
   pages     = {273--284},
   title     = {Multiparty asynchronous session types},
@@ -726,7 +600,7 @@
 
 @inproceedings{demangeonhonda11,
   author    = {Demangeon, Romain and Honda, Kohei},
-  booktitle = {CONCUR'11},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2011,
   pages     = {280--296},
   title     = {Full Abstraction in a Subtyped pi-Calculus with Linear Types},
@@ -734,7 +608,7 @@
 
 @inproceedings{dezani-ciancaglinigiachino06,
   author    = {Dezani-Ciancaglini, Mariangiola and Giachino, Elena and Drossopoulou, Sophia and Yoshida, Nobuko},
-  booktitle = {FMCO},
+  booktitle = {Proc.\ of {FMCO}},
   year      = 2006,
   pages     = {207--245},
   title     = {Bounded Session Types for Object Oriented Languages},
@@ -742,7 +616,7 @@
 
 @inproceedings{dezani-ciancagliniyoshida05,
   author    = {Dezani-Ciancaglini, Mariangiola and Yoshida, Nobuko and Ahern, Alexander and Drossopoulou, Sophia},
-  booktitle = {TGC},
+  booktitle = {Proc.\ of {TGC}},
   year      = 2005,
   pages     = {299--318},
   title     = {A Distributed Object-Oriented Language with Session Types},
@@ -761,7 +635,7 @@
 @inproceedings{bettinicoppo08,
   author    = {Bettini, Lorenzo and Coppo, Mario and D'Antoni, Loris and Luca, Marco De and Dezani-Ciancaglini, Mariangiola and Yoshida, Nobuko},
   publisher = {Springer},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2008,
   pages     = {418--433},
   series    = {LNCS},
@@ -772,16 +646,14 @@
 @misc{coppodezani-ciancaglini08,
   author = {Coppo, Mario and Dezani-Ciancaglini, Mariangiola and Yoshida, Nobuko},
   year   = 2008,
-  note   = {\url{http://www.di.unito.it/~dezani/papers/cdy12.pdf}},
   title  = {Global Progress for Dynamically Interleaved Multiparty Sessions (Long Version)},
 }
 
 @inproceedings{coppodezani-ciancaglini07,
   author    = {Coppo, Mario and Dezani-Ciancaglini, Mariangiola and Yoshida, Nobuko},
   publisher = {Springer},
-  booktitle = {Proceedings of the 9th International Conference on Formal Methods for Open Object-Based Distributed Systems (FMOODS)},
+  booktitle = {Proc.\ of {FMOODS}},
   year      = 2007,
-  doi       = {10.1007/978-3-540-72952-5\_1},
   pages     = {1--31},
   series    = {Lecture Notes in Computer Science},
   title     = {Asynchronous Session Types and Progress for Object-Oriented Languages},
@@ -791,9 +663,8 @@
 @inproceedings{dezani-ciancagliniliguoro09progress,
   author    = {Dezani-Ciancaglini, Mariangiola and de'Liguoro, Ugo and Yoshida, Nobuko},
   publisher = {Springer},
-  booktitle = {TGC},
+  booktitle = {Proc.\ of {TGC}},
   year      = 2009,
-  doi       = {10.1007/978-3-540-78663-4\_18},
   pages     = {257--275},
   series    = {LNCS},
   title     = {On Progress for Structured Communications},
@@ -802,16 +673,15 @@
 
 @inproceedings{mostrousyoshida07,
   author    = {Mostrous, Dimitris and Yoshida, Nobuko},
-  booktitle = {TLCA},
+  booktitle = {Proc.\ of {TLCA}},
   year      = 2007,
   pages     = {321--335},
   title     = {Two Session Typing Systems for Higher-Order Mobile Processes},
 }
 
 @article{gayvasconcelos12infcom,
-  author       = {Vasconcelos, Vasco T.},
+  author       = {Vasconcelos, Vasco},
   year         = 2012,
-  doi          = {10.1016/j.ic.2012.05.002},
   journal      = {Inf. Comput.},
   pages        = {52--70},
   title        = {Fundamentals of session types},
@@ -819,8 +689,8 @@
 }
 
 @inproceedings{vasconcelos09,
-  author    = {Vasconcelos, Vasco Thudichum},
-  booktitle = {SFM},
+  author    = {Vasconcelos, Vasco},
+  booktitle = {Proc.\ of {SFM}},
   year      = 2009,
   pages     = {158--186},
   title     = {Fundamentals of Session Types},
@@ -829,7 +699,7 @@
 @inproceedings{takeuchihonda94,
   author    = {Takeuchi, Kaku and Honda, Kohei and Kubo, Makoto},
   publisher = {Springer},
-  booktitle = {PARLE '94},
+  booktitle = {Proc.\ of {PARLE}},
   year      = 1994,
   pages     = {398--413},
   series    = {LNCS},
@@ -840,7 +710,7 @@
 @inproceedings{denielouyoshida11,
   author    = {Deni\'{e}lou, Pierre-Malo and Yoshida, Nobuko},
   publisher = {ACM},
-  booktitle = {Proc. of POPL},
+  booktitle = {Proc.\ of {POPL}},
   year      = 2011,
   pages     = {435--446},
   title     = {Dynamic multirole session types},
@@ -860,7 +730,7 @@
   author    = {Dezani-Ciancaglini, Mariangiola and de' Liguoro, Ugo},
   location  = {Heidelberg, Germany},
   publisher = {springer},
-  booktitle = {Proc. of the 6th International Workshop on Web Service and Formal Methods (WS-FM'09)},
+  booktitle = {Proc.\ of {WS-FM}},
   year      = 2009,
   series    = {LNCS},
   title     = {Sessions and Session Types: an Overview},
@@ -869,7 +739,7 @@
 @inproceedings{dezani-ciancaglinimostrous06,
   author    = {Dezani-Ciancaglini, Mariangiola and Mostrous, Dimitris and Yoshida, Nobuko and Drossopoulou, Sophia},
   publisher = {Springer},
-  booktitle = {ECOOP},
+  booktitle = {Proc.\ of {ECOOP}},
   year      = 2006,
   pages     = {328--352},
   series    = {LNCS},
@@ -881,7 +751,7 @@
   author    = {Carbone, Marco and Honda, Kohei and Yoshida, Nobuko},
   location  = {Heidelberg, Germany},
   publisher = {Springer},
-  booktitle = {Proc. of ESOP},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2007,
   pages     = {2--17},
   series    = {LNCS},
@@ -892,9 +762,8 @@
 @inproceedings{hondavasconcelos98,
   author    = {Honda, Kohei and Vasconcelos, Vasco Thudichum and Kubo, Makoto},
   publisher = {Springer},
-  booktitle = {ESOP},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 1998,
-  doi       = {10.1007/BFb0053567},
   pages     = {122--138},
   series    = {LNCS},
   title     = {Language Primitives and Type Discipline for Structured Communication-Based Programming},
@@ -904,9 +773,8 @@
 @inproceedings{honda93,
   author    = {Honda, Kohei},
   publisher = {Springer},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 1993,
-  doi       = {10.1007/3-540-57208-2\_35},
   pages     = {509--523},
   series    = {LNCS},
   title     = {Types for Dyadic Interaction},
@@ -917,7 +785,7 @@
   author    = {Vasconcelos, Vasco and Ravara, Ant{ó}nio and Gay, Simon J.},
   location  = {Heidelberg, Germany},
   publisher = {springer},
-  booktitle = {Proc. of the 15th International Conference on Concurrency Theory (CONCUR)},
+  booktitle = {Proc.\ of {CONCUR}},
   year      = 2004,
   pages     = {497--511},
   series    = {LNCS},
@@ -949,7 +817,7 @@
   author    = {Vasconcelos, Vasco},
   location  = {Heidelberg, Germany},
   publisher = {springer},
-  booktitle = {Proc. of ECOOP'94},
+  booktitle = {Proc.\ of {ECOOP}},
   year      = {1994-07},
   pages     = {100--117},
   series    = {LNCS},
@@ -959,7 +827,7 @@
 
 @inproceedings{perezcaires12,
   author    = {P\'{e}rez, Jorge A. and Caires, Luı́s and Pfenning, Frank and Toninho, Bernardo},
-  booktitle = {ESOP'12},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2012,
   pages     = {539--558},
   title     = {Linear Logical Relations for Session-Based Concurrency},
@@ -987,7 +855,7 @@
 
 @inproceedings{gaygesbert08,
   author    = {Gay, Simon J. and Gesbert, Nils and Ravara, António},
-  booktitle = {PLACES'08},
+  booktitle = {Proc.\ of {PLACES}},
   year      = 2008,
   title     = {Session types as generic process types},
 }
@@ -1012,7 +880,7 @@
 
 @inproceedings{piercesangiorgi93,
   author    = {Pierce, Benjamin C. and Sangiorgi, Davide},
-  booktitle = {LICS'93},
+  booktitle = {Proc.\ of {LICS}},
   year      = 1993,
   pages     = {376--385},
   title     = {Typing and Subtyping for Mobile Processes},
@@ -1022,7 +890,7 @@
   author    = {Kobayashi, Naoki and Pierce, Benjamin and Turner, David},
   location  = {New York, NY, USA},
   publisher = {ACM Press},
-  booktitle = {POPL},
+  booktitle = {Proc.\ of {POPL}},
   year      = 1996,
   pages     = {358--371},
   title     = {Linear Types and $\pi$-calculus},
@@ -1128,7 +996,6 @@
 
 @misc{oasis,
   author       = {OASIS},
-  howpublished = {\url{http://docs.oasis-open.org/wsbpel/2.0/wsbpel-v2.0.html}},
   title        = {{W}eb {S}ervices {B}usiness {P}rocess {E}xecution {L}anguage},
 }
 
@@ -1140,7 +1007,7 @@
 
 @inproceedings{clarkepotter98,
   author    = {Clarke, David G. and Potter, John and Noble, James},
-  booktitle = {OOPSLA},
+  booktitle = {Proc.\ of {OOPSLA}},
   year      = 1998,
   pages     = {48--64},
   title     = {Ownership Types for Flexible Alias Protection},
@@ -1149,7 +1016,7 @@
 @inproceedings{boerclarke07,
   author    = {Boer, Frank S. De and Clarke, Dave and Johnsen, Einar Broch},
   publisher = {Springer-Verlag},
-  booktitle = {Proc. 16th European Symposium on Programming (ESOP’07), volume 4421 of LNCS},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2007,
   pages     = {316--330},
   title     = {A complete guide to the future},
@@ -1185,7 +1052,7 @@
   author    = {Lienhardt, Micha\"{e}l and Lanese, Ivan and Bravetti, Mario and Sangiorgi, Davide and Zavattaro, Gianluigi and Welsch, Yannick and Sch\"{a}fer, Jan and Poetzsch-Heffter, Arnd},
   location  = {Berlin, Heidelberg},
   publisher = {Springer-Verlag},
-  booktitle = {Proceedings of the 9th international conference on Formal Methods for Components and Objects},
+  booktitle = {Proc.\ of {FMCO}},
   year      = 2011,
   pages     = {165--183},
   series    = {FMCO},
@@ -1204,7 +1071,7 @@
 
 @inproceedings{welcjagannathan05,
   author    = {Welc, Adam and Jagannathan, Suresh and Hosking, Antony L.},
-  booktitle = {OOPSLA},
+  booktitle = {Proc.\ of {OOPSLA}},
   year      = 2005,
   pages     = {439--453},
   title     = {Safe futures for Java},
@@ -1220,11 +1087,11 @@
   volume       = 365,
 }
 
-@inproceedings{sch\aferpoetzsch-heffter10,
+@inproceedings{schaferpoetzsch-heffter10,
   author    = {Sch\"{a}fer, Jan and Poetzsch-Heffter, Arnd},
   location  = {Berlin, Heidelberg},
   publisher = {Springer-Verlag},
-  booktitle = {Proceedings of the 24th European conference on Object-oriented programming},
+  booktitle = {Proc.\ of {ECOOP}},
   year      = 2010,
   pages     = {275--299},
   series    = {ECOOP},
@@ -1245,7 +1112,7 @@
 
 @inproceedings{blasiofisher96,
   author    = {Blasio, Paolo Di and Fisher, Kathleen},
-  booktitle = {CONCUR},
+  booktitle = {Proc.\ of CONCUR},
   year      = 1996,
   pages     = {655--670},
   title     = {A Calculus for Concurrent Objects},
@@ -1274,7 +1141,7 @@
   author    = {Lucassen, J. M. and Gifford, D. K.},
   location  = {New York, NY, USA},
   publisher = {ACM},
-  booktitle = {Proceedings of the 15th ACM SIGPLAN-SIGACT symposium on Principles of programming languages},
+  booktitle = {Proc.\ of {POPL}},
   year      = 1988,
   pages     = {47--57},
   series    = {POPL},
@@ -1325,7 +1192,7 @@
 
 @inproceedings{welschschafer11,
   author    = {Welsch, Yannick and Sch\"{a}fer, Jan},
-  booktitle = {TOOLS (49)},
+  booktitle = {Proc.\ of {TOOLS}},
   year      = 2011,
   pages     = {194--210},
   title     = {Location Types for Safe Distributed Object-Oriented Programming},
@@ -1333,7 +1200,7 @@
 
 @inproceedings{giachinograzia13,
   author    = {Giachino, Elena and Grazia, Carlo A. and Laneve, Cosimo and Lienhardt, Michael and Wong, Peter Y. H.},
-  booktitle = {IFM},
+  booktitle = {Proc.\ of {IFM}},
   year      = 2013,
   pages     = {394--411},
   title     = {Deadlock Analysis of Concurrent Objects: Theory and Practice},
@@ -1342,13 +1209,13 @@
 @unpublished{giachinolascu12,
   author = {Giachino, Elena and Lascu, Tudor A.},
   year   = 2012,
-  note   = {Presented at {\em ICTCS}. Available at \url{http://www.cs.unibo.it/~giachino/}},
+  note   = {Presented at {\em ICTCS}},
   title  = {{Lock Analysis for an Asynchronous Object Calculus}},
 }
 
 @inproceedings{lienhardtbravetti12,
   author    = {Lienhardt, Michael and Bravetti, Mario and Sangiorgi, Davide},
-  booktitle = {ISoLA (1)},
+  booktitle = {Proc.\ of {ISoLA}},
   year      = 2012,
   pages     = {64--78},
   title     = {An Object Group-Based Component Model},
@@ -1357,7 +1224,7 @@
 @incollection{johnsenhahnle12,
   author    = {Johnsen, Einar and H\"{a}hnle, Reiner and Sch\"{a}fer, Jan and Schlatte, Rudolf and Steffen, Martin},
   publisher = {Springer-Verlag},
-  booktitle = {FMCO'10},
+  booktitle = {Proc.\ of {FMCO}},
   year      = 2012,
   pages     = {142--164},
   series    = {LNCS},
@@ -1367,7 +1234,7 @@
 
 @inproceedings{albertflores-montoya12,
   author    = {Albert, Elvira and Flores-Montoya, Antonio and Genaim, Samir},
-  booktitle = {FMOODS/FORTE},
+  booktitle = {Proc.\ of {FMOODS/FORTE}},
   year      = 2012,
   pages     = {35--51},
   title     = {Analysis of May-Happen-in-Parallel in Concurrent Objects},
@@ -1393,7 +1260,7 @@
 
 @inproceedings{coulsonblair04,
   author    = {Coulson, Geoff and Blair, Gordon and Grace, Paul and Joolia, Ackbar and Lee, Kevin and Ueyama, Jo},
-  booktitle = {In Proc. IASTED Software Engineering and Applications (SEA’04)},
+  booktitle = {Proc.\ of {SEA}},
   year      = 2004,
   title     = {A Component Model for Building Systems Software},
 }
@@ -1402,7 +1269,7 @@
   author    = {Batista, Thais and Joolia, Ackbar and Coulson, Geoff},
   location  = {Berlin, Heidelberg},
   publisher = {Springer-Verlag},
-  booktitle = {Proceedings of the 2nd European conference on Software Architecture},
+  booktitle = {Proc.\ of {ECSA}},
   year      = 2005,
   pages     = {1--17},
   series    = {EWSA'05},
@@ -1413,7 +1280,7 @@
   author    = {Lienhardt, Michael and Schmitt, Alan and Stefani, Jean-Bernard},
   location  = {New York, NY, USA},
   publisher = {ACM},
-  booktitle = {Proceedings of the 6th international conference on Generative programming and component engineering},
+  booktitle = {Proc.\ of {GPCE}},
   year      = 2007,
   pages     = {43--52},
   series    = {GPCE '07},
@@ -1457,7 +1324,7 @@
 
 @inproceedings{malayerialdrich08,
   author    = {Malayeri, Donna and Aldrich, Jonathan},
-  booktitle = {ECOOP},
+  booktitle = {Proc.\ of {ECOOP}},
   year      = 2008,
   pages     = {260--284},
   title     = {Integrating Nominal and Structural Subtyping},
@@ -1465,7 +1332,7 @@
 
 @inproceedings{malayerialdrich09,
   author    = {Malayeri, Donna and Aldrich, Jonathan},
-  booktitle = {ESOP},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2009,
   pages     = {95--111},
   title     = {Is Structural Subtyping Useful? An Empirical Study},
@@ -1483,7 +1350,7 @@
 
 @inproceedings{findlerflatt04,
   author    = {Findler, Robert Bruce and Flatt, Matthew and Felleisen, Matthias},
-  booktitle = {ECOOP},
+  booktitle = {Proc.\ of {ECOOP}},
   year      = 2004,
   pages     = {364--388},
   title     = {Semantic Casts: Contracts and Structural Subtyping in a Nominal World},
@@ -1492,7 +1359,7 @@
 @inproceedings{mirandapinto01,
   author    = {Miranda, Hugo and Pinto, Alexandre S. and Rodrigues, Luis},
   publisher = {IEEE Computer Society},
-  booktitle = {21st International Conference on Distributed Computing Systems (ICDCS 2001)},
+  booktitle = {Proc.\ of {ICDCS}},
   year      = 2001,
   title     = {Appia: A Flexible Protocol Kernel Supporting Multiple Coordinated Channels},
 }
@@ -1518,7 +1385,7 @@
 @inproceedings{abramskygay96,
   author    = {Abramsky, Samson and Gay, Simon J. and Nagarajan, Rajagopal},
   editor    = {Broy, Manfred},
-  booktitle = {Proceedings of the {NATO} Advanced Study Institute on Deductive Program Design},
+  booktitle = {Proc.\ of {NATO ASI}},
   year      = 1996,
   pages     = {35--113},
   title     = {Interaction categories and the foundations of typed concurrent programming},
@@ -1527,9 +1394,8 @@
 @inproceedings{abramskygay97,
   author    = {Abramsky, Samson and Gay, Simon J. and Nagarajan, Rajagopal},
   publisher = {Springer},
-  booktitle = {TACS},
+  booktitle = {Proc.\ of {TACS}},
   year      = 1997,
-  doi       = {10.1007/BFb0014557},
   pages     = {295--320},
   series    = {LNCS},
   title     = {A Type-Theoretic Approach to Deadlock-Freedom of Asynchronous Systems},
@@ -1539,7 +1405,6 @@
 @article{abramskygay99,
   author       = {Abramsky, Samson and Gay, Simon J. and Nagarajan, Rajagopal},
   year         = 1999,
-  doi          = {10.1016/S0304-3975(98)00189-3},
   journal      = {Theoretical Computer Science},
   number       = {1--2},
   pages        = {1--53},
@@ -1571,7 +1436,6 @@
   author      = {Barber, Andrew},
   institution = {University of Edinburgh},
   year        = 1996,
-  note        = {\url{www.lfcs.inf.ed.ac.uk/reports/96/ECS-LFCS-96-347}},
   number      = {ECS-LFCS-96-347},
   title       = {Dual Intuitionistic Linear Logic},
   type        = {techreport},
@@ -1580,7 +1444,6 @@
 @article{gaynagarajan03,
   author       = {Gay, Simon J. and Nagarajan, Rajagopal},
   year         = 2003,
-  doi          = {10.1007/s00165-003-0018-1},
   journal      = {Formal Aspects of Computing},
   number       = 4,
   pages        = {299--318},
@@ -1590,9 +1453,8 @@
 
 @inproceedings{wadge79,
   author    = {Wadge, William W.},
-  booktitle = {Proceedings of the International Symposium on Semantics of Concurrent Computation},
+  booktitle = {Proc.\ of {SCC}},
   year      = 1979,
-  doi       = {10.1007/BFb0022475},
   pages     = {285--299},
   title     = {An Extensional Treatment of Dataflow Deadlock},
 }
@@ -1609,8 +1471,7 @@
 @article{balzerpfenning17,
   author       = {Balzer, Stephanie and Pfenning, Frank},
   year         = 2017,
-  doi          = {10.1145/3110281},
-  journal      = {Proceedings of the ACM on Programming Languages},
+  journal      = {Proc.\ of the ACM on Programming Languages},
   number       = {{ICFP}},
   pages        = {37:1--37:29},
   title        = {Manifest sharing with session types},
@@ -1620,9 +1481,8 @@
 @inproceedings{balzertoninho19,
   author    = {Balzer, Stephanie and Toninho, Bernardo and Pfenning, Frank},
   publisher = {Springer},
-  booktitle = {Proceedings or the 28th European Symposium on Programming,{ESOP}},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2019,
-  doi       = {10.1007/978-3-030-17184-1\_22},
   pages     = {611--639},
   series    = {Lecture Notes in Computer Science},
   title     = {Manifest Deadlock-Freedom for Shared Session Types},
@@ -1632,9 +1492,8 @@
 @inproceedings{atkeylindley16,
   author    = {Atkey, Robert and Lindley, Sam and Morris, J. Garrett},
   publisher = {Springer},
-  booktitle = {A List of Successes That Can Change the World---Essays Dedicated to Philip Wadler on the Occasion of His 60th Birthday},
+  booktitle = {A List of Successes That Can Change the World},
   year      = 2016,
-  doi       = {10.1007/978-3-319-30936-1\_2},
   pages     = {32--55},
   series    = {LNCS},
   title     = {Conflation Confers Concurrency},
@@ -1644,9 +1503,8 @@
 @inproceedings{dardhagay18,
   author    = {Dardha, Ornela and Gay, Simon J.},
   publisher = {Springer},
-  booktitle = {Proceedings of the 21st International Conference on Foundations of Software Science and Computation Structures (FOSSACS)},
+  booktitle = {Proc.\ of {FoSSaCS}},
   year      = 2018,
-  doi       = {10.1007/978-3-319-89366-2\_5},
   pages     = {91--109},
   series    = {LNCS},
   title     = {A New Linear Logic for Deadlock-Free Session-Typed Processes},
@@ -1656,9 +1514,8 @@
 @inproceedings{cairesperez17,
   author    = {Caires, Lu\`{i}s and P\'{e}rez, Jorge A.},
   publisher = {Springer},
-  booktitle = {Proceedings of the 26th European Symposium on Programming (ESOP)},
+  booktitle = {Proc.\ of {ESOP}},
   year      = 2017,
-  doi       = {10.1007/978-3-662-54434-1\_9},
   pages     = {229--259},
   series    = {LNCS},
   title     = {Linearity, Control Effects, and Behavioral Types},
@@ -1668,9 +1525,8 @@
 @inproceedings{padovaninovara15,
   author    = {Padovani, Luca and Novara, Luca},
   publisher = {Springer},
-  booktitle = {Proceedings of the IFIP International Conference on Formal Methods and Techniques (FORTE)},
+  booktitle = {Proc.\ of {FORTE}},
   year      = 2015,
-  doi       = {10.1007/978-3-319-19195-9\_1},
   pages     = {3--18},
   series    = {LNCS},
   title     = {{Types for Deadlock-Free Higher-Order Programs}},
@@ -1678,19 +1534,13 @@
 }
 
 @inproceedings{toninhocaires12,
-  author    = {Bernardo Toninho and
-               Lu{\'{\i}}s Caires and
-               Frank Pfenning},
+  author    = {Bernardo Toninho and Lu{\'{\i}}s Caires and Frank Pfenning},
   title     = {Functions as Session-Typed Processes},
-  booktitle = {FProceedings of the 15th
-               International Conference on Foundations of Software Science and Computation Structures, {FOSSACS}},
+  booktitle = {Proc.\ of {FoSSaCS}},
   series    = {LNCS},
   volume    = {7213},
   pages     = {346--360},
   publisher = {Springer},
   year      = {2012},
-  doi       = {10.1007/978-3-642-28729-9\_23},
   timestamp = {Tue, 14 May 2019 10:00:55 +0200},
-  biburl    = {https://dblp.org/rec/conf/fossacs/ToninhoCP12.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
