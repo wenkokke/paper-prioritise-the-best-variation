@@ -166,8 +166,7 @@ We use syntactic sugar to make terms more readable: we write $\tm{\andthen{M}{N}
 % We recover $\tm{\fork}$ as $\tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}$.
 
 \subsubsection*{Internal and External Choice}
-\todo{You might want to clarify (repeat) that external choice can be modeled by sum type communication only because the language uses linear channels.}
-\todo{We also might want to emphasise that the modelling of choice in GV by~\cite{lindleymorris15} is unsound.}
+\todo{You might want to clarify (repeat) that external choice can be modeled by sum type communication only because the language uses linear channels. (We also might want to emphasise that the modelling of choice in GV by~\cite{lindleymorris15} is unsound.)}
 Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
 \[
 \begin{array}{lcl}
