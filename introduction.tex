@@ -3,10 +3,10 @@
 
 \begin{document}
 \section{Introduction}
-\todo{The first three sentences of the introduction are too general to motivate the paper and feel a bit out of place. Consider removing them.}
-Communication and concurrency are at the basis of our modern society. Every service or device we interact with, from smart phones, to health monitors or any other IoT device, relies on communication. Hence, verification of communication in concurrent settings is important for our own safety. Session types are a type formalism which can be used to specify and verify communication protocols between two or more communicating agents~\cite{honda93,takeuchihonda94,hondavasconcelos98,carbonehonda07}.
+Session types are a type formalism which can be used to specify and verify communication protocols between two or more communicating agents~\cite{honda93,takeuchihonda94,hondavasconcelos98,carbonehonda07}.
 \todo{These two settings are very different. The $\pi$-calculus is a mobile process algebra preceding inside which session types were developed and GV is an ad-hoc calculus made to demonstrate how propositions can be used as types.}
-Session types have been studied for many programming paradigms, but to date the most successful settings remain the $\pi$-calculus~\cite{sangiorgiwalker01}---a process calculus for communication and concurrency, and Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus.
+Session types have been studied for many programming paradigms, including concurrent and functional paradigms. Most notably, they have been defined for the $\pi$-calculus~\cite{sangiorgiwalker01}---a process calculus for communication and concurrency, and for Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus.
+
 Session-typed concurrent $\lambda$-calculus and $\pi$-calculus satisfy communication safety and session fidelity, namely that communication proceeds without any type mismatch of the data being transmitted and follows the predefined protocol specified by a session type.
 Another key property in a concurrent setting is deadlock freedom, stating that agents communicate without getting stuck in cyclic dependencies. Unfortunately, deadlock freedom is a more involving property and session types alone are not enough to rule out deadlocks in cyclic structures of multiple interleaved sessions. Several techniques have been developed to address deadlock freedom in the $\pi$-calculus and concurrent $\lambda$-calculus with session types.
 
@@ -16,16 +16,29 @@ With regards to GV, the original work on session types in GV~\cite{gayvasconcelo
 Moreover, the benefit of working with GV over other session-typed functional languages is that GV has strong ties to linear logic, via its relation to CP~\cite{wadler12}, and consequently it has strong formal properties, \eg deadlock freedom, albeit in a restrictive way.
 Following the above observations, we aim to further investigate GV and deadlock freedom, and thus we pose our research question:
 
-\emph{Can we design a more expressive GV where deadlock freedom is guaranteed by design and communication structures are not limited to trees?}
+\textbf{RQ:} \emph{Can we design a more expressive GV where deadlock freedom is guaranteed by design and communication structures are not limited to trees?}
 
 We address this research question by following the line of work from CP to Priority CP, and present
 Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning and restores deadlock freedom by adding priorities. This work closes the circle of the strong connection of CP and GV, together with their priority versions, PCP and PGV.
 
 In this paper we make the following contributions:
-\begin{itemize}
-\item \emph{Priority GV.} We present Priority GV (PGV) in~\cref{sec:pgv}, and prove subject reduction (\cref{thm:pgv-subject-reduction-confs}) and progress (\cref{thm:pgv-closed-progress-confs}). Unlike  previous work on GV, structural congruence and reduction are type preserving in PGV.
-\item \emph{Milner's Cyclic Scheduler.} To illustrate newfound expressiveness of PGV, we present Milner's Cyclic Scheduler~\cite{milner89} (\cref{sec:pgv-example}).
-\item \emph{Updated Priority CP.} We present an updated version of Priority CP~\cite{dardhagay18} in \cref{sec:pcp}. We remove commuting conversions and move away from reduction as cut elimination, towards reduction based on structural congruence, as in process calculi. We present Milner's Cyclic Scheduler in PCP (\cref{sec:pcp-example}).
-\item \emph{Translation from PCP to PGV.} We present a translation from PCP to PGV in~\cref{sec:pcp} and prove that it preserves typing (\cref{thm:pcp-to-pgv-confs-preservation}) and satisfies operational correspondence (\cref{thm:pcp-to-pgv-operational-correspondence-soundness,thm:pcp-to-pgv-operational-correspondence-completeness}). Finally, the scheduler in PCP (\cref{sec:pcp-example}) translates to the scheduler in PGV (\cref{sec:pgv-example}).
-\end{itemize}
+\begin{enumerate}
+\item
+\textbf{Priority GV}. We present Priority GV (PGV) in~\cref{sec:pgv}, and prove subject reduction (\cref{thm:pgv-subject-reduction-confs}) and progress (\cref{thm:pgv-closed-progress-confs}).
+PGV is the \emph{first} session-typed functional language with priorities \emph{and} strong ties to linear logic via its correspondence with PCP and its relation to the CP and GV languages.
+To illustrate newfound expressiveness of PGV, we present Milner's Cyclic Scheduler~\cite{milner89} (\cref{sec:pgv-example}) as well as other examples.
+
+
+ \item
+ \textbf{Solving GV problems}. PGV addresses several problems in the original GV language, most notably:
+ 	\begin{enumerate}
+	\item our version does not have the pseudo-type $S^\sharp$;
+	\item our structural congruence is type preserving.
+	\end{enumerate}
+\item
+\textbf{Updated Priority CP.} We present an updated version of Priority CP~\cite{dardhagay18} in \cref{sec:pcp}. We remove commuting conversions and move away from reduction as cut elimination, towards reduction based on structural congruence, as in process calculi. We present Milner's Cyclic Scheduler in PCP (\cref{sec:pcp-example}).
+
+\item
+\textbf{Connection to linear logic}. The connection of PGV to logic is given via a sound and complete encoding of PCP to PGV in~\cref{sec:pcp} and prove that it preserves typing (\cref{thm:pcp-to-pgv-confs-preservation}) and satisfies operational correspondence (\cref{thm:pcp-to-pgv-operational-correspondence-soundness,thm:pcp-to-pgv-operational-correspondence-completeness}).  We showcase it with the encoding of cyclic scheduler to PGV (\cref{sec:pgv-example}).
+\end{enumerate}
 \end{document}
