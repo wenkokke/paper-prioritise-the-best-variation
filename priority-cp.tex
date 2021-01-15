@@ -5,9 +5,8 @@
 
 \section{Relation to Priority CP}\label{sec:pcp}
 
-We present an updated version of Priority CP (PCP)~\cite{dardhagay18}, which is Wadler's CP~\cite{wadler12} with {priorities}, and a translation from PCP to PGV.
-\todo{This one is a bit difficult to understand without context: in [14] it appears inside a typed semantics context, where changing dynamically priorities make sense. This is quite different from what is presented here. ({It would certainly be prudent of us that we do not need to dynamically change priorities in the updated version.})}
-The main difference with respect to PCP~\cite{dardhagay18} is removing commuting conversions and using structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them. %They show this by decomposing the reduction relation for CP into two phases: first, all $\beta$-reductions are performed, and second, commuting conversions are used to bring one particular action to the front, to eliminate the top-level cut.
+We present an updated version of Priority CP (PCP)~\cite{dardhagay18}, which is Wadler's CP~\cite{wadler14} with {priorities}, and a translation from PCP to PGV.
+The main difference with respect to PCP~\cite{dardhagay18} is the removal of commuting conversions in favour of using structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all $\beta$-reductions that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them.
 
 From the perspective of process calculi, commuting conversions behave strangely. Let us consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
 \[
@@ -36,37 +35,12 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
     {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{Q})}}}}
   \end{array}
 \end{mathpar}
+
 Commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 
-\input{fig/pcp-operational-semantics-and-typing}
+As a consequence of removing commuting conversions, we no longer need to dynamically change the priorities during reduction, which means that the intuition for priorities holds true in our updated version of PCP!
 
-\begin{example}[Milner's Cyclic Scheduler in PCP]\label{sec:pcp-example}
-We introduce PCP by revising Milner's cyclic scheduler~\cite{milner89,dardhagay18}. Our PCP scheduler has exactly the same behaviour as the PGV version in~\cref{sec:pgv-example}. We use $\pcp{\tm{\prod_{I}P_i}}$ to denote the parallel composition of the processes $\pcp{\tm{P_i}}$, $\tm{i}\in\tm{I}$, and $\pcp{\tm{\plug{P}{Q}}}$ to denote the plugging of $\pcp{\tm{Q}}$ in the one-hole process-context $\pcp{\tm{P}}$:
-\[
-  \usingnamespace{pcp}
-  \begin{array}{lrlr}
-    \tm{\sched}
-    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
-               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
-               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
-               \tm{\res{d}{d'}{}}
-    \\ &     & \tm{(
-               \ppar{\proc1}{\agent1}
-               \parallel
-               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
-               )}
-    \\
-    \tm{\agent1}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
-    \\
-    \tm{\agent{i}}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
-    \\
-    \tm{\proc{i}}
-    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
-  \end{array}
-\]
-\end{example}
+\input{fig/pcp-operational-semantics-and-typing}
 
 \subsubsection*{Types}
 Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic propositions, and are defined by the following grammar:
@@ -86,7 +60,7 @@ Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic 
 \]
 Each connective is annotated with a priority $\cs{o}\in\mathbb{N}$.
 Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. Types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
-Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler12}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18}.
+Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18}.
 Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
 
 \subsubsection*{Environments}
@@ -283,8 +257,6 @@ It translates as much as possible of the process to the corresponding configurat
   &&= \pgv{\tm{\offeremp{x}}}
 \end{align*}
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
-
-Recall our implementations of Milner's Cyclic Scheduler in PCP ($\pcp{\tm{\sched}}$, \cref{sec:pcp-example}) and PGV ($\pgv{\tm{\sched}}$, \cref{sec:pgv-example}). It follows immediately from the definition of our translation that the translation of $\pcp{\tm{\sched}}$ is exactly $\pgv{\tm{\sched}}$, where all processes are child processes.
 
 The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
 \begin{compacttheorems}
