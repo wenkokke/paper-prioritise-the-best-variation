@@ -2,23 +2,6 @@
   \begin{mdframed}
     \small
     \begin{mathpar}
-      % Preservation for T-Seq
-      \inferrule*[lab=T-Seq]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\andthen{M}{N}}{T}}
-      \elabarrow
-      \inferrule*{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letunit{M}{N}}{T}}
-      \\
       % Preservation for T-LamUnit
       \inferrule*[lab=T-LamUnit]{
         {\tseq[\cs{q}]{\ty{\Gamma}}{M}{T}}
@@ -92,16 +75,7 @@
         {\ty{\Gamma},\ty{\Delta}}
         {(\lambda x.N)\;M}
         {U}}
-    \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV.}
-    \label{fig:pgv-typing-sugar}
-  \end{mdframed}
-\end{figure}
-
-\begin{figure}
-  \begin{mdframed}
-    \small
-    \begin{mathpar}
+      \\
       % Preservation for T-Fork
       \inferrule*[lab=T-Fork]{
       }{\tseq[\cs{\pbot}]
@@ -182,8 +156,8 @@
       \tmty{\spawn}
       {\tylolli[]{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}
     \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Fork}).}
-    \label{fig:pgv-typing-sugar-fork}
+    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-LamUnit}, \LabTirName{T-LamPair}, \LabTirName{T-Let}, and \LabTirName{T-Fork}).}
+    \label{fig:pgv-typing-sugar}
   \end{mdframed}
 \end{figure}
 
@@ -280,17 +254,7 @@
       \tmty{\send}
       {\tylolli[\cs{\ptop},\cs{o}]
         {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}{\tyends[\cs{o+1}]}}
-    \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inl}).}
-    \label{fig:pgv-typing-sugar-select-inl}
-  \end{mdframed}
-\end{figure}
-\end{landscape}
-\begin{landscape}
-\begin{figure}
-  \begin{mdframed}
-    \small
-    \begin{mathpar}
+      \\
       % Preservation for T-Select-Inr
       \inferrule*[lab=T-Select-Inr]{
         \minpr(\ty{S})=\minpr(\ty{S'})
@@ -380,16 +344,18 @@
       {\tylolli[\cs{\ptop},\cs{o}]
         {\typrod{(\tysum{\co{S}}{\co{S'}})}{(\tyselect[\cs{o}]{S}{S'})}}{\tyends[\cs{o+1}]}}
     \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inr}).}
-    \label{fig:pgv-typing-sugar-select-inr}
+    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Select-Inl} and \LabTirName{T-Select-Inr}).
+    \label{fig:pgv-typing-sugar-select}}
   \end{mdframed}
 \end{figure}
 \end{landscape}
+
 \begin{landscape}
 \begin{figure}
   \begin{mdframed}
     \small
     \begin{mathpar}
+      \mprset{sep=0.5em}
       % Preservation for T-Offer
       \inferrule*[lab=T-Offer]{
         {\tseq[\cs{p}]
@@ -484,21 +450,12 @@
       {\tylolli[\cs{\ptop},\cs{o}]
         {\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}
         {\typrod{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}}
-    
+
       \LabTirName{(b)} =
       \tmty{\wait}
       {\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o+1}]}{\tyunit}} 
-    \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer}).}
-    \label{fig:pgv-typing-sugar-offer}
-  \end{mdframed}
-\end{figure}
-\end{landscape}
-\begin{landscape}
-\begin{figure}
-  \begin{mdframed}
-    \small
-    \begin{mathpar}
+      \\
+      % Preservation for T-Offer-Absurd
       \inferrule*[lab=T-Offer-Absurd]{
         \tseq[\cs{p}]
         {\ty{\Gamma}}
@@ -511,9 +468,6 @@
         {\offeremp{L}}
         {T}}
       \elabarrow
-      \\
-      \\
-      \\
       \inferrule*{
         \inferrule*{
           \LabTirName{(a)}
@@ -571,8 +525,8 @@
       \tmty{\wait}
       {\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o+1}]}{\tyunit}}
     \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer-Absurd}).}
-    \label{fig:pgv-typing-sugar-offer-absurd}
+    \caption{Typing Rules for Syntactic Sugar for PGV (\LabTirName{T-Offer} and \LabTirName{T-Offer-Absurd}).}
+    \label{fig:pgv-typing-sugar-offer}
   \end{mdframed}
 \end{figure}
 \end{landscape}

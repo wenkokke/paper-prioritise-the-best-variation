@@ -126,11 +126,9 @@ The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the 
   \end{array}
 \]
 \[
-  \begin{array}{l}
-    \minpr(\ty{\emptyenv})          = \cs{\ptop}
-    \\
-    \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
-  \end{array}
+  \minpr(\ty{\emptyenv})          = \cs{\ptop}
+  \quad
+  \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
 \]
 
 \subsubsection*{Terms}
@@ -208,28 +206,8 @@ We illustrate the relation between PCP and PGV by giving a translation from PCP 
     & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
   \end{array}
 \]
-There are two separate translations on processes. The first, $\tm{\cpgvC{\cdot}}$, translates processes to \emph{configurations}:
-\begin{align*}
-  &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
-  &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
-  \\
-  &\pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
-  &&= \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
-  \\
-  &\pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
-  \\
-  &\pcp{\tm{\cpgvC{\inl{x}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
-  \\
-  &\pcp{\tm{\cpgvC{\inr{x}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
-  \\
-  &\pcp{\tm{\cpgvC{P}}}
-  &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
-\end{align*}
-The third, fourth, and fifth cases translate the $\nu$-binders in the translation of bound sending to configuration constructs, which is required for completeness of the operational correspondence.
-It translates as much as possible of the process to the corresponding configuration constructs. Once it hits the first action, it switches to the second translation, $\tm{\cpgvM{\cdot}}$, which translates processes to \emph{terms}:
+
+There are two separate translations on processes. The main translation, $\tm{\cpgvM{\cdot}}$, translates processes to \emph{terms}:
 \begin{align*}
   &\pcp{\tm{\cpgvM{\link{x}{y}}}}
   &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
@@ -256,9 +234,30 @@ It translates as much as possible of the process to the corresponding configurat
   &\pcp{\tm{\cpgvM{\absurd{x}}}}
   &&= \pgv{\tm{\offeremp{x}}}
 \end{align*}
-Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
 
-The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation}:
+Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is incomplete, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which reduce back to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted as a result of translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce. To address this issue, we use a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to $\tm{\cpgvM{\cdot}}$ followed by reduction using \LabTirName{E-New} and \LabTirName{E-Spawn}:
+\begin{align*}
+  &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+  &&= \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inl{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inr{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{P}}}
+  &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
+\end{align*}
+
+Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
+The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence. The proofs are standard inductions. The details can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]
     \label{lem:pcp-to-pgv-terms-preservation}
@@ -268,9 +267,6 @@ The translations $\tm{\cpgvC{\cdot}}$ and $\tm{\cpgvM{\cdot}}$ preserve typing. 
     \label{thm:pcp-to-pgv-confs-preservation}
     If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$.
   \end{restatabletheorem}
-\end{compacttheorems}
-
-Our translation satisfies soundness and completeness of operational correspondence. We link ${\tm{\cpgvM{\cdot}}}$ and ${\tm{\cpgvC{\cdot}}}$ and show that $\tm{\cpgvM{P}}$ \emph{must} reduce to $\tm{\cpgvC{P}}$, \ie $\tm{\cpgvC{\cdot}}$ is equivalent to translating with $\tm{\cpgvM{\cdot}}$ and performing several reduction steps. We use this fact to prove the results below. The details are in~\cref{prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-completeness,prf:thm-pcp-to-pgv-operational-correspondence-soundness}:
   \begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
     \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
     For any $\pcp{\tm{P}}$, either:
@@ -285,20 +281,14 @@ Our translation satisfies soundness and completeness of operational corresponden
     \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$, there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
   \end{restatabletheorem}
-  % \begin{proof}
-  %   By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.\simon{Surprising that you can get it by the derivation of the reduction relation---normally, 'soundness' would be proved by shunting into a canonical form and then proceeding by induction the structure of the term / induction on typing derivations.}
-  %   Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-soundness}.
-  % \end{proof}
-\begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
-  [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
-  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
-  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
-\end{restatabletheorem}
-% \begin{proof}
-%   By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$. We apply \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC} for the cases in which the translation switches from $\tm{\cpgvC{\cdot}}$ to $\tm{\cpgvM{\cdot}}$, \ie under actions. We apply \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv} for \LabTirName{E-LiftSC}. Details in \cref{prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
-% \end{proof}
+  \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
+    [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
+    \label{thm:pcp-to-pgv-operational-correspondence-completeness}
+    \hfill\\%newline before theorem statement
+    If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
+    then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
+  \end{restatabletheorem}
+\end{compacttheorems}
 \end{document}
 
 %%% Local Variables:
