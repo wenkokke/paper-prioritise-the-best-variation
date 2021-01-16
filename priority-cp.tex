@@ -170,7 +170,7 @@ There are two separate translations on processes. The main translation, $\tm{\cp
   &&= \pgv{\tm{\offeremp{x}}}
 \end{align*}
 
-Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which reduce back to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted as a result of translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce. To address this issue, we use a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to $\tm{\cpgvM{\cdot}}$ followed by reductions using \LabTirName{E-New} and \LabTirName{E-Spawn}:
+Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which can reduce to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted when translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce. To address this issue, we use a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to $\tm{\cpgvM{\cdot}}$ followed by reductions using \LabTirName{E-New} and \LabTirName{E-Spawn}:
 \begin{align*}
   &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
   &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
