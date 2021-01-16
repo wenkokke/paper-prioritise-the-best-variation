@@ -7,7 +7,7 @@
 
 We present a correspondence between Priority GV and an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's CP~\cite{wadler14} with priorities. The correspondence connects PGV to (a~relaxed variant of) classical linear logic.
 
-\subsubsection*{Revisiting Priority CP}
+\subsection{Revisiting Priority CP}
 \begingroup
 \usingnamespace{pcp}
 Types ($\ty{A}$, $\ty{B}$) in PCP correspond to the connectives of linear logic annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr$ are defined as expected (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
@@ -105,7 +105,7 @@ We prove closed progress for our updated PCP. The proof is in \cref{prf:thm-pcp-
 \end{compacttheorems}
 \endgroup
 
-\subsubsection*{Translation}
+\subsection{Translation}
 \begingroup
 We illustrate the relation between PCP and PGV by giving a translation from PCP to PGV. The translation on types is defined as follows:
 \[

@@ -44,6 +44,7 @@
 \section{Relation to Priority CP}
 \begingroup
 \usingnamespace{pcp}
+\subsection{Revisiting Priority CP}
 
 \subsubsection*{Types}
 Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic propositions, and are defined by the following grammar:
@@ -184,11 +185,11 @@ Finally, since our reduction relation is a strict subset of the reduction relati
 
 \begin{compacttheorems}
     \begin{restatabledefinition}{defpcpactions}[Actions]
-    A~process acts on an endpoint $\tm{x}$ if it is of the form $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
+    A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
   \end{restatabledefinition}
   \begin{restatabledefinition}{defpcpcanonicalforms}[Canonical Forms]
     \label{def:pcp-canonical-forms}
-    A~process $\tm{P}$ is in canonical form if it is of the form $\tm{\halt}$ or $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+    A~process $\tm{P}$ is in canonical form if it is $\tm{\halt}$ or $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
   \end{restatabledefinition}
   \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
     \label{lem:pcp-canonical-forms}
@@ -202,7 +203,7 @@ Finally, since our reduction relation is a strict subset of the reduction relati
 \end{compacttheorems}
 \endgroup
 
-\subsubsection*{Translation}
+\subsection{Translation}
 \begingroup
 \restatelemma{lempcptopgvtermspreservation}
 \input{prf/lem-pcp-to-pgv-terms-preservation}
