@@ -45,57 +45,164 @@
 \begingroup
 \usingnamespace{pcp}
 
+\subsubsection*{Types}
+Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic propositions, and are defined by the following grammar:
+\[
+  \usingnamespace{pcp}
+  \begin{array}{lcl}
+    \ty{A}, \ty{B}
+    & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
+      \sep        \ty{\typarr[\cs{o}]{A}{B}}
+      \sep        \ty{\tyone[\cs{o}]}
+      \sep        \ty{\tybot[\cs{o}]}
+      \sep        \ty{\typlus[\cs{o}]{A}{B}}
+      \sep        \ty{\tywith[\cs{o}]{A}{B}}
+      \sep        \ty{\tynil[\cs{o}]}
+      \sep        \ty{\tytop[\cs{o}]}
+  \end{array}
+\]
+Each connective is annotated with a priority $\cs{o}\in\mathbb{N}$.
+Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. Types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
+Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18}.
+Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
+
+\subsubsection*{Environments}
+\label{sec:pcp-environments}
+Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to types. Environments are linear, so two environments can only be combined as $\pcp{\ty{\Gamma}}, \pcp{\ty{\Delta}}$ if their names are distinct, \ie $\pcp{\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing}$.
+\[
+  \usingnamespace{pcp}
+  \begin{array}{lcl}
+    \ty{\Gamma}, \ty{\Delta}
+    & \Coloneqq & \ty{\emptyenv}
+      \sep        \ty{\Gamma}, \tmty{x}{A}
+  \end{array}
+\]
+
+\subsubsection*{Duality}
+\label{sec:pcp-duality}
+Duality is an involutive function on types which preserves priorities:
+\[
+  \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
+  \begin{array}{lcl}
+    \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
+    \ty{\co{(\tybot[\cs{o}])}} & = & \ty{\tyone[\cs{o}]}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\tytens[\cs{o}]{A}{B})}} & = & \ty{\typarr[\cs{o}]{\co{A}}{\co{B}}} \\
+    \ty{\co{(\typarr[\cs{o}]{A}{B})}} & = & \ty{\tytens[\cs{o}]{\co{A}}{\co{B}}}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\tynil[\cs{o}])}} & = & \ty{\tytop[\cs{o}]} \\
+    \ty{\co{(\tytop[\cs{o}])}} & = & \ty{\tynil[\cs{o}]}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\typlus[\cs{o}]{A}{B})}} & = & \ty{\tywith[\cs{o}]{\co{A}}{\co{B}}} \\
+    \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
+  \end{array}
+\]
+
+\subsubsection*{Priorities}
+\label{sec:pcp-priorities}
+The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the type system guarantees that the top-most connective always holds the smallest priority.  The function $\minpr(\cdot)$ returns the \emph{minimum} priority of all types a typing context, or $\cs{\ptop}$ if the context is empty:
+\[
+  \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
+  \begin{array}{lclclcl}
+    \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\tytens[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\typarr[\cs{o}]{A}{B}}) & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\typlus[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\tywith[\cs{o}]{A}{B}}) & = & \cs{o} 
+  \end{array}
+\]
+\[
+  \minpr(\ty{\emptyenv})          = \cs{\ptop}
+  \quad
+  \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+\]
+
+\subsubsection*{Terms}
+Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following grammar.
+\[
+  \usingnamespace{pcp}
+  \begin{array}[t]{lcl}
+    \tm{P}, \tm{Q}
+    & \Coloneqq & \tm{\link{x}{y}}
+           \sep   \tm{\res{x}{y}{P}}
+           \sep   \tm{(\ppar{P}{Q})}
+           \sep   \tm{\halt}
+    \\   & \sep & \tm{\send{x}{y}{P}}
+           \sep   \tm{\close{x}{P}}
+           \sep   \tm{\recv{x}{y}{P}}
+           \sep   \tm{\wait{x}{P}}
+    \\   & \sep & \tm{\inl{x}{P}}
+           \sep   \tm{\inr{x}{P}}
+           \sep   \tm{\offer{x}{P}{Q}}
+           \sep   \tm{\absurd{x}}
+  \end{array}
+\]
+Process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
+Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. Processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
+Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
+We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
+
+\input{fig/pcp-operational-semantics-and-typing}
+
+\subsubsection*{Operational Semantics}
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics-and-typing}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
+
+The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
+
+\subsubsection*{Typing}
+\Cref{fig:pcp-operational-semantics-and-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
+
+\textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
+\textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm{x}}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\pcp{\tm{x}}$ is the smallest among all priorities in $\pcp{\ty{\Gamma}}$.
+\textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+
+Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
+
 % Proofs that the syntactic sugar is well-typed.
 \input{fig/pcp-typing-sugar}
 
-\begin{definition}[Actions]
-  A~process acts on an endpoint $\tm{x}$ if it is in one of the following forms:
-  \begin{multicols}{3}
-    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-    \item $\tm{\link{x}{y}}$ 
-    \item $\tm{\link{y}{x}}$
-    \item $\tm{\send{x}{y}{P}}$
-    \item $\tm{\recv{x}{y}{P}}$
-    \item $\tm{\close{x}{P}}$
-    \item $\tm{\wait{x}{P}}$
-    \item $\tm{\inl{x}{P}}$
-    \item $\tm{\inr{x}{P}}$
-    \item $\tm{\offer{x}{P}{Q}}$
-    \item $\tm{\absurd{x}}$
-    \end{itemize}
-  \end{multicols}
-  \noindent
-  A~process is an action if it acts on some endpoint $\tm{x}$.
-\end{definition}
-
-\begin{definition}[Canonical Forms]
-  \label{def:pcp-canonical-forms}
-  A~process $\tm{P}$ is in canonical form if it is in one of the following forms:
-  \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-  \item
-    $\tm{\halt}$
-  \item
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$
-    where $m>0$ and each $\tm{P_j}$ is an action.
-  \end{itemize}
-\end{definition}
-
-\begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
-  \label{lem:pcp-canonical-forms}
-  If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
-\end{restatablelemma}
-\begin{proof}
-  If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
-\end{proof}
-
-\begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]
-  \label{thm:pcp-closed-progress}
-  \hfill\\%newline before theorem statement
-  If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
-\end{restatabletheorem}
-\input{prf/thm-pcp-closed-progress}
+\begin{compacttheorems}
+    \begin{restatabledefinition}{defpcpactions}[Actions]
+    A~process acts on an endpoint $\tm{x}$ if it is of the form $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
+  \end{restatabledefinition}
+  \begin{restatabledefinition}{defpcpcanonicalforms}[Canonical Forms]
+    \label{def:pcp-canonical-forms}
+    A~process $\tm{P}$ is in canonical form if it is of the form $\tm{\halt}$ or $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+  \end{restatabledefinition}
+  \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
+    \label{lem:pcp-canonical-forms}
+    If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+  \end{restatablelemma}
+  \begin{proof}
+    If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+  \end{proof}
+  \restatetheorem{thmpcpclosedprogress}
+  \input{prf/thm-pcp-closed-progress}
+\end{compacttheorems}
 \endgroup
 
+\subsubsection*{Translation}
 \begingroup
 \restatelemma{lempcptopgvtermspreservation}
 \input{prf/lem-pcp-to-pgv-terms-preservation}

@@ -100,10 +100,28 @@
   }%
   \expandafter\lemma\BODY\unskip\label{#1}\endlemma
 }
+\newcommand{\restatedefinition}[1]{%
+  \begingroup
+  \renewcommand{\thedefinition}{\ref{#1}}%
+  \expandafter\expandafter\expandafter\definition
+  \csname restatabledefinition@#1\endcsname
+  \enddefinition
+  \endgroup
+}
+\NewEnviron{restatabledefinition}[1]{%
+  \global\expandafter\xdef\csname restatabledefinition@#1\endcsname{%
+    \unexpanded\expandafter{\BODY}%
+  }%
+  \expandafter\definition\BODY\unskip\label{#1}\enddefinition
+}
+
 
 % Inference rules
 \usepackage{mathpartir}
 \mprset{sep=1em}
+\makeatletter
+\newskip \mpr@andskip \mpr@andskip 1ex plus 0.5fil minus 0.5ex
+\makeatother
 
 % Sort macros
 \usepackage{xcolor}

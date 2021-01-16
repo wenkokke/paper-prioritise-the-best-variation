@@ -234,7 +234,6 @@ Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel
 Secondly, our structural congruence is type preserving. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
 
 \subsubsection*{Typing}
-\todo{This is a type-and-effect system and should probably be presented as such, as in [37].}
 \Cref{fig:pgv-typing} gives the typing rules for PGV.
 Typing rules for terms are at the top of \cref{fig:pgv-typing}. Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ stating that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing for the linear $\lambda$-calculus is standard. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. Constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const} (mid of \cref{fig:pgv-typing}). The typing rules treat \emph{all variables} as linear resources, even those of non-linear types such as $\ty{\tyunit}$. However, the rules can easily be extended to allow values with unrestricted usage~\cite{wadler14}.
 
@@ -261,7 +260,7 @@ In order to guarantee deadlock freedom, in GV each parallel composition must spl
 \subsubsection*{Subject reduction}
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
-We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
+We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment. The proofs are standard inductions and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempgvvaluedone}
     \label{lem:pgv-value-done}
@@ -291,7 +290,6 @@ We must show that substitution preserves priority constraints. For this, we prov
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
   \end{restatabletheorem}
 \end{compacttheorems}
-The proofs are standard inductions. The details can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 
 \subsubsection*{Progress and deadlock freedom}
 PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged:
