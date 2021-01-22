@@ -1,31 +1,29 @@
 \begin{figure}
   \usingnamespace{pcp}
-  \begin{mdframed}
-    \small
-    \begin{mathpar}
-      % Preservation for T-UnboundSend
-      \inferrule*[lab=T-UnboundSend]{
-        \inferrule*{
-        }{\seq{P}{\ty{\Gamma},\tmty{x}{B}}}
-        \\
-        \cs{o}<\minpr{(\ty{\Gamma},\ty{A},\ty{B})}
-      }{\seq{\usend{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens{A}{B}},\tmty{y}{\co{A}}}}
-      \elabarrow
+  \small
+  \begin{mathpar}
+    % Preservation for T-UnboundSend
+    \inferrule*[lab=T-UnboundSend]{
+      \inferrule*{
+      }{\seq{P}{\ty{\Gamma},\tmty{x}{B}}}
+      \\
+      \cs{o}<\minpr{(\ty{\Gamma},\ty{A},\ty{B})}
+    }{\seq{\usend{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens{A}{B}},\tmty{y}{\co{A}}}}
+    \elabarrow
+    \inferrule*{
       \inferrule*{
         \inferrule*{
-          \inferrule*{
-          }{\seq{\link[\ty{A}]{z}{y}}{\tmty{y}{\co{A}},\tmty{z}{A}}}
-          \\
-          \inferrule*{
-          }{\seq{P}{\ty{\Gamma},\tmty{x}{B}}}
-        }{\seq{\ppar{\link[\ty{A}]{z}{y}}{P}}{\ty{\Gamma},\tmty{x}{B},\tmty{y}{\co{A}},\tmty{z}{A}}}
+        }{\seq{\link[\ty{A}]{z}{y}}{\tmty{y}{\co{A}},\tmty{z}{A}}}
         \\
-        \cs{o}<\minpr{(\ty{\Gamma},\ty{A},\ty{B})}
-      }{\seq{\send{x}{z}{(\ppar{\link[\ty{A}]{z}{y}}{P})}}{\ty{\Gamma},\tmty{x}{\tytens{A}{B}},\tmty{y}{\co{A}}}}
-    \end{mathpar}
-    \caption{Typing Rules for Syntactic Sugar for PCP.}
-    \label{fig:pcp-typing-sugar}
-  \end{mdframed}
+        \inferrule*{
+        }{\seq{P}{\ty{\Gamma},\tmty{x}{B}}}
+      }{\seq{\ppar{\link[\ty{A}]{z}{y}}{P}}{\ty{\Gamma},\tmty{x}{B},\tmty{y}{\co{A}},\tmty{z}{A}}}
+      \\
+      \cs{o}<\minpr{(\ty{\Gamma},\ty{A},\ty{B})}
+    }{\seq{\send{x}{z}{(\ppar{\link[\ty{A}]{z}{y}}{P})}}{\ty{\Gamma},\tmty{x}{\tytens{A}{B}},\tmty{y}{\co{A}}}}
+  \end{mathpar}
+  \caption{Typing Rules for Syntactic Sugar for PCP.}
+  \label{fig:pcp-typing-sugar}
 \end{figure}
 
 %%% Local Variables:

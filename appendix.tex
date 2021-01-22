@@ -2,13 +2,6 @@
 \section{Priority GV}
 \begingroup
 \usingnamespace{pgv}
-
-% Scheduler example
-\input{fig/pgv-scheduler}
-
-% Proofs that the syntactic sugar is well-typed.
-\input{fig/pgv-typing-sugar}
-
 \restatelemma{lempgvvaluedone}
 \input{prf/lem-pgv-value-done}
 
@@ -39,6 +32,8 @@
 
 \restatetheorem{thmpgvclosedprogressconfs}
 \input{prf/thm-pgv-closed-progress-confs}
+
+\input{fig/pgv-typing-sugar}
 \endgroup
 
 \section{Relation to Priority CP}
@@ -163,15 +158,18 @@ Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or re
 Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
-\input{fig/pcp-operational-semantics-and-typing}
 
 \subsubsection*{Operational Semantics}
-The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics-and-typing}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
 
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively. 
 
+\input{fig/pcp-operational-semantics}
+
 \subsubsection*{Typing}
-\Cref{fig:pcp-operational-semantics-and-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
+\Cref{fig:pcp-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
+
+\input{fig/pcp-typing}
 
 \textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.

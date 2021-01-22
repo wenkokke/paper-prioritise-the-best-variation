@@ -9,6 +9,39 @@
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. 
 
+\begin{center}
+\begin{minipage}{0.5\linewidth}
+\begin{example}[Cyclic Structure]
+  \[\tm{%
+    \begin{array}{l}
+      \letpair{x}{x'}{\new}{}
+      \\
+      \letpair{y}{y'}{\new}{}
+      \\
+      \andthen{\spawn\;(\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}})}{}
+      \\
+      \andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}
+    \end{array}
+  }\]
+\end{example}
+\end{minipage}%
+\begin{minipage}{0.5\linewidth}
+\begin{example}[Deadlock]
+  \[\tm{%
+    \begin{array}{l}
+      \letpair{x}{x'}{\new}{}
+      \\
+      \letpair{y}{y'}{\new}{}
+      \\
+      \andthen{\spawn\;(\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}})}{}
+      \\
+      \andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}
+    \end{array}
+  }\]
+\end{example}
+\end{minipage}
+\end{center}
+
 \subsubsection*{Session types}
 Session ($\ty{S}$) types are defined by the following grammar:
 \[
