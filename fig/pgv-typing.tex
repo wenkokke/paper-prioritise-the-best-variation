@@ -75,8 +75,10 @@
         \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyvoid}
       }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
     \end{mathpar}
-    We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations.
-    \\[1\smallskipamount]
+    \begin{center}
+      We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations, \\
+      and omit $\ty{T}$ when it can be inferred from context.
+    \end{center}    
     \textbf{Type Schemas for Constants.}
     \begin{mathpar}
       \tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}

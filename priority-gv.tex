@@ -9,6 +9,8 @@
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. 
 
+\todo{Describe examples.}
+
 \begin{center}
 \begin{minipage}{0.5\linewidth}
 \begin{example}[Cyclic Structure]
@@ -18,9 +20,17 @@ Priority GV offers a more fine-grained analysis of communication structures, and
       \\
       \letpair{y}{y'}{\new}{}
       \\
-      \andthen{\spawn\;(\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}})}{}
+      \spawn\left(%
+      \begin{array}{l}
+        {\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}}};
+        \\
+        {\andthen{\wait\;{x'}}{\close\;{y}}}
+      \end{array}%
+      \right);
       \\
-      \andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}
+      \underline{\andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}};
+      \\
+      {\andthen{\close\;{x}}{\wait\;{y'}}}
     \end{array}
   }\]
 \end{example}
@@ -33,14 +43,23 @@ Priority GV offers a more fine-grained analysis of communication structures, and
       \\
       \letpair{y}{y'}{\new}{}
       \\
-      \andthen{\spawn\;(\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}})}{}
+      \spawn\left(%
+      \begin{array}{l}
+        {\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}}};
+        \\
+        {\andthen{\wait\;{x'}}{\close\;{y}}}
+      \end{array}%
+      \right);
       \\
-      \andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}
+      \underline{\andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}}
+      \\
+      {\andthen{\close\;{x}}{\wait\;{y'}}}
     \end{array}
   }\]
 \end{example}
 \end{minipage}
 \end{center}
+
 
 \subsubsection*{Session types}
 Session ($\ty{S}$) types are defined by the following grammar:
@@ -274,11 +293,67 @@ Typing rules for terms are at the top of \cref{fig:pgv-typing}. Terms are typed 
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
 \begin{enumerate*}[label=(\roman*)]
-\item an action with priority $\cs{o}$ happens before an action with priority $\cs{o+n}$; and
-\item communication requires \emph{equal} priorities for the dual actions.
+\item an action with lower priority happens before an action with higher priority; and
+\item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate*}
 
-In PGV, sequents are annotated with a priority bound $\cs{p}$, which is the \emph{upper bound} on the priority of actions performed while evaluating the term. The \emph{lower bound} is obtained from the typing environment. Terms with sequential evaluation, such as \LabTirName{T-Andthen}, have side conditions to ensure deadlock freedom. For instance, the side condition for typing $\tm{\andthen{M}{N}}$ requires that $\tm{M}$ has finished communicating before $\tm{N}$ starts communicating. The rule \LabTirName{T-Lam} stores the lower and upper priority bound of the function body in the type.
+In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts.
+\begin{mathpar}
+  \inferrule*{
+    \inferrule*{
+      \inferrule*{
+      }{
+        \tseq{\tmty{y'}{\tyrecv{\tyunit}{\tyendr}}}{y'}{\tyrecv{\tyunit}{\tyendr}}
+      }
+    }{
+      \tseq{\tmty{y'}{\tyrecv{\tyunit}{\tyendr}}}{\recv\;{y'}}{\typrod{\tyunit}{\tyendr}}
+    }
+    \\
+    \inferrule*{
+    }{
+      \tseq{}{\send\;{\pair{\unit}{x}}}{}
+    }
+  }{
+    \tseq{}{\andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}}{}
+  }
+
+  {\andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}}
+\end{mathpar}
+Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds of the function body on the function type, and \LabTirName{T-App} restores them. For instance, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ is assigned the type $\ty{\tylolli[\cs{o},\cs{o}]{A}{S}}$, \ie, a~function which, when applied, starts and finishes communicating at priority $\cs{o}$:
+\begin{mathpar}
+  \inferrule*{
+    \inferrule*{
+      \inferrule*{}{\tm{\send}}
+      \\
+      \inferrule*{
+        \inferrule*{
+        }{
+          \tseq[\pbot]{\tmty{x}{A}}{x}{A}
+        }
+        \\
+        \inferrule*{
+        }{
+          \tseq[\pbot]
+          {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+          {y}{\tysend[\cs{o}]{A}{S}}
+        }
+      }{
+        \tseq[\pbot]
+        {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+        {\pair{x}{y}}{\typrod{A}{\tysend[\cs{o}]{A}{S}}}
+      }
+    }{
+      \tseq[\cs{o}]
+      {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+      {\send\;\pair{x}{y}}{S}
+    }
+  }{
+    \tseq[\pbot]
+    {\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+    {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{A}{S}}
+  }
+\end{mathpar}
+The approximation of the lower bound is not entirely accurate, \eg, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ has lower bound $\ptop$, not $\cs{o}$, but as we only ever under-approximate, it is safe.
 
 Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
 
