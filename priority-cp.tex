@@ -44,21 +44,20 @@ Processes ($\tm{P}$, $\tm{Q}$) in PCP are defined by the following grammar.
 \]
 Processes are typed by sequents $\seq{P}{\ty{\Gamma}}$, which correspond to the one-sided sequents classical linear logic. Different from PGV, we do not need to store the greatest priority on the sequent, as, due to the absence of higher-order functions, we cannot compose processes \emph{sequentially}.
 
-PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par}, and guarantees deadlock freedom using priority constraints, \eg, in \LabTirName{T-Send}. The full typing rules and operational semantics are available in \cref{fig:pcp-operational-semantics-and-typing} and in \cite{dardhagay18}:
+PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par}, and guarantees deadlock freedom using priority constraints, \eg, in \LabTirName{T-Send}. The full typing rules and operational semantics are available in \cref{fig:pcp-operational-semantics,fig:pcp-typing} and in \cite{dardhagay18}:
 \begin{mathpar}
+  \small
   \inferrule*[lab=T-Res]{
     \seq{P}{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}
   }{\seq{\res{x}{y}{P}}{\ty{\Gamma}}}
-  
   \inferrule*[lab=T-Par]{
     \seq{P}{\ty{\Gamma}}
-    \\
+    \and
     \seq{Q}{\ty{\Delta}}
   }{\seq{\ppar{P}{Q}}{\ty{\Gamma},\ty{\Delta}}}
-
   \inferrule*[lab=T-Send]{
     \seq{P}{\ty{\Gamma},\tmty{y}{A},\tmty{x}{B}}
-    \\
+    \and
     \cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})
   }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
 \end{mathpar}
