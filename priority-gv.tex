@@ -9,7 +9,12 @@
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. 
 
-\todo{Describe examples.}
+We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
+\begin{enumerate*}[label=(\alph*)]
+\item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
+\item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
+\end{enumerate*}
+We will show that only \cref{ex:cycle} is typeable in PGV, as opposed to neither in GV~\cite{wadler14} and both in its predecessor~\cite{gayvasconcelos10}.
 
 \begin{center}
 \begin{minipage}{0.5\linewidth}
@@ -69,7 +74,6 @@ Priority GV offers a more fine-grained analysis of communication structures, and
 \end{example}
 \end{minipage}
 \end{center}
-
 
 \subsubsection*{Session types}
 Session ($\ty{S}$) types are defined by the following grammar:
@@ -221,7 +225,6 @@ Similarly, we use syntactic sugar for the term forms of choice, which combine se
 \]
 
 \subsubsection*{Operational Semantics}
-
 Priority GV terms are evaluated as part of a configuration of processes. Configurations are defined by the following grammar:
 \[
 \begin{array}[t]{lcl}
@@ -366,17 +369,17 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
       }
       \and
       \inferrule*{%
-        % \inferrule*{
-        % }{
-        %   \tseq[\pbot]{\tmty{x}{A}}{x}{A}
-        % }
-        % \and
-        % \inferrule*{
-        % }{
-        %   \tseq[\pbot]
-        %   {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-        %   {y}{\tysend[\cs{o}]{A}{S}}
-        % }
+        \inferrule*{
+        }{
+          \tseq[\pbot]{\tmty{x}{A}}{x}{A}
+        }
+        \and
+        \inferrule*{
+        }{
+          \tseq[\pbot]
+          {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+          {y}{\tysend[\cs{o}]{A}{S}}
+        }
       }{
         \tseq[\pbot]
         {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
@@ -465,11 +468,11 @@ Progress for the term language is standard for GV, and deviates from progress fo
 \begin{restatablelemma}{lempgvopenprogressterms}[Progress, $\tred$]
   \label{lem:pgv-open-progress-terms}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
-  \begin{itemize}
+  \begin{enumerate*}[label=\emph{(\alph*)}]
   \item $\tm{M}$ is a value;
   \item $\tm{M}\tred\tm{N}$ for some term $\tm{N}$; or
   \item $\tm{M}$ is ready.
-  \end{itemize}
+  \end{enumerate*}
 \end{restatablelemma}
 
 Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
