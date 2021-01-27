@@ -14,6 +14,7 @@ Priority GV offers a more fine-grained analysis of communication structures, and
 \begin{center}
 \begin{minipage}{0.5\linewidth}
 \begin{example}[Cyclic Structure]
+  \label{ex:cycle}
   \[\tm{%
     \begin{array}{l}
       \letpair{x}{x'}{\new}{}
@@ -22,13 +23,17 @@ Priority GV offers a more fine-grained analysis of communication structures, and
       \\
       \spawn\left(%
       \begin{array}{l}
-        {\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}}};
+        {\letpair{\unit}{x'}{\recv\;{x'}}{}}
+        \\
+        {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
         \\
         {\andthen{\wait\;{x'}}{\close\;{y}}}
       \end{array}%
       \right);
       \\
-      \underline{\andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}};
+      \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
+      \\
+      \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
       \\
       {\andthen{\close\;{x}}{\wait\;{y'}}}
     \end{array}
@@ -37,6 +42,7 @@ Priority GV offers a more fine-grained analysis of communication structures, and
 \end{minipage}%
 \begin{minipage}{0.5\linewidth}
 \begin{example}[Deadlock]
+  \label{ex:deadlock}
   \[\tm{%
     \begin{array}{l}
       \letpair{x}{x'}{\new}{}
@@ -45,17 +51,21 @@ Priority GV offers a more fine-grained analysis of communication structures, and
       \\
       \spawn\left(%
       \begin{array}{l}
-        {\andthen{\recv\;{x'}}{\send\;{\pair{\unit}{y}}}};
+        {\letpair{\unit}{x'}{\recv\;{x'}}{}}
+        \\
+        {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
         \\
         {\andthen{\wait\;{x'}}{\close\;{y}}}
       \end{array}%
       \right);
       \\
-      \underline{\andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}}
+      \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
+      \\
+      \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
       \\
       {\andthen{\close\;{x}}{\wait\;{y'}}}
     \end{array}
-  }\]
+   }\]
 \end{example}
 \end{minipage}
 \end{center}
@@ -297,61 +307,94 @@ The only non-standard feature of the typing rules is the priority annotations. P
 \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate*}
 
-In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts.
+In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom. For instance, the program in \cref{ex:deadlock} is deadlocked. Crucially, it composes the terms below in parallel. While each of these terms itself is well-typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
-  \inferrule*{
-    \inferrule*{
+  \resizebox{\linewidth}{!}{\ensuremath{%
       \inferrule*{
-      }{
-        \tseq{\tmty{y'}{\tyrecv{\tyunit}{\tyendr}}}{y'}{\tyrecv{\tyunit}{\tyendr}}
+        \tseq[\cs{o'}]
+        {\tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}}
+        {\recv\;{y'}}
+        {\typrod{\tyunit}{\tyendr}}
+        {\hskip 1em}
+        \tseq[\cs{p}]
+        {\tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},\tmty{y'}{\tyendr}}
+        {\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}
+        {\tyunit}
+        {\hskip 1em}
+        \cs{o'}<\cs{o}
+      }{%
+        \tseq[\cs{p}]
+        {%
+          \tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},
+          \tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}
+        }
+        {\letpair{\unit}{y'}{\recv\;{y'}}{\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}}
+        {\tyunit}
       }
-    }{
-      \tseq{\tmty{y'}{\tyrecv{\tyunit}{\tyendr}}}{\recv\;{y'}}{\typrod{\tyunit}{\tyendr}}
-    }
-    \\
-    \inferrule*{
-    }{
-      \tseq{}{\send\;{\pair{\unit}{x}}}{}
-    }
-  }{
-    \tseq{}{\andthen{\send\;{\pair{\unit}{x}}}{\recv\;{y'}}}{}
-  }
-
-  {\andthen{\recv\;{y'}}{\send\;{\pair{\unit}{x}}}}
+    }}
+  \\
+  \resizebox{\linewidth}{!}{\ensuremath{%
+      \inferrule*{
+        \tseq[\cs{o}]
+        {\tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}}
+        {\recv\;{x'}}
+        {\typrod{\tyunit}{\tyendr}}
+        {\hskip 1em}
+        \tseq[\cs{q}]
+        {\tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},\tmty{x'}{\tyendr}}
+        {\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}
+        {\tyunit}
+        {\hskip 1em}
+        \cs{o}<\cs{o'}
+      }{%
+        \tseq[\cs{q}]
+        {%
+          \tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},
+          \tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}
+        }
+        {\letpair{\unit}{x'}{\recv\;{x'}}{\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}}
+        {\tyunit}
+      }
+    }}
 \end{mathpar}
 Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds of the function body on the function type, and \LabTirName{T-App} restores them. For instance, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ is assigned the type $\ty{\tylolli[\cs{o},\cs{o}]{A}{S}}$, \ie, a~function which, when applied, starts and finishes communicating at priority $\cs{o}$:
 \begin{mathpar}
-  \inferrule*{
-    \inferrule*{
-      \inferrule*{}{\tm{\send}}
-      \\
+  \resizebox{\linewidth}{!}{\ensuremath{%
       \inferrule*{
         \inferrule*{
+          \inferrule*{
+          }{
+            \tmty{\send}{\tylolli[\ptop,\cs{o}]{\typrod{A}{\tysend[\cs{o}]{A}{S}}}{S}}
+          }
+          \and
+          \inferrule*{
+            \inferrule*{
+            }{
+              \tseq[\pbot]{\tmty{x}{A}}{x}{A}
+            }
+            \and
+            \inferrule*{
+            }{
+              \tseq[\pbot]
+              {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+              {y}{\tysend[\cs{o}]{A}{S}}
+            }
+          }{
+            \tseq[\pbot]
+            {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+            {\pair{x}{y}}{\typrod{A}{\tysend[\cs{o}]{A}{S}}}
+          }
         }{
-          \tseq[\pbot]{\tmty{x}{A}}{x}{A}
-        }
-        \\
-        \inferrule*{
-        }{
-          \tseq[\pbot]
+          \tseq[\cs{o}]
           {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-          {y}{\tysend[\cs{o}]{A}{S}}
+          {\send\;\pair{x}{y}}{S}
         }
       }{
         \tseq[\pbot]
-        {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-        {\pair{x}{y}}{\typrod{A}{\tysend[\cs{o}]{A}{S}}}
+        {\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+        {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{A}{S}}
       }
-    }{
-      \tseq[\cs{o}]
-      {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-      {\send\;\pair{x}{y}}{S}
-    }
-  }{
-    \tseq[\pbot]
-    {\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-    {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{A}{S}}
-  }
+    }}
 \end{mathpar}
 The approximation of the lower bound is not entirely accurate, \eg, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ has lower bound $\ptop$, not $\cs{o}$, but as we only ever under-approximate, it is safe.
 
