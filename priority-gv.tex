@@ -355,7 +355,7 @@ For instance, the program in \cref{ex:deadlock} is deadlocked. Crucially, it com
     {\tyunit}
   }
 \end{mathpar}
-Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds of the function body on the function type, and \LabTirName{T-App} restores them. For instance, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ is assigned the type $\ty{\tylolli[\cs{o},\cs{o}]{A}{S}}$, \ie, a~function which, when applied, starts and finishes communicating at priority $\cs{o}$:
+Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds of the function body on the function type, and \LabTirName{T-App} restores them. For instance, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ is assigned the type $\ty{\tylolli[\cs{o},\cs{o}]{A}{S}}$, \ie, a~function which, when applied, starts and finishes communicating at priority $\cs{o}$.
 \begin{mathpar}
   \small
   \inferrule*{
@@ -365,18 +365,18 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
         \tmty{\send}{\tylolli[\ptop,\cs{o}]{\typrod{A}{\tysend[\cs{o}]{A}{S}}}{S}}
       }
       \and
-      \inferrule*{
-        \inferrule*{
-        }{
-          \tseq[\pbot]{\tmty{x}{A}}{x}{A}
-        }
-        \and
-        \inferrule*{
-        }{
-          \tseq[\pbot]
-          {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-          {y}{\tysend[\cs{o}]{A}{S}}
-        }
+      \inferrule*{%
+        % \inferrule*{
+        % }{
+        %   \tseq[\pbot]{\tmty{x}{A}}{x}{A}
+        % }
+        % \and
+        % \inferrule*{
+        % }{
+        %   \tseq[\pbot]
+        %   {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+        %   {y}{\tysend[\cs{o}]{A}{S}}
+        % }
       }{
         \tseq[\pbot]
         {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
@@ -393,7 +393,6 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
     {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{A}{S}}
   }
 \end{mathpar}
-The approximation of the lower bound is not entirely accurate, \eg, $\tm{\lambda{x}.\send\;\pair{x}{y}}$ has lower bound $\ptop$, not $\cs{o}$, but as we only ever under-approximate, it is safe.
 
 Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
 
