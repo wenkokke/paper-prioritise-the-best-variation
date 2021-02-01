@@ -510,7 +510,7 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
   \end{proof}
   \begin{corollary}
     \label{cor:pgv-closed-progress}
-    If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value V.
+    If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value $\tm{V}$.
   \end{corollary}
 \end{compacttheorems}
 It follows immediately from \cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} that a term which does not return an endpoint will complete all its communication actions, thus satisfying deadlock freedom.
