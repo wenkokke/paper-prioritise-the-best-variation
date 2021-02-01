@@ -313,7 +313,8 @@ The only non-standard feature of the typing rules is the priority annotations. P
 \end{enumerate*}
 
 In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
-For instance, the program in \cref{ex:deadlock} is deadlocked. Crucially, it composes the terms below in parallel. While each of these terms itself is well-typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
+
+To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well-typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
   \small
   \inferrule*{
@@ -403,16 +404,16 @@ Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Conf
 
 While our configuration typing is based on the standard typing for GV, it differs on two counts:
 \begin{enumerate*}[label=(\roman*)]
-\item we require that child threads return the unit value, as opposed to a terminated channel; and
-\item we simplify typing for parallel composition.
+\item \emph{we require that child threads return the unit value}, as opposed to a terminated channel; and
+\item \emph{we simplify typing for parallel composition}.
 \end{enumerate*}
-In order to guarantee deadlock freedom, in GV each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$. Consequently, associativity of parallel composition does not preserve typing. In PGV, we guarantee deadlock freedom using priorities, which removes the channel pseudo-type $\ty{S^\sharp}$, simplifies typing for parallel composition, and restores type preservation for the structural congruence.
+In order to guarantee deadlock freedom, in GV each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$. Consequently, associativity of parallel composition does not preserve typing. In PGV, we guarantee deadlock freedom using priorities, which removes the need for the channel pseudo-type $\ty{S^\sharp}$, and simplifies typing for parallel composition, while restoring type preservation for the structural congruence.
 
 
 \subsubsection*{Subject reduction}
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
-We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment. The proofs are standard inductions and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
+We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment. The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempgvvaluedone}
     \label{lem:pgv-value-done}
@@ -472,7 +473,7 @@ Progress for the term language is standard for GV, and deviates from progress fo
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
   \begin{enumerate*}[label=\emph{(\alph*)}]
   \item $\tm{M}$ is a value;
-  \item $\tm{M}\tred\tm{N}$ for some term $\tm{N}$; or
+  \item $\tm{M}\tred\tm{N}$ for some $\tm{N}$; or
   \item $\tm{M}$ is ready.
   \end{enumerate*}
 \end{restatablelemma}
@@ -512,7 +513,7 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
     If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value V.
   \end{corollary}
 \end{compacttheorems}
-It follows from \cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} that a term which does not return an endpoint will complete all its communication actions, thus satisfying deadlock freedom.
+It follows immediately from \cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} that a term which does not return an endpoint will complete all its communication actions, thus satisfying deadlock freedom.
 \end{document}
 
 %%% Local Variables:
