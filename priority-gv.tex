@@ -1,4 +1,3 @@
-% !TeX root = priorities.tex
 \documentclass[main.tex]{subfiles}
 
 \begin{document}
@@ -6,15 +5,14 @@
 \section{Priority GV}\label{sec:pgv}
 \usingnamespace{pgv}
 
-We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
+We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. 
-
 We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
 \begin{enumerate*}[label=(\alph*)]
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate*}
-We will show that only \cref{ex:cycle} is typeable in PGV, as opposed to neither in GV~\cite{wadler14} and both in its predecessor~\cite{gayvasconcelos10}.
+We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} or its predecessor~\cite{gayvasconcelos10}. 
 
 \begin{center}
 \begin{minipage}{0.5\linewidth}
@@ -76,7 +74,7 @@ We will show that only \cref{ex:cycle} is typeable in PGV, as opposed to neither
 \end{center}
 
 \subsubsection*{Session types}
-Session ($\ty{S}$) types are defined by the following grammar:
+Session types ($\ty{S}$) are defined by the following grammar:
 \[
 \begin{array}{lcl}
   \ty{S}
@@ -289,14 +287,18 @@ Term reduction is the standard call-by-value, left-to-right evaluation for GV, a
 
 Configuration reduction resembles evaluation for a process calculus: \LabTirName{E-Link}, \LabTirName{E-Send}, and \LabTirName{E-Close} perform communications, \LabTirName{E-LiftC} allows reduction under configuration contexts, and \LabTirName{E-LiftSC} embeds a structural congruence $\equiv$. The remaining rules mediate between the process calculus and the functional language: \LabTirName{E-New} and \LabTirName{E-Spawn} evaluate the $\tm{\new}$ and $\tm{\spawn}$ constructs, creating the equivalent configuration constructs, and \LabTirName{E-LiftM} embeds term reduction.
 
-Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated proceess as the neutral element; it is commutative and associative.
+Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated process as the neutral element; it is commutative and associative.
 
 While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts.
-Firstly, we decompose the $\tm{\fork}$ construct.
+\begin{enumerate*}[label=(\alph*)]
+\item
+\emph{We decompose the $\tm{\fork}$ construct}.
 In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct.
 Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must \emph{create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the \emph{actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
+\item
+\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
+\end{enumerate*}
 
-Secondly, our structural congruence is type preserving. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
 
 \subsubsection*{Typing}
 \Cref{fig:pgv-typing} gives the typing rules for PGV.
