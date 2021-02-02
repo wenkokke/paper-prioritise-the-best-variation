@@ -159,6 +159,39 @@ Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or re
 Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
+\subsubsection*{On Commuting Conversions}
+\label{app:commuting-conversions}
+
+The main change we make to PCP is \emph{removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, but using structural congruence.
+
+From the perspective of process calculi, commuting conversions behave strangely. 
+Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
+\begin{mathpar}
+  (\kappa_{\parr})
+  \quad
+  \tm{\res{z}{z'}{(\ppar{\recv{x}{y}{P}}{Q})}}
+  \red
+  \tm{\recv{x}{y}{\res{z}{z'}{(\ppar{P}{Q})}}}
+\end{mathpar}
+As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\labrecv{x}{y}}}$, and any actions $\pcp{\tm{Q}}$ was able to perform become unavailable. Consequently, CP is non-confluent:
+\begin{mathpar}
+  \setlength{\arraycolsep}{2em}
+  \begin{array}{cc}
+    \multicolumn{2}{c}{%
+    \hspace*{10ex}
+    {\tm{\res{x}{x'}{(\ppar{\recv{a}{y}{P}}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
+    \\
+    \qquad\rotatebox[origin=c]{270}{$\red\hphantom{{}^+}$}
+    &
+    \rotatebox[origin=c]{270}{$\red^+$}\qquad
+    \\
+    {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
+    &
+    {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{Q})}}}}
+  \end{array}
+\end{mathpar}
+
+In PCP, commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 
 \subsubsection*{Operational Semantics}
 The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
@@ -188,7 +221,7 @@ Finally, since our reduction relation is a strict subset of the reduction relati
   \end{restatabledefinition}
   \begin{restatabledefinition}{defpcpcanonicalforms}[Canonical Forms]
     \label{def:pcp-canonical-forms}
-    A~process $\tm{P}$ is in canonical form if it is $\tm{\halt}$ or $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+    A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
   \end{restatabledefinition}
   \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
     \label{lem:pcp-canonical-forms}
