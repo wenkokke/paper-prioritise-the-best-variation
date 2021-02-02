@@ -107,7 +107,7 @@ We prove closed progress for our updated PCP. The proof is in \cref{prf:thm-pcp-
 
 \subsection{Correspondence between PGV and PCP}
 \begingroup
-We illustrate the relation between PCP and PGV by giving a translation from PCP to PGV. The translation on types is defined as follows:
+We illustrate the relation between PCP and PGV by defining a translation from PCP to PGV. The translation on types is defined as follows:
 \[
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
@@ -192,7 +192,7 @@ Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unso
 \end{align*}
 
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
-The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence. The proofs are standard inductions and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
+The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence. The proofs are by structural induction and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]
     \label{lem:pcp-to-pgv-terms-preservation}
@@ -225,6 +225,11 @@ The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, 
   \end{restatabletheorem}
 \end{compacttheorems}
 \endgroup
+
+\noindent
+\textbf{Milner's Cyclic Scheduler}.
+As an example of a deadlock-free cyclic process, Dardha and Gay~\cite{dardhagay18} introduce an implementation of Milner's cyclic scheduler~\cite{milner89} in Priority CP. We have reproduced the scheduler in our updated PCP, and showed its translation to PGV. Full details are given in \cref{sec:milner}.
+
 \end{document}
 
 %%% Local Variables:
