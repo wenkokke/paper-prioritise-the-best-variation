@@ -5,12 +5,12 @@
 
 \section{Relation to Priority CP}\label{sec:pcp}
 
-We present a correspondence between Priority GV and an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's CP~\cite{wadler14} with priorities. The correspondence connects PGV to (a~relaxed variant of) classical linear logic.
+We present a correspondence between Priority GV and an updated version of Priority CP~\cite[PCP]{dardhagay18}, which is Wadler's CP~\cite{wadler14} with priorities. This correspondence connects PGV to (a~relaxed variant of) classical linear logic.
 
 \subsection{Revisiting Priority CP}
 \begingroup
 \usingnamespace{pcp}
-Types ($\ty{A}$, $\ty{B}$) in PCP correspond to the connectives of linear logic annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr$ are defined as expected (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
+\textbf{Types} ($\ty{A}$, $\ty{B}$) in PCP correspond to linear logic connectives annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr(\cdot)$ are defined as expected (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
 \[
   \begin{array}{lcl}
     \ty{A}, \ty{B}
@@ -24,7 +24,7 @@ Types ($\ty{A}$, $\ty{B}$) in PCP correspond to the connectives of linear logic 
       \sep        \ty{\tytop[\cs{o}]}
   \end{array}
 \]
-Processes ($\tm{P}$, $\tm{Q}$) in PCP are defined by the following grammar.
+\textbf{Processes} ($\tm{P}$, $\tm{Q}$) in PCP are defined by the following grammar.
 \[
   \begin{array}[t]{lcl}
     \tm{P}, \tm{Q}
@@ -42,9 +42,9 @@ Processes ($\tm{P}$, $\tm{Q}$) in PCP are defined by the following grammar.
            \sep   \tm{\absurd{x}}
   \end{array}
 \]
-Processes are typed by sequents $\seq{P}{\ty{\Gamma}}$, which correspond to the one-sided sequents classical linear logic. Different from PGV, we do not need to store the greatest priority on the sequent, as, due to the absence of higher-order functions, we cannot compose processes \emph{sequentially}.
+Processes are typed by sequents $\seq{P}{\ty{\Gamma}}$, which correspond to the one-sided sequents in classical linear logic. Differently from PGV, in PCP we do not need to store the greatest priority on the sequent, as, due to the absence of higher-order functions, we cannot compose processes \emph{sequentially}.
 
-PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par}, and guarantees deadlock freedom using priority constraints, \eg, in \LabTirName{T-Send}. The full typing rules and operational semantics are available in \cref{fig:pcp-operational-semantics,fig:pcp-typing} and in \cite{dardhagay18}:
+PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par} rules---logically corresponding to cycle and mix rules, respectively---and guarantees deadlock freedom by using priority constraints, \eg, as in \LabTirName{T-Send}. The full typing rules and operational semantics are available in \cref{fig:pcp-operational-semantics,fig:pcp-typing} in \cref{app:revisiting-PCP} and in \cite{dardhagay18}:
 \begin{mathpar}
   \small
   \inferrule*[lab=T-Res]{
@@ -62,7 +62,7 @@ PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par}, and guarantee
   }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
 \end{mathpar}
 
-The main change we make to PCP is \emph{removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, using structural congruence.
+The main change we make to PCP is \emph{removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, but using structural congruence.
 
 From the perspective of process calculi, commuting conversions behave strangely. Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
 \begin{mathpar}
