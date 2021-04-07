@@ -119,7 +119,6 @@
 % Inference rules
 \usepackage{mathpartir}
 
-
 % Sort macros
 \usepackage{xcolor}
 \newcommand{\tm}[1]{\ensuremath{{\color[HTML]{a40038}#1}}}
@@ -320,7 +319,7 @@ In Classical Processes (CP)~\cite{wadler14}, a process calculus based on classic
 %
 In both GV and CP, deadlock freedom is achieved at the expense of expressivity as the only communication structures allowed are trees. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows for cyclic structures and restores deadlock freedom by adding priorities to types, in line with Kobayashi and Padovani's work~\cite{kobayashi06,padovani14}.
 
-Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, and restores deadlock freedom by adding priorities. PGV has strong ties to linear logic and solves several problems in the original GV. We show our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics. 
+Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, and restores deadlock freedom by adding priorities. PGV has strong ties to linear logic and solves several problems in the original GV. We show our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
 %\keywords{session types \and $\pi$-calculus \and GV \and CP \and deadlock freedom}
 \end{abstract}
 
