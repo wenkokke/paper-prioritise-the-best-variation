@@ -6,13 +6,13 @@
 \usingnamespace{pgv}
 
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
-Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures. 
+Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures.
 We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
 \begin{enumerate*}[label=(\alph*)]
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate*}
-We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} or its predecessor~\cite{gayvasconcelos10}. 
+We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} nor guaranteed to be deadlock-free by its predecessor~\cite{gayvasconcelos10}.
 
 \begin{center}
 \begin{minipage}{0.5\linewidth}
@@ -121,9 +121,9 @@ Duality plays a crucial role in session types. The two endpoints of a channel ar
   \qquad
   \ty{\co{\tyrecv[\cs{o}]{T}{S}}} = \ty{\tysend[\cs{o}]{T}{\co{S}}}
   \qquad
-  \ty{\co{\tyends[\cs{o}]}} = \ty{\co{\tyendr[\cs{o}]}}
+  \ty{\co{\tyends[\cs{o}]}} = \ty{\tyendr[\cs{o}]}
   \qquad
-  \ty{\co{\tyendr[\cs{o}]}} = \ty{\co{\tyends[\cs{o}]}}
+  \ty{\co{\tyendr[\cs{o}]}} = \ty{\tyends[\cs{o}]}
 \]
 
 \subsubsection*{Priorities}
@@ -181,7 +181,7 @@ Terms ($\tm{L}$, $\tm{M}$, $\tm{N}$) are defined by the following grammar:
     \sep        \tm{\wait}
 \end{array}
 \]
-Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$. The term language is the standard linear $\lambda$-calculus with products, sums, and their units, extended with constants $\tm{K}$ for the communication primitives. 
+Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$. The term language is the standard linear $\lambda$-calculus with products, sums, and their units, extended with constants $\tm{K}$ for the communication primitives.
 
 Constants are best understood in conjunction with their typing and reduction rules in~\cref{fig:pgv-typing,fig:pgv-operational-semantics}.
 Briefly, $\tm{\link}$ links two endpoints together, forwarding messages from one to the other, $\tm{\new}$ creates a new channel and returns a pair of its endpoints, and $\tm{\spawn}$ spawns off its argument as a new thread.
@@ -338,7 +338,7 @@ To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock
     {\letpair{\unit}{y'}{\recv\;{y'}}{\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}}
     {\tyunit}
   }
-  
+
   \inferrule*{
     \tseq[\cs{o}]
     {\tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}}
@@ -400,7 +400,7 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
   }
 \end{mathpar}
 
-Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensure that there is at most one main thread.
+Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensures that there is at most one main thread.
 
 While our configuration typing is based on the standard typing for GV, it differs on two counts:
 \begin{enumerate*}[label=(\roman*)]
@@ -453,7 +453,7 @@ Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\
 \[
   \tm{\main\;\letpair{x}{x'}{\new}{\andthen{\spawn\;(\lambda\unit.\echo_{x'})}}{x}}
 \]
-If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$. In~\cref{cor:pgv-closed-progress} we show that if a term does not return an endpoint, it must produce \emph{only} a value.
+If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce \emph{only} a value.
 
 \emph{Actions} are terms which perform communication actions and which synchronise between two threads.
 \begin{definition}[Actions]
@@ -464,7 +464,7 @@ If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\
 \emph{Ready terms} are terms which are ready to perform a communication action, either by themselves, \eg creating a new channel or thread, or with another thread, \eg sending or receiving.
 \begin{definition}[Ready Terms]
   \label{def:pgv-ready-actions}
-  A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$ or $\tm{\link\;\pair{y}{x}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$.
+  A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$.
 \end{definition}
 
 Progress for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}:
