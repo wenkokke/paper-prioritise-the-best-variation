@@ -4,19 +4,18 @@
 \begin{document}
 \section{Related Work and Conclusion}
 \subsubsection*{Deadlock freedom and progress}
-%Deadlock freedom and progress are well studied properties in the $\pi$-calculus.
-For the standard typed $\pi$-calculus, one line of work is Kobayashi's approach to deadlock freedom~\cite{kobayashi98}, where priorities are abstract tags defined over a partially ordered set. These tags were later simplified to pairs of natural numbers, called obligations and capabilities~\cite{kobayashi06}, which allowed more $\pi$-calculus processes to be typed. Padovani~\cite{padovani13} adapted the obligation and capability pairs to session types, and later simplified them to a single priority for the linear $\pi$-calculus~\cite{padovani14}.  Furthermore, by exploiting the encoding of session types into linear types~\cite{kobayashi07,dardhagiachino12}
-%,dardha14beat,dardha16 %
-and the priority-based linear $\pi$-calculus,
+Deadlock freedom and progress are well studied properties in the $\pi$-calculus.
+For the `standard' typed $\pi$-calculus, one line of work is Kobayashi's approach to deadlock freedom~\cite{kobayashi98}, where priorities are abstract tags defined over a partially ordered set. These tags were later simplified to pairs of natural numbers, called obligations and capabilities~\cite{kobayashi06}, which allowed more $\pi$-calculus processes to be typed. Padovani~\cite{padovani13} adapted the obligation and capability pairs to session types, and later simplified them to a single priority for the linear $\pi$-calculus~\cite{padovani14}.  Furthermore, by exploiting the encoding of session types into linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat} and the priority-based linear $\pi$-calculus,
 we can obtain deadlock freedom for the $\pi$-calculus with session types.
 
 For the session-typed $\pi$-calculus, Dezani~\etal~\cite{dezani-ciancaglinimostrous06} guarantee progress by allowing only one active session at a time. Dezani later~\cite{dezani-ciancagliniliguoro09progress} introduces a partial order on channels similar to Kobayashi~\cite{kobayashi98}. Carbone and Debois~\cite{carbonedebois10} define progress for session typed $\pi$-calculus in terms of a \emph{catalyser}, which provides a missing counterpart to a process, thus guaranteeing deadlock freedom.
-Carbone~\etal~\cite{carbonedardha14} use such catalysers to show that progress is a compositional form of lock-freedom and that it can be lifted to session types via the encoding of session types to linear types. Vieira and Vasconcelos~\cite{vieiravasconcelos13} use single priorities and an abstract partial order to guarantee deadlock freedom in a session-typed $\pi$-calculus.
-%
-Multiparty Session Types (MPST) \cite{hondayoshida08} guarantee deadlock freedom \emph{within a single} session, but not for session interleaving.
-Consequently, several techniques for deadlock freedom in MPST have been defined \cite{bettinicoppo08,carbonemontesi13}.
-%Bettini~\etal~\cite{bettinicoppo08} follow a similar technique to Kobayashi for multiparty session types. The main
-%difference with our work is that we associate priorities to communication actions, and not to channels. Carbone and Montesi~\cite{carbonemontesi13} explore and combine MPST and choreographies to obtain a formalism that satisfies deadlock freedom by design.
+Carbone~\etal~\cite{carbonedardha14} use such catalysers to show that progress is a compositional form of lock-freedom and that it can be lifted to session types via the encoding of session types to linear types. Vieira and Vasconcelos~\cite{vieiravasconcelos13} use single priorities and an abstract partial order to guarantee deadlock freedom in a binary session-typed $\pi$-calculus and building on conservation types.
+
+While our work focuses on \emph{binary} session types, it is worth to discuss related work on Multiparty Session Types (MPST) in order to give a broader context. The original work on MPST by Honda~\etal~\cite{hondayoshida08} guarantees deadlock freedom \emph{within a single} session, but not for session interleaving.
+Later on, several techniques for deadlock freedom in MPST were defined.
+Bettini~\etal~\cite{bettinicoppo08} follow a similar technique to Kobayashi's for the MPST setting. The main difference with our work is that we associate priorities with communication actions, whether Bettini~\etal~\cite{bettinicoppo08} with channels. Carbone and Montesi~\cite{carbonemontesi13} explore and combine MPST and choreographies to obtain a formalism that satisfies deadlock freedom by design.
+Castellani~\etal~\cite{CastellaniDGH20} guarantee lock freedom--a stronger property than deadlock freedom--in the context of MPST with \emph{internal delegation}, where participants are allowed to delegate tasks to each other as long as they fall within the same multiparty session. This allows for the internal delegation to be captured by the global type.
+
 
 Gay~\etal~\cite{gaynagarajan03} and Vasconcelos~\etal~\cite{vasconcelosravara04,vasconcelosgay06} were the first to introduce a functional language with session types. However, such works, including early GV~\cite{gayvasconcelos10,gayvasconcelos12} did not guarantee deadlock freedom, until it was addressed via syntactic restrictions~\cite{lindleymorris15,wadler14}. Toninho~\etal~\cite{toninhocaires12} present a translation of simply-typed $\lambda$-calculus into session-typed $\pi$-calculus. However, their focus is not on deadlock freedom.
 
