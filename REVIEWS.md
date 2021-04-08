@@ -135,11 +135,11 @@ I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this
 >
 > Several prominent claim such as the second sentence of the abstract are not true in general and the scope in which it might be true is not made clear. For example, the original 2008 paper on multi-party session types allows the IO causal dependency of your example by referring to global types. Other papers make use of multi-party compatibility to reconstruct the global dependencies from the local type and more recently some use model checking directly -- you do not mention such branches of the literature that make justifying your claims harder. Many papers on session types build on these directions and much of the literature is fairly language agnostic, so could be applied to the language typed in this paper.
 
-@reviewer2 is correct that our claims regarding session types and deadlock freedom are too loose, and only really hold for binary session types. However, I'm not familiar with the more recent work they're referring to. Do you happen to know which papers "make use of multi-party compatibility to reconstruct the global dependencies from the local type" and which "use model checking directly"?
+~~@reviewer2 is correct that our claims regarding session types and deadlock freedom are too loose, and only really hold for binary session types. However, I'm not familiar with the more recent work they're referring to. Do you happen to know which papers "make use of multi-party compatibility to reconstruct the global dependencies from the local type" and which "use model checking directly"?~~
 
-@elektra85: *maybe* these are the papers @reviewer2 is talking about
+~~@elektra85: *maybe* these are the papers @reviewer2 is talking about
 1. on coherence cand compatibility: https://arxiv.org/abs/1304.1902 and https://link.springer.com/article/10.1007/s00236-016-0285-y and https://www.sciencedirect.com/science/article/pii/S2352220817301487
-2. https://dl.acm.org/doi/10.1145/3290343
+2. https://dl.acm.org/doi/10.1145/3290343~~
 
 
 TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
