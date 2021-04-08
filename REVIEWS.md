@@ -23,9 +23,11 @@ As for a compelling example, we could take a standard example from multiparty se
 
 I'm not sure what the reviewer means here? Are they saying "Either *only* linear channels or *everything primitive*?" That'd be a fair point, to be honest. I think the original GV does require a primitive send and receive in order to maintain the tree structure, but we no longer need that, so the main reason we'd have for keeping it is for comparability to the old GV.
 
-> The paper is very readable up to section 3. Here it gets a bit too dense, likely because the authors had to compress the presentation of PCP in little space. Nonetheless, also here the content makes sense to people acquainted with the related literature, except for the reference to Milner's cyclic scheduler. I understand the authors wanted to cite a known example in the scope of their type system, but the given reference is absolutely inadequate to provide any meaningful information. I think the paper stands on its own even without this paragraph.
+> ~~The paper is very readable up to section 3. Here it gets a bit too dense, likely because the authors had to compress the presentation of PCP in little space. Nonetheless, also here the content makes sense to people acquainted with the related literature, except for the reference to Milner's cyclic scheduler. I understand the authors wanted to cite a known example in the scope of their type system, but the given reference is absolutely inadequate to provide any meaningful information. I think the paper stands on its own even without this paragraph.~~
 
-We can probably remove the paragraph relating to Milner's cyclic scheduler.
+~~We can probably remove the paragraph relating to Milner's cyclic scheduler.~~
+
+I did remove the paragraph on cyclic sched.
 
 > One question that I didn't see addressed nor discussed in the paper is whether this is actually an extension of GV, in the sense that every well-typed GV program is also a well-typed PGV program.  It would be reassuring to know that no well-typed GV program is rejected because of priorities.
 
@@ -57,7 +59,11 @@ TODO: @wenkokke insert a clarification that stresses that, unfortunately, GV use
 
 ## Paper description
 
-> This paper applies a technique introduced in an existing calculus called PCP for permitting richer patterns of session interleaving, sometime referred to as a type of delegation, than the very restricted delegation patterns offered by calculi that provide a session calculus-like syntax for linear functions. To accept this paper one has to accept that building on GV is a good idea. An external motivation for pursuing this particular combination of calculi is not provided.
+> This paper applies a technique introduced in an existing calculus called PCP for permitting richer patterns of session interleaving, sometime referred to as a type of delegation, than the very restricted delegation patterns offered by calculi that provide a session calculus-like syntax for linear functions.
+
+> To accept this paper one has to accept that building on GV is a good idea. An external motivation for pursuing this particular combination of calculi is not provided.
+
+We have a full paragraph on why functional languages are useful, and in fact another reviewer did notice this. Said that, is there an external reference we could use to convince @reviewer2 that building on GV is worth it?
 
 > The paper claims to make four contributions:
 >
@@ -82,6 +88,8 @@ I think this criticism is somewhat unfair. The encoding isn't surprising, and it
 The research question is stated explicitly: "Can we design a more expressive GV where deadlock freedom is guaranteed by design and communication structures are not limited to only trees?" Nowhere do we mention delegation as having a special role in our research question.
 
 However, it would be extremely useful to find out which papers @reviewer2 is referring to with "a recent paper [which] proposes "internal delegation" that guarantees more than deadlock-freedom" so that we can discuss it in the related work section.
+
+@elektra85: I believe it is this https://www.sciencedirect.com/science/article/abs/pii/S030439751930578X
 
 TODO: @elektra85 discuss the "internal delegation" paper in the related work section
 
@@ -119,6 +127,8 @@ TODO: @wenkokke weaken the claims regarding the correspondence with linear logic
 
 I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this discussion. From what I can assess, their point is that CP isn't process calculus, but rather linear functions, so you should describe them as such. However, they describe a correspondence between process calculus and BV below, and I think it would be fair to say that they would accept such a calculus as a process calculus. Therefore, I think it's fair for us to position CP as aspiring towards that better calculus? However, I'm uncertain how to incorporate this into the paper.
 
+@elektra85: we could add this to the discussion/conclusion section at the end of the paper.
+
 ## Following PC discussion
 
 > The following expands on the message in Review 4, and is in addition to the comments above.
@@ -127,7 +137,14 @@ I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this
 
 @reviewer2 is correct that our claims regarding session types and deadlock freedom are too loose, and only really hold for binary session types. However, I'm not familiar with the more recent work they're referring to. Do you happen to know which papers "make use of multi-party compatibility to reconstruct the global dependencies from the local type" and which "use model checking directly"?
 
-TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction, and compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
+@elektra85: *maybe* these are the papers @reviewer2 is talking about
+1. on coherence cand compatibility: https://arxiv.org/abs/1304.1902 and https://link.springer.com/article/10.1007/s00236-016-0285-y and https://www.sciencedirect.com/science/article/pii/S2352220817301487
+2. https://dl.acm.org/doi/10.1145/3290343
+
+
+TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
+
+TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
 >
@@ -141,7 +158,7 @@ TODO: @wenkokke see if you can assess the expressivity of [2] compared to PCP/PG
 
 [2]: https://arxiv.org/abs/cs/9910023
 
-TODO: @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)
+~~TODO: @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)~~
 
 
 # Review 3
@@ -193,6 +210,8 @@ I feel it doesn't become *quintessentially* GV until it starts ruling out deadlo
 We should clarify the link between CP and PCP if we want to keep these claims about the "strong" link to linear logic. @reviewer3 is right in that the relation between PCP and CLL is tenuous at best. We don't have CLL--->PCP, even if we suspect it holds, and we know that certainly PCP-/->CLL.
 
 TODO: either we prove the injection from CP--->PCP or GV--->PGV, or we put some serious qualifiers on the claim that PGV has any ties to linear logic, and weaken the terminology to "logic-inspired"
+
+TODO: add in PCP section that as for CP, in PCP we prove cycle elimination and obtain deadlock freedom as a result of that; this is the most formal connection to LL. It is not clear what priorities mean in logic and if they have a meaning at all and definitely CP --> PCP and PCP -/-> are not proved but we can conjecture them and say these are future work!
 
 > It seems to me that the work by Balzers et al. on manifest sharing for Intuitionistic Linear Logic is nearer to a logical approach, due to their usage of stratification and modalities, but this might be a matter of taste.
 
