@@ -87,11 +87,11 @@ I think this criticism is somewhat unfair. The encoding isn't surprising, and it
 
 The research question is stated explicitly: "Can we design a more expressive GV where deadlock freedom is guaranteed by design and communication structures are not limited to only trees?" Nowhere do we mention delegation as having a special role in our research question.
 
-However, it would be extremely useful to find out which papers @reviewer2 is referring to with "a recent paper [which] proposes "internal delegation" that guarantees more than deadlock-freedom" so that we can discuss it in the related work section.
+~~However, it would be extremely useful to find out which papers @reviewer2 is referring to with "a recent paper [which] proposes "internal delegation" that guarantees more than deadlock-freedom" so that we can discuss it in the related work section.~~
 
-@elektra85: I believe it is this https://www.sciencedirect.com/science/article/abs/pii/S030439751930578X
+~~@elektra85: I believe it is this https://www.sciencedirect.com/science/article/abs/pii/S030439751930578X~~
 
-TODO: @elektra85 discuss the "internal delegation" paper in the related work section
+~~TODO: @elektra85 discuss the "internal delegation" paper in the related work section~~
 
 > To substantiate the above better it would be good to be more precise about the contribution. Perhaps you could classify key session type systems that do satisfy deadlock-freedom in the presence of delegation and others that do not. You could then illustrate with good example how some mainstream session type systems (not restricting the particular take on the Curry-Howard world here) do not guarantee deadlock-freedom due to delegation (perhaps separating different kinds of delegation, such as the limited spawn-only type that falls out of the Curry-Howard inspired calculi, which is not classic delegation and is what I think you mean by the tree structure -- a claim that also needs to be illustrated better). You could then explain how to fix some of the systems that do not guarantee deadlock-freedom at all and also how you enable richer delegation patterns. My suspicion though is that if you go though with this then the case for PGV would remain weak.
 
