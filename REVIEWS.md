@@ -137,9 +137,9 @@ I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this
 
 ~~@reviewer2 is correct that our claims regarding session types and deadlock freedom are too loose, and only really hold for binary session types. However, I'm not familiar with the more recent work they're referring to. Do you happen to know which papers "make use of multi-party compatibility to reconstruct the global dependencies from the local type" and which "use model checking directly"?~~
 
-~~@elektra85: *maybe* these are the papers @reviewer2 is talking about
-1. on coherence cand compatibility: https://arxiv.org/abs/1304.1902 and https://link.springer.com/article/10.1007/s00236-016-0285-y and https://www.sciencedirect.com/science/article/pii/S2352220817301487
-2. https://dl.acm.org/doi/10.1145/3290343~~
+~~@elektra85: *maybe* these are the papers @reviewer2 is talking about~~
+~~1. on coherence cand compatibility: https://arxiv.org/abs/1304.1902 and https://link.springer.com/article/10.1007/s00236-016-0285-y and https://www.sciencedirect.com/science/article/pii/S2352220817301487~~
+~~2. https://dl.acm.org/doi/10.1145/3290343~~
 
 
 TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
