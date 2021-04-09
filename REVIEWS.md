@@ -229,17 +229,18 @@ We cannot. See above.
 
 ~~This is a straightforward misunderstanding of us using "by design" to mean "baked into the language".~~
 
-> p.2: "Recent developments in the Classical Process (CP) [...] to decoupling these constructs"
-> This makes it sound like this decoupling was invented thanks to CP/CLL, but it had already been discovered for Intuitionistic Linear Logic, by extending the propositions-as-types correspondence by Caires and Pfenning with hypersequents:
-> [3] https://doi.org/10.1007/978-3-662-44584-6_5
->
-> Is there a fundamental difference?
+~~> p.2: "Recent developments in the Classical Process (CP) [...] to decoupling these constructs"~~
+~~> This makes it sound like this decoupling was invented thanks to CP/CLL, but it had already been discovered for Intuitionistic Linear Logic, by extending the propositions-as-types correspondence by Caires and Pfenning with hypersequents:~~
+~~> [3] https://doi.org/10.1007/978-3-662-44584-6_5~~
+~~> Is there a fundamental difference?~~
 
-I believe [3] uses hypersequents, much like HCP, which means that it enforces a tree structure, which means it's more restrictive than PCP/PGV. There's absolutely a difference between the decouplings. However, we cite HCP. Therefore it would be prudent to also cite [3, 4].
+~~I believe [3] uses hypersequents, much like HCP, which means that it enforces a tree structure, which means it's more restrictive than PCP/PGV. There's absolutely a difference between the decouplings. However, we cite HCP. Therefore it would be prudent to also cite [3, 4].~~
 
-[4]: https://arxiv.org/abs/1803.01049
+~~[4]: https://arxiv.org/abs/1803.01049~~
 
-TODO: @wenkokke add these citations
+~~TODO: @wenkokke add these citations~~
+
+@elektra85 added references [3] and [4] and commented on them in the introduction!
 
 > ~~p.2: Classical Process -> Classical Processes~~
 
