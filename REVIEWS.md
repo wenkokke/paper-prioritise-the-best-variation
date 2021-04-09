@@ -223,11 +223,11 @@ TODO: @elektra85 add discussion of priorities vs. modalities to the related work
 
 We cannot. See above.
 
-> p.2: "[...] guarantee deadlock freedom by design"
-> A clarification is needed here. What do you mean with "deadlock freedom by design"?
-> Googling gives <https://dl.acm.org/doi/10.1145/2429069.2429101> where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?
+~~> p.2: "[...] guarantee deadlock freedom by design"~~
+~~> A clarification is needed here. What do you mean with "deadlock freedom by design"?~~
+~~> Googling gives <https://dl.acm.org/doi/10.1145/2429069.2429101> where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?~~
 
-This is a straightforward misunderstanding of us using "by design" to mean "baked into the language".
+~~This is a straightforward misunderstanding of us using "by design" to mean "baked into the language".~~
 
 > p.2: "Recent developments in the Classical Process (CP) [...] to decoupling these constructs"
 > This makes it sound like this decoupling was invented thanks to CP/CLL, but it had already been discovered for Intuitionistic Linear Logic, by extending the propositions-as-types correspondence by Caires and Pfenning with hypersequents:
