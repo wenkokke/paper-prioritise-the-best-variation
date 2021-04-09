@@ -144,7 +144,7 @@ I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this
 
 TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
 
-TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
+~~TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.~~
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
 >
@@ -152,7 +152,7 @@ TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in th
 
 @reviewer2 is correct that the correspondence between process calculus and BV is likely much nicer than the correspondence between process calculus and CLL. However, we should asses what the expressivity of BV is compared to that of PCP. We know that PCP is more expressive than linear logic, precisely due to the ad-hoc approach to internalising dependencies via priorities. My intuition is that, since BV corresponds *loosely* to linear logic, the expressivity of a calculus following such a correspondence would correspond to that of CP, not that of PCP.
 
-TODO: @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.
+~~TODO: @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.~~
 
 TODO: @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
 
