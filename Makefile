@@ -9,7 +9,7 @@ build: $(MAIN).pdf
 
 .PHONY: watch
 watch:
-	@fswatch -o $(SOURCES) | xargs -n1 -I{} make
+	@fswatch -o $(SOURCES) | xargs -n1 -I{} make build
 
 .PHONY: clean
 clean:

@@ -62,7 +62,7 @@ PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par} rules---logica
   }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
 \end{mathpar}
 
-The main change we make to PCP is \emph{removing commuting conversions} and defining an operational semantics based on structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination. 
+The main change we make to PCP is \emph{removing commuting conversions} and defining an operational semantics based on structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination.
 However, from the perspective of process calculi, commuting conversions behave strangely: they allow an input/output action to be moved to the top of a process, thus potentially blocking actions which were previously possible (an example is given in \cref{app:commuting-conversions}). This makes CP, and PCP in \cite{dardhagay18}, non-confluent.
 As Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, if using structural congruence.
 %Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
@@ -191,18 +191,18 @@ Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unso
   &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
 \end{align*}
 
-Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$.
+Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$, where $\tm{\pgv{\child}}$ indicates a child thread. Translated processes do not have a main thread.
 The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence. The proofs are by structural induction and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
 \begin{compacttheorems}
-  \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]
+  \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
     \label{lem:pcp-to-pgv-terms-preservation}
     If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$.
   \end{restatablelemma}
-  \begin{restatabletheorem}{thmpcptopgvconfspreservation}[Preservation, ${\tm{\cpgvC{\cdot}}}$]
+  \begin{restatabletheorem}{thmpcptopgvconfspreservation}[Preservation, ${\tm{\cpgvC{\cdot}}}$]%
     \label{thm:pcp-to-pgv-confs-preservation}
     If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$.
   \end{restatabletheorem}
-  \begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}
+  \begin{restatablelemma}{lempcptopgvcpgvMtocpgvC}%
     \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
     For any $\pcp{\tm{P}}$, either:
     \begin{itemize}
@@ -211,13 +211,13 @@ The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, 
     \end{itemize}
   \end{restatablelemma}
   \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencesoundness}%
-    [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]
+    [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]%
     \label{thm:pcp-to-pgv-operational-correspondence-soundness}
     \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$, there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
   \end{restatabletheorem}
   \begin{restatabletheorem}{thmpcptopgvoperationalcorrespondencecompleteness}%
-    [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]
+    [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]%
     \label{thm:pcp-to-pgv-operational-correspondence-completeness}
     \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,

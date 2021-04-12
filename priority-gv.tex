@@ -246,6 +246,8 @@ Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of th
   \quad
   (\tm{\main}  + \tm{\main} \; \text{is undefined})
 \]
+The use of $\tm{\child}$ for child threads~\cite{lindleymorris15} overlaps with the use of the meta-variable $\cs{o}$ for priorities~\cite{dardhagay18}. Both are used to annotate sequents: flags appear on the sequent in configuration typing, and priorities in term typing. To distinguish the two symbols, they are typeset in a different font and a different colour.
+
 Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation contexts ($\tm{\conf{F}}$), and configuration contexts ($\tm{\conf{G}}$) are defined by the following grammars:
 \[
 \begin{array}[t]{lcl}
@@ -307,7 +309,7 @@ Typing rules for terms are at the top of \cref{fig:pgv-typing}. Terms are typed 
 \input{fig/pgv-typing}
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18}, priorities obey the following two laws:
-\begin{enumerate*}[label=(\roman*)]
+\begin{enumerate*}[label= (\roman*) ]
 \item an action with lower priority happens before an action with higher priority; and
 \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate*}
@@ -403,7 +405,7 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
 Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensures that there is at most one main thread.
 
 While our configuration typing is based on the standard typing for GV, it differs on two counts:
-\begin{enumerate*}[label=(\roman*)]
+\begin{enumerate*}[label= (\roman*) ]
 \item \emph{we require that child threads return the unit value}, as opposed to a terminated channel; and
 \item \emph{we simplify typing for parallel composition}.
 \end{enumerate*}
@@ -415,28 +417,28 @@ Unlike with previous versions of GV, structural congruence, term reduction, and 
 
 We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment. The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 \begin{compacttheorems}
-  \begin{restatablelemma}{lempgvvaluedone}
+  \begin{restatablelemma}{lempgvvaluedone}%
     \label{lem:pgv-value-done}
     If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
   \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubstitution}[Substitution]
+  \begin{restatablelemma}{lempgvsubstitution}[Substitution]%
     \label{lem:pgv-substitution}
     \hfill\\%newline before theorem statement
     If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
   \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]
+  \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]%
     \label{lem:pgv-subject-reduction-terms}
     \hfill\\%newline before theorem statement
     If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
     then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
   \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]
+  \begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]%
     \label{lem:pgv-subject-congruence}
     \hfill\\%newline before theorem statement
     If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
   \end{restatablelemma}
-  \begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]
+  \begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]%
     \label{thm:pgv-subject-reduction-confs}
     \hfill\\%newline before theorem statement
     If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
@@ -456,19 +458,19 @@ Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\
 If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce \emph{only} a value.
 
 \emph{Actions} are terms which perform communication actions and which synchronise between two threads.
-\begin{definition}[Actions]
+\begin{definition}[Actions]%
   \label{def:pgv-actions}
   A~term \emph{acts on} an endpoint $\tm{x}$ if it is $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;{x}}$, $\tm{\close\;{x}}$, or $\tm{\wait\;{x}}$. A~term is an \emph{action} if it acts on some endpoint $\tm{x}$.
 \end{definition}
 
 \emph{Ready terms} are terms which are ready to perform a communication action, either by themselves, \eg creating a new channel or thread, or with another thread, \eg sending or receiving.
-\begin{definition}[Ready Terms]
+\begin{definition}[Ready Terms]%
   \label{def:pgv-ready-actions}
   A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$.
 \end{definition}
 
 Progress for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}:
-\begin{restatablelemma}{lempgvopenprogressterms}[Progress, $\tred$]
+\begin{restatablelemma}{lempgvopenprogressterms}[Progress, $\tred$]%
   \label{lem:pgv-open-progress-terms}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
   \begin{enumerate*}[label=\emph{(\alph*)}]
@@ -484,31 +486,31 @@ A~configuration either reduces, or it is equivalent to configuration in normal f
 Finally, as a corollary, we get that well-typed terms which do not return endpoints return \emph{just} a value:
 
 \begin{compacttheorems}
-  \begin{definition}[Canonical Forms]
+  \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
     A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
     \[
       \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}.
     \]
   \end{definition}
-  \begin{definition}[Normal Forms]
+  \begin{definition}[Normal Forms]%
     A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
     \[
       \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}.
     \]
   \end{definition}
-  \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]
+  \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]%
     \label{lem:pgv-canonical-forms}
     If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
   \end{restatablelemma}
-  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]
+  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]%
     \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
   \end{restatabletheorem}
   \begin{proof}
     Our proof follows the reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). Details are in~\Cref{prf:thm-pgv-closed-progress-confs}.
   \end{proof}
-  \begin{corollary}
+  \begin{corollary}%
     \label{cor:pgv-closed-progress}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value $\tm{V}$.
   \end{corollary}

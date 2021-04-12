@@ -10,12 +10,11 @@
 % Typesetting
 \usepackage[all]{foreign}
 \usepackage{rotating}
-\usepackage{lscape}
-% \usepackage{pdflscape}
+\usepackage{pdflscape}
 \usepackage[inline]{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \usepackage{multicol}
-\setlist[description]{style=unboxed,font=\normalfont\itshape}
+\setlist[description]{style=unboxed,font=\normalfont\itshape}%
 \usepackage[strict]{changepage}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
@@ -27,11 +26,11 @@
 \usepackage{etoolbox}
 \makeatletter
 \patchcmd{\@spthm}
-  {\topsep 7\p@ \@plus 2\p@ \@minus 4\p@}
+  {\topsep7\p@\@plus2\p@\@minus4\p@}
   {\topsep\spthmsep}
   {}{}
 \makeatother
-\newlength\spthmsep
+\newlength\spthmsep%
 \setlength{\spthmsep}{\smallskipamount}
 \newenvironment{compacttheorems}
  {\par\vspace{\spthmsep}\begingroup
@@ -39,10 +38,10 @@
  {\endgroup\vspace{\spthmsep}}
 
 % Formatting of \subsubsection
-\let\llncssubparagraph\subparagraph
-\let\subparagraph\paragraph
+\let\llncssubparagraph\subparagraph%
+\let\subparagraph\paragraph%
 \usepackage[compact]{titlesec}
-\let\subparagraph\llncssubparagraph
+\let\subparagraph\llncssubparagraph%
 \titleformat{\subsubsection}[runin]{\normalfont\bfseries}{}{1em}{}[.]
 \titlespacing{\subsubsection}{0pt}{\medskipamount}{1ex}
 
@@ -59,7 +58,7 @@
 \usetikzlibrary{arrows,automata,shapes,shapes.geometric}
 
 % Breaking math across pages
-\allowdisplaybreaks
+\allowdisplaybreaks%
 
 % Subfiles and namespaces
 \usepackage{subfiles}
@@ -75,44 +74,44 @@
 \newcommand{\restatetheorem}[1]{%
   \begingroup
   \renewcommand{\thetheorem}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\theorem
-  \csname restatabletheorem@#1\endcsname
-  \endtheorem
+  \expandafter\expandafter\expandafter\theorem%
+  \csname restatabletheorem@#1\endcsname%
+  \endtheorem%
   \endgroup
 }
 \NewEnviron{restatabletheorem}[1]{%
   \global\expandafter\xdef\csname restatabletheorem@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\theorem\BODY\unskip\label{#1}\endtheorem
+  \expandafter\theorem\BODY\unskip\label{#1}\endtheorem%
 }
 \newcommand{\restatelemma}[1]{%
   \begingroup
   \renewcommand{\thelemma}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\lemma
+  \expandafter\expandafter\expandafter\lemma%
   \csname restatablelemma@#1\endcsname
-  \endlemma
+  \endlemma%
   \endgroup
 }
 \NewEnviron{restatablelemma}[1]{%
   \global\expandafter\xdef\csname restatablelemma@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\lemma\BODY\unskip\label{#1}\endlemma
+  \expandafter\lemma\BODY\unskip\label{#1}\endlemma%
 }
 \newcommand{\restatedefinition}[1]{%
   \begingroup
   \renewcommand{\thedefinition}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\definition
+  \expandafter\expandafter\expandafter\definition%
   \csname restatabledefinition@#1\endcsname
-  \enddefinition
+  \enddefinition%
   \endgroup
 }
 \NewEnviron{restatabledefinition}[1]{%
   \global\expandafter\xdef\csname restatabledefinition@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\definition\BODY\unskip\label{#1}\enddefinition
+  \expandafter\definition\BODY\unskip\label{#1}\enddefinition%
 }
 
 
@@ -265,8 +264,8 @@
   \providecommand{\main}[0]{\ensuremath{\bullet}}
   \providecommand{\child}[0]{\ensuremath{\circ}}
   % Typing judgements
-  \providecommand{\tseq}[4][]{\ensuremath{#2\vdash^{#1}\tmty{#3}{#4}}}
-  \providecommand{\cseq}[3][]{\ensuremath{#2\vdash^{#1}\tm{#3}}}
+  \providecommand{\tseq}[4][]{\ensuremath{#2\vdash^{\cs{#1}}\tmty{#3}{#4}}}
+  \providecommand{\cseq}[3][]{\ensuremath{#2\vdash^{\tm{#1}}\tm{#3}}}
   % Reduction relations
   \providecommand{\tred}[0]{\ensuremath{\longrightarrow_{M}}}
   \providecommand{\cred}[0]{\ensuremath{\longrightarrow_{\conf{C}}}}

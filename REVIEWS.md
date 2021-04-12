@@ -51,11 +51,11 @@
 
 > ~~page 11, definition 2: given that x and y range over arbitrary variables, I think it's superfluous to list both link(x,y) and link(y,x)~~
 
-> page 14, before lemma 7: when showing the translation of sequents, it's not clear whether the o annotation ranges over priorities (it's in a different font), nor where it comes from.
+> ~~page 14, before lemma 7: when showing the translation of sequents, it's not clear whether the o annotation ranges over priorities (it's in a different font), nor where it comes from.~~
 
 @wenkokke: Ah, we tripped someone up with the collision between GV's ●/○ and the priority variable 'o'!
 
-- [ ] @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
+- [X] @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
 
 > ~~page 15, acknowledgments: "they"~~
 
@@ -153,9 +153,10 @@
 @wenkokke: @reviewer2 is correct that the correspondence between process calculus and BV is likely much nicer than the correspondence between process calculus and CLL. However, we should asses what the expressivity of BV is compared to that of PCP. We know that PCP is more expressive than linear logic, precisely due to the ad-hoc approach to internalising dependencies via priorities. My intuition is that, since BV corresponds *loosely* to linear logic, the expressivity of a calculus following such a correspondence would correspond to that of CP, not that of PCP.
 
 - [X] @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.
-- [ ] @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
+- [X] @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
 - [X] @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)
 
+@wenkokke: BV is a *conservative* extension of CLL with mix, which should mean that it conflates 1 and ⊥ but distinguishes ⊗ and ⅋. PCP is a *non-conservative* extension of CLL with mix, which fully conflates 1 and ⊥ and partially conflates ⊗ and ⅋. Partial conflation, in the context of PCP, means that the isomorphism between the two connectives is derivable, but introduces priority constraints.
 
 # Review 3
 
@@ -219,11 +220,11 @@
 
 @wenkokke: We cannot. See above.
 
-> ~~ p.2: "[...] guarantee deadlock freedom by design"~~
+> ~~p.2: "[...] guarantee deadlock freedom by design"~~
 
-> ~~ A clarification is needed here. What do you mean with "deadlock freedom by design"?~~
+> ~~A clarification is needed here. What do you mean with "deadlock freedom by design"?~~
 
-> ~~ Googling gives [10] where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?~~
+> ~~Googling gives [10] where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?~~
 
 @wenkokke: This is a straightforward misunderstanding of us using "by design" to mean "baked into the language".
 
