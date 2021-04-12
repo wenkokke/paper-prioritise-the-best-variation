@@ -42,10 +42,15 @@ Yes! This is an open research question. We *strongly suspect* that it's true, bu
 This is... fine? Added a 'that' just to be clear.
 
 > ~~page 3, before example 1: it is not clear to me the reason why example 1 is typeable in PGV but not in Gay and Vasconcelos [18]. The latter work is not concerned with deadlock freedom, its type system is not strictly based on linear logic and its session types are not decorated with priorities, so I see no reason why the shown example should not be typeable in there, modulo the obvious differences in the syntax of the calculi.~~
+
 > ~~page 4, duality: the last two equations should not have the overbar on the end on the right hand side.~~
+
 > ~~page 10: "which ensure that"~~
+
 > ~~page 11: "In corollay 1 we [will] show..." otherwise it appears as if corollary 1 has already been discussed, while this is not the case.~~
+
 > ~~page 11, definition 2: given that x and y range over arbitrary variables, I think it's superfluous to list both link(x,y) and link(y,x)~~
+
 > page 14, before lemma 7: when showing the translation of sequents, it's not clear whether the o annotation ranges over priorities (it's in a different font), nor where it comes from.
 
 Ah, we tripped someone up with the collision between GV's ●/○ and the priority variable 'o'!
@@ -110,6 +115,7 @@ I mean, plurality and whatnot. It would be a good idea to provide a more compell
 ## Further comments
 
 > The following prominent sentence is ambiguous, and should be rewritten so that it does not mislead that reader into thinking that a broader class of session type systems fail to guarantee deadlock freedom than those that actually do:
+
 > "Session type systems guarantee communication safety and session fidelity, but cannot guarantee deadlock freedom and avoid bad interleaving of different sessions."
 
 Good point! We should write "binary session types", not "session types".
@@ -117,6 +123,7 @@ Good point! We should write "binary session types", not "session types".
 (There's a TODO for this later on, as @reviewer2 reiterates this point.)
 
 > Regarding the 1st line of page 2, neither of [6,43] offer Curry-Howard correspondences with for a session typed pi-calculus. They do use pi-calculus like syntax, but that is just a trick. In reality, they offer a Curry-Howard correspondence with linear functions, much like GV more honestly claims. Yes, the argument you use has been published before, but I think it would be really much better to try to find a fresh perspective to keep this line of work moving forward on a more solid set of assumptions and principles.
+
 > "Moreover, the benefit of working with GV over other session-typed functional languages is that GV has strong ties to linear logic, via its relation to CP"
 
 There's a great point. I'll grant @reviewer2 that CP is a *very non-standard* pi-calculus at best, and that most of its syntax is just a trick. HCP significantly improves the situation, and I believe I can prove that HCP is a truncation of BV which admits a mostly standard process calculus.
@@ -132,7 +139,6 @@ I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this
 ## Following PC discussion
 
 > The following expands on the message in Review 4, and is in addition to the comments above.
->
 > Several prominent claim such as the second sentence of the abstract are not true in general and the scope in which it might be true is not made clear. For example, the original 2008 paper on multi-party session types allows the IO causal dependency of your example by referring to global types. Other papers make use of multi-party compatibility to reconstruct the global dependencies from the local type and more recently some use model checking directly -- you do not mention such branches of the literature that make justifying your claims harder. Many papers on session types build on these directions and much of the literature is fairly language agnostic, so could be applied to the language typed in this paper.
 
 ~~@reviewer2 is correct that our claims regarding session types and deadlock freedom are too loose, and only really hold for binary session types. However, I'm not familiar with the more recent work they're referring to. Do you happen to know which papers "make use of multi-party compatibility to reconstruct the global dependencies from the local type" and which "use model checking directly"?~~
@@ -147,16 +153,12 @@ TODO: @elektra85 weaken the claims regarding session types and deadlock freedom 
 ~~TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.~~
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
->
-> [1]: http://dx.doi.org/10.1007/978-3-319-41579-6_8
 
 @reviewer2 is correct that the correspondence between process calculus and BV is likely much nicer than the correspondence between process calculus and CLL. However, we should asses what the expressivity of BV is compared to that of PCP. We know that PCP is more expressive than linear logic, precisely due to the ad-hoc approach to internalising dependencies via priorities. My intuition is that, since BV corresponds *loosely* to linear logic, the expressivity of a calculus following such a correspondence would correspond to that of CP, not that of PCP.
 
 ~~TODO: @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.~~
 
 TODO: @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
-
-[2]: https://arxiv.org/abs/cs/9910023
 
 ~~TODO: @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)~~
 
@@ -223,34 +225,33 @@ TODO: @elektra85 add discussion of priorities vs. modalities to the related work
 
 We cannot. See above.
 
-~~> p.2: "[...] guarantee deadlock freedom by design"~~
-~~> A clarification is needed here. What do you mean with "deadlock freedom by design"?~~
-~~> Googling gives <https://dl.acm.org/doi/10.1145/2429069.2429101> where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?~~
+> ~~ p.2: "[...] guarantee deadlock freedom by design"~~
+
+> ~~ A clarification is needed here. What do you mean with "deadlock freedom by design"?~~
+
+> ~~ Googling gives <https://dl.acm.org/doi/10.1145/2429069.2429101> where deadlock-freedom by design is described as "by using choreographies as initial design tool". But this paper has no choreographies. Did you mean something different? By design of what?~~
 
 ~~This is a straightforward misunderstanding of us using "by design" to mean "baked into the language".~~
 
-~~> p.2: "Recent developments in the Classical Process (CP) [...] to decoupling these constructs"~~
-~~> This makes it sound like this decoupling was invented thanks to CP/CLL, but it had already been discovered for Intuitionistic Linear Logic, by extending the propositions-as-types correspondence by Caires and Pfenning with hypersequents:~~
-~~> [3] https://doi.org/10.1007/978-3-662-44584-6_5~~
-~~> Is there a fundamental difference?~~
+> ~~p.2: "Recent developments in the Classical Process (CP) [...] to decoupling these constructs"~~
+> ~~This makes it sound like this decoupling was invented thanks to CP/CLL, but it had already been discovered for Intuitionistic Linear Logic, by extending the propositions-as-types correspondence by Caires and Pfenning with hypersequents:~~
+> ~~Is there a fundamental difference?~~
 
-~~I believe [3] uses hypersequents, much like HCP, which means that it enforces a tree structure, which means it's more restrictive than PCP/PGV. There's absolutely a difference between the decouplings. However, we cite HCP. Therefore it would be prudent to also cite [3, 4].~~
-
-~~[4]: https://arxiv.org/abs/1803.01049~~
-
-~~TODO: @wenkokke add these citations~~
-
-@elektra85 added references [3] and [4] and commented on them in the introduction!
+~~I believe [3] uses hypersequents, much like HCP, which means that it enforces a tree structure, which means it's more restrictive than PCP/PGV. There's absolutely a difference between the decouplings. However, we cite HCP. Therefore it will also cite [3] and [4].~~
 
 > ~~p.2: Classical Process -> Classical Processes~~
 
 > p.2: "We aim to further investigate GV [...]"
+
 > This paragraph oversells functional languages.
 > Being kinder to process calculi would only make the paper look better.
 > For example, "there is a clear separation between a program that the user writes, and a configuration": to many, this would look like a disadvantage that points to lack of expressivity. Indeed, your system is arguably more complicated than a process calculus as a consequence (processes normally do not require this extra layer).
+
 > Another example: "[...] within a functional language allows to derive extensions of the communication capabilities of the language via well-understood extensions of the functional fragment [...]"
 > Sure, but that comes at the cost of having functions and sum types (something not necessary in pi calculus), and your semantics still needs to have dedicate rules for communications *in addition* to those for the functional layer. Dardha and Sangiorgi showed that if pi is equipped with variants, the same is achievable in that setting. The pi calculus looks like a clear winner in terms of simplicity.
+
 > Case in point, examples 1 and 2 expose quite a bit of "functional boilerplate".
+
 > Note that I actually *like* your encodings of selections (see below my comment for p.5), I was just surprised by the strength of the claim regarding the advantages of functional languages. The same arguments can be made more neutrally.
 > In summary, I don't think that anybody would doubt that studying how to do concurrency in a functional setting is valuable, because of the higher-order and well-known features of lambda calculus, but the claims against process calculi (many of these features have been studied in pi) look a bit unfair to me.
 
@@ -277,3 +278,10 @@ We should standardise on only citing the journal version [43]. However, I do sti
 > Could that be interesting in the future for this line of work as well?
 
 Oh, very cool! We should look into this!
+
+---
+
+[1]: http://dx.doi.org/10.1007/978-3-319-41579-6_8
+[2]: https://arxiv.org/abs/cs/9910023
+[3] https://doi.org/10.1007/978-3-662-44584-6_5
+[4]: https://arxiv.org/abs/1803.01049
