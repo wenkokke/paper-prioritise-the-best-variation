@@ -62,8 +62,8 @@ PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par} rules---logica
   }{\seq{\send{x}{y}{P}}{\ty{\Gamma},\tmty{x}{\tytens[\cs{o}]{A}{B}}}}
 \end{mathpar}
 
-The main change we make to PCP is \emph{removing commuting conversions} and defining an operational semantics based on structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18}) elimination.
-However, from the perspective of process calculi, commuting conversions behave strangely: they allow an input/output action to be moved to the top of a process, thus potentially blocking actions which were previously possible (an example is given in \cref{app:commuting-conversions}). This makes CP, and PCP in \cite{dardhagay18}, non-confluent.
+The main change we make to PCP is \emph{removing commuting conversions} and defining an operational semantics based on structural congruence. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut elimination.
+However, from the perspective of process calculi, commuting conversions behave strangely: they allow an input/output action to be moved to the top of a process, thus potentially blocking actions which were previously possible (an example is given in \cref{app:commuting-conversions}). This makes CP, and Dardha and Gay's PCP~\cite{dardhagay18}, non-confluent.
 As Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, if using structural congruence.
 %Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
 %\begin{mathpar}
@@ -97,7 +97,7 @@ One benefit of removing commuting conversions is that we no longer need to dynam
 
 We prove closed progress for our updated PCP. The proof is in \cref{prf:thm-pcp-closed-progress}.
 \begin{compacttheorems}
-  \begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]
+  \begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]%
     \label{thm:pcp-closed-progress}
     \hfill\\%newline before theorem statement
     If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
@@ -225,10 +225,6 @@ The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, 
   \end{restatabletheorem}
 \end{compacttheorems}
 \endgroup
-
-%\noindent
-%\textbf{Milner's Cyclic Scheduler}.
-%As an example of a deadlock-free cyclic process, Dardha and Gay~\cite{dardhagay18} introduce an implementation of Milner's cyclic scheduler~\cite{milner89} in Priority CP. We have reproduced the scheduler in our updated PCP, and showed its translation to PGV. Full details are given in \cref{sec:milner}.
 
 \end{document}
 
