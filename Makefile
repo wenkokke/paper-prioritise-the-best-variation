@@ -1,7 +1,8 @@
 MAIN ?= priorities
+VIEW ?= open -a Skim
 SOURCES := $(shell find . -type f -and \( -name '*.tex' -or -name '*.bib' \))
 
-default: build
+default: clean build view watch
 
 .PHONY: build
 build: $(MAIN).pdf
@@ -16,8 +17,7 @@ clean:
 
 .PHONY: view
 view:
-	@open -a Skim $(MAIN).pdf
+	@$(VIEW) $(MAIN).pdf
 
 $(MAIN).pdf: $(SOURCES)
 	@latexmk -pdf $(MAIN) -halt-on-error
-
