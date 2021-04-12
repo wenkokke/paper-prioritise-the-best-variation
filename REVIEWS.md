@@ -130,6 +130,8 @@
 
 - [ ] @wenkokke weaken the claims regarding the correspondence with linear logic.
 
+The benefits of GV are that they have a compositional approach to deadlock freedom. The downside is that such approaches aren't tremendously expressive. Therefore, we here relax it to a non-compositional approach which is vastly more expressive.
+
 > I would say rather that CP has the saving grace that it is connected to GV, which exposes more clearly the linear functions inhabiting session types. There is a long history of linear functions inhabiting linear logic formulas, e.g., the thesis of Lafont that is not mentioned.
 
 @wenkokke: I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this discussion. From what I can assess, their point is that CP isn't process calculus, but rather linear functions, so you should describe them as such. However, they describe a correspondence between process calculus and BV below, and I think it would be fair to say that they would accept such a calculus as a process calculus. Therefore, I think it's fair for us to position CP as aspiring towards that better calculus? However, I'm uncertain how to incorporate this into the paper.
@@ -206,7 +208,7 @@
 
 @wenkokke: We should clarify the link between CP and PCP if we want to keep these claims about the "strong" link to linear logic. @reviewer3 is right in that the relation between PCP and CLL is tenuous at best. We don't have CLL--->PCP, even if we suspect it holds, and we know that certainly PCP-/->CLL. It's probably best to leave the injection from CLL into PCP to a journal version of the PCP/PGV paper, so we should put some qualifications on PGVs ties to linear logic.
 
-- [ ] either we prove the injection from CP--->PCP or GV--->PGV, or we put some serious qualifiers on the claim that PGV has any ties to linear logic, and weaken the terminology to "logic-inspired"
+- [ ] mention that the PCP paper does not prove an embedding result for CP---realistically, we should repeat the claim that we except GV programs to be proper HGV programs, but we defer proving this until a journal version of PCP/PGV;
 
 - [ ] add in PCP section that as for CP, in PCP we prove cycle elimination and obtain deadlock freedom as a result of that; this is the most formal connection to LL. It is not clear what priorities mean in logic and if they have a meaning at all and definitely CP --> PCP and PCP -/-> are not proved but we can conjecture them and say these are future work!
 
