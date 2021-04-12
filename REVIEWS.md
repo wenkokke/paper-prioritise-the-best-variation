@@ -13,11 +13,11 @@
 
 ## Paper description
 
-> The authors study a refinement of GV, a core functional language with sessions, that allows parallel threads to share two (and possibly more) sessions, while at the same time preserving the deadlock freedom property of the original GV. To achieve this goal, the type structure of GV is enriched with "priorities", numbers attached to the input/output actions of session types and decorating arrow types that enforce the order in which channels are meant to be used. The type system ensures that no circular dependencies are created among different sessions. The papers also assesses the expressiveness of GV, by showing an encoding from PCP (a calculus of sessions based on linear logic and priority annotations) into PGV.
+> ~~The authors study a refinement of GV, a core functional language with sessions, that allows parallel threads to share two (and possibly more) sessions, while at the same time preserving the deadlock freedom property of the original GV. To achieve this goal, the type structure of GV is enriched with "priorities", numbers attached to the input/output actions of session types and decorating arrow types that enforce the order in which channels are meant to be used. The type system ensures that no circular dependencies are created among different sessions. The papers also assesses the expressiveness of GV, by showing an encoding from PCP (a calculus of sessions based on linear logic and priority annotations) into PGV.~~
 
 ## Overall evaluation
 
-> This is an interesting paper exploring the use of priorities/levels in session types for ensuring deadlock freedom and overcoming the limitation of other logic-based approaches, which restrict the addressable network topologies to trees or forests. The use of priorities by itself is not new, and in fact the proposed type system is closely tied to others found in the literature, but in this paper the authors fill the gap, to some extent, between such type systems and the linear logic interpretation of session types.
+> ~~This is an interesting paper exploring the use of priorities/levels in session types for ensuring deadlock freedom and overcoming the limitation of other logic-based approaches, which restrict the addressable network topologies to trees or forests. The use of priorities by itself is not new, and in fact the proposed type system is closely tied to others found in the literature, but in this paper the authors fill the gap, to some extent, between such type systems and the linear logic interpretation of session types.~~
 
 > I found one design choice not fully justified by the authors: they choose to encode choices using sums, unlike [19] and going in the direction of using encoded session types [13,35], but then they retain the structure of session types for other communications. My intuition is that this hybrid choice has been made to avoid extending the calculus with primitive constructs that are specific to session communications. Either way, I think that this choice should be motivated and compared to alternatives found in the literature.
 
@@ -55,7 +55,7 @@
 
 @wenkokke: Ah, we tripped someone up with the collision between GV's ●/○ and the priority variable 'o'!
 
-TODO: @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
+- [ ] @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
 
 > ~~page 15, acknowledgments: "they"~~
 
@@ -96,7 +96,7 @@ TODO: @wenkokke insert a clarification that stresses that, unfortunately, GV use
 
 @elektra85: I believe it is [5]
 
-~~TODO: @elektra85 discuss the "internal delegation" paper in the related work section~~
+- [X] @elektra85 discuss the "internal delegation" paper in the related work section.
 
 > To substantiate the above better it would be good to be more precise about the contribution. Perhaps you could classify key session type systems that do satisfy deadlock-freedom in the presence of delegation and others that do not. You could then illustrate with good example how some mainstream session type systems (not restricting the particular take on the Curry-Howard world here) do not guarantee deadlock-freedom due to delegation (perhaps separating different kinds of delegation, such as the limited spawn-only type that falls out of the Curry-Howard inspired calculi, which is not classic delegation and is what I think you mean by the tree structure -- a claim that also needs to be illustrated better). You could then explain how to fix some of the systems that do not guarantee deadlock-freedom at all and also how you enable richer delegation patterns. My suspicion though is that if you go though with this then the case for PGV would remain weak.
 
@@ -120,7 +120,7 @@ TODO: @wenkokke insert a clarification that stresses that, unfortunately, GV use
 
 @wenkokke: Good point! We should write "binary session types", not "session types".
 
-(There's a TODO for this later on, as @reviewer2 reiterates this point.)
+(There's a task for this later on, as @reviewer2 reiterates this point.)
 
 > Regarding the 1st line of page 2, neither of [6,43] offer Curry-Howard correspondences with for a session typed pi-calculus. They do use pi-calculus like syntax, but that is just a trick. In reality, they offer a Curry-Howard correspondence with linear functions, much like GV more honestly claims. Yes, the argument you use has been published before, but I think it would be really much better to try to find a fresh perspective to keep this line of work moving forward on a more solid set of assumptions and principles.
 
@@ -128,7 +128,7 @@ TODO: @wenkokke insert a clarification that stresses that, unfortunately, GV use
 
 @wenkokke: There's a great point. I'll grant @reviewer2 that CP is a *very non-standard* pi-calculus at best, and that most of its syntax is just a trick. HCP significantly improves the situation, and I believe I can prove that HCP is a truncation of BV which admits a mostly standard process calculus.
 
-TODO: @wenkokke weaken the claims regarding the correspondence with linear logic.
+- [ ] @wenkokke weaken the claims regarding the correspondence with linear logic.
 
 > I would say rather that CP has the saving grace that it is connected to GV, which exposes more clearly the linear functions inhabiting session types. There is a long history of linear functions inhabiting linear logic formulas, e.g., the thesis of Lafont that is not mentioned.
 
@@ -145,19 +145,16 @@ TODO: @wenkokke weaken the claims regarding the correspondence with linear logic
 
 @elektra85: *maybe* these are the papers @reviewer2 is talking about [6], [7], [8], and [9]
 
-TODO: @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
-
-~~TODO: @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.~~
+- [ ] @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
+- [X] @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
 
 @wenkokke: @reviewer2 is correct that the correspondence between process calculus and BV is likely much nicer than the correspondence between process calculus and CLL. However, we should asses what the expressivity of BV is compared to that of PCP. We know that PCP is more expressive than linear logic, precisely due to the ad-hoc approach to internalising dependencies via priorities. My intuition is that, since BV corresponds *loosely* to linear logic, the expressivity of a calculus following such a correspondence would correspond to that of CP, not that of PCP.
 
-~~TODO: @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.~~
-
-TODO: @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
-
-~~TODO: @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)~~
+- [X] @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.
+- [ ] @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
+- [X] @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)
 
 
 # Review 3
@@ -190,7 +187,7 @@ TODO: @wenkokke see if you can assess the expressivity of [2] compared to PCP/PG
 
 @wenkokke: I agree with @reviewer3: it'd be good to see more of the proofs in the paper itself. @reviewer3 will be glad to know that the draft version of the paper is already on arXiv, including appendices.
 
-TODO: @wenkokke once the rewrite is complete, move the progress proof into the main body of the paper if space permits
+- [ ] @wenkokke once the rewrite is complete, move the progress proof into the main body of the paper if space permits
 
 ## Minor comments
 
@@ -206,17 +203,17 @@ TODO: @wenkokke once the rewrite is complete, move the progress proof into the m
 
 > p.2/3: That PGV is encodable to PCP contributes to showing the expressivity of PCP, just like in Wadler's earlier work encoding GV to CP showed the expressivity of CP. But that's not what the authors discuss: rather, they claim that this encoding shows a "strong" link to linear logic. Since this is claimed right after the same qualifier is used for the link between GV and CP, I was expecting the same link "strength". However, looking at the typing rules of PCP in the appendix, I was left wondering how near to classical linear logic PCP actually is. To me, PCP looks like a "standard" session type system with priorities, obtained by replacing the usual session type symbols (e.g., ! and ?) with the symbols of the connectives and units of CLL and adopting the typing rule for bound output (tensor) instead of the one for free output. Is this sufficient to claim a strong link to linear logic? At the very least, the link seems weaker than the one presented with CP.
 
-@wenkokke: We should clarify the link between CP and PCP if we want to keep these claims about the "strong" link to linear logic. @reviewer3 is right in that the relation between PCP and CLL is tenuous at best. We don't have CLL--->PCP, even if we suspect it holds, and we know that certainly PCP-/->CLL.
+@wenkokke: We should clarify the link between CP and PCP if we want to keep these claims about the "strong" link to linear logic. @reviewer3 is right in that the relation between PCP and CLL is tenuous at best. We don't have CLL--->PCP, even if we suspect it holds, and we know that certainly PCP-/->CLL. It's probably best to leave the injection from CLL into PCP to a journal version of the PCP/PGV paper, so we should put some qualifications on PGVs ties to linear logic.
 
-TODO: either we prove the injection from CP--->PCP or GV--->PGV, or we put some serious qualifiers on the claim that PGV has any ties to linear logic, and weaken the terminology to "logic-inspired"
+- [ ] either we prove the injection from CP--->PCP or GV--->PGV, or we put some serious qualifiers on the claim that PGV has any ties to linear logic, and weaken the terminology to "logic-inspired"
 
-TODO: add in PCP section that as for CP, in PCP we prove cycle elimination and obtain deadlock freedom as a result of that; this is the most formal connection to LL. It is not clear what priorities mean in logic and if they have a meaning at all and definitely CP --> PCP and PCP -/-> are not proved but we can conjecture them and say these are future work!
+- [ ] add in PCP section that as for CP, in PCP we prove cycle elimination and obtain deadlock freedom as a result of that; this is the most formal connection to LL. It is not clear what priorities mean in logic and if they have a meaning at all and definitely CP --> PCP and PCP -/-> are not proved but we can conjecture them and say these are future work!
 
 > It seems to me that the work by Balzers et al. on manifest sharing for Intuitionistic Linear Logic is nearer to a logical approach, due to their usage of stratification and modalities, but this might be a matter of taste.
 
 @wenkokke: The original work on Manifest Sharing has deadlocks, but it does seem like @reviewer3 is pointing towards the 2019 paper which ensures deadlock freedom via modalities. We believe that there is a correspondence between modalities and priorities, which we should perhaps mention in the related work section. However, proving this fact is out of scope for this paper.
 
-TODO: @elektra85 add discussion of priorities vs. modalities to the related work section
+- [ ] @elektra85 add discussion of priorities vs. modalities to the related work section
 
 > If the authors can justify a link as strong as CP's, please clarify. Otherwise, consider weakening or contextualising better the claim.
 
@@ -254,7 +251,7 @@ TODO: @elektra85 add discussion of priorities vs. modalities to the related work
 
 @wenkokke: That's because I wrote this section, and I like functional languages.
 
-TODO: @elektra85 rephrase the cited passages to be kinder towards process calculus
+- [ ] @elektra85 rephrase the cited passages to be kinder towards process calculus
 
 > RQ: "by design" appears again, leaving me confused. See previous comment on the same aspect. Your approach seems quite standard: achieve deadlock-freedom by a carefully designed typing system. Nothing in the calculus aids with deadlock-freedom if one removes the typing.
 
