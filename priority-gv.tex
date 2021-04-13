@@ -8,7 +8,7 @@
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures.
 We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
-\begin{enumerate*}[label=(\alph*)]
+\begin{enumerate*}[label= (\alph*) ]
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate*}
@@ -422,7 +422,8 @@ In order to guarantee deadlock freedom, in GV each parallel composition must spl
 \subsubsection*{Subject reduction}
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
-We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment. The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
+We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
+% The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempgvvaluedone}%
     \label{lem:pgv-value-done}
@@ -495,27 +496,29 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
 \begin{compacttheorems}
   \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
-    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the following form, where no term $\tm{M_i}$ is a value:
-    \[
-      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}.
-    \]
-  \end{definition}
-  \begin{definition}[Normal Forms]%
-    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the following form, where each $\tm{M_i}$ is ready to act on $\tm{x_i}$:
-    \[
-      \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}.
-    \]
+    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
+    \(
+    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
+    \)
+    where no term $\tm{M_i}$ is a value.
   \end{definition}
   \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]%
     \label{lem:pgv-canonical-forms}
     If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
   \end{restatablelemma}
+  \begin{definition}[Normal Forms]%
+    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
+    \(
+    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}
+    \)
+    where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
+  \end{definition}
   \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]%
     \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
   \end{restatabletheorem}
-  \begin{proof}
-    Our proof follows the reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). Details are in~\Cref{prf:thm-pgv-closed-progress-confs}.
+  \begin{proof}[Sketch]
+    Our proof follows the reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2). We apply \cref{lem:pgv-open-progress-terms} to each thread. Either we obtain a reduction, or each child thread is ready and the main thread ready or a value. We pick the ready term $\tm{L}$ with the smallest priority bound. If $\tm{L}$ contains new, spawn, or a link, we apply \LabTirName{E-New}, \LabTirName{E-Spawn}, or \LabTirName{E-Link}. Otherwise, $\tm{L}$ must be ready on some $\tm{x_i}$. Linearity guarantees there is some thread  $\tm{L'}$ which acts on $\tm{x'_i}$. If $\tm{L'}$ is ready, priority typing guarantees it is ready on $\tm{x'_i}$, and we apply \LabTirName{E-Send} or \LabTirName{E-Close}. If $\tm{L'}$ is not ready, it must be the main thread returning a value. We move $\tm{L}$ into the $i^{\text{th}}$ position and repeat until we either find a reduction or reach normal form.
   \end{proof}
   \begin{corollary}%
     \label{cor:pgv-closed-progress}

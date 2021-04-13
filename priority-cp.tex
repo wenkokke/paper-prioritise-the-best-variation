@@ -10,7 +10,8 @@ We present a correspondence between Priority GV and an updated version of Priori
 \subsection{Revisiting Priority CP}
 \begingroup
 \usingnamespace{pcp}
-\textbf{Types} ($\ty{A}$, $\ty{B}$) in PCP correspond to linear logic connectives annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr(\cdot)$ are defined as expected (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
+\textbf{Types} ($\ty{A}$, $\ty{B}$) in PCP correspond to linear logic connectives annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr(\cdot)$ are defined as expected.
+% (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
 \[
   \begin{array}{lcl}
     \ty{A}, \ty{B}
@@ -95,7 +96,8 @@ As Lindley and Morris~\cite{lindleymorris15} show, all communications that can b
 In  particular for PCP, commuting conversions break our intuition that an action with lower priority \emph{occurs before} an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 One benefit of removing commuting conversions is that we no longer need to dynamically change the priorities during reduction, which means that the intuition for priorities holds true in our updated version of PCP. Furthermore, we can safely define reduction on untyped processes, which means that type and priority information is erasable!
 
-We prove closed progress for our updated PCP. The proof is in \cref{prf:thm-pcp-closed-progress}.
+We prove closed progress for our updated PCP.
+% The proof is in \cref{prf:thm-pcp-closed-progress}.
 \begin{compacttheorems}
   \begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]%
     \label{thm:pcp-closed-progress}
@@ -192,7 +194,8 @@ Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unso
 \end{align*}
 
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$, where $\tm{\pgv{\child}}$ indicates a child thread. Translated processes do not have a main thread.
-The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence. The proofs are by structural induction and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
+The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence.
+% The proofs are by structural induction and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
     \label{lem:pcp-to-pgv-terms-preservation}
