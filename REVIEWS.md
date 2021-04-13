@@ -274,7 +274,7 @@ The benefits of GV are that they have a compositional approach to deadlock freed
 > ~~Could that be interesting in the future for this line of work as well?~~
 
 @wenkokke: Oh, very cool! We should look into this!
-@elektra: added this and other to future work
+@elektra85: added this and other to future work
 
 [1]: http://dx.doi.org/10.1007/978-3-319-41579-6_8
 [2]: https://arxiv.org/abs/cs/9910023
