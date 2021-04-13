@@ -270,11 +270,11 @@ The benefits of GV are that they have a compositional approach to deadlock freed
 
 @wenkokke: We should standardise on only citing the journal version [43]. However, I do still think having both the original paper *and* the journal version in the bibliography is valuable. (We consistently do this, see [18, 19].) @reviewer3 seems to have misread [44], which is a different paper, though I feel that one's on Wadler for giving two of his papers almost identical names.
 
-> p.15: There is new work on Kobayashi's approach [11].
-> Could that be interesting in the future for this line of work as well?
+> ~~p.15: There is new work on Kobayashi's approach [11].~~
+> ~~Could that be interesting in the future for this line of work as well?~~
 
 @wenkokke: Oh, very cool! We should look into this!
-
+@elektra: added this and other to future work
 
 [1]: http://dx.doi.org/10.1007/978-3-319-41579-6_8
 [2]: https://arxiv.org/abs/cs/9910023
