@@ -14,9 +14,9 @@ We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each p
 \end{enumerate*}
 We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} nor guaranteed to be deadlock-free by its predecessor~\cite{gayvasconcelos12}.
 
-\begin{center}
+\begin{figure}
 \begin{minipage}{0.5\linewidth}
-\begin{example}[Cyclic Structure]
+\begin{example}[Cyclic Structure]%
   \label{ex:cycle}
   \[\tm{%
     \begin{array}{l}
@@ -44,7 +44,7 @@ We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typab
 \end{example}
 \end{minipage}%
 \begin{minipage}{0.5\linewidth}
-\begin{example}[Deadlock]
+\begin{example}[Deadlock]%
   \label{ex:deadlock}
   \[\tm{%
     \begin{array}{l}
@@ -71,7 +71,7 @@ We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typab
    }\]
 \end{example}
 \end{minipage}
-\end{center}
+\end{figure}
 
 \subsubsection*{Session types}
 Session types ($\ty{S}$) are defined by the following grammar:
