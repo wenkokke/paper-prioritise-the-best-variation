@@ -6,8 +6,9 @@
 
 @wenkokke: As for a compelling example, we could take a standard example from multiparty session types and encode it. Milner's cyclic scheduler is a bad example, since each individual channel used in it is *linear*, and hence it doesn't demonstrate the difference with Padovani and Novara [35] very well.
 
-> - dial down the misleading and unjustified claims about session types in the abstract and introduction in particular, and properly situate the work (please see Review 2 for concrete points that must be addressed).
+> ~~- dial down the misleading and unjustified claims about session types in the abstract and introduction in particular, and properly situate the work (please see Review 2 for concrete points that must be addressed).~~
 
+@elektra85: this is addressed now; abstract and intro are rewritten and contributions improved
 
 # Review 1
 
