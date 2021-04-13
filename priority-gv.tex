@@ -12,7 +12,7 @@ We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each p
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate*}
-We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} nor guaranteed to be deadlock-free by its predecessor~\cite{gayvasconcelos10}.
+We will show that only \cref{ex:cycle} is typeable in PGV, while it is not typable in GV~\cite{wadler14} nor guaranteed to be deadlock-free by its predecessor~\cite{gayvasconcelos12}.
 
 \begin{center}
 \begin{minipage}{0.5\linewidth}
