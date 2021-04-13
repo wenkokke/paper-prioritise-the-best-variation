@@ -147,7 +147,7 @@ The benefits of GV are that they have a compositional approach to deadlock freed
 
 @elektra85: *maybe* these are the papers @reviewer2 is talking about [6], [7], [8], and [9]
 
-- [ ] @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
+- [X] @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
 - [X] @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
@@ -274,6 +274,7 @@ The benefits of GV are that they have a compositional approach to deadlock freed
 > ~~Could that be interesting in the future for this line of work as well?~~
 
 @wenkokke: Oh, very cool! We should look into this!
+
 @elektra85: added this and other to future work
 
 [1]: http://dx.doi.org/10.1007/978-3-319-41579-6_8
