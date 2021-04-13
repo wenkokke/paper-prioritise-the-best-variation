@@ -1,122 +1,117 @@
 \begin{figure}
-  \begin{mdframed}
-    \textbf{Static Typing Rules.}
-    \begin{mathpar}
-      \inferrule*[lab=T-Var]{
-      }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
-      
-      \inferrule*[lab=T-Lam]{
-        \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
-      }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{T}{U}}}
-      
-      \inferrule*[lab=T-Const]{
-      }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
-      
-      \inferrule*[lab=T-App]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-        \\
-        \cs{q}<\cs{p'}
-      }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta}}{M\;N}{U}}
+  \textbf{Static Typing Rules.}
+  \begin{mathpar}
+    \inferrule*[lab=T-Var]{
+    }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
+
+    \inferrule*[lab=T-Const]{
+    }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
+
+    \inferrule*[lab=T-Lam]{
+      \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+    }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\minpr(\ty{\Gamma})},\cs{q}]{T}{U}}}
+
+    \inferrule*[lab=T-App]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tylolli[\cs{p'},\cs{q'}]{T}{U}}
       \\
-      \inferrule*[lab=T-Unit]{
-      }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-      
-      \inferrule*[lab=T-LetUnit]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\andthen{M}{N}}{T}}
-      
-      \inferrule*[lab=T-Pair]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{N}{U}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{M}{N}}{\typrod{T}{U}}}
-      
-      \inferrule*[lab=T-LetPair]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\typrod{T}{T'}}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T},\tmty{y}{T'}}{N}{U}
-        \\
-        \cs{p}<\minpr(\ty{\Delta},\ty{T},\ty{T'})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letpair{x}{y}{M}{N}}{U}}
-      
-      \inferrule*[lab=T-Inl]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
-        \\
-        \minpr(\ty{T})=\minpr(\ty{U})
-      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{M}}{\tysum{T}{U}}}
-      
-      \inferrule*[lab=T-Inr]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{U}
-        \\
-        \minpr(\ty{T})=\minpr(\ty{U})
-      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{M}}{\tysum{T}{U}}}
-      
-      \inferrule*[lab=T-CaseSum]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{L}{\tysum{T}{T'}}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T}}{M}{U}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
-        \\
-        \cs{p}<\minpr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\casesum{L}{x}{M}{y}{N}}{U}}
-      
-      \inferrule*[lab=T-Absurd]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyvoid}
-      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
-    \end{mathpar}
-    \begin{center}
-      We write $\tmty{K}{T}$ for $\tseq[\cs{\pbot}]{\emptyenv}{K}{T}$ in typing derivations.
-    \end{center}    
-    \textbf{Type Schemas for Constants.}
-    \begin{mathpar}
-      \tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}
-      
-      \tmty{\new}{\tylolli{\tyunit}{\typrod{S}{\co{S}}}}
-      
-      \tmty{\spawn}{\tylolli{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}
+      \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
       \\
-      \tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}
-      
-      \tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]{\tyrecv[\cs{o}]{T}{S}}{\typrod{T}{S}}}
+      \cs{p}<\minpr(\ty{\Delta})
       \\
-      \tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}
-      
-      \tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}
-    \end{mathpar}
-    \textbf{Runtime Typing Rules.}
-    \begin{mathpar}
-      \inferrule*[lab=T-Main]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
-      }{\cseq[\main]{\ty{\Gamma}}{\main\;M}}
-      
-      \inferrule*[lab=T-Child]{
-        \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
-      }{\cseq[\child]{\ty{\Gamma}}{\child\;M}}
-      
-      \inferrule*[lab=T-Res]{
-        \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{C}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\conf{C}}}}
-      
-      \inferrule*[lab=T-Par]{
-        \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-        \\
-        \cseq[\phi']{\ty{\Delta}}{\conf{D}}
-      }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\conf{D}}}}
-    \end{mathpar}
-    \caption{Typing Rules for PGV.}
-    \label{fig:pgv-typing}
-  \end{mdframed}
+      \cs{q}<\cs{p'}
+    }{\tseq[\cs{p}\sqcup\cs{q}\sqcup\cs{q'}]{\ty{\Gamma},\ty{\Delta}}{M\;N}{U}}
+    \\
+    \inferrule*[lab=T-Unit]{
+    }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+
+    \inferrule*[lab=T-LetUnit]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta}}{N}{T}
+      \\
+      \cs{p}<\minpr(\ty{\Delta})
+    }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\andthen{M}{N}}{T}}
+
+    \inferrule*[lab=T-Pair]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta}}{N}{U}
+      \\
+      \cs{p}<\minpr(\ty{\Delta})
+    }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{M}{N}}{\typrod{T}{U}}}
+
+    \inferrule*[lab=T-LetPair]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\typrod{T}{T'}}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T},\tmty{y}{T'}}{N}{U}
+      \\
+      \cs{p}<\minpr(\ty{\Delta},\ty{T},\ty{T'})
+    }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\letpair{x}{y}{M}{N}}{U}}
+
+    \inferrule*[lab=T-Inl]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+      \\
+      \minpr(\ty{T})=\minpr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{M}}{\tysum{T}{U}}}
+
+    \inferrule*[lab=T-Inr]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{U}
+      \\
+      \minpr(\ty{T})=\minpr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{M}}{\tysum{T}{U}}}
+
+    \inferrule*[lab=T-CaseSum]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{L}{\tysum{T}{T'}}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta},\tmty{x}{T}}{M}{U}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
+      \\
+      \cs{p}<\minpr(\ty{\Delta})
+    }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\casesum{L}{x}{M}{y}{N}}{U}}
+
+    \inferrule*[lab=T-Absurd]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyvoid}
+    }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\absurd{M}}{T}}
+  \end{mathpar}
+  \textbf{Type Schemas for Constants.}
+  \begin{mathpar}
+    \tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}
+
+    \tmty{\new}{\tylolli{\tyunit}{\typrod{S}{\co{S}}}}
+
+    \tmty{\spawn}{\tylolli{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}
+    \\
+    \tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}
+
+    \tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]{\tyrecv[\cs{o}]{T}{S}}{\typrod{T}{S}}}
+    \\
+    \tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}
+
+    \tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}
+  \end{mathpar}
+  \textbf{Runtime Typing Rules.}
+  \begin{mathpar}
+    \inferrule*[lab=T-Main]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+    }{\cseq[\main]{\ty{\Gamma}}{\main\;M}}
+
+    \inferrule*[lab=T-Child]{
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{\tyunit}
+    }{\cseq[\child]{\ty{\Gamma}}{\child\;M}}
+
+    \inferrule*[lab=T-Res]{
+      \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{C}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\conf{C}}}}
+
+    \inferrule*[lab=T-Par]{
+      \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+      \\
+      \cseq[\phi']{\ty{\Delta}}{\conf{D}}
+    }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\conf{D}}}}
+  \end{mathpar}
+  \caption{Typing Rules for PGV.}%
+  \label{fig:pgv-typing}
 \end{figure}
 %%% Local Variables:
 %%% TeX-master: "../priorities"

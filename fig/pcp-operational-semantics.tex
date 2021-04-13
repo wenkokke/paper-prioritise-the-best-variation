@@ -54,11 +54,11 @@
     \inferrule*[lab=E-LiftRes]{
       \tm{P}\red\tm{P'}
     }{\tm{\res{x}{y}{P}}\red\tm{\res{x}{y}{P'}}}
-  
+
     \inferrule*[lab=E-LiftPar]{
       \tm{P}\red\tm{P'}
     }{\tm{\ppar{P}{Q}}\red\tm{\ppar{P'}{Q}}}
-  
+
     \inferrule*[lab=E-LiftSC]{
       \tm{P}\equiv\tm{P'}
       \\
@@ -67,7 +67,7 @@
       \tm{Q'}\equiv\tm{Q}
     }{\tm{P}\red\tm{Q}}
   \end{mathpar}
-  \caption{Operational Semantic for PCP.}
+  \caption{Operational Semantic for PCP.}%
   \label{fig:pcp-operational-semantics}
 \end{figure}
 %%% Local Variables:
