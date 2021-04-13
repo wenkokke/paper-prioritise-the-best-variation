@@ -212,39 +212,46 @@ As the syntax for units suggests, these are the binary and nullary forms of the 
 
 Similarly, we use syntactic sugar for the term forms of choice, which combine sending and receiving with the introduction and elimination forms for the sum and empty types. There are two constructs for binary internal choice, expressed using the meta-variable $\tm{\ell}$ which ranges over $\{\tm{\labinl},\tm{\labinr}\}$. As there is no introduction for the empty type, there is no construct for nullary internal choice:
 \[
-\begin{array}{l}
-  \tm{\select{\ell}}\elabarrow \\
-  \qquad\tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\ell\;y}{x}})}{z}}} \\
-  \tm{\offer{L}{x}{M}{y}{N}}\elabarrow \\
-  \qquad\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}} \\
-  \tm{\offeremp{L}}\elabarrow \\
-  \qquad\tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
+\begin{array}{lcl}
+  \tm{\select{\ell}}
+  & \elabarrow
+  & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\ell\;y}{x}})}{z}}}
+  \\
+  \multicolumn{3}{l}{%
+  \tm{\offer{L}{x}{M}{y}{N}}\elabarrow}
+  \\
+  \multicolumn{3}{l}{%
+  \qquad\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}}
+  \\
+  \tm{\offeremp{L}}
+  & \elabarrow
+  & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
 \end{array}
 \]
 
 \subsubsection*{Operational Semantics}
 Priority GV terms are evaluated as part of a configuration of processes. Configurations are defined by the following grammar:
 \[
-\begin{array}[t]{lcl}
   \tm{\phi}
-  & \Coloneqq & \tm{\main}
-    \sep        \tm{\child}
-  \\
+  \Coloneqq \tm{\main}
+  \sep      \tm{\child}
+  \hfill
   \tm{\conf{C}}, \tm{\conf{D}}, \tm{\conf{E}}
-  & \Coloneqq & \tm{\phi\;M}
-    \sep        \tm{\ppar{\conf{C}}{\conf{D}}}
-    \sep        \tm{\res{x}{x'}{\conf{C}}}
-\end{array}
+  \Coloneqq \tm{\phi\;M}
+  \sep      \tm{\ppar{\conf{C}}{\conf{D}}}
+  \sep      \tm{\res{x}{x'}{\conf{C}}}
+  \hfill
 \]
 Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of threads $\tm{\phi\;M}$, parallel compositions $\tm{\ppar{\conf{C}}{\conf{D}}}$, and name restrictions $\tm{\res{x}{x'}{\conf{C}}}$. To preserve the functional nature of PGV, where programs return a single value, we use flags ($\tm{\phi}$) to differentiate between the main thread, marked $\tm{\main}$, and child threads created by $\tm{\spawn}$, marked $\tm{\child}$. Only the main thread returns a value. We determine the flag of a configuration by combining the flags of all threads in that configuration:
 \[
   \tm{\main}  + \tm{\child} = \tm{\main}
-  \quad
+  \hfill
   \tm{\child} + \tm{\main}  = \tm{\main}
-  \quad
+  \hfill
   \tm{\child} + \tm{\child} = \tm{\child}
-  \quad
+  \hfill
   (\tm{\main}  + \tm{\main} \; \text{is undefined})
+  \hfill
 \]
 The use of $\tm{\child}$ for child threads~\cite{lindleymorris15} overlaps with the use of the meta-variable $\cs{o}$ for priorities~\cite{dardhagay18}. Both are used to annotate sequents: flags appear on the sequent in configuration typing, and priorities in term typing. To distinguish the two symbols, they are typeset in a different font and a different colour.
 

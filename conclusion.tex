@@ -3,9 +3,9 @@
 
 \begin{document}
 
-\section{Related Work}
+\section{Related Work and Discussion}
 
-\paragraph*{Deadlock freedom and progress}
+\subsubsection*{Deadlock freedom and progress}
 Deadlock freedom and progress are well studied properties in the $\pi$-calculus.
 For the `standard' typed $\pi$-calculus, an important line of work starts from Kobayashi's approach to deadlock freedom~\cite{kobayashi98}, where priorities are values from an abstract poset. Kobayashi~\cite{kobayashi06} simplifies the abstract poset to pairs of naturals, called \emph{obligations} and\emph{capabilities}. Padovani simplifies these further to a single natural, called a \emph{priority}~\cite{padovani14}, and adapts obligations/capabilities to session types~\cite{padovani13}.
 
@@ -26,7 +26,7 @@ Scalas and Yoshida~\cite{scalasyoshida19} provide a revision of the foundations 
 Gay~\etal~\cite{gaynagarajan03} and Vasconcelos~\etal~\cite{vasconcelosravara04,vasconcelosgay06} introduce the first functional language with session types. Such works did not guarantee deadlock freedom until GV~\cite{lindleymorris15,wadler14}.
 Toninho~\etal~\cite{toninhocaires12} present a translation of simply-typed $\lambda$-calculus into session-typed $\pi$-calculus, but their focus is not on deadlock freedom.
 
-\paragraph*{Ties with logic}
+\subsubsection*{Ties with logic}
 The correspondence between logic and types lays the foundation for functional programming~\cite{wadler15}.
 Since its inception by Girard~\cite{girard87}, linear logic has been a candidate for a foundational correspondence for concurrent programs.
 A~correspondence with linear $\pi$-calculus was established early on by Abramsky~\cite{abramsky94} and Bellin and Scott~\cite{bellinscott94}. Many years later, correspondences with the $\pi$-calculus with binary session types were proposed. Caires and Pfenning~\cite{cairespfenning10} propose a correspondence with dual intuitionistic linear logic, while Wadler~\cite{wadler14} proposes a correspondence with classical linear logic. Both guarantee deadlock freedom via their connection to logic, as a consequence of cut elimination.
@@ -40,13 +40,14 @@ Their binary session types are rooted in linear logic following the propositions
 Ciobanu and Horne~\cite{CiobanuH15} gave the first propositions-as-sessions correspondence of MPST with the \emph{calculus of structures}~\cite{Guglielmi07} with global and local session types are inspired by Scribble, which determines whether local session types can be combined in a deadlock free manner.
 Horne~\cite{Horne20} presents a system for subtyping and multiparty compatibility where compatible processes are race free and deadlock free using a propositions-as-sessions correspondence, similar to the approach in~\cite{CiobanuH15}, with a non-commutative extension of linear logic.
 
-\section{Conclusion and Future Work}
+\subsubsection*{Conclusion}
 We answered our research question by presenting Priority GV, a~session-typed functional language which allows cyclic communication structures and uses priorities to ensure deadlock freedom. We showed its relation to Priority CP~\cite{dardhagay18} via an operational correspondence.
 
+\subsubsection*{Future work}
 Our formalism so far only captures the core of GV. In future work, we plan to explore recursion, following Lindley and Morris~\cite{lindleymorris16} and Padovani and Novara~\cite{padovaninovara15}, and sharing, following Balzer and Pfenning~\cite{balzerpfenning17} or Voinea~\etal~\cite{VoineaDG19}.
 % or in the lines of Kobayashi and Laneve for unbounded networks~\cite{KL17}, which is a refinement of previous work by Kobayashi.
 
-\paragraph*{Acknowledgements}
+\subsubsection*{Acknowledgements}
 The authors would like to thank Simon Fowler, April Gon\c{c}alves, and Philip Wadler for their comments on the manuscript.
 
 \end{document}
