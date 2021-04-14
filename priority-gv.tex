@@ -455,15 +455,26 @@ We must show that substitution preserves priority constraints. For this, we prov
 \end{compacttheorems}
 
 \subsubsection*{Progress and deadlock freedom}
-PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged:
+PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged. Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\tm{x'}$, spawns off an echo server listening on $\tm{x}$, and then returns $\tm{x'}$:
 \[
-  \tm{\echo_x} \defeq \tm{\letpair{y}{x}{\recv\;{x}}{\letbind{x}{\send\;\pair{y}{x}}{\close\;x}}}
+  \begin{array}{ll}
+    \tm{\main}
+    & \tm{\letpair{x}{x'}{\new}{}}
+    \\
+    & \tm{\andthen{\spawn\;(\lambda\unit.\echo_{x})}{x'}}
+  \end{array}
+  \hfill
+  \begin{array}{lcl}
+    \tm{\echo_x}
+    & \defeq
+    & \tm{\letpair{y}{x}{\recv\;{x}}{}}
+    \\
+    &
+    & \tm{\letbind{x}{\send\;\pair{y}{x}}{\close\;x}}
+  \end{array}
+  \hfill
 \]
-Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\tm{x'}$, spawns off an echo server listening on $\tm{x'}$, and then returns $\tm{x}$:
-\[
-  \tm{\main\;\letpair{x}{x'}{\new}{\andthen{\spawn\;(\lambda\unit.\echo_{x'})}}{x}}
-\]
-If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\main\;x}{\child\;\echo_{x'}})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x'}}$, which is blocked on $\tm{x'}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce \emph{only} a value.
+If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\child\;\echo_{x}}{\main\;x'})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x}}$, which is blocked on $\tm{x}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce \emph{only} a value.
 
 \emph{Actions} are terms which perform communication actions and which synchronise between two threads.
 \begin{definition}[Actions]%
