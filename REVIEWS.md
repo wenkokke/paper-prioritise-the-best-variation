@@ -56,7 +56,7 @@
 
 @wenkokke: Ah, we tripped someone up with the collision between GV's ●/○ and the priority variable 'o'!
 
-- [X] @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
+- [x] @wenkokke insert a clarification that stresses that, unfortunately, GV uses ●/○ to mark main and child threads, and we're keeping that notation for comparability---but watch out, we're using different fonts and colouring to help you tell 'o' and '○' apart.
 
 > ~~page 15, acknowledgments: "they"~~
 
@@ -97,7 +97,7 @@
 
 @elektra85: I believe it is [5]
 
-- [X] @elektra85 discuss the "internal delegation" paper in the related work section.
+- [x] @elektra85 discuss the "internal delegation" paper in the related work section.
 
 > To substantiate the above better it would be good to be more precise about the contribution. Perhaps you could classify key session type systems that do satisfy deadlock-freedom in the presence of delegation and others that do not. You could then illustrate with good example how some mainstream session type systems (not restricting the particular take on the Curry-Howard world here) do not guarantee deadlock-freedom due to delegation (perhaps separating different kinds of delegation, such as the limited spawn-only type that falls out of the Curry-Howard inspired calculi, which is not classic delegation and is what I think you mean by the tree structure -- a claim that also needs to be illustrated better). You could then explain how to fix some of the systems that do not guarantee deadlock-freedom at all and also how you enable richer delegation patterns. My suspicion though is that if you go though with this then the case for PGV would remain weak.
 
@@ -129,15 +129,19 @@
 
 @wenkokke: There's a great point. I'll grant @reviewer2 that CP is a *very non-standard* pi-calculus at best, and that most of its syntax is just a trick. HCP significantly improves the situation, and I believe I can prove that HCP is a truncation of BV which admits a mostly standard process calculus.
 
-- [ ] @wenkokke weaken the claims regarding the correspondence with linear logic.
+- [x] @wenkokke weaken the claims regarding the correspondence with linear logic.
 
 The benefits of GV are that they have a compositional approach to deadlock freedom. The downside is that such approaches aren't tremendously expressive. Therefore, we here relax it to a non-compositional approach which is vastly more expressive.
+
+@wenkokke: I feel confident claiming that piDILL corresponds to DILL and CP corresponds to CLL, since in both cases they're essentially the same system. However, I think we should avoid explicitly mentioning that they're really truly process calculi.
 
 > I would say rather that CP has the saving grace that it is connected to GV, which exposes more clearly the linear functions inhabiting session types. There is a long history of linear functions inhabiting linear logic formulas, e.g., the thesis of Lafont that is not mentioned.
 
 @wenkokke: I'm not sure what @reviewer2 is getting in dragging Yves' Ph.D. thesis into this discussion. From what I can assess, their point is that CP isn't process calculus, but rather linear functions, so you should describe them as such. However, they describe a correspondence between process calculus and BV below, and I think it would be fair to say that they would accept such a calculus as a process calculus. Therefore, I think it's fair for us to position CP as aspiring towards that better calculus? However, I'm uncertain how to incorporate this into the paper.
 
 @elektra85: we could add this to the discussion/conclusion section at the end of the paper.
+
+@wenkokke: Yeah, but what do we say?
 
 ## Following PC discussion
 
@@ -148,16 +152,16 @@ The benefits of GV are that they have a compositional approach to deadlock freed
 
 @elektra85: *maybe* these are the papers @reviewer2 is talking about [6], [7], [8], and [9]
 
-- [X] @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
-- [X] @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
+- [x] @elektra85 weaken the claims regarding session types and deadlock freedom in the abstract and introduction
+- [x] @elektra85 compare PCP/PGV to the approaches mentioned by @reviewer2 in the related work section.
 
 > Furthermore, even in the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV. This overstating of claims, failure to situate the work, and particularly the poor illustration of the session interleaving problems in the session type literature (not just GV) must be addressed in a final version of the paper, which will be shepherded.
 
 @wenkokke: @reviewer2 is correct that the correspondence between process calculus and BV is likely much nicer than the correspondence between process calculus and CLL. However, we should asses what the expressivity of BV is compared to that of PCP. We know that PCP is more expressive than linear logic, precisely due to the ad-hoc approach to internalising dependencies via priorities. My intuition is that, since BV corresponds *loosely* to linear logic, the expressivity of a calculus following such a correspondence would correspond to that of CP, not that of PCP.
 
-- [X] @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.
-- [X] @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
-- [X] @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)
+- [x] @elektra85 see if you can assess the expressivity of [1] compared to PCP/PGV.
+- [x] @wenkokke see if you can assess the expressivity of [2] compared to PCP/PGV.
+- [x] @elektra85 see if you can identify the papers hinted at by @reviewer2; if not, we'll have to request that the PC ask @reviewer2 to provide references (which is probably safest anyway, to not misinterpret their words)
 
 @wenkokke: BV is a *conservative* extension of CLL with mix, which should mean that it conflates 1 and ⊥ but distinguishes ⊗ and ⅋. PCP is a *non-conservative* extension of CLL with mix, which fully conflates 1 and ⊥ and partially conflates ⊗ and ⅋. Partial conflation, in the context of PCP, means that the isomorphism between the two connectives is derivable, but introduces priority constraints.
 
