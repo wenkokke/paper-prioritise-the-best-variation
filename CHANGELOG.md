@@ -4,11 +4,11 @@ We have added all related work that were suggested to us by the reviewers and re
 
 > Address the formal link to linear logic that is unclear.
 
-We added a sentence which says that, though we have not proven that PGV is a (non-conservative) extension of GV, we believe that it is. We reference [1], which shows that CP can be embedded in a Kobayashi-style system, to support this belief.
+We added a sentence which says that, though we have not proven that PGV is a (non-conservative) extension of GV, we believe that it is. We reference work by Ornela Dardha and Jorge A. Perez[^1], which shows that CP can be embedded in a Kobayashi-style system, to support this belief.
 
 > Provide a more compelling example that explains the need for this new system (in particular in comparison to existing work on session types such at [35]).
 
-We would like to clarify that PGV is not more expressive than Padovani and Novara in terms of what processes are typeable. Rather, we think of PGV as an alternative language, which uses session types as opposed to linear channels, and which comes with a proven-correct relation to PCP. On the theoretical side, our aim was to give a calculus more expressive than GV which completes the picture of GV/CP and PGV/PCP. On the practical side, we found PGV easy to implement as a library for deadlock-free session-typed communication in Haskell.
+We would like to clarify that PGV is not more expressive than Padovani and Novara in terms of what processes are typeable. Rather, we think of PGV as an alternative language, which uses session types as opposed to linear channels, and which comes with a proven-correct relation to PCP. On the theoretical side, our aim was to give a calculus more expressive than GV which completes the picture of GV/CP and PGV/PCP. On the practical side, we found PGV easy to implement as a library for deadlock-free session-typed communication in Haskell[^2].
 
 > Dial down the misleading and unjustified claims about session types in the abstract and introduction in particular, and properly situate the work (please see Review 2 for concrete points that must be addressed).
 
@@ -22,9 +22,9 @@ We would like to clarify that our contribution was to get rid of commuting conve
 
 We have rephrased the introduction to emphasise that these papers work towards a correspondence between session typed pi-calculus and linear logic.
 
-> Reviewer #2 In the direction of linear logic there are extensions of the genuine proof calculus BV [1] that can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV.
+> Reviewer #2 In the direction of linear logic there are extensions of the genuine proof calculus BV hat can express session type systems that internalise the causal dependencies of Honda et al., which is a paper not compared to precisely either here or in the work on PCP which takes a more adhoc approach to internalising dependencies than BV.
 
-We believe that the Curry-Howard correspondence between BV and session-typed pi-calculus is an interesting line of work, and have added a brief discussion of [3, 4, 5] to the related work.
+We believe that the Curry-Howard correspondence between BV and session-typed pi-calculus is an interesting line of work, and have added a brief discussion of BV[^3] and two papers building on it[^4][^5] to the related work.
 
 > Reviewer #3: Being kinder to process calculi would only make the paper look better.
 
@@ -32,7 +32,7 @@ We rewrote the paragraph on the relevance of functional languages and GV, focusi
 
 > Reviewer #3: I would be happy if the authors made the full version accessible somewhere (e.g., arXiv).
 
-We have uploaded the full paper, including appendices, on arXiv [6].
+We have uploaded the full paper, including appendices, on arXiv[^6].
 
 > Reviewer #3: What do you mean with "deadlock freedom by design"?
 
@@ -42,12 +42,9 @@ We have rewritten sentences where 'by design' was occurring, but to clarify, wit
 
 We have update the paper to consistently cite journal papers and extended versions in the main text. We used to specify the original works within the references to give a more precise bibliography and timeline. We have removed the references to the original works (to compress the bibliography).
 
-[1]: Ornela Dardha and Jorge A. Perez, Comparing Type Systems for Deadlock-Freedom, 2018.
-     Available at <https://arxiv.org/abs/1810.00635>.
-[2]: Wen Kokke and Ornela Dardha, Deadlock-Free Session Types in Linear Haskell, 2021.
-     Available at <https://arxiv.org/abs/2103.14481>.
-[3]: Alessio Guglielmi, A system of interaction and structure, 2007.
-[4]: Gabriel Ciobanu and Ross Horne, Behavioural Analysis of Sessions Using the Calculus of Structures, 2015.
-[5]: Session Subtyping and Multiparty Compatibility Using Circular Sequents, Ross Horne, 2020.
-[6]: Wen Kokke and Ornela Dardha, Prioritise the Best Variation, 2021.
-     Available at <https://arxiv.org/abs/2103.14466>.
+[^1]: Ornela Dardha and Jorge A. Perez, Comparing Type Systems for Deadlock-Freedom, 2018. Available at <https://arxiv.org/abs/1810.00635>.
+[^2]: Wen Kokke and Ornela Dardha, Deadlock-Free Session Types in Linear Haskell, 2021. Available at <https://arxiv.org/abs/2103.14481>.
+[^3]: Alessio Guglielmi, A system of interaction and structure, 2007.
+[^4]: Gabriel Ciobanu and Ross Horne, Behavioural Analysis of Sessions Using the Calculus of Structures, 2015.
+[^5]: Session Subtyping and Multiparty Compatibility Using Circular Sequents, Ross Horne, 2020.
+[^6]: Wen Kokke and Ornela Dardha, Prioritise the Best Variation, 2021. Available at <https://arxiv.org/abs/2103.14466>.
