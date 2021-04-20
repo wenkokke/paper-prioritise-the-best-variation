@@ -32,7 +32,7 @@ We rewrote the paragraph on the relevance of functional languages and GV, focusi
 
 > Reviewer #3: I would be happy if the authors made the full version accessible somewhere (e.g., arXiv).
 
-We have uploaded the full paper, including appendices, on arXiv.
+We have uploaded the full paper, including appendices, on arXiv [6].
 
 > Reviewer #3: What do you mean with "deadlock freedom by design"?
 
