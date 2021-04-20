@@ -18,6 +18,10 @@ We rewrote the abstract and introduction clarifying the parts on deadlock freedo
 
 We would like to clarify that our contribution was to get rid of commuting conversions and use structural congruence, which makes our updated PCP closer to pi-calculus. We agree that this is a niche contribution, and as such have updated our contributions list to deemphasise this point.
 
+> Reviewer #2: Neither of [6,43] offer Curry-Howard correspondences with for a session typed pi-calculus. They do use pi-calculus like syntax, but that is just a trick.
+
+We agree, and have rephrased the sentence to emphasise that these papers work towards a correspondence between session typed pi-calculus and linear logic.
+
 > Reviewer #3: Being kinder to process calculi would only make the paper look better.
 
 We rewrote the paragraph on the relevance of functional languages and GV, focusing on the practical side by referencing our library implementation in Haskell.
