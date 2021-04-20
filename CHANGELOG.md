@@ -1,10 +1,12 @@
+Prioritise the Best Variation: Letter to Reviewers.
+
 We have rewritten the paper with particular focus on abstract, introduction, and related work sections to address the reviewers' comments.
 
 We have added all related work that were suggested to us by the reviewers and rewrote the related work section accordingly.
 
 > Address the formal link to linear logic that is unclear.
 
-We added a sentence which says that, though we have not proven that PGV is a (non-conservative) extension of GV, we believe that it is. We reference work by Ornela Dardha and Jorge A. Perez[^1], which shows that CP can be embedded in a Kobayashi-style system, to support this belief.
+We have dialed down on the link of PGV with linear logic (particularly in contributions, but also throughout abstract and introduction). Moreover, we added a sentence which says that, though we have not proven that PGV is a (non-conservative) extension of GV, we believe that it is. We reference work by Dardha and Perez[^1], which shows that CP can be embedded in a Kobayashi-style system, to support this belief.
 
 > Provide a more compelling example that explains the need for this new system (in particular in comparison to existing work on session types such at [35]).
 
