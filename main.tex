@@ -10,8 +10,7 @@
 % Typesetting
 \usepackage[all]{foreign}
 \usepackage{rotating}
-\usepackage{lscape}
-%\usepackage{pdflscape}
+\usepackage{pdflscape}
 \usepackage[inline]{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \usepackage{multicol}
@@ -291,7 +290,7 @@
 \renewcommand{\onlyinsubfile}[1]{}
 \renewcommand{\notinsubfile}[1]{#1}
 %
-\title{Prioritise the Best Variation %
+\title{Prioritise the Best Variation%
  \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI).}
 }
 %
@@ -334,11 +333,13 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
 \bibliographystyle{splncs04}
 \bibliography{main}
 
-% \clearpage
-% \appendix
-% \changetext{}{10em}{-5em}{-5em}{}
-% \floatplacement{figure}{h}
-% {\input{appendix.tex}}
+\clearpage
+\appendix
+{
+  \changetext{}{10em}{-5em}{-5em}{}
+  \floatplacement{figure}{h}
+  \input{appendix.tex}
+}
 
 \end{document}
 

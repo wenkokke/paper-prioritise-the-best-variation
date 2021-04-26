@@ -23,7 +23,7 @@ Deni\'{e}lou and Yoshida~\cite{DenielouY13} introduce \emph{multiparty compatibi
 Castellani~\etal~\cite{CastellaniDGH20} guarantee lock freedom, a stronger property than deadlock freedom, for MPST with \emph{internal delegation}, where participants in the same session are allowed to delegate tasks to each other, and internal delegation is captured by the global type.
 Scalas and Yoshida~\cite{scalasyoshida19} provide a revision of the foundations for MPST, and offer a less complicated and more general theory, by removing duality/consistency. The type systems is parametric and type checking is decidable, but allows for a novel integration of model checking techniques. More protocols and processes can be typed and are guaranteed to be free of deadlocks.
 
-Gay~\etal~\cite{gaynagarajan03} and Vasconcelos~\etal~\cite{vasconcelosravara04,vasconcelosgay06} introduce the first functional language with session types. Such works did not guarantee deadlock freedom until GV~\cite{lindleymorris15,wadler14}.
+Neubauer and Thiemann~\cite{neubauert04} and Vasconcelos~\etal~\cite{vasconcelosravara04,vasconcelosgay06} introduce the first functional language with session types. Such works did not guarantee deadlock freedom until GV~\cite{lindleymorris15,wadler14}.
 Toninho~\etal~\cite{toninhocaires12} present a translation of simply-typed $\lambda$-calculus into session-typed $\pi$-calculus, but their focus is not on deadlock freedom.
 
 \subsubsection*{Ties with logic}
@@ -43,7 +43,6 @@ We answered our research question by presenting Priority GV, a~session-typed fun
 
 \subsubsection*{Future work}
 Our formalism so far only captures the core of GV. In future work, we plan to explore recursion, following Lindley and Morris~\cite{lindleymorris16} and Padovani and Novara~\cite{padovaninovara15}, and sharing, following Balzer and Pfenning~\cite{balzerpfenning17} or Voinea~\etal~\cite{VoineaDG19}.
-% or in the lines of Kobayashi and Laneve for unbounded networks~\cite{KL17}, which is a refinement of previous work by Kobayashi.
 
 \subsubsection*{Acknowledgements}
 The authors would like to thank Simon Fowler, April Gon\c{c}alves, and Philip Wadler for their comments on the manuscript.
