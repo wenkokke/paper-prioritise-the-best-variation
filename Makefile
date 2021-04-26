@@ -1,4 +1,4 @@
-MAIN ?= priorities
+MAIN ?= main
 VIEW ?= open -a Skim
 SOURCES := $(shell find . -type f -and \( -name '*.tex' -or -name '*.bib' \))
 
