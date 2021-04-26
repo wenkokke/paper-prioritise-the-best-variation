@@ -61,10 +61,7 @@
 % Breaking math across pages
 \allowdisplaybreaks%
 
-% Subfiles and namespaces
-\usepackage{subfiles}
-\newcommand{\onlyinsubfile}[1]{#1}
-\newcommand{\notinsubfile}[1]{}
+% Namespaces
 \usepackage{namespc}
 
 % Theorem environments
@@ -287,9 +284,6 @@
 
 \begin{document}
 %
-\renewcommand{\onlyinsubfile}[1]{}
-\renewcommand{\notinsubfile}[1]{#1}
-%
 \title{Prioritise the Best Variation%
  \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI).}
 }
@@ -324,10 +318,10 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
 \keywords{session types \and $\pi$-calculus \and functional programming \and deadlock freedom \and GV \and CP}
 \end{abstract}
 
-{\subfile{introduction}}
-{\subfile{priority-gv}}
-{\subfile{priority-cp}}
-{\subfile{conclusion}}
+{\input{introduction}}
+{\input{priority-gv}}
+{\input{priority-cp}}
+{\input{conclusion}}
 
 \clearpage
 \bibliographystyle{splncs04}
@@ -335,11 +329,9 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
 
 \clearpage
 \appendix
-{
-  \changetext{}{10em}{-5em}{-5em}{}
-  \floatplacement{figure}{h}
-  \input{appendix.tex}
-}
+\changetext{}{10em}{-5em}{-5em}{}
+\floatplacement{figure}{h}
+{\input{appendix.tex}}
 
 \end{document}
 

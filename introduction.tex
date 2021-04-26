@@ -1,6 +1,3 @@
-\documentclass[main.tex]{subfiles}
-
-\begin{document}
 \section{Introduction}
 Session types~\cite{honda93,takeuchihonda94,hondavasconcelos98} are types for protocols. Regular types ensure functions are used according to their specification. Session types ensure \emph{communication channels} are used according to their protocols. Session types have been studied in many settings. For instance, in the $\pi$-calculus~\cite{honda93,takeuchihonda94,hondavasconcelos98}, a foundational calculus for communication and concurrency, and in concurrent $\lambda$-calculi~\cite{gayvasconcelos10}, including the focus of our paper: Good Variation~\cite[GV]{wadler15,lindleymorris15}.
 
@@ -31,4 +28,3 @@ We make the following main contributions:
   We present a \emph{sound and complete encoding} of Priority CP~\cite{dardhagay18extended} in PGV (\secref{sec:pcp}). We prove the encoding preserves typing (\cref{thm:pcp-to-pgv-confs-preservation}) and satisfies operational correspondence (\cref{thm:pcp-to-pgv-operational-correspondence-soundness,thm:pcp-to-pgv-operational-correspondence-completeness}).
   To obtain a tight correspondence, we update PCP, moving away from commuting conversions and reduction as cut elimination towards reduction based on structural congruence, as it is standard in process calculi.
 \end{enumerate}
-\end{document}

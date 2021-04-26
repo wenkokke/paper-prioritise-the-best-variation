@@ -1,8 +1,3 @@
-% !TeX root = priorities.tex
-\documentclass[main.tex]{subfiles}
-
-\begin{document}
-
 \section{Relation to Priority CP}\label{sec:pcp}
 
 We present a correspondence between Priority GV and an updated version of Priority CP~\cite[PCP]{dardhagay18extended}, which is Wadler's CP~\cite{wadler14} with priorities. This correspondence connects PGV to (a~relaxed variant of) classical linear logic.
@@ -11,7 +6,6 @@ We present a correspondence between Priority GV and an updated version of Priori
 \begingroup
 \usingnamespace{pcp}
 \textbf{Types} ($\ty{A}$, $\ty{B}$) in PCP correspond to linear logic connectives annotated with priorities $\cs{o}\in\mathbb{N}$. Typing environments, duality, and the priority function $\pr(\cdot)$ are defined as expected.
-% (see~\cref{sec:pcp-environments,sec:pcp-duality,sec:pcp-priorities}).
 \[
   \begin{array}{lcl}
     \ty{A}, \ty{B}
@@ -45,7 +39,7 @@ We present a correspondence between Priority GV and an updated version of Priori
 \]
 Processes are typed by sequents $\seq{P}{\ty{\Gamma}}$, which correspond to the one-sided sequents in classical linear logic. Differently from PGV, in PCP we do not need to store the greatest priority on the sequent, as, due to the absence of higher-order functions, we cannot compose processes \emph{sequentially}.
 
-PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par} rules---corresponding to cycle and mix rules, respectively---and guarantees deadlock freedom by using priority constraints, \eg, as in \LabTirName{T-Send}. % The full typing rules and operational semantics are available in \cref{fig:pcp-operational-semantics,fig:pcp-typing} in \cref{app:revisiting-PCP}:
+PCP decomposes cut into \LabTirName{T-Res} and \LabTirName{T-Par} rules---corresponding to cycle and mix rules, respectively---and guarantees deadlock freedom by using priority constraints, \eg, as in \LabTirName{T-Send}.
 \begin{mathpar}
   \small
   \inferrule*[lab=T-Res]{
@@ -195,7 +189,6 @@ Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unso
 
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$, where $\tm{\pgv{\child}}$ indicates a child thread. Translated processes do not have a main thread.
 The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence.
-% The proofs are by structural induction and can be found in~\cref{prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-terms-preservation,prf:lem-pcp-to-pgv-cpgvM-to-cpgvC,prf:thm-pcp-to-pgv-operational-correspondence-soundness,prf:thm-pcp-to-pgv-operational-correspondence-completeness}.
 \begin{compacttheorems}
   \begin{restatablelemma}{lempcptopgvtermspreservation}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
     \label{lem:pcp-to-pgv-terms-preservation}
@@ -228,9 +221,3 @@ The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, 
   \end{restatabletheorem}
 \end{compacttheorems}
 \endgroup
-
-\end{document}
-
-%%% Local Variables:
-%%% TeX-master: "priorities"
-%%% End:
