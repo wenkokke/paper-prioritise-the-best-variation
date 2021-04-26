@@ -307,7 +307,6 @@
 \maketitle
 %
 \begin{abstract}
-%Binary session types have been integrated both in the $\pi$-calculus \cite{honda93,takeuchihonda94,hondavasconcelos98} and a linear concurrent $\lambda$-calculus---Good Variation (GV)~\cite{wadler15,lindleymorris15}, among other paradigms.
 %
 Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
 In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
@@ -326,12 +325,6 @@ Following PCP, we present Priority GV (PGV), a~variant of GV which decouples cha
 \clearpage
 \bibliographystyle{splncs04}
 \bibliography{main}
-
-\clearpage
-\appendix
-\changetext{}{10em}{-5em}{-5em}{}
-\floatplacement{figure}{h}
-{\input{appendix.tex}}
 
 \end{document}
 
