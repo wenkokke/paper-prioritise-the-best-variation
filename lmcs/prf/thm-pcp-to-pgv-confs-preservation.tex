@@ -1,0 +1,48 @@
+\begin{proof}
+  \label{prf:thm-pcp-to-pgv-confs-preservation}
+  By induction on the derivation of $\pcp{\seq{P}{\ty{\Gamma}}}$.
+
+  \begin{case*}[\LabTirName{T-Res}]
+    Immediately, from the induction hypothesis.
+    \small
+    \begin{mathpar}
+      \pcp{\inferrule*[lab=T-Res]{
+          \seq{\ty{\Gamma},\tmty{x}{A},\tmty{y}{\co{A}}}{\tm{P}}
+        }{\seq{\ty{\Gamma}}{\tm{\res{x}{y}{P}}}}}
+      \cpgvCarrow
+      \pgv{\inferrule*{
+          \cseq[\child]{\ty{\cpgvT{\Gamma}},\tmty{x}{\cpgvT{A}},\tmty{y}{\cpgvT{B}}}{\tm{\cpgvC{P}}}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\res{x}{y}{\cpgvC{P}}}}}}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{T-Par}]
+    Immediately, from the induction hypotheses.
+    \begin{mathpar}
+      \pcp{\inferrule*[lab=T-Par]{
+          \seq{\ty{\Gamma}}{\tm{P}}
+          \\
+          \seq{\ty{\Delta}}{\tm{Q}}
+        }{\seq{\ty{\Gamma},\ty{\Delta}}{\ppar{P}{Q}}}}
+      \cpgvCarrow
+      \pgv{\inferrule*{
+          \cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\cpgvC{P}}}
+          \\
+          \cseq[\child]{\ty{\cpgvT{\Delta}}}{\tm{\cpgvC{Q}}}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}},\ty{\cpgvT{\Delta}}}{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}}}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{*}]
+    By \cref{lem:pcp-to-pgv-terms-preservation}
+    \begin{mathpar}
+      \pcp{\seq{\ty{\Gamma}}{\tm{P}}}
+      \cpgvCarrow
+      \pgv{\inferrule*{
+          \tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\tm{\cpgvM{P}}}{\tyunit}
+        }{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\tm{\child\;\cpgvM{P}}}}}
+    \end{mathpar}
+  \end{case*}
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

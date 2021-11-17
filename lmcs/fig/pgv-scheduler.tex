@@ -1,0 +1,48 @@
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[shape=circle,draw=black]                       (agent1) {\tm{\agent1}};
+    \node[shape=circle,draw=black,below right=of agent1] (agent2) {\tm{\agent2}};
+    \node[shape=circle,draw=black,below left =of agent1] (agent3) {\tm{\agent3}};
+
+    \node[shape=circle,draw=black,above      =of agent1] (proc1) {\tm{\proc1}};
+    \node[shape=circle,draw=black,below right=of agent2] (proc2) {\tm{\proc2}};
+    \node[shape=circle,draw=black,below left =of agent3] (proc3) {\tm{\proc3}};
+
+    \draw[->]
+    (agent1) -- node[pos=0.35,above] {$c_1$}
+    node[pos=1.0,above] {$c'_1$} ++ (agent2);
+    \draw[->]
+    (agent2) -- node[pos=0.1,above] {$c_2$}
+    node[pos=0.9,above] {$c'_2$} ++ (agent3);
+    \draw[->]
+    (agent3) -- node[pos=0.0,above] {$c_3$}
+    node[pos=0.65,above] {$c'_3$} ++ (agent1);
+       
+    \draw[implies-implies,double]
+    (agent1) -- node[pos=0.15,left] {$a_1$} node[pos=0.85,left] {$a'_1$}
+    node[pos=0.15,right] {$b_1$} node[pos=0.85,right] {$b'_1$} ++ (proc1);
+    \draw[implies-implies,double]
+    (agent2) -- node[pos=0.15,above right] {$a_2$} node[pos=0.85,above right] {$a'_2$}
+    node[pos=0.15,below left] {$b_2$} node[pos=0.85,below left] {$b'_2$} ++ (proc2);
+    \draw[implies-implies,double]
+    (agent3) -- node[pos=0.15,above left] {$a_3$} node[pos=0.85,above left] {$a'_3$}
+    node[pos=0.15,below right] {$b_3$} node[pos=0.85,below right] {$b'_3$} ++ (proc3);
+
+    \draw[->]
+    (agent1) to[bend left=45] node[pos=0.15,left] {$d$} node[pos=0.85,left] {$d'$} (proc1);
+
+    \draw[->,dashed]
+    (proc1.east) to[bend left] node[pos=0.15,align=center,above right] {optional\\data transfer} (proc2.north);
+    \draw[->,dashed]
+    (proc2.west) to[bend left] (proc3.east);
+    \draw[->,dashed]
+    (proc3.north) to[bend left] (proc1.west);
+  \end{tikzpicture}
+  \label{fig:pgv-scheduler}
+  \caption{Milner's Cyclic Scheduler}
+\end{figure}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

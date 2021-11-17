@@ -1,0 +1,99 @@
+\begin{proof}
+  \label{prf:lem-pgv-subject-reduction-terms}
+  By induction on the derivation of $\tm{M}\tred\tm{M'}$.
+
+  \begin{case*}[\LabTirName{E-Lam}]
+    By \cref{lem:pgv-substitution}.
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{p}]{T}{U}}}
+        \\
+        \tseq[\cs{\pbot}]{\ty{\Delta}}{V}{T}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{(\lambda x.M)\;V}{U}}
+      \tred
+      \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{M}{V}{x}}{U}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Unit}]
+    By \cref{lem:pgv-substitution}.
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+        \\
+        \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+      }{\tseq[\cs{p}]{\ty{\Gamma}}{\letunit{\unit}{M}}{T}}
+      \tred
+      \tseq[\cs{p}]{\ty{\Gamma}}{M}{T}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Pair}]
+    By \cref{lem:pgv-substitution}.
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \tseq[\cs{\pbot}]{\ty{\Gamma}}{V}{T}
+          \\
+          \tseq[\cs{\pbot}]{\ty{\Delta}}{W}{T'}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma},\ty{\Delta}}{\pair{V}{W}}{\typrod{T}{T'}}}
+        \\
+        \tseq[\cs{p}]{\ty{\Theta},\tmty{x}{T},\tmty{y}{T'}}{M}{U}
+      }{\tseq[]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\letpair{x}{y}{\pair{V}{W}}{M}}{U}}
+      \\
+      \begin{turn}{270}
+        \tred
+      \end{turn}
+      \\
+      \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\subst{\subst{M}{V}{x}}{W}{y}}{U}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Inl}]
+    By \cref{lem:pgv-substitution}.
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \tseq[\cs{\pbot}]{\ty{\Gamma}}{V}{T}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{T'}}}
+        \\
+        \tseq[\cs{p}]{\ty{\Delta},\tmty{x}{T}}{M}{U}
+        \\
+        \tseq[\cs{p}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\casesum{\inl{V}}{x}{M}{y}{N}}{U}}
+      \\
+      \begin{turn}{270}
+        \tred
+      \end{turn}
+      \\
+      \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{M}{V}{x}}{U}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Inr}]
+    By \cref{lem:pgv-substitution}.
+    \begin{mathpar}
+      \inferrule*{
+        \inferrule*{
+          \tseq[\cs{\pbot}]{\ty{\Gamma}}{V}{T'}
+        }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\inr{V}}{\tysum{T}{T'}}}
+        \\
+        \tseq[\cs{p}]{\ty{\Delta},\tmty{x}{T}}{M}{U}
+        \\
+        \tseq[\cs{p}]{\ty{\Delta},\tmty{y}{T'}}{N}{U}
+      }{\tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\casesum{\inr{V}}{x}{M}{y}{N}}{U}}
+      \\
+      \begin{turn}{270}
+        \tred
+      \end{turn}
+      \\
+      \tseq[\cs{p}]{\ty{\Gamma},\ty{\Delta}}{\subst{N}{V}{y}}{U}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{E-Lift}]
+    By induction on the evaluation context $\tm{E}$.
+  \end{case*}
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../priorities"
+%%% End:

@@ -1,0 +1,106 @@
+\begin{figure}[t!]
+  \textbf{Term reduction.}
+  \begin{mathpar}
+    \begin{array}{llcl}
+      \LabTirName{E-Lam}  & \tm{(\lambda x.M) \; V}
+                          & \tred & \tm{\subst{M}{V}{x}}
+      \\
+      \LabTirName{E-Unit} & \tm{\letunit{\unit}{M}}
+                          & \tred & \tm{M}
+      \\
+      \LabTirName{E-Pair} & \tm{\letpair{x}{y}{\pair{V}{W}}{M}}
+                          & \tred & \tm{\subst{\subst{M}{V}{x}}{W}{y}}
+      \\
+      \LabTirName{E-Inl}  & \tm{\casesum{\inl{V}}{x}{M}{y}{N}}
+                          & \tred & \tm{\subst{M}{V}{x}}
+      \\
+      \LabTirName{E-Inr}  & \tm{\casesum{\inr{V}}{x}{M}{y}{N}}
+                          & \tred & \tm{\subst{N}{V}{y}}
+    \end{array}
+    \\
+    \inferrule*[lab=E-Lift]{
+      \tm{M}\tred\tm{M'}
+    }{\tm{\plug{E}{M}}\tred\tm{\plug{E}{M'}}}
+  \end{mathpar}
+  \textbf{Structural congruence.}
+  \begin{mathpar}
+    \begin{array}{llcl}
+      \LabTirName{SC-LinkSwap}   & \tm{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}
+                                 & \equiv & \tm{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}
+      \\
+      \LabTirName{SC-ResLink}    & \tm{\res{x}{y}{(\phi\;\link\;\pair{x}{y})}}
+                                 & \equiv & \tm{\phi\;\unit}
+      \\
+      \LabTirName{SC-ResSwap}    & \tm{\res{x}{y}{\conf{C}}}
+                                 & \equiv & \tm{\res{y}{x}{\conf{C}}}
+      \\
+      \LabTirName{SC-ResComm}    & \tm{\res{x}{y}{\res{z}{w}{\conf{C}}}}
+                                 & \equiv & \tm{\res{z}{w}{\res{x}{y}{\conf{C}}}},
+                                            \text{ if }{\{\tm{x},\tm{y}\}\cap\{\tm{z},\tm{w}\}=\varnothing}
+      \\
+      \LabTirName{SC-ResExt}     & \tm{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}
+                                 & \equiv & \tm{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}},
+                                            \text{ if }{\tm{x},\tm{y}\notin\fv(\tm{\conf{C}})}
+      \\
+      \LabTirName{SC-ParNil}     & \tm{\ppar{\conf{C}}{\child{\unit}}}
+                                 & \equiv & \tm{\conf{C}}
+      \\
+      \LabTirName{SC-ParComm}    & \tm{\ppar{\conf{C}}{\conf{D}}}
+                                 & \equiv & \tm{\ppar{\conf{D}}{\conf{C}}}
+      \\
+      \LabTirName{SC-ParAssoc}   & \tm{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}
+                                 & \equiv & \tm{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}
+    \end{array}
+  \end{mathpar}
+  \textbf{Configuration reduction.}
+  \begin{mathpar}
+    \begin{array}{l}
+      \begin{array}{llcl}
+        \LabTirName{E-Link}  & \tm{\res{x}{y}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
+                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{y}}}
+        \\
+        \LabTirName{E-New}   & \tm{\plug{\conf{F}}{\new\;\unit}}
+                             & \cred & \tm{\res{x}{y}{(\plug{\conf{F}}{\pair{x}{y}})}},
+                                       \text{ if }\tm{x},\tm{y}\notin\fv(\tm{\conf{F}})
+        \\
+        \LabTirName{E-Spawn} & \tm{\plug{\conf{F}}{(\spawn\;V)}}
+                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\child\;V\;\unit}}
+      \end{array}
+      \\
+      \begin{array}{llcl}
+        \LabTirName{E-Send}  & \tm{\res{x}{y}{(\ppar
+                               {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
+                               {\plug{\conf{F'}}{\recv\;{y}}})}}
+                             & \cred & \tm{\res{x}{y}{(\ppar
+                                       {\plug{\conf{F}}{x}}
+                                       {\plug{\conf{F'}}{\pair{V}{y}}})}}
+        \\
+        \LabTirName{E-Close} & \tm{\res{x}{y}{(\ppar
+                               {\plug{\conf{F}}{\wait\;{x}}}
+                               {\plug{\conf{F'}}{\close\;{y}}})}}
+                             & \cred & \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
+      \end{array}
+    \end{array}
+    \\
+    \inferrule*[lab=E-LiftC]{
+      \tm{\conf{C}}\cred\tm{\conf{C'}}
+    }{\tm{\plug{\conf{G}}{\conf{C}}}\cred\tm{\plug{\conf{G}}{\conf{C'}}}}
+
+    \inferrule*[lab=E-LiftM]{
+      \tm{M}\tred\tm{M'}
+    }{\tm{\plug{\conf{F}}{M}}\tred\tm{\plug{\conf{F}}{M'}}}
+
+    \inferrule*[lab=E-LiftSC]{
+      \tm{\conf{C}}\equiv\tm{\conf{C'}}
+      \\
+      \tm{\conf{C'}}\cred\tm{\conf{D'}}
+      \\
+      \tm{\conf{D'}}\equiv\tm{\conf{D}}
+    }{\tm{\conf{C}}\cred\tm{\conf{D}}}
+  \end{mathpar}
+  \caption{Operational Semantics for PGV.}%
+  \label{fig:pgv-operational-semantics}
+\end{figure}
+% Local Variables:
+% TeX-master: "../priorities"
+% End:

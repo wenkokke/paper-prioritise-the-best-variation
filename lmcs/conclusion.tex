@@ -1,0 +1,43 @@
+\section{Related Work and Discussion}
+
+\subsubsection*{Deadlock freedom and progress}
+Deadlock freedom and progress are well studied properties in the $\pi$-calculus.
+For the `standard' typed $\pi$-calculus, an important line of work starts from Kobayashi's approach to deadlock freedom~\cite{kobayashi98}, where priorities are values from an abstract poset. Kobayashi~\cite{kobayashi06} simplifies the abstract poset to pairs of naturals, called \emph{obligations} and\emph{capabilities}. Padovani simplifies these further to a single natural, called a \emph{priority}~\cite{padovani14}, and adapts obligations/capabilities to session types~\cite{padovani13}.
+
+% We can obtain deadlock freedom for the $\pi$-calculus with session types via the encoding of session types using linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat} and linear $\pi$-calculus with priorities.
+
+For the session-typed $\pi$-calculus, Dezani~\etal~\cite{dezani-ciancaglinimostrous06} guarantee progress by allowing only one active session at a time. Dezani~\cite{dezani-ciancagliniliguoro09progress} introduces a partial order on channels, similar to Kobayashi~\cite{kobayashi98}.
+Carbone and Debois~\cite{carbonedebois10} define progress for session typed $\pi$-calculus in terms of a \emph{catalyser} which provides the missing counterpart to a process. Carbone~\etal~\cite{carbonedardha14} use catalysers to show that progress is a compositional form of lock-freedom and can be lifted to session types via the encoding of session types to linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat}.
+Vieira and Vasconcelos~\cite{vieiravasconcelos13} use single priorities and an abstract partial order to guarantee deadlock freedom in a binary session-typed $\pi$-calculus and building on conservation types.
+
+While our work focuses on \emph{binary} session types, it is worth to discuss related work on Multiparty Session Types (MPST). The line of work on MPST starts with Honda~\etal~\cite{hondayoshida08}, which guarantees deadlock freedom \emph{within a single session}, but not for session interleaving.
+Bettini~\etal~\cite{bettinicoppo08} follow a technique similar to Kobayashi's for MPST.
+The main difference with our work is that we associate priorities with communication actions, where Bettini~\etal~\cite{bettinicoppo08} associate them with channels.
+Carbone and Montesi~\cite{carbonemontesi13} combine MPST with choreographies and obtain a formalism that satisfies deadlock freedom.
+Deni\'{e}lou and Yoshida~\cite{DenielouY13} introduce \emph{multiparty compatibility} which generalises duality in binary session types. They synthesise safe and deadlock-free global types from local types leveraging LTSs and communicating automata.
+Castellani~\etal~\cite{CastellaniDGH20} guarantee lock freedom, a stronger property than deadlock freedom, for MPST with \emph{internal delegation}, where participants in the same session are allowed to delegate tasks to each other, and internal delegation is captured by the global type.
+Scalas and Yoshida~\cite{scalasyoshida19} provide a revision of the foundations for MPST, and offer a less complicated and more general theory, by removing duality/consistency. The type systems is parametric and type checking is decidable, but allows for a novel integration of model checking techniques. More protocols and processes can be typed and are guaranteed to be free of deadlocks.
+
+Neubauer and Thiemann~\cite{neubauert04} and Vasconcelos~\etal~\cite{vasconcelosravara04,vasconcelosgay06} introduce the first functional language with session types. Such works did not guarantee deadlock freedom until GV~\cite{lindleymorris15,wadler14}.
+Toninho~\etal~\cite{toninhocaires12} present a translation of simply-typed $\lambda$-calculus into session-typed $\pi$-calculus, but their focus is not on deadlock freedom.
+
+\subsubsection*{Ties with logic}
+The correspondence between logic and types lays the foundation for functional programming~\cite{wadler15}.
+Since its inception by Girard~\cite{girard87}, linear logic has been a candidate for a foundational correspondence for concurrent programs.
+A~correspondence with linear $\pi$-calculus was established early on by Abramsky~\cite{abramsky94} and Bellin and Scott~\cite{bellinscott94}. Many years later, several correspondences between linear logic and the $\pi$-calculus with binary session types were proposed. Caires and Pfenning~\cite{cairespfenning10} propose a correspondence with dual intuitionistic linear logic, while Wadler~\cite{wadler14} proposes a correspondence with classical linear logic. Both guarantee deadlock freedom as a consequence of cut elimination.
+Dardha and Gay~\cite{dardhagay18extended} integrate Kobayashi and Padovani's work on priorities~\cite{kobayashi06,padovani14} with CP, loosening its ties to linear logic in exchange for expressivity.
+Dardha and P\'{e}rez~\cite{dardhaperez15extended} compare priorities \`a la Kobayashi with tree restrictions \`a la CP, and show that the latter is a subsystem of the former.
+Balzer~\etal~\cite{balzerpfenning17} introduce sharing at the cost of deadlock freedom, which they restore using an approach similar to priorities~\cite{balzertoninho19}.
+Carbone~\etal~\cite{CarboneMSY15,carbonelindley16} give a logical view of MPST with a generalised duality.
+Caires and P\'{e}rez~\cite{CairesP16} give a presentation of MPST in terms of binary session types and the use of a \emph{medium process} which guarantee protocol fidelity and deadlock freedom. Their binary session types are rooted in linear logic.
+Ciobanu and Horne~\cite{CiobanuH15} give the first Curry-Howard correspondence between MPST and BV~\cite{Guglielmi07}, a conservative extension of linear logic with a non-commutative operator for sequencing.
+Horne~\cite{Horne20} give a system for subtyping and multiparty compatibility where compatible processes are race free and deadlock free using a Curry-Howard correspondence, similar to the approach in~\cite{CiobanuH15}.
+
+\subsubsection*{Conclusion}
+We answered our research question by presenting Priority GV, a~session-typed functional language which allows cyclic communication structures and uses priorities to ensure deadlock freedom. We showed its relation to Priority CP~\cite{dardhagay18extended} via an operational correspondence.
+
+\subsubsection*{Future work}
+Our formalism so far only captures the core of GV. In future work, we plan to explore recursion, following Lindley and Morris~\cite{lindleymorris16} and Padovani and Novara~\cite{padovaninovara15}, and sharing, following Balzer and Pfenning~\cite{balzerpfenning17} or Voinea~\etal~\cite{VoineaDG19}.
+
+\subsubsection*{Acknowledgements}
+The authors would like to thank Simon Fowler, April Gon\c{c}alves, and Philip Wadler for their comments on the manuscript.

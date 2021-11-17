@@ -1,0 +1,387 @@
+% !TeX root = priorities.tex
+\section{Priority GV}
+\begingroup
+\usingnamespace{pgv}
+\restatelemma{lempgvvaluedone}
+\input{prf/lem-pgv-value-done}
+
+\restatelemma{lempgvsubstitution}
+\input{prf/lem-pgv-substitution}
+
+\restatelemma{lempgvsubjectreductionterms}
+\input{prf/lem-pgv-subject-reduction-terms}
+
+\restatelemma{lempgvsubjectcongruence}
+\input{prf/lem-pgv-subject-congruence}
+
+\restatetheorem{thmpgvsubjectreductionconfs}
+\input{prf/thm-pgv-subject-reduction-confs}
+
+\begin{restatablelemma}{lempgvreadypriority}
+  \label{lem:pgv-ready-priority}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+\end{restatablelemma}
+\begin{proof}
+  Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+\end{proof}
+
+\restatelemma{lempgvcanonicalforms}
+\begin{proof}
+  We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+\end{proof}
+
+\restatetheorem{thmpgvclosedprogressconfs}
+\input{prf/thm-pgv-closed-progress-confs}
+
+\input{fig/pgv-typing-sugar}
+\endgroup
+
+\section{Relation to Priority CP}
+\begingroup
+\usingnamespace{pcp}
+\subsection{Revisiting Priority CP}
+\label{app:revisiting-PCP}
+
+\subsubsection*{Types}
+Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic propositions, and are defined by the following grammar:
+\[
+  \usingnamespace{pcp}
+  \begin{array}{lcl}
+    \ty{A}, \ty{B}
+    & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
+      \sep        \ty{\typarr[\cs{o}]{A}{B}}
+      \sep        \ty{\tyone[\cs{o}]}
+      \sep        \ty{\tybot[\cs{o}]}
+      \sep        \ty{\typlus[\cs{o}]{A}{B}}
+      \sep        \ty{\tywith[\cs{o}]{A}{B}}
+      \sep        \ty{\tynil[\cs{o}]}
+      \sep        \ty{\tytop[\cs{o}]}
+  \end{array}
+\]
+Each connective is annotated with a priority $\cs{o}\in\mathbb{N}$.
+Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. Types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
+Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18extended}.
+Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
+
+\subsubsection*{Environments}
+\label{sec:pcp-environments}
+Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to types. Environments are linear, so two environments can only be combined as $\pcp{\ty{\Gamma}}, \pcp{\ty{\Delta}}$ if their names are distinct, \ie $\pcp{\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing}$.
+\[
+  \usingnamespace{pcp}
+  \begin{array}{lcl}
+    \ty{\Gamma}, \ty{\Delta}
+    & \Coloneqq & \ty{\emptyenv}
+      \sep        \ty{\Gamma}, \tmty{x}{A}
+  \end{array}
+\]
+
+\subsubsection*{Duality}
+\label{sec:pcp-duality}
+Duality is an involutive function on types which preserves priorities:
+\[
+  \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
+  \begin{array}{lcl}
+    \ty{\co{(\tyone[\cs{o}])}} & = & \ty{\tybot[\cs{o}]} \\
+    \ty{\co{(\tybot[\cs{o}])}} & = & \ty{\tyone[\cs{o}]}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\tytens[\cs{o}]{A}{B})}} & = & \ty{\typarr[\cs{o}]{\co{A}}{\co{B}}} \\
+    \ty{\co{(\typarr[\cs{o}]{A}{B})}} & = & \ty{\tytens[\cs{o}]{\co{A}}{\co{B}}}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\tynil[\cs{o}])}} & = & \ty{\tytop[\cs{o}]} \\
+    \ty{\co{(\tytop[\cs{o}])}} & = & \ty{\tynil[\cs{o}]}
+  \end{array}
+  \quad
+  \begin{array}{lcl}
+    \ty{\co{(\typlus[\cs{o}]{A}{B})}} & = & \ty{\tywith[\cs{o}]{\co{A}}{\co{B}}} \\
+    \ty{\co{(\tywith[\cs{o}]{A}{B})}} & = & \ty{\typlus[\cs{o}]{\co{A}}{\co{B}}}
+  \end{array}
+\]
+
+\subsubsection*{Priorities}
+\label{sec:pcp-priorities}
+The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the type system guarantees that the top-most connective always holds the smallest priority.  The function $\minpr(\cdot)$ returns the \emph{minimum} priority of all types a typing context, or $\cs{\ptop}$ if the context is empty:
+\[
+  \usingnamespace{pcp}
+  \setlength{\arraycolsep}{1pt}
+  \begin{array}{lclclcl}
+    \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\tytens[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\typarr[\cs{o}]{A}{B}}) & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o} \\
+    \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}
+  \end{array}
+  \qquad
+  \begin{array}{lclclcl}
+    \pr(\ty{\typlus[\cs{o}]{A}{B}}) & = & \cs{o} \\
+    \pr(\ty{\tywith[\cs{o}]{A}{B}}) & = & \cs{o}
+  \end{array}
+\]
+\[
+  \minpr(\ty{\emptyenv})          = \cs{\ptop}
+  \quad
+  \minpr(\ty{\Gamma},\tmty{x}{A}) = \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+\]
+
+\subsubsection*{Terms}
+Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following grammar.
+\[
+  \usingnamespace{pcp}
+  \begin{array}[t]{lcl}
+    \tm{P}, \tm{Q}
+    & \Coloneqq & \tm{\link{x}{y}}
+           \sep   \tm{\res{x}{y}{P}}
+           \sep   \tm{(\ppar{P}{Q})}
+           \sep   \tm{\halt}
+    \\   & \sep & \tm{\send{x}{y}{P}}
+           \sep   \tm{\close{x}{P}}
+           \sep   \tm{\recv{x}{y}{P}}
+           \sep   \tm{\wait{x}{P}}
+    \\   & \sep & \tm{\inl{x}{P}}
+           \sep   \tm{\inr{x}{P}}
+           \sep   \tm{\offer{x}{P}{Q}}
+           \sep   \tm{\absurd{x}}
+  \end{array}
+\]
+Process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
+Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. Processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
+Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
+We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
+
+\subsubsection*{On Commuting Conversions}
+\label{app:commuting-conversions}
+
+The main change we make to PCP is \emph{removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18extended}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, but using structural congruence.
+
+From the perspective of process calculi, commuting conversions behave strangely.
+Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:
+\begin{mathpar}
+  (\kappa_{\parr})
+  \quad
+  \tm{\res{z}{z'}{(\ppar{\recv{x}{y}{P}}{Q})}}
+  \red
+  \tm{\recv{x}{y}{\res{z}{z'}{(\ppar{P}{Q})}}}
+\end{mathpar}
+As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\labrecv{x}{y}}}$, and any actions $\pcp{\tm{Q}}$ was able to perform become unavailable. Consequently, CP is non-confluent:
+\begin{mathpar}
+  \setlength{\arraycolsep}{2em}
+  \begin{array}{cc}
+    \multicolumn{2}{c}{%
+    \hspace*{10ex}
+    {\tm{\res{x}{x'}{(\ppar{\recv{a}{y}{P}}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
+    \\
+    \qquad\rotatebox[origin=c]{270}{$\red\hphantom{{}^+}$}
+    &
+    \rotatebox[origin=c]{270}{$\red^+$}\qquad
+    \\
+    {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
+    &
+    {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{Q})}}}}
+  \end{array}
+\end{mathpar}
+
+In PCP, commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18extended} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
+
+\subsubsection*{Operational Semantics}
+The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
+
+The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively.
+
+\input{fig/pcp-operational-semantics}
+
+\subsubsection*{Typing}
+\Cref{fig:pcp-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
+
+\input{fig/pcp-typing}
+
+\textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
+\textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm{x}}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\pcp{\tm{x}}$ is the smallest among all priorities in $\pcp{\ty{\Gamma}}$.
+\textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+
+Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
+
+% Proofs that the syntactic sugar is well-typed.
+\input{fig/pcp-typing-sugar}
+
+\begin{compacttheorems}
+    \begin{restatabledefinition}{defpcpactions}[Actions]
+    A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
+  \end{restatabledefinition}
+  \begin{restatabledefinition}{defpcpcanonicalforms}[Canonical Forms]
+    \label{def:pcp-canonical-forms}
+    A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+  \end{restatabledefinition}
+  \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
+    \label{lem:pcp-canonical-forms}
+    If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+  \end{restatablelemma}
+  \begin{proof}
+    If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+  \end{proof}
+  \restatetheorem{thmpcpclosedprogress}
+  \input{prf/thm-pcp-closed-progress}
+\end{compacttheorems}
+\endgroup
+
+\subsection{Correspondence between PGV and PCP}
+\begingroup
+\restatelemma{lempcptopgvtermspreservation}
+\input{prf/lem-pcp-to-pgv-terms-preservation}
+
+\restatetheorem{thmpcptopgvconfspreservation}
+\input{prf/thm-pcp-to-pgv-confs-preservation}
+
+\restatetheorem{thmpcptopgvoperationalcorrespondencesoundness}
+\input{prf/thm-pcp-to-pgv-operational-correspondence-soundness}
+
+\restatelemma{lempcptopgvcpgvMtocpgvC}
+\input{prf/lem-pcp-to-pgv-cpgvM-to-cpgvC}
+
+\begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
+  \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
+  then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
+\end{restatablelemma}
+\begin{proof}
+  Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
+\end{proof}
+
+\restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
+\input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}
+\endgroup
+
+\section{Milner's Cyclic Scheduler}
+\label{sec:milner}
+As an example of a deadlock-free cyclic process, Dardha and Gay~\cite{dardhagay18extended} introduce an implementation of Milner's cyclic scheduler~\cite{milner89} in Priority CP. We reproduce that scheduler here, and show its translation to Priority GV.
+
+\begingroup
+\usingnamespace{pcp}
+\begin{example}[Milner's Cyclic Scheduler, PCP]
+  \label{ex:pcp-scheduler}
+  A set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc1}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc1}$ when all processes have finished.
+
+  Our scheduler $\tm{\sched}$ consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent1}$ initiates, then waits for every other process to finish, and signals $\tm{\proc1}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start. Each of the channels in the scheduler is of a terminated type, and is merely used to synchronise.
+
+  Below is a diagram of our scheduler instantiated with three processes:
+  \begin{center}
+    \begin{tikzpicture}
+      \node[shape=circle,draw=black]                       (agent1) {\tm{\agent1}};
+      \node[shape=circle,draw=black,below right=of agent1] (agent2) {\tm{\agent2}};
+      \node[shape=circle,draw=black,below left =of agent1] (agent3) {\tm{\agent3}};
+
+      \node[shape=circle,draw=black,above      =of agent1] (proc1) {\tm{\proc1}};
+      \node[shape=circle,draw=black,below right=of agent2] (proc2) {\tm{\proc2}};
+      \node[shape=circle,draw=black,below left =of agent3] (proc3) {\tm{\proc3}};
+
+      \draw[->]
+      (agent1) -- node[pos=0.35,above] {$c_1$}
+      node[pos=1.0,above] {$c'_1$} ++ (agent2);
+      \draw[->]
+      (agent2) -- node[pos=0.1,above] {$c_2$}
+      node[pos=0.9,above] {$c'_2$} ++ (agent3);
+      \draw[->]
+      (agent3) -- node[pos=0.0,above] {$c_3$}
+      node[pos=0.65,above] {$c'_3$} ++ (agent1);
+
+      \draw[implies-implies,double]
+      (agent1) -- node[pos=0.15,left] {$a_1$} node[pos=0.85,left] {$a'_1$}
+      node[pos=0.15,right] {$b_1$} node[pos=0.85,right] {$b'_1$} ++ (proc1);
+      \draw[implies-implies,double]
+      (agent2) -- node[pos=0.15,above right] {$a_2$} node[pos=0.85,above right] {$a'_2$}
+      node[pos=0.15,below left] {$b_2$} node[pos=0.85,below left] {$b'_2$} ++ (proc2);
+      \draw[implies-implies,double]
+      (agent3) -- node[pos=0.15,above left] {$a_3$} node[pos=0.85,above left] {$a'_3$}
+      node[pos=0.15,below right] {$b_3$} node[pos=0.85,below right] {$b'_3$} ++ (proc3);
+
+      \draw[->]
+      (agent1) to[bend left=45] node[pos=0.15,left] {$d$} node[pos=0.85,left] {$d'$} (proc1);
+
+      \draw[->,dashed]
+      (proc1.east) to[bend left] node[pos=0.15,align=center,above right] {optional\\data transfer} (proc2.north);
+      \draw[->,dashed]
+      (proc2.west) to[bend left] (proc3.east);
+      \draw[->,dashed]
+      (proc3.north) to[bend left] (proc1.west);
+    \end{tikzpicture}
+  \end{center}
+
+    We implement the scheduler as follows, using $\tm{\prod_{I}P_i}$ to denote the parallel composition of the processes $\tm{P_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{P}{Q}}$ to denote the plugging of $\tm{Q}$ in the one-hole process-context $\tm{P}$. The process-contexts $\tm{P_i}$ represent the computations performed by each process $\tm{\proc{i}}$. The process-contexts $\tm{Q_i}$ represent any post-processing, and any possible data transfer from $\tm{\proc{i}}$ to $\tm{\proc{i+1}}$. Finally, $\tm{Q_1}$ should contain $\tm{\labwait{d'}}$.
+\[
+  \begin{array}{lrlr}
+    \tm{\sched}
+    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+               \tm{\res{d}{d'}{}}
+    \\ &     & \tm{(
+               \ppar{\proc1}{\agent1}
+               \parallel
+               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
+               )}
+    \\
+    \tm{\agent1}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
+    \\
+    \tm{\agent{i}}
+    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
+    \\
+    \tm{\proc{i}}
+    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
+  \end{array}
+\]
+\end{example}
+\endgroup
+
+\begingroup
+\usingnamespace{pgv}
+\begin{example}[Milner's Cyclic Scheduler, PGV]
+  \label{ex:pgv-scheduler}
+  The PGV scheduler has exactly the same behaviour as the PCP version in~\cref{ex:pcp-scheduler}. It is implemented as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$. For simplicity, we let $\tm{\sched}$ be a configuration. The terms $\tm{M_i}$ represent the computations performed by each process $\tm{\proc{i}}$. The terms $\tm{N_i}$ represent any post-processing, and any possible data transfer from $\tm{\proc{i}}$ to $\tm{\proc{i+1}}$. Finally, $\tm{N_1}$ should contain $\tm{\wait\;{d'}}$.
+  \[
+    \begin{array}{lrlr}
+      \tm{\sched}
+      & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+                 \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+                 \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+                 \tm{\res{d}{d'}{}}
+      \\ &     & \tm{\begin{array}{lll}
+                       (
+                       & \phi\;\proc1
+                         \parallel
+                         \child\;\andthen{\agent1}{\andthen{\wait\;{c'_n}}{\close\;{d}}}
+                       \\
+                       \parallel
+                       &
+                         \prod_{2\leq{i}\leq{n}}
+                         (\child\;\proc{i} \parallel \child\;\andthen{\wait\;{c'_{i-1}}}{\agent{i}})
+                       & )
+                     \end{array}}
+      \\
+      \tm{\agent{i}}
+      & \defeq & \tm{\andthen{\close\;{a_i}}{\andthen{\wait\;{b_i}}{\close\;{c_i}}}}
+      \\
+      \tm{\proc{i}}
+      & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
+    \end{array}
+  \]
+\end{example}
+\endgroup
+
+If $\pcp{\tm{\cpgvM{P_i}}}=\pgv{\tm{M_i}}$ and $\pcp{\tm{\cpgvM{Q_i}}}=\pgv{\tm{N_i}}$, then the translation of $\pcp{\tm{\sched}}$ (\cref{ex:pcp-scheduler}), $\pcp{\tm{\cpgvC{\sched\,}}}$, is exactly $\pgv{\tm{\sched}}$ (\cref{ex:pgv-scheduler}).
+
+
+%%% Local Variables:
+%%% TeX-master: "priorities"
+%%% End:
