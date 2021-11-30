@@ -505,9 +505,9 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
   \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
     A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
-    \(
-    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}
-    \)
+
+    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$
+
     where no term $\tm{M_i}$ is a value.
   \end{definition}
   \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]%
@@ -516,9 +516,9 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
   \end{restatablelemma}
   \begin{definition}[Normal Forms]%
     A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
-    \(
-    \tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}
-    \)
+
+    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}$
+
     where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
   \end{definition}
   \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]%

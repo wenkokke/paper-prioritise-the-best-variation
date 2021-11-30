@@ -1,55 +1,29 @@
-\documentclass[citecolor=red,linkcolor=blue,runningheads]{llncs}
-\usepackage[english]{babel}
+\PassOptionsToPackage{inline}{enumitem}
+\documentclass{lmcs}
 
-% Comments and TODOs
-\usepackage{todonotes,regexpatch}
-\makeatletter
-\xpatchcmd{\@todo}{\setkeys{todonotes}{#1}}{\setkeys{todonotes}{inline,#1}}{}{}
-\makeatother
+
+%% mandatory lists of keywords
+\keywords{session types \and $\pi$-calculus \and functional programming \and deadlock freedom \and GV \and CP}
+
+\usepackage[english]{babel}
 
 % Typesetting
 \usepackage[all]{foreign}
 \usepackage{rotating}
 \usepackage{pdflscape}
-\usepackage[inline]{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \usepackage{multicol}
-\setlist[description]{style=unboxed,font=\normalfont\itshape}%
+\usepackage{amsmath,amssymb}
 \usepackage[strict]{changepage}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usepackage{mdframed}
 \usepackage{float}
 \floatplacement{figure}{tp}
-\newcommand{\secref}[1]{\S\ref{#1}}
-
-% Formatting of theorem environments
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\@spthm}
-  {\topsep7\p@\@plus2\p@\@minus4\p@}
-  {\topsep\spthmsep}
-  {}{}
-\makeatother
-\newlength\spthmsep%
-\setlength{\spthmsep}{\smallskipamount}
-\newenvironment{compacttheorems}
- {\par\vspace{\spthmsep}\begingroup
-  \setlength{\spthmsep}{0pt}}
- {\endgroup\vspace{\spthmsep}}
-
-% Formatting of \subsubsection
-\let\llncssubparagraph\subparagraph%
-\let\subparagraph\paragraph%
-\usepackage[compact]{titlesec}
-\let\subparagraph\llncssubparagraph%
-\titleformat{\subsubsection}[runin]{\normalfont\bfseries}{}{1em}{}[.]
-\titlespacing{\subsubsection}{0pt}{\medskipamount}{1ex}
+\newcommand{\secref}[1]{Section~\ref{#1}}
 
 % Math symbols
-\usepackage[fleqn]{amsmath}
 \let\:\undefined% conflicts with namespc
-\usepackage{amssymb}
 \usepackage{centernot}
 \usepackage{stmaryrd}
 \usepackage{cmll}
@@ -57,6 +31,16 @@
 \usepackage{environ}
 \usepackage{tikz-cd}
 \usetikzlibrary{arrows,automata,shapes,shapes.geometric}
+\let\theorem\thm%
+\let\endtheorem\endthm%
+\let\lemma\lem%
+\let\endlemma\endlem%
+\let\example\exa%
+\let\endexample\endexa%
+\let\definition\defi%
+\let\enddefinition\enddefi%
+\let\corollary\cor%
+\let\endcorollary\endcor%
 
 % Breaking math across pages
 \allowdisplaybreaks%
@@ -65,8 +49,8 @@
 \usepackage{namespc}
 
 % Theorem environments
-\spnewtheorem*{case*}{Case}{\itshape}{\rmfamily}
-\spnewtheorem*{subcase*}{Subcase}{\itshape}{\rmfamily}
+\newtheorem{case*}{Case}{\itshape}{\rmfamily}
+\newtheorem{subcase*}{Subcase}{\itshape}{\rmfamily}
 
 % Restatable theorems and lemmas (LLNCS-compatible)
 \newcommand{\restatetheorem}[1]{%
@@ -275,6 +259,8 @@
 }{}
 \newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
 
+\newenvironment{compacttheorems}{}{}
+
 % References
 \usepackage{varioref}
 \usepackage[hidelinks]{hyperref}
@@ -284,25 +270,21 @@
 
 \begin{document}
 %
-\title{Prioritise the Best Variation%
- \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI).}
-}
+\title{Prioritise the Best Variation}
 %
-\author{
-  Wen Kokke%
-  \inst{1}%
-  \and%
-  Ornela Dardha%
-  \inst{2}}
+% \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI).}
 %
-\authorrunning{W.\ Kokke \and O.\ Dardha}
+\author[W.~Kokke]{Wen Kokke}
+\author[O.~Dardha]{Ornela Dardha}
 %
-\institute{%
-  University of Edinburgh, Edinburgh
-  \email{wen.kokke@ed.ac.uk}
-  \\
-  University of Glasgow, Glasgow
-  \email{ornela.dardha@glasgow.ac.uk}}
+%
+%
+% \institute{%
+%   University of Edinburgh, Edinburgh
+%   \email{wen.kokke@ed.ac.uk}
+%   \\
+%   University of Glasgow, Glasgow
+%   \email{ornela.dardha@glasgow.ac.uk}}
 %
 \maketitle
 %
@@ -314,7 +296,6 @@ In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classi
 In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
 %
 Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
-\keywords{session types \and $\pi$-calculus \and functional programming \and deadlock freedom \and GV \and CP}
 \end{abstract}
 
 {\input{introduction}}
