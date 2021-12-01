@@ -31,6 +31,14 @@
 \usepackage{environ}
 \usepackage{tikz-cd}
 \usetikzlibrary{arrows,automata,shapes,shapes.geometric}
+
+% Breaking math across pages
+\allowdisplaybreaks%
+
+% Namespaces
+\usepackage{namespc}
+
+% Compatibility code for LMCS
 \let\theorem\thm%
 \let\endtheorem\endthm%
 \let\lemma\lem%
@@ -41,59 +49,52 @@
 \let\enddefinition\enddefi%
 \let\corollary\cor%
 \let\endcorollary\endcor%
-
-% Breaking math across pages
-\allowdisplaybreaks%
-
-% Namespaces
-\usepackage{namespc}
-
-% Theorem environments
 \newtheorem{case*}{Case}{\itshape}{\rmfamily}
 \newtheorem{subcase*}{Subcase}{\itshape}{\rmfamily}
+\newenvironment{compacttheorems}{}{}
 
 % Restatable theorems and lemmas (LLNCS-compatible)
 \newcommand{\restatetheorem}[1]{%
   \begingroup
-  \renewcommand{\thetheorem}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\theorem%
+  \renewcommand{\thethm}{\ref{#1}}%
+  \expandafter\expandafter\expandafter\thm%
   \csname restatabletheorem@#1\endcsname%
-  \endtheorem%
+  \endthm%
   \endgroup
 }
 \NewEnviron{restatabletheorem}[1]{%
   \global\expandafter\xdef\csname restatabletheorem@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\theorem\BODY\unskip\label{#1}\endtheorem%
+  \expandafter\thm\BODY\unskip\label{#1}\endthm%
 }
 \newcommand{\restatelemma}[1]{%
   \begingroup
-  \renewcommand{\thelemma}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\lemma%
+  \renewcommand{\thelem}{\ref{#1}}%
+  \expandafter\expandafter\expandafter\lem%
   \csname restatablelemma@#1\endcsname
-  \endlemma%
+  \endlem%
   \endgroup
 }
 \NewEnviron{restatablelemma}[1]{%
   \global\expandafter\xdef\csname restatablelemma@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\lemma\BODY\unskip\label{#1}\endlemma%
+  \expandafter\lem\BODY\unskip\label{#1}\endlem%
 }
 \newcommand{\restatedefinition}[1]{%
   \begingroup
   \renewcommand{\thedefinition}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\definition%
+  \expandafter\expandafter\expandafter\defi%
   \csname restatabledefinition@#1\endcsname
-  \enddefinition%
+  \enddefi%
   \endgroup
 }
 \NewEnviron{restatabledefinition}[1]{%
   \global\expandafter\xdef\csname restatabledefinition@#1\endcsname{%
     \unexpanded\expandafter{\BODY}%
   }%
-  \expandafter\definition\BODY\unskip\label{#1}\enddefinition%
+  \expandafter\defi\BODY\unskip\label{#1}\enddefi%
 }
 
 
@@ -259,7 +260,6 @@
 }{}
 \newcommand{\pgv}[1]{\namespace*{pgv}{}{#1}}
 
-\newenvironment{compacttheorems}{}{}
 
 % References
 \usepackage{varioref}
@@ -286,17 +286,17 @@
 %   University of Glasgow, Glasgow
 %   \email{ornela.dardha@glasgow.ac.uk}}
 %
-\maketitle
-%
 \begin{abstract}
+  %
+  Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
+  In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
+  %
+  In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
+  %
+  Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
+  \end{abstract}
 %
-Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
-In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
-%
-In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
-%
-Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
-\end{abstract}
+\maketitle
 
 {\input{introduction}}
 {\input{priority-gv}}
