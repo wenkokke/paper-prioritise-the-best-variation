@@ -3,11 +3,12 @@
 
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures.
+
 We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
-\begin{enumerate*}[label= (\alph*) ]
+\begin{enumerate}[label= (\alph*) ]
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
-\end{enumerate*}
+\end{enumerate}
 PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadlock-free in PGV, but is not typeable in GV~\cite{wadler14} and not guaranteed deadlock-free in GV's predecessor~\cite{gayvasconcelos10}. We believe PGV is a non-conservative \emph{extension} of GV, as CP can be embedded in a Kobayashi-style system~\cite{dardhaperez15extended}.
 
 
@@ -134,6 +135,7 @@ Function $\pr(\cdot)$ returns the smallest priority of a session type. The type 
   \qquad
   \pr(\ty{\tyendr[\cs{o}]})       = \cs{o}
 \]
+
 We extend the function $\pr(\cdot)$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority. We use $\sqcap$ and $\sqcup$ to denote the minimum and maximum:
 \[
 \begin{array}{lcl}
@@ -178,6 +180,7 @@ Terms ($\tm{L}$, $\tm{M}$, $\tm{N}$) are defined by the following grammar:
     \sep        \tm{\wait}
 \end{array}
 \]
+
 Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$. The term language is the standard linear $\lambda$-calculus with products, sums, and their units, extended with constants $\tm{K}$ for the communication primitives.
 
 Constants are best understood in conjunction with their typing and reduction rules in~\cref{fig:pgv-typing,fig:pgv-operational-semantics}.
@@ -313,10 +316,10 @@ Typing rules for terms are at the top of \cref{fig:pgv-typing}. Terms are typed 
 \input{fig/pgv-typing}
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18extended}, priorities obey the following two laws:
-\begin{enumerate*}[label= (\roman*) ]
+\begin{enumerate}[label= (\roman*) ]
 \item an action with lower priority happens before an action with higher priority; and
 \item communication requires \emph{equal} priorities for dual actions.
-\end{enumerate*}
+\end{enumerate}
 
 In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
 
@@ -415,43 +418,50 @@ While our configuration typing is based on the standard typing for GV, it differ
 \end{enumerate*}
 In order to guarantee deadlock freedom, in GV each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$. Consequently, associativity of parallel composition does not preserve typing. In PGV, we guarantee deadlock freedom using priorities, which removes the need for the channel pseudo-type $\ty{S^\sharp}$, and simplifies typing for parallel composition, while restoring type preservation for the structural congruence.
 
-
-\subsubsection*{Subject reduction}
+\section{Technical Developments}
+\subsection{Subject reduction}
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
 We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
-% The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
-\begin{compacttheorems}
-  \begin{restatablelemma}{lempgvvaluedone}%
+%The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
+  \begin{lemma}%
     \label{lem:pgv-value-done}
     If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
-  \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubstitution}[Substitution]%
+  \end{lemma}
+  \input{prf/lem-pgv-value-done}
+
+  \begin{lemma}[Substitution]%
     \label{lem:pgv-substitution}
     \hfill\\%newline before theorem statement
     If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
-  \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubjectreductionterms}[Subject Reduction, $\tred$]%
+  \end{lemma}
+  \input{prf/lem-pgv-substitution}
+
+  \begin{lemma}[Subject Reduction, $\tred$]%
     \label{lem:pgv-subject-reduction-terms}
     \hfill\\%newline before theorem statement
     If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
     then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
-  \end{restatablelemma}
-  \begin{restatablelemma}{lempgvsubjectcongruence}[Subject Congruence, $\equiv$]%
+  \end{lemma}
+  \input{prf/lem-pgv-subject-reduction-terms}
+
+  \begin{lemma}[Subject Congruence, $\equiv$]%
     \label{lem:pgv-subject-congruence}
     \hfill\\%newline before theorem statement
     If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-  \end{restatablelemma}
-  \begin{restatabletheorem}{thmpgvsubjectreductionconfs}[Subject Reduction, $\cred$]%
+  \end{lemma}
+  \input{prf/lem-pgv-subject-congruence}
+
+  \begin{theorem}[Subject Reduction, $\cred$]%
     \label{thm:pgv-subject-reduction-confs}
     \hfill\\%newline before theorem statement
     If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-  \end{restatabletheorem}
-\end{compacttheorems}
-
-\subsubsection*{Progress and deadlock freedom}
+  \end{theorem}
+  \input{prf/thm-pgv-subject-reduction-confs}
+  
+\subsection{Progress and deadlock freedom}
 PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV. Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged. Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\tm{x'}$, spawns off an echo server listening on $\tm{x}$, and then returns $\tm{x'}$:
 \[
   \begin{array}{ll}
@@ -501,7 +511,6 @@ Canonical forms deviate from those for GV, in that we opt to move all $\nu$-bind
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
 Finally, as a corollary, we get that well-typed terms which do not return endpoints return \emph{just} a value:
 
-\begin{compacttheorems}
   \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
     A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
@@ -510,10 +519,15 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
 
     where no term $\tm{M_i}$ is a value.
   \end{definition}
-  \begin{restatablelemma}{lempgvcanonicalforms}[Canonical Forms]%
+
+  \begin{lemma}[Canonical Forms]%
     \label{lem:pgv-canonical-forms}
     If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
-  \end{restatablelemma}
+  \end{lemma}
+  \begin{proof}
+    We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+  \end{proof}
+
   \begin{definition}[Normal Forms]%
     A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
 
@@ -521,16 +535,28 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
 
     where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
   \end{definition}
-  \begin{restatabletheorem}{thmpgvclosedprogressconfs}[Progress, $\cred$]%
+
+  \begin{lemma}
+    \label{lem:pgv-ready-priority}
+    If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+  \end{lemma}
+  \begin{proof}
+    Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+  \end{proof}
+  
+  \begin{theorem}[Progress, $\cred$]%
     \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
-  \end{restatabletheorem}
-  \begin{proof}[Sketch]
-    Our proof follows that of Kobayashi~\cite[theorem 2]{kobayashi06}. We apply \cref{lem:pgv-open-progress-terms} to each thread. Either we obtain a reduction, or each child thread is ready and the main thread ready or a value. We pick the ready term $\tm{L}$ with the smallest priority bound. If $\tm{L}$ contains new, spawn, or a link, we apply \LabTirName{E-New}, \LabTirName{E-Spawn}, or \LabTirName{E-Link}. Otherwise, $\tm{L}$ must be ready on some $\tm{x_i}$. Linearity guarantees there is some thread  $\tm{L'}$ which acts on $\tm{x'_i}$. If $\tm{L'}$ is ready, priority typing guarantees it is ready on $\tm{x'_i}$, and we apply \LabTirName{E-Send} or \LabTirName{E-Close}. If $\tm{L'}$ is not ready, it must be the main thread returning a value. We move $\tm{L}$ into the $i^{\text{th}}$ position and repeat until we either find a reduction or reach normal form.
-  \end{proof}
+  \end{theorem}
+  % \begin{proof}[Sketch]
+  %   Our proof follows that of Kobayashi~\cite[theorem 2]{kobayashi06}. We apply \cref{lem:pgv-open-progress-terms} to each thread. Either we obtain a reduction, or each child thread is ready and the main thread ready or a value. We pick the ready term $\tm{L}$ with the smallest priority bound. If $\tm{L}$ contains new, spawn, or a link, we apply \LabTirName{E-New}, \LabTirName{E-Spawn}, or \LabTirName{E-Link}. Otherwise, $\tm{L}$ must be ready on some $\tm{x_i}$. Linearity guarantees there is some thread  $\tm{L'}$ which acts on $\tm{x'_i}$. If $\tm{L'}$ is ready, priority typing guarantees it is ready on $\tm{x'_i}$, and we apply \LabTirName{E-Send} or \LabTirName{E-Close}. If $\tm{L'}$ is not ready, it must be the main thread returning a value. We move $\tm{L}$ into the $i^{\text{th}}$ position and repeat until we either find a reduction or reach normal form.
+  % \end{proof}
+  \input{prf/thm-pgv-closed-progress-confs}
+  \input{fig/pgv-typing-sugar}
+
+
   \begin{corollary}%
     \label{cor:pgv-closed-progress}
     If $\cseq[\phi]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value $\tm{V}$.
   \end{corollary}
-\end{compacttheorems}
 It follows immediately from \cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} that a term which does not return an endpoint will complete all its communication actions, thus satisfying deadlock freedom.
