@@ -1,40 +1,40 @@
 % !TeX root = priorities.tex
-\section{Priority GV}
-\begingroup
-\usingnamespace{pgv}
-\restatelemma{lempgvvaluedone}
-\input{prf/lem-pgv-value-done}
+% \section{Priority GV}
+% \begingroup
+% \usingnamespace{pgv}
+% \restatelemma{lempgvvaluedone}
+% \input{prf/lem-pgv-value-done}
 
-\restatelemma{lempgvsubstitution}
-\input{prf/lem-pgv-substitution}
+% \restatelemma{lempgvsubstitution}
+% \input{prf/lem-pgv-substitution}
 
-\restatelemma{lempgvsubjectreductionterms}
-\input{prf/lem-pgv-subject-reduction-terms}
+% \restatelemma{lempgvsubjectreductionterms}
+% \input{prf/lem-pgv-subject-reduction-terms}
 
-\restatelemma{lempgvsubjectcongruence}
-\input{prf/lem-pgv-subject-congruence}
+% \restatelemma{lempgvsubjectcongruence}
+% \input{prf/lem-pgv-subject-congruence}
 
-\restatetheorem{thmpgvsubjectreductionconfs}
-\input{prf/thm-pgv-subject-reduction-confs}
+% \restatetheorem{thmpgvsubjectreductionconfs}
+% \input{prf/thm-pgv-subject-reduction-confs}
 
-\begin{restatablelemma}{lempgvreadypriority}
-  \label{lem:pgv-ready-priority}
-  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
-\end{restatablelemma}
-\begin{proof}
-  Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
-\end{proof}
+% \begin{restatablelemma}{lempgvreadypriority}
+%   \label{lem:pgv-ready-priority}
+%   If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+% \end{restatablelemma}
+% \begin{proof}
+%   Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+% \end{proof}
 
-\restatelemma{lempgvcanonicalforms}
-\begin{proof}
-  We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
-\end{proof}
+% \restatelemma{lempgvcanonicalforms}
+% \begin{proof}
+%   We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+% \end{proof}
 
-\restatetheorem{thmpgvclosedprogressconfs}
-\input{prf/thm-pgv-closed-progress-confs}
+% \restatetheorem{thmpgvclosedprogressconfs}
+% \input{prf/thm-pgv-closed-progress-confs}
 
-\input{fig/pgv-typing-sugar}
-\endgroup
+% \input{fig/pgv-typing-sugar}
+% \endgroup
 
 \section{Relation to Priority CP}
 \begingroup
