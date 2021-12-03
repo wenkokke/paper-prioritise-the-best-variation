@@ -1,5 +1,5 @@
 \PassOptionsToPackage{inline}{enumitem}
-\documentclass{lmcs}
+\documentclass[citecolor=red,linkcolor=blue]{lmcs}
 
 
 %% mandatory lists of keywords
@@ -263,36 +263,57 @@
 
 % References
 \usepackage{varioref}
-\usepackage[hidelinks]{hyperref}
-\usepackage{cleveref}
+\usepackage[colorlinks]{hyperref}
+\usepackage{thmtools,cleveref}
 \usepackage{doi}
 \usepackage[strings]{underscore}
+
+%% so that \Cref actually works
+\newcommand{\renewtheorem}[1]{%
+  \expandafter\let\csname #1\endcsname\relax
+  \expandafter\let\csname c@#1\endcsname\relax
+  \expandafter\let\csname end#1\endcsname\relax
+  \newtheorem{#1}%
+}
+
+\theoremstyle{example} %% style
+%\newtheorem{example}[theorem]{Example}
+%\declaretheorem[style=example,qed=$\triangle$]{example}
+
+% the following environments keep the roman font:
+\theoremstyle{definition}
+
+\renewtheorem{theorem}{Theorem}[section]
+\renewtheorem{corollary}[thm]{Corollary}
+\renewtheorem{lemma}[thm]{Lemma}
+\renewtheorem{proposition}[thm]{Proposition}
+\renewtheorem{asm}[thm]{Assumption}
+
+\crefname{section}{\S.\@\!}{Sections}%
+\crefname{subsection}{\S\!\!\,}{\S\!\!\,}%
+\crefname{subsubsection}{\S\!\!\,}{\S\!\!\,}%
 
 \begin{document}
 %
 \title{Prioritise the Best Variation}
 %
-% \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI).}
+ \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI)}
 %
 \author[W.~Kokke]{Wen Kokke}
+\address{University of Edinburgh, Edinburgh, UK}
+\email{wen.kokke@ed.ac.uk}
+
 \author[O.~Dardha]{Ornela Dardha}
-%
-%
-%
-% \institute{%
-%   University of Edinburgh, Edinburgh
-%   \email{wen.kokke@ed.ac.uk}
-%   \\
-%   University of Glasgow, Glasgow
-%   \email{ornela.dardha@glasgow.ac.uk}}
-%
+\address{School of Computing Science, University of Glasgow, UK}	%required
+\email{ornela.dardha@glasgow.ac.uk}  %optional
+
 \begin{abstract}
   %
   Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
   In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
-  %
+  
   In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
-  %
+  
   Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
   \end{abstract}
 %
