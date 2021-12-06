@@ -276,10 +276,6 @@
   \newtheorem{#1}%
 }
 
-\theoremstyle{example} %% style
-%\newtheorem{example}[theorem]{Example}
-%\declaretheorem[style=example,qed=$\triangle$]{example}
-
 % the following environments keep the roman font:
 \theoremstyle{definition}
 
@@ -287,7 +283,7 @@
 \renewtheorem{corollary}[thm]{Corollary}
 \renewtheorem{lemma}[thm]{Lemma}
 \renewtheorem{proposition}[thm]{Proposition}
-\renewtheorem{asm}[thm]{Assumption}
+\renewtheorem{example}[thm]{Example}
 
 \crefname{section}{\S.\@\!}{Sections}%
 \crefname{subsection}{\S\!\!\,}{\S\!\!\,}%
@@ -310,6 +306,7 @@
 \begin{abstract}
   %
   Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
+  
   In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
   
   In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
@@ -321,12 +318,11 @@
 
 {\input{introduction}}
 {\input{priority-gv}}
-{\input{priority-cp}}
+%{\input{priority-cp}}
+{\input{priority-cp-long}}
 {\input{conclusion}}
-{\input{appendix}}
 
-\clearpage
-\bibliographystyle{splncs04}
+\bibliographystyle{alpha}
 \bibliography{main}
 
 \end{document}
