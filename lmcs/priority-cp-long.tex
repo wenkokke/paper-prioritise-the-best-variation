@@ -37,6 +37,8 @@
 % \endgroup
 
 \section{Relation to Priority CP}
+\label{sec:pcp}
+
 \begingroup
 \usingnamespace{pcp}
 \subsection{Revisiting Priority CP}
@@ -63,7 +65,7 @@ Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ 
 Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18extended}.
 Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
 
-\subsubsection*{Environments}
+\subsubsection*{Typing Environments}
 \label{sec:pcp-environments}
 Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to types. Environments are linear, so two environments can only be combined as $\pcp{\ty{\Gamma}}, \pcp{\ty{\Delta}}$ if their names are distinct, \ie $\pcp{\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing}$.
 \[
@@ -75,7 +77,7 @@ Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to 
   \end{array}
 \]
 
-\subsubsection*{Duality}
+\subsubsection*{Type Duality}
 \label{sec:pcp-duality}
 Duality is an involutive function on types which preserves priorities:
 \[
@@ -154,6 +156,7 @@ Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following g
            \sep   \tm{\absurd{x}}
   \end{array}
 \]
+
 Process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
 Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. Processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
 Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
@@ -193,14 +196,14 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
 
 In PCP, commuting conversions break our intuition that an action with lower priority occurs before an action with higher priority. To cite Dardha and Gay~\cite{dardhagay18extended} ``\emph{if a prefix on a channel endpoint $\pcp{\tm{x}}$ with priority $\cs{o}$ is pulled out at top level, then to preserve priority constraints in the typing rules [..], it is necessary to increase priorities of all actions after the prefix on $\pcp{\tm{x}}$}'' by $\cs{o+1}$.
 
-\subsubsection*{Operational Semantics}
+\subsection{Operational Semantics}
 The operational semantics for PCP, given in \cref{fig:pcp-operational-semantics}, is defined as a reduction relation $\pcp{\red}$ on processes (bottom) and uses structural congruence (top). Each of the axioms of structural congruence corresponds to the axiom of the same name for PGV. We write $\pcp{\red^+}$ for the transitive closures, and $\pcp{\red^\star}$ for the reflexive-transitive closures.
 
 The reduction relation is given by a set of axioms and inference rules for context closure. Reduction occurs under restriction. $\LabTirName{E-Link}$ reduces a parallel composition with a link into a substitution. $\LabTirName{E-Send}$ is the main communication rule, where send and receive processes sychronise and reduce to the corresponding continuations. $\LabTirName{E-Close}$ follows the previous rule and it closes the channel identified by endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$. $\LabTirName{E-Select-Inl}$ and $\LabTirName{E-Select-Inr}$ are generalised versions of $\LabTirName{E-Send}$. They state respectively that a left and right selection synchronises with a choice offering and reduces to the corresponding continuations. The last three rules state that reduction is closed under restriction, parallel composition and structural congruence, respectively.
 
 \input{fig/pcp-operational-semantics}
 
-\subsubsection*{Typing}
+\subsection{Typing Rules}
 \Cref{fig:pcp-typing} gives the typing rules for our version of PCP. A typing judgement $\pcp{\seq{P}{\Gamma}}$ states that ``process $\pcp{\tm{P}}$ is well typed under the typing context $\pcp{\ty{\Gamma}}$''.
 
 \input{fig/pcp-typing}
@@ -215,50 +218,84 @@ Finally, since our reduction relation is a strict subset of the reduction relati
 % Proofs that the syntactic sugar is well-typed.
 \input{fig/pcp-typing-sugar}
 
-\begin{compacttheorems}
-    \begin{restatabledefinition}{defpcpactions}[Actions]
-    A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
-  \end{restatabledefinition}
-  \begin{restatabledefinition}{defpcpcanonicalforms}[Canonical Forms]
-    \label{def:pcp-canonical-forms}
-    A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
-  \end{restatabledefinition}
-  \begin{restatablelemma}{lempcpcanonicalforms}[Canonical Forms]
-    \label{lem:pcp-canonical-forms}
-    If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
-  \end{restatablelemma}
-  \begin{proof}
-    If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
-  \end{proof}
-  \restatetheorem{thmpcpclosedprogress}
-  \input{prf/thm-pcp-closed-progress}
-\end{compacttheorems}
+\begin{definition}[Actions]
+A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
+\end{definition}
+\begin{definition}[Canonical Forms]
+\label{def:pcp-canonical-forms}
+A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+\end{definition}
+\begin{lemma}[Canonical Forms]
+\label{lem:pcp-canonical-forms}
+If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+\end{lemma}
+\begin{proof}
+If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
+\end{proof}
+
+%\restatetheorem{thmpcpclosedprogress}
+\begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]%
+  \label{thm:pcp-closed-progress}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
+\end{restatabletheorem}
+\input{prf/thm-pcp-closed-progress}
+
 \endgroup
 
 \subsection{Correspondence between PGV and PCP}
 \begingroup
-\restatelemma{lempcptopgvtermspreservation}
+%\restatelemma{lempcptopgvtermspreservation}
+\begin{lemma}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
+  \label{lem:pcp-to-pgv-terms-preservation}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$.
+\end{lemma}
 \input{prf/lem-pcp-to-pgv-terms-preservation}
 
-\restatetheorem{thmpcptopgvconfspreservation}
+%\restatetheorem{thmpcptopgvconfspreservation}
+\begin{theorem}[Preservation, ${\tm{\cpgvC{\cdot}}}$]%
+  \label{thm:pcp-to-pgv-confs-preservation}
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$.
+\end{theorem}
 \input{prf/thm-pcp-to-pgv-confs-preservation}
 
-\restatetheorem{thmpcptopgvoperationalcorrespondencesoundness}
+%\restatetheorem{thmpcptopgvoperationalcorrespondencesoundness}
+\begin{theorem}%
+  [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]%
+  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$, there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
+\end{theorem}
 \input{prf/thm-pcp-to-pgv-operational-correspondence-soundness}
 
-\restatelemma{lempcptopgvcpgvMtocpgvC}
+%\restatelemma{lempcptopgvcpgvMtocpgvC}
+\begin{lemma}%
+  \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
+  For any $\pcp{\tm{P}}$, either:
+  \begin{itemize}
+  \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
+  \item $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
+  \end{itemize}
+\end{lemma}
 \input{prf/lem-pcp-to-pgv-cpgvM-to-cpgvC}
 
-\begin{restatablelemma}{lempcptopgvoperationalcorrespondenceequiv}%
+\begin{lemma}%
   \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
-\end{restatablelemma}
+\end{lemma}
 \begin{proof}
   Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
 \end{proof}
 
-\restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
+%\restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
+\begin{theorem}%
+  [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]%
+  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
+  \hfill\\%newline before theorem statement
+  If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
+  then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
+\end{theorem}
 \input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}
 \endgroup
 
