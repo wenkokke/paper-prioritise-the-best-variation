@@ -60,9 +60,13 @@ Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic 
       \sep        \ty{\tytop[\cs{o}]}
   \end{array}
 \]
+
 Each connective is annotated with a priority $\cs{o}\in\mathbb{N}$.
+
 Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we send or receive a channel of type $\pcp{\ty{A}}$, and then proceed as type $\pcp{\ty{B}}$. Types $\pcp{\ty{\tyone[\cs{o}]}}$ and $\pcp{\ty{{\tybot}[\cs{o}]}}$ type the endpoints of a channel whose session has terminated, and over which we send or receive a \emph{ping} before closing the channel. These two types act as units for $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$, respectively.
+
 Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18extended}.
+
 Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
 
 \subsubsection*{Typing Environments}
@@ -158,8 +162,11 @@ Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following g
 \]
 
 Process $\pcp{\tm{\link{x}{y}}}$ links endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ and forwards communication from one to the other. $\pcp{\tm{\res{x}{y}{P}}}$, $\pcp{\tm{(\ppar{P}{Q})}}$ and $\pcp{\tm{\halt}}$ denote respectively the restriction processes where channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ are bound together and with scope $\pcp{\tm{P}}$, the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ and the terminated process.
+
 Processes $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x}{y}{P}}}$ send or receive over channel $\pcp{\tm{x}}$ a value $\pcp{\tm{y}}$ and proceed as process $\pcp{\tm{P}}$. Processes $\pcp{\tm{\close{x}{P}}}$ and $\pcp{\tm{\wait{x}{P}}}$ send and receive an empty value---denoting the closure of channel $\pcp{\tm{x}}$, and continue as $\pcp{\tm{P}}$.
+
 Processes $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ make a left and right choice, respectively and proceed as process $\pcp{\tm{P}}$. Dually, $\pcp{\tm{\offer{x}{P}{Q}}}$ offers both left and right branches, with continuations $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$, and $\pcp{\tm{\absurd{x}}}$ is the empty offer.
+
 We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic sugar for $\pcp{\tm{\send{x}{z}{(\ppar{\link{y}{z}}{P})}}}$. Alternatively, we could take $\pcp{\tm{\usend{x}{y}{P}}}$ as primitive, and let $\pcp{\tm{\send{x}{y}{P}}}$ be syntactic sugar for $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$. CP takes \emph{bound} sending as primitive, as it is impossible to eliminate the top-level cut in terms such as $\pcp{\tm{\res{y}{z}{(\usend{x}{z}{P})}}}$, even with commuting conversions. In our setting without commuting conversions and with more permissive normal forms, this is no longer an issue, but, for simplicity, we keep bound sending as primitive.
 
 \subsubsection*{On Commuting Conversions}
@@ -209,15 +216,19 @@ The reduction relation is given by a set of axioms and inference rules for conte
 \input{fig/pcp-typing}
 
 \textsc{T-Link} states that the link process $\pcp{\tm{\link{x}{y}}}$ is well typed under channels $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Res} sates that the restriction process $\pcp{\tm{\res{x}{y}{P}}}$ is well typed under typing context $\pcp{\ty{\Gamma}}$ if process $\pcp{\tm{P}}$ is well typed in $\pcp{\ty{\Gamma}}$ augmented with channel endpoints $\pcp{\tm{x}}$ and $\pcp{\tm{y}}$ having dual types, respectively $\pcp{\ty{A}}$ and $\pcp{\ty{\co{A}}}$. \textsc{T-Par} states that the parallel composition of processes $\pcp{\tm{P}}$ and $\pcp{\tm{Q}}$ is well typed under the disjoint union of their respective typing contexts. \textsc{T-Halt} states that the terminated process $\pcp{\tm{\halt}}$ is well typed in the empty context.
+
 \textsc{T-Send} and \textsc{T-Recv} state that the sending and receiving of a bound name $\pcp{\tm{y}}$ over a channel $\pcp{\tm{x}}$ is well typed under $\pcp{\ty{\Gamma}}$ and $\pcp{\tm{x}}$ of type $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$, respectively $\pcp{\typarr[\cs{o}]{A}{B}}$. Priority $\cs{o}$ is the smallest among all priorities of the types used by the output or input process, captured by the side condition $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+
 Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm{x}}$ and are in the same lines as the previous two rules, requiring that the priority of channel $\pcp{\tm{x}}$ is the smallest among all priorities in $\pcp{\ty{\Gamma}}$.
+
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
+
+\Cref{fig:pcp-typing-sugar} shows how syntactic sugar in PCP is well-typed.
+\input{fig/pcp-typing-sugar}
 
 Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
 
-% Proofs that the syntactic sugar is well-typed.
-\input{fig/pcp-typing-sugar}
-
+\subsection{Technical Developments}
 \begin{definition}[Actions]
 A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
 \end{definition}
