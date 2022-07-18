@@ -1,5 +1,6 @@
 ## PDF files:
 *.pdf
+!lmcs/reviews/review-2.pdf
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

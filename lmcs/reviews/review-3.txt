@@ -1,0 +1,108 @@
+Prioritise the Best Variation
+
+Authors: Wen Kokke ; Ornela Dardha
+
+
+Summary:
+
+This work introduces Priority GV (PGV), a variant of the GV
+session-typed functional language, decoupling channel creation from
+thread spawning and introducing a notion of priority (from Kobayashi’s
+obligations and capabilities, later refined by Padovani) to restore
+deadlock freedom to a language that can now type cyclic-structured
+concurrent processes.
+
+Priority GV introduces conceptual improvements on the original GV
+language by having structural congruence preserve typing, unlike in
+GV and its process calculus origins where structural congruence
+includes ill-typed terms. The authors establish the standard
+metatheoretical results of subject reduction and, via the priority
+mechanism, progress (and thus deadlock-freedom).
+
+The relation to Priority CP, the priority-based process calculus based
+on CP is also studied. To establish an operationally sound and
+complete encoding, the operational semantics of PCP are revised to be
+more “process calculus”-like rather than based on cut elimination.
+
+Review:
+
+I quite enjoyed reading this paper and I think this work is solid and
+addresses a clearly missing piece of the “GV puzzle” as far as the
+compromise of expressiveness vs deadlock-freedom is concerned.
+
+While the authors did not list the additions wrt the version of the
+paper published in FORTE, it would seem these consist of augmented
+technical content and explanations (proofs, lemmas, etc.), as well as
+the extended example of Section 5.
+I believe this to be a sufficient improvement over the conference
+version of the work.
+
+The technical development itself appears crisp. The proofs are
+presented in sufficient detail so that they can be followed with ease,
+and I found no bugs of note in the development.  The presentation is
+also well motivated, and the contrast and comparison to GV and, later,
+to CP, provides a nice anchor to guide the reader that is familiar
+with those systems. A reader less familiar with the specifics of GV
+and CP should also be able to follow the paper, given the use of
+(small) examples to motivate the key issues.
+
+I have no real complaints, but I do have some suggestions/minor
+comments that I believe would improve the paper:
+
+
+* The issue raised in the abstract about CP is coupling thread spawning
+and channel creation is true also about the earlier work of Caires and
+Pfenning, and is generally true of all works in this space based on
+the core proof theory of linear logic. I suggest reflecting this in
+the abstract rather than singling out CP in this sense.
+
+
+* I disagree with the (informal) definition of session interleaving used
+in e.g. paragraph 2, page 2, of the introduction.  The authors state
+that
+
+[...] This ensures that two processes can only communicate via exactly
+one series of channels, which rules out interleavings of sessions, and
+guarantees deadlock freedom
+
+To my understanding, session interleaving is the ability of a
+process to communicate on more than one channel, which is clearly
+supported by linear logic-based systems in a deadlock-free way. This
+is in sharp contrast with the original session type works where the
+sheer fact that a process can use more than one channel entails the
+possibility of deadlock. What is ruled out is cyclic dependencies of
+blocking actions, not interleaving.
+
+* The authors should state clearly what the downsides of coupling
+channel creation with thread spawning in a setting such as GV are
+(beyond the acyclicity constraint).
+
+* The notion of Ready Term (Def. 3.6) seems related to the notion of
+  poised process of [BP17,BTP19] and live process of [CP10]. A remark
+  to this effect would be helpful.
+
+* Since the orignal publication of this work, a few works on
+  deadlock-freedom by typing that go beyond the languages that stem
+  directly from the logical interpretation of session types have been
+  published that should be included in the related work discussion.
+Please comment on the recent work by Rocha and Caires on shared
+  state in a language inspired by differential linear logic:
+
+Pedro Rocha, Luís Caires:
+Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
+
+And on the work by Qian, Kavvos and Birkedal using coexponentials:
+
+Zesen Qian, G. A. Kavvos, Lars Birkedal:
+Client-server sessions in linear logic. Proc. ACM Program. Lang. 5(ICFP): 1-31 (2021)
+
+
+Typos:
+
+
+p2 par2: combing -> combining
+formating of \phi ::= ... in page 6 is broken
+page 10 l1, enforce sequentially
+
+
+Section 6, par 2: conservation types -> conversation
