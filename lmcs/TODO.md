@@ -1,24 +1,23 @@
+## Derived issues
+
+- @wenkokke: Either what "ties to linear logic" means, or remove any mention of it.
+  Related commends:
+
+  + @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
+
+- @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
+  Related comments:
+
+  + @Reviewer1: page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
+
+  + @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
+
+  We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language.
+
+
 ## Fixes defect, easy to fix
 
-- @Reviewer1: page 12: Where is the case for M;N? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
-
-- @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
-
-- @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term let () = ..., which would be necessary here.
-
-- @Reviewer1: page 26: T-Res sTates
-
 - @Reviewer1: The Introduction should mention that this article is the extended version of a published conference paper.
-
-- @Reviewer3: page 10: l1, enforce sequentially
-
-## Fixes defect, requires consideration
-
-- @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
-
-- @Reviewer1: 1st line: "verify correct ordering of operations, namely protocols". Don't session types verify _implementations_ of protocols, instead of the protocols themselves?
-
-- @Reviewer1: 2nd line: "Regular types". I don't think you mean regular types in the technical sense. Perhaps you mean data types?
 
 ## Enhances contribution
 
@@ -70,6 +69,10 @@
 - @Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.
 
 - @Reviewer1: pages 27-36: These sections are too dry. There's no explanation of what works as usual, what is different, how the translation from PCP to PGV works (it is not even really _defined_ before the proofs!), and what the reader should focus on. It almost reads like a file intended for a theorem prover. I suggest that you rewrite these sections by explaining these aspects, presenting selected rules and the translation with examples, and then putting what "works as usual" into an appendix.
+
+- @wenkokke: Regarding Figure 3, are these definitions? I believe so: we're deriving the typing rules for the syntactic sugar from the core typing rules.
+  Related comments:
+  - @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
 
 ## Clarifies related work
 
@@ -136,3 +139,11 @@
 - ~~@Reviewer3: Section 6, paragraph 2: conservation types -> conversation~~
 
 - ~~@Reviewer1: last line of page 1: I think you lack a colon at the end.~~
+
+- ~~@Reviewer1: page 26: T-Res sTates~~
+
+- ~~@Reviewer3: page 10: l1, enforce sequentially~~
+
+- ~~@Reviewer1: 1st line: "verify correct ordering of operations, namely protocols". Don't session types verify _implementations_ of protocols, instead of the protocols themselves?~~
+
+- ~~@Reviewer1: 2nd line: "Regular types". I don't think you mean regular types in the technical sense. Perhaps you mean data types?~~
