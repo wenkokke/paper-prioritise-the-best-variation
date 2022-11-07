@@ -8,7 +8,7 @@ For the `standard' typed $\pi$-calculus, an important line of work starts from K
 
 For the session-typed $\pi$-calculus, Dezani~\etal~\cite{dezani-ciancaglinimostrous06} guarantee progress by allowing only one active session at a time. Dezani~\cite{dezani-ciancagliniliguoro09progress} introduces a partial order on channels, similar to Kobayashi~\cite{kobayashi98}.
 Carbone and Debois~\cite{carbonedebois10} define progress for session typed $\pi$-calculus in terms of a \emph{catalyser} which provides the missing counterpart to a process. Carbone~\etal~\cite{carbonedardha14} use catalysers to show that progress is a compositional form of lock-freedom and can be lifted to session types via the encoding of session types to linear types~\cite{kobayashi07,dardhagiachino12,dardha14beat}.
-Vieira and Vasconcelos~\cite{vieiravasconcelos13} use single priorities and an abstract partial order to guarantee deadlock freedom in a binary session-typed $\pi$-calculus and building on conservation types.
+Vieira and Vasconcelos~\cite{vieiravasconcelos13} use single priorities and an abstract partial order to guarantee deadlock freedom in a binary session-typed $\pi$-calculus and building on conversation types.
 
 While our work focuses on \emph{binary} session types, it is worth to discuss related work on Multiparty Session Types (MPST). The line of work on MPST starts with Honda~\etal~\cite{hondayoshida08}, which guarantees deadlock freedom \emph{within a single session}, but not for session interleaving.
 Bettini~\etal~\cite{bettinicoppo08} follow a technique similar to Kobayashi's for MPST.

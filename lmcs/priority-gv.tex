@@ -492,7 +492,7 @@ Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris1
     \\
     & \tm{\andthen{\spawn\;(\lambda\unit.\echo_{x})}{x'}}
   \end{array}
-  \hfill
+  \hfill\qquad\hfill
   \begin{array}{lcl}
     \tm{\echo_x}
     & \defeq
@@ -501,7 +501,6 @@ Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris1
     &
     & \tm{\letbind{x}{\send\;\pair{y}{x}}{\close\;x}}
   \end{array}
-  \hfill
 \]
 
 If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\child\;\echo_{x}}{\main\;x'})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x}}$, which is blocked on $\tm{x}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce \emph{only} a value.

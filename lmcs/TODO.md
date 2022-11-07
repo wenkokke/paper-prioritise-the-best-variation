@@ -12,10 +12,6 @@
 
 - @Reviewer3: page 10: l1, enforce sequentially
 
-- @Reviewer3: Section 6, paragraph 2: conservation types -> conversation
-
-- @Reviewer1: last line of page 1: I think you lack a colon at the end.
-
 ## Fixes defect, requires consideration
 
 - @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
@@ -136,3 +132,7 @@
 - ~~@Reviewer1: page 6: The syntax of configuration needs a line break or some spacing, I think.~~
 
 - ~~@Reviewer1: page 6: I couldn't really make sense of the equations for the markings. I proceeded by guessing what spacing should have been there.~~
+
+- ~~@Reviewer3: Section 6, paragraph 2: conservation types -> conversation~~
+
+- ~~@Reviewer1: last line of page 1: I think you lack a colon at the end.~~
