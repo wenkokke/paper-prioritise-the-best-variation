@@ -223,7 +223,7 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm
 
 \textsc{T-Select-Inl} and \textsc{T-Select-Inr} type respectively the left $\pcp{\tm{\inl{x}{P}}}$ and right $\pcp{\tm{\inr{x}{P}}}$ choice performed on channel $\pcp{\tm{x}}$. \textsc{T-Offer} and \textsc{T-Offer-Absurd} type the offering of a choice, or empty choice, on channel $\pcp{\tm{x}}$. In all the above rules the priority $\cs{o}$ of channel $\pcp{\tm{x}}$ is the smallest with respect to the typing context $\pcp{\cs{o}<\minpr(\ty{\Gamma})}$ and types involved in the choice $\pcp{\cs{o}<\minpr(\ty{\Gamma},\ty{A},\ty{B})}$.
 
-\Cref{fig:pcp-typing-sugar} shows how syntactic sugar in PCP is well-typed.
+\Cref{fig:pcp-typing-sugar} shows how syntactic sugar in PCP is well typed.
 \input{fig/pcp-typing-sugar}
 
 Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.

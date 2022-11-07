@@ -26,5 +26,5 @@ $(MAIN).pdf: $(SOURCES)
 .PHONY: zip
 zip: $(MAIN).zip
 
-$(MAIN).zip: $(SOURCES) $(MAIN).bbl llncs.cls splncs04.bst
-	@zip -r $(MAIN).zip $(SOURCES) $(MAIN).bbl llncs.cls splncs04.bst
+$(MAIN).zip: $(SOURCES) $(MAIN).bbl lmcs.cls
+	@zip -r $(MAIN).zip $(SOURCES) $(MAIN).bbl lmcs.cls

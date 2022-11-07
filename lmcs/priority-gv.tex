@@ -17,11 +17,11 @@ PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadl
   \label{ex:cycle}
   \[\tm{%
     \begin{array}{l}
-      \letpair{x}{x'}{\new}{}
+      \letpair{x}{x'}{\new\unit}{}
       \\
-      \letpair{y}{y'}{\new}{}
+      \letpair{y}{y'}{\new\unit}{}
       \\
-      \spawn\left(%
+      \spawn\left(\lambda\unit.%
       \begin{array}{l}
         {\letpair{\unit}{x'}{\recv\;{x'}}{}}
         \\
@@ -45,11 +45,11 @@ PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadl
   \label{ex:deadlock}
   \[\tm{%
     \begin{array}{l}
-      \letpair{x}{x'}{\new}{}
+      \letpair{x}{x'}{\new\unit}{}
       \\
-      \letpair{y}{y'}{\new}{}
+      \letpair{y}{y'}{\new\unit}{}
       \\
-      \spawn\left(%
+      \spawn\left(\lambda\unit.%
       \begin{array}{l}
         {\letpair{\unit}{x'}{\recv\;{x'}}{}}
         \\
@@ -243,24 +243,23 @@ Priority GV terms are evaluated as part of a configuration of processes. Configu
   \tm{\phi}
   \Coloneqq \tm{\main}
   \sep      \tm{\child}
-  \hfill
+  \hfill\qquad\hfill
   \tm{\conf{C}}, \tm{\conf{D}}, \tm{\conf{E}}
   \Coloneqq \tm{\phi\;M}
   \sep      \tm{\ppar{\conf{C}}{\conf{D}}}
   \sep      \tm{\res{x}{x'}{\conf{C}}}
-  \hfill
 \]
 
 Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of threads $\tm{\phi\;M}$, parallel compositions $\tm{\ppar{\conf{C}}{\conf{D}}}$, and name restrictions $\tm{\res{x}{x'}{\conf{C}}}$. To preserve the functional nature of PGV, where programs return a single value, we use flags ($\tm{\phi}$) to differentiate between the main thread, marked $\tm{\main}$, and child threads created by $\tm{\spawn}$, marked $\tm{\child}$. Only the main thread returns a value. We determine the flag of a configuration by combining the flags of all threads in that configuration:
 \[
   \tm{\main}  + \tm{\child} = \tm{\main}
-  \hfill
+  \hfill\qquad\hfill
   \tm{\child} + \tm{\main}  = \tm{\main}
-  \hfill
+  \hfill\qquad\hfill
   \tm{\child} + \tm{\child} = \tm{\child}
-  \hfill
+  \hfill\qquad\hfill
   (\tm{\main}  + \tm{\main} \; \text{is undefined})
-  \hfill
+  \hfill\qquad\hfill
 \]
 
 The use of $\tm{\child}$ for child threads~\cite{lindleymorris15} overlaps with the use of the meta-variable $\cs{o}$ for priorities~\cite{dardhagay18extended}. Both are used to annotate sequents: flags appear on the sequent in configuration typing, and priorities in term typing. To distinguish the two symbols, they are typeset in a different font and a different colour.
@@ -308,7 +307,7 @@ Term reduction is the standard call-by-value, left-to-right evaluation for GV, a
 
 Configuration reduction resembles evaluation for a process calculus: \LabTirName{E-Link}, \LabTirName{E-Send}, and \LabTirName{E-Close} perform communications, \LabTirName{E-LiftC} allows reduction under configuration contexts, and \LabTirName{E-LiftSC} embeds a structural congruence $\equiv$. The remaining rules mediate between the process calculus and the functional language: \LabTirName{E-New} and \LabTirName{E-Spawn} evaluate the $\tm{\new}$ and $\tm{\spawn}$ constructs, creating the equivalent configuration constructs, and \LabTirName{E-LiftM} embeds term reduction.
 
-Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated process as the neutral element; it is commutative and associative.
+Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to be applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated process as the neutral element; it is commutative and associative.
 
 While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts.
 \begin{enumerate}[label=(\alph*)]
@@ -318,7 +317,7 @@ In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the 
 
 Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must \emph{create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the \emph{actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
 \item
-\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
+\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well typed configuration using $\equiv$.
 \end{enumerate}
 
 
@@ -339,7 +338,7 @@ The only non-standard feature of the typing rules is the priority annotations. P
 
 In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentially, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
 
-To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well-typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
+To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
   \inferrule*{
     \tseq[\cs{o'}]
@@ -481,9 +480,9 @@ We must show that substitution preserves priority constraints. For this, we prov
     then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
   \end{theorem}
   \input{prf/thm-pgv-subject-reduction-confs}
-  
+
 \subsection{Progress and Deadlock Freedom}
-PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV.
+PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well typed PGV term does not necessarily produce \emph{just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV.
 
 Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged. Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\tm{x'}$, spawns off an echo server listening on $\tm{x}$, and then returns $\tm{x'}$:
 \[
@@ -531,12 +530,12 @@ Progress for the term language is standard for GV, and deviates from progress fo
 Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
 
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
-Finally, as a corollary, we get that well-typed terms which do not return endpoints return \emph{just} a value:
+Finally, as a corollary, we get that well typed terms which do not return endpoints return \emph{just} a value:
 
   \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
-    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form 
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$ 
+    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
+    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$
     where no term $\tm{M_i}$ is a value.
   \end{definition}
 
@@ -549,8 +548,8 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
   \end{proof}
 
   \begin{definition}[Normal Forms]%
-    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form 
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}$ 
+    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
+    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}$
     where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
   \end{definition}
 
@@ -561,7 +560,7 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
   \begin{proof}
     Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
   \end{proof}
-  
+
   \begin{theorem}[Progress, $\cred$]%
     \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.

@@ -1,9 +1,9 @@
-\PassOptionsToPackage{inline}{enumitem}
+\PassOptionsToPackage{inline}{enumitem}%
 \documentclass[citecolor=red,linkcolor=blue]{lmcs}
-
+\pdfoutput=1%
 
 %% mandatory lists of keywords
-\keywords{session types \and $\pi$-calculus \and functional programming \and deadlock freedom \and GV \and CP}
+\keywords{session types, $\pi$-calculus, functional programming, deadlock freedom, GV, CP}
 
 \usepackage[english]{babel}
 
@@ -49,8 +49,8 @@
 \let\enddefinition\enddefi%
 \let\corollary\cor%
 \let\endcorollary\endcor%
-\newtheorem{case*}{Case}{\itshape}{\rmfamily}
-\newtheorem{subcase*}{Subcase}{\itshape}{\rmfamily}
+\newtheorem*{case*}{Case}{\itshape}{\rmfamily}
+\newtheorem*{subcase*}{Subcase}{\itshape}{\rmfamily}
 \newenvironment{compacttheorems}{}{}
 
 % Restatable theorems and lemmas (LLNCS-compatible)
@@ -293,11 +293,11 @@
 %
 \title{Prioritise the Best Variation}
 %
- \thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI)}
+\thanks{Supported by the EU HORIZON 2020 MSCA RISE project 778233 ``Behavioural Application Program Interfaces'' (BehAPI)}
 %
 \author[W.~Kokke]{Wen Kokke}
-\address{University of Edinburgh, Edinburgh, UK}
-\email{wen.kokke@ed.ac.uk}
+\address{University of Strathclyde, Glasgow, UK}
+\email{wen.kokke@strath.ac.uk}
 
 \author[O.~Dardha]{Ornela Dardha}
 \address{School of Computing Science, University of Glasgow, UK}	%required
