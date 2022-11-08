@@ -1,3 +1,49 @@
+# TODO: @elektra85
+
+## Clarifies contribution
+
+- @Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.
+
+## Clarifies related work
+
+- @Reviewer3: The issue raised in the abstract about CP is coupling thread spawning and channel creation is true also about the earlier work of Caires and Pfenning, and is generally true of all works in this space based on the core proof theory of linear logic. I suggest reflecting this in the abstract rather than singling out CP in this sense.
+
+- @Reviewer1: 2nd paragraph: You say that Linear Compositional Choreographies maintain a correspondence to CLL, but they are based on Intuitionistic Linear Logic.
+
+- @Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.
+
+- @Reviewer1: 3rd paragraph of Section 6: Similarly, I don't think the average reader will know what a "global type" is. Might be worth saying something about it.
+
+- @Reviewer1: 3rd paragraph of Section 6: You say that [CM13] combine MPST with choreographies to achieve deadlock-freedom. But global types in MPST _are_ choreographies. Do you mean choreographic programming ("combine MPST with choreographic programming")?
+
+- @Reviewer1: By the way, just like global types, I don't think that the average reader will know what choreographic programming is.
+
+## Adds related work
+
+- @Reviewer1: 1st paragraph of Section 6: As far as I know one of the most powerful of Kobayashi's systems is the one in
+
+  > Naoki Kobayashi, Cosimo Laneve
+  > Deadlock analysis of unbounded process networks. Inf. Comput. 252: 48-70 (2017)
+
+  so it might be worth citing. This system seems much more powerful than the one presented in this paper (but has no link to linear logic, as far as I know, so it doesn't detract from the authors' contribution).
+
+- @Reviewer1: Your work and GV in general reminded me a lot of this paper:
+
+  > Bernardo Toninho, Luís Caires, Frank Pfenning:
+  > Higher-Order Processes, Functions, and Sessions: A Monadic Integration. ESOP 2013: 350-369
+
+  where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.
+
+- @Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.
+
+- @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the recent work by Rocha and Caires on shared state in a language inspired by differential linear logic:
+
+  > Pedro Rocha, Luís Caires:
+  > Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
+
+
+# TODO: @wenkokke
+
 ## Derived issues
 
 - @wenkokke: We should clarify what leads to deadlock freedom:
@@ -93,8 +139,6 @@
 
 - @Reviewer1: page 8: Would be nice to have an example about reductions before proceeding to typing.
 
-- @Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.
-
 - @Reviewer1: pages 27-36: These sections are too dry. There's no explanation of what works as usual, what is different, how the translation from PCP to PGV works (it is not even really _defined_ before the proofs!), and what the reader should focus on. It almost reads like a file intended for a theorem prover. I suggest that you rewrite these sections by explaining these aspects, presenting selected rules and the translation with examples, and then putting what "works as usual" into an appendix.
 
 - @wenkokke: Regarding Figure 3, are these definitions? I believe so: we're deriving the typing rules for the syntactic sugar from the core typing rules.
@@ -103,44 +147,9 @@
 
   - @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
 
-## Clarifies related work
-
-- @Reviewer3: The issue raised in the abstract about CP is coupling thread spawning and channel creation is true also about the earlier work of Caires and Pfenning, and is generally true of all works in this space based on the core proof theory of linear logic. I suggest reflecting this in the abstract rather than singling out CP in this sense.
-
-- @Reviewer1: 2nd paragraph: You say that Linear Compositional Choreographies maintain a correspondence to CLL, but they are based on Intuitionistic Linear Logic.
-
-- @Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.
-
-- @Reviewer1: 3rd paragraph of Section 6: Similarly, I don't think the average reader will know what a "global type" is. Might be worth saying something about it.
-
-- @Reviewer1: 3rd paragraph of Section 6: You say that [CM13] combine MPST with choreographies to achieve deadlock-freedom. But global types in MPST _are_ choreographies. Do you mean choreographic programming ("combine MPST with choreographic programming")?
-
-- @Reviewer1: By the way, just like global types, I don't think that the average reader will know what choreographic programming is.
-
 ## Adds related work
 
-- @Reviewer1: 1st paragraph of Section 6: As far as I know one of the most powerful of Kobayashi's systems is the one in
-
-  > Naoki Kobayashi, Cosimo Laneve
-  > Deadlock analysis of unbounded process networks. Inf. Comput. 252: 48-70 (2017)
-
-  so it might be worth citing. This system seems much more powerful than the one presented in this paper (but has no link to linear logic, as far as I know, so it doesn't detract from the authors' contribution).
-
-- @Reviewer1: Your work and GV in general reminded me a lot of this paper:
-
-  > Bernardo Toninho, Luís Caires, Frank Pfenning:
-  > Higher-Order Processes, Functions, and Sessions: A Monadic Integration. ESOP 2013: 350-369
-
-  where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.
-
-- @Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.
-
-- @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the recent work by Rocha and Caires on shared state in a language inspired by differential linear logic:
-
-  > Pedro Rocha, Luís Caires:
-  > Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
-
-  And on the work by Qian, Kavvos and Birkedal using coexponentials:
+- @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the work by Qian, Kavvos and Birkedal using coexponentials:
 
   > Zesen Qian, G. A. Kavvos, Lars Birkedal:
   > Client-server sessions in linear logic. Proc. ACM Program. Lang. 5(ICFP): 1-31 (2021)
@@ -164,7 +173,7 @@
   @Reviewer1: The document is full of emphasised words, a bit too much for my taste. I'd suggest to highlight only keywords that should be remembered for later, not words that the reader should really read (the reader should read everything, and if not that part should be erased)---an example is the emphasis on "alone" in line 4 of page 2. This might be a matter of taste so it's not a strong suggestion.
 
 
-## Completed
+# Completed
 
 - ~~@Reviewer1: page 26: you sometimes say "well typed" and other times "well-typed".~~
 
