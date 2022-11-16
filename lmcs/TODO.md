@@ -4,13 +4,21 @@
 
 - @Reviewer1: The Introduction should mention that this article is the extended version of a published conference paper.
 
+@elektra85: We have now added a paragraph at the end of the introduction.
+
 - @Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.
+
+@elektra85: We have added an opening to sec 4, clarifying what PCP is and why it matters to us.
 
 ## Clarifies related work
 
 - @Reviewer3: The issue raised in the abstract about CP is coupling thread spawning and channel creation is true also about the earlier work of Caires and Pfenning, and is generally true of all works in this space based on the core proof theory of linear logic. I suggest reflecting this in the abstract rather than singling out CP in this sense.
 
+@elektra85: We have now added a paragraph about this in the abstract.
+
 - @Reviewer1: 2nd paragraph: You say that Linear Compositional Choreographies maintain a correspondence to CLL, but they are based on Intuitionistic Linear Logic.
+
+@elektra85: We have fixed this.
 
 - @Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.
 
