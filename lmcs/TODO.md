@@ -1,4 +1,5 @@
 # TODO: @elektra85
+@elektra85: all my todos are now DONE!
 
 ## Clarifies contribution
 
@@ -38,7 +39,6 @@
 
 ## Adds related work
 
-
 - @Reviewer2:
 
   + M. Coppo, M. Dezani-Ciancaglini, L. Padovani, and N. Yoshida. Inference of global progress prop- erties for dynamically interleaved multiparty sessions. In COORDINATION, 2013. doi: 10.1007/ 978-3-642-38493-6\ 4.
@@ -46,6 +46,8 @@
   + M. Coppo, M. Dezani-Ciancaglini, N. Yoshida, and L. Padovani. Global progress for dynamically interleaved multiparty sessions. MSCS, 26(2):238–302, 2016. doi: 10.1017/S0960129514000188. URL https://doi.org/10.1017/S0960129514000188.
 
   + B. Toninho, L. Caires, and F. Pfenning. Higher-order processes, functions, and sessions: A monadic integration. In ESOP, volume 7792 of LNCS, pages 350–369, 2013. doi: 10.1007/978-3-642-37036-6\ 20. URL https://doi.org/10.1007/978-3-642-37036-6\_20.
+  
+@elektra85: we have now added all the above related work.
 
 - @Reviewer1: 1st paragraph of Section 6: As far as I know one of the most powerful of Kobayashi's systems is the one in
 
@@ -54,19 +56,27 @@
 
   so it might be worth citing. This system seems much more powerful than the one presented in this paper (but has no link to linear logic, as far as I know, so it doesn't detract from the authors' contribution).
 
+@elektra85: we have now added this reference.
+
 - @Reviewer1: Your work and GV in general reminded me a lot of this paper:
 
   > Bernardo Toninho, Luís Caires, Frank Pfenning:
   > Higher-Order Processes, Functions, and Sessions: A Monadic Integration. ESOP 2013: 350-369
 
-  where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.
+ where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.
+
+@elektra85: we have now added this reference.
 
 - @Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.
+
+@elektra85: we have now commented about it and restructured this part of the paper.
 
 - @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the recent work by Rocha and Caires on shared state in a language inspired by differential linear logic:
 
   > Pedro Rocha, Luís Caires:
   > Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
+
+@elektra85: we have now added this reference.
 
 # TODO: @wenkokke
 
