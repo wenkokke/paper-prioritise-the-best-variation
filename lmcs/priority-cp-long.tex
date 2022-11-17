@@ -232,6 +232,12 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm
 
 Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
 
+
+\subsection{PCP and PLL}
+In this subsection, we highlight the connection between PCP and linear logic.
+Dardha and Gay \cite{dardhagay18} present PCP--consequently also PCP given in this paper--in a way which can be viewed both as Classical Processes with restriction (T-Res) and parallel composition (T-Par) typing rules, and as a new version of linear logic, which they call Priority Linear Logic (PLL).
+PLL builds on CLL by replacing the cut rule with two logical rules: a mix and a cycle rule---here corresponding to T-Par and T-Res, respectively. Dardha and Gay \cite[\S 4]{dardhagay18} prove cycle-elimination, in the same lines as cut-elimination for CLL. As a corollary of cycle-elimination for PLL, we obtain deadlock freedom for PCP (Theorem 3 in \cite[\S 4]{dardhagay18}). In summary, PLL is an extension of CLL and the authors show the correspondence of PCP and PLL. Notice however, that PCP is not in correspondence with CLL itself, since processes in PCP are graphs, whether CLL induces trees.
+
 \subsection{Technical Developments}
 \begin{definition}[Actions]
 A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
