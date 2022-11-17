@@ -22,11 +22,19 @@
 
 - @Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.
 
+@elektra85: We have now added section 4.4 on PCP and PLL to clarify this.
+
 - @Reviewer1: 3rd paragraph of Section 6: Similarly, I don't think the average reader will know what a "global type" is. Might be worth saying something about it.
+
+@elektra85: We have now clarified this.
 
 - @Reviewer1: 3rd paragraph of Section 6: You say that [CM13] combine MPST with choreographies to achieve deadlock-freedom. But global types in MPST _are_ choreographies. Do you mean choreographic programming ("combine MPST with choreographic programming")?
 
+@elektra85: Yes, thank you. We have fixed this now.
+
 - @Reviewer1: By the way, just like global types, I don't think that the average reader will know what choreographic programming is.
+
+@elektra85: We have added a description of choreographies in this paragraph.
 
 ## Adds related work
 
