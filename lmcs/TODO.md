@@ -1,41 +1,40 @@
 # TODO: @elektra85
-@elektra85: all my todos are now DONE!
 
 ## Clarifies contribution
 
 - @Reviewer1: The Introduction should mention that this article is the extended version of a published conference paper.
 
-@elektra85: We have now added a paragraph at the end of the introduction.
+  @elektra85: We have now added a paragraph at the end of the introduction.
 
 - @Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.
 
-@elektra85: We have added an opening to sec 4, clarifying what PCP is and why it matters to us.
+  @elektra85: We have added an opening to sec 4, clarifying what PCP is and why it matters to us.
 
 ## Clarifies related work
 
 - @Reviewer3: The issue raised in the abstract about CP is coupling thread spawning and channel creation is true also about the earlier work of Caires and Pfenning, and is generally true of all works in this space based on the core proof theory of linear logic. I suggest reflecting this in the abstract rather than singling out CP in this sense.
 
-@elektra85: We have now added a paragraph about this in the abstract.
+  @elektra85: We have now added a paragraph about this in the abstract.
 
 - @Reviewer1: 2nd paragraph: You say that Linear Compositional Choreographies maintain a correspondence to CLL, but they are based on Intuitionistic Linear Logic.
 
-@elektra85: We have fixed this.
+  @elektra85: We have fixed this.
 
 - @Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.
 
-@elektra85: We have now added section 4.4 on PCP and PLL to clarify this.
+  @elektra85: We have now added section 4.4 on PCP and PLL to clarify this.
 
 - @Reviewer1: 3rd paragraph of Section 6: Similarly, I don't think the average reader will know what a "global type" is. Might be worth saying something about it.
 
-@elektra85: We have now clarified this.
+  @elektra85: We have now clarified this.
 
 - @Reviewer1: 3rd paragraph of Section 6: You say that [CM13] combine MPST with choreographies to achieve deadlock-freedom. But global types in MPST _are_ choreographies. Do you mean choreographic programming ("combine MPST with choreographic programming")?
 
-@elektra85: Yes, thank you. We have fixed this now.
+  @elektra85: Yes, thank you. We have fixed this now.
 
 - @Reviewer1: By the way, just like global types, I don't think that the average reader will know what choreographic programming is.
 
-@elektra85: We have added a description of choreographies in this paragraph.
+  @elektra85: We have added a description of choreographies in this paragraph.
 
 ## Adds related work
 
@@ -47,7 +46,7 @@
 
   + B. Toninho, L. Caires, and F. Pfenning. Higher-order processes, functions, and sessions: A monadic integration. In ESOP, volume 7792 of LNCS, pages 350–369, 2013. doi: 10.1007/978-3-642-37036-6\ 20. URL https://doi.org/10.1007/978-3-642-37036-6\_20.
   
-@elektra85: we have now added all the above related work.
+  @elektra85: we have now added all the above related work.
 
 - @Reviewer1: 1st paragraph of Section 6: As far as I know one of the most powerful of Kobayashi's systems is the one in
 
@@ -56,7 +55,7 @@
 
   so it might be worth citing. This system seems much more powerful than the one presented in this paper (but has no link to linear logic, as far as I know, so it doesn't detract from the authors' contribution).
 
-@elektra85: we have now added this reference.
+  @elektra85: we have now added this reference.
 
 - @Reviewer1: Your work and GV in general reminded me a lot of this paper:
 
@@ -65,18 +64,18 @@
 
  where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.
 
-@elektra85: we have now added this reference.
+  @elektra85: we have now added this reference.
 
 - @Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.
 
-@elektra85: we have now commented about it and restructured this part of the paper.
+  @elektra85: we have now commented about it and restructured this part of the paper.
 
 - @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the recent work by Rocha and Caires on shared state in a language inspired by differential linear logic:
 
   > Pedro Rocha, Luís Caires:
   > Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
 
-@elektra85: we have now added this reference.
+  @elektra85: we have now added this reference.
 
 # TODO: @wenkokke
 
