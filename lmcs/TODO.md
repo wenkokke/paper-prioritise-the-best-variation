@@ -1,134 +1,3 @@
-# TODO
-
-Ask the editor:
-
-- [ ] Should we remove references from the abstract?
-- [ ] Do we need DOI links in the references?
-      If so, can we have more pages of bibliography?
-
-# Address in response letter
-
-## Responses
-
-- ~~@Reviewer2: P2, ”there have been several attempts at developing Curry-Howard correspondences”: Attempts, implies that it failed.~~
-
-  There is no suggested change.
-  I disagree that "attempt" implies failure.
-
-- ~~@Reviewer2: References: It would be nice if references included DOI links.~~
-
-  @wenkokke: Sure would, but we removed them because there was a page limit for the bibliography, and I'm not putting them back. Unless the editor requires this of us.
-
-- ~~@Reviewer2: Abstract: It seems rather unusual to include citations.~~
-
-  @wenkokke: Let's check in with the editor on this. "Unusual" does not mean bad. If the editor says no, we'll cut them.
-
-- ~~@Reviewer2: P2, ”Concurrent lambda-calculi maintain a clear separation between the program ... and the configurations”: True also for some other session-typed languages.~~
-
-  Do we imply that is not the case? I don't think we do.
-
-- ~~@Reviewer2: P6, grammar, bottom of page: Why is K (defined earlier in the term syntax) a value? Shouldn’t K be mentioned in rhs of E? Also, I do not understand the need for the thread evaluation context, nor do I understand how it fits with the remaining notions, E and G. F doesn’t show up there. Could it be that F should appear in the rhs of G? Maybe instead of the hole?~~
-
-  @wenkokke: No. Functions are values, K is the sort for builtin functions, so K is a value. I don't know why K should be in the rhs of E, and @Reviewer2 does not elaborate. The thread evaluation context is separately useful. The contexts F and G have holes of different types. They are used in different places.
-
-- ~~@Reviewer2: SC-ResComm: Why is the side condition necessary? Doesn’t name restriction generate fresh names?~~
-
-  Following the operational semantics, sure, but it's not encoded in the term syntax. Your suggestion amounts to moving the side-condition to well-formedness of the term syntax.
-
-- ~~@Reviewer2: P8, ”We no longer require that every child thread finishes by returning a terminated channel”: Doesn’t that have implications for linearity?~~
-
-  It doesn't. In previous settings, each child thread returned its terminated channel to be closed by the "runtime system". In our setting, it is enforced by the type system that each child thread must close its terminated channel.
-
-- ~~@Reviewer2: P8, middle of page, in (b): not sure how to parse this arrow/implication?~~
-
-  @wenkokke: Which? The composition of equality and reduction?
-
-- @Reviewer2: Fig2: rule T-Absurd would admit weakening, so is wrong.
-
-  @wenkokke: My buddy, my pal, if you build a proof of False, you can weaken all you want.
-
-- ~~@Reviewer2: T-Pair: why should p < minpr(∆)?~~
-
-  @wenkokke: Because of the operational semantics evaluting products. They're ordered. First field goes first.
-
-# Discuss
-
-- @Reviewer2: P3, ”Priority GV offers a more fine-grained analysis of communication structures”: Clarify?
-
-  @wenkokke: Compared to what?
-
-- @Reviewer2: P4: Why does top denote a lower bound and bottom an upper bound? Shouldn’t it be the other way
-  around?
-
-  @wenkokke: I assume this is regarding the type of functions. Perhaps add a clarification?
-
-- @Reviewer2: P5, ”top-most connective”: Left-most?
-
-  @wenkokke: Eh, given the structure of these types, either way?
-  Left-most may be clearer, but top-most is unambiguous in general.
-
-- @Reviewer2: P6: again, the definitions for the flags lack space to separate them. Also, this seems not a proper inductive definition, i.e., base cases are missing. Moreover, what seems required is a left to right reading here, i.e., the right to left reading doesn’t seem to make sense. I think the proper way to define this would be as an inductive definition over the configuration, in particular decomposing C||D. The introduction of ”+” seems unnecessary, moreover the semantics of it is not defined. And, after having read the paper, these definitions are later on never used.
-
-  @wenkokke: What are they _talking about_?
-
-- @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
-
-  @wenkokke: Do we have to? -\_-
-
-- @Reviewer2: Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
-
-  @wenkokke: We use it all over the place in examples?
-
-- @Reviewer2: P8, last sentence: At this point it’s not clear to me how the lower bound is approximated.
-
-  @wenkokke: @elektra85, let's discuss if we can improve this?
-
-- @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
-
-  @wenkokke: I am so tired. But perhaps @Reviewer2 has a point, and we should define what this notation means?! -\_-
-
-- @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
-
-  @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_"
-
-- @Reviewer2: Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
-
-  @wenkokke: Bestie, derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'".
-
-- @Reviewer2: P22: I am surprised to read that progress seems to allow ready terms. Shouldn’t a stronger progress statement be possible due to linearity?
-
-  @wenkokke: You're reading progress for the functional language as progress for the whole dealio.
-
-- @Reviewer2: Lemma 3.7: here the remark is made that Gamma contains only session types. Reminding of my earlier remark regarding closed terms, I think this remark should also be made for subject reduction?
-
-  @wenkokke: Nope. "Only contains session types" means, essentially, that the term is closed wrt variables, but may become blocked on a channel, i.e., be ready. So this is essentially progress for variable-closed terms. If there's variables, obviously progress becomes trickier, since we may also become blocked on a variable. Subject reduction holds for all terms.
-
-- @Reviewer2: P22, ”we opt to move all nu-binders to the top”: Where is that done?
-
-  @wenkokke: Literally in the definition of canonical forms that's referenced?
-  In the associated canonical forms proof by "using SC-ResExt"?
-  My guy, please, I am tired.
-
-- @Reviewer2: P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
-
-  @wenkokke: _Please_ read until the end of the sentence before you comment?! This sequencing structure is used for the _entire_ section and only now it tripped you up?!
-
-- @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
-
-  @wenkokke: Good point. @elektra85, is this fixed by expanding the PCP section?
-
-- @Reviewer2: Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture
-  of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
-
-  @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive?
-
-- @Reviewer2: Fig.10: What is the semantics of this arrow/implication?
-
-  @wenkokke: In all case, it is unfolding the definition.
-
-- @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
-
-  @wenkokke: Think about this!
 
 # TODO: @wenkokke
 
@@ -277,3 +146,87 @@ Ask the editor:
   Related comments:
 
   @Reviewer1: The document is full of emphasised words, a bit too much for my taste. I'd suggest to highlight only keywords that should be remembered for later, not words that the reader should really read (the reader should read everything, and if not that part should be erased)---an example is the emphasis on "alone" in line 4 of page 2. This might be a matter of taste so it's not a strong suggestion.
+
+# TODO: Discuss
+
+- Should we ask the editor:
+
+  * Should we remove references from the abstract?
+  * Do we need DOI links in the references? If so, can we have more pages of bibliography?
+
+- @Reviewer2: P3, ”Priority GV offers a more fine-grained analysis of communication structures”: Clarify?
+
+  @wenkokke: Compared to what?
+
+- @Reviewer2: P4: Why does top denote a lower bound and bottom an upper bound? Shouldn’t it be the other way
+  around?
+
+  @wenkokke: I assume this is regarding the type of functions. Perhaps add a clarification?
+
+- @Reviewer2: P5, ”top-most connective”: Left-most?
+
+  @wenkokke: Eh, given the structure of these types, either way?
+  Left-most may be clearer, but top-most is unambiguous in general.
+
+- @Reviewer2: P6: again, the definitions for the flags lack space to separate them. Also, this seems not a proper inductive definition, i.e., base cases are missing. Moreover, what seems required is a left to right reading here, i.e., the right to left reading doesn’t seem to make sense. I think the proper way to define this would be as an inductive definition over the configuration, in particular decomposing C||D. The introduction of ”+” seems unnecessary, moreover the semantics of it is not defined. And, after having read the paper, these definitions are later on never used.
+
+  @wenkokke: What are they _talking about_?
+
+- @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
+
+  @wenkokke: Do we have to? -\_-
+
+- @Reviewer2: Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
+
+  @wenkokke: We use it all over the place in examples?
+
+- @Reviewer2: P8, last sentence: At this point it’s not clear to me how the lower bound is approximated.
+
+  @wenkokke: @elektra85, let's discuss if we can improve this?
+
+- @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
+
+  @wenkokke: I am so tired. But perhaps @Reviewer2 has a point, and we should define what this notation means?! -\_-
+
+- @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
+
+  @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_"
+
+- @Reviewer2: Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
+
+  @wenkokke: Bestie, derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'".
+
+- @Reviewer2: P22: I am surprised to read that progress seems to allow ready terms. Shouldn’t a stronger progress statement be possible due to linearity?
+
+  @wenkokke: You're reading progress for the functional language as progress for the whole dealio.
+
+- @Reviewer2: Lemma 3.7: here the remark is made that Gamma contains only session types. Reminding of my earlier remark regarding closed terms, I think this remark should also be made for subject reduction?
+
+  @wenkokke: Nope. "Only contains session types" means, essentially, that the term is closed wrt variables, but may become blocked on a channel, i.e., be ready. So this is essentially progress for variable-closed terms. If there's variables, obviously progress becomes trickier, since we may also become blocked on a variable. Subject reduction holds for all terms.
+
+- @Reviewer2: P22, ”we opt to move all nu-binders to the top”: Where is that done?
+
+  @wenkokke: Literally in the definition of canonical forms that's referenced?
+  In the associated canonical forms proof by "using SC-ResExt"?
+  My guy, please, I am tired.
+
+- @Reviewer2: P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
+
+  @wenkokke: _Please_ read until the end of the sentence before you comment?! This sequencing structure is used for the _entire_ section and only now it tripped you up?!
+
+- @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
+
+  @wenkokke: Good point. @elektra85, is this fixed by expanding the PCP section?
+
+- @Reviewer2: Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture
+  of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
+
+  @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive?
+
+- @Reviewer2: Fig.10: What is the semantics of this arrow/implication?
+
+  @wenkokke: In all case, it is unfolding the definition.
+
+- @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
+
+  @wenkokke: Think about this!
