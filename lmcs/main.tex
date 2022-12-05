@@ -227,7 +227,8 @@
   \providecommand{\inr}[1]{\ensuremath{\labinr\;#1}}
   \providecommand{\casesum}[5]{\ensuremath{\mathbf{case}\;#1\;\left\{\inl{#2}\mapsto{#3};\;\inr{#4}\mapsto{#5}\right\}}}
   \providecommand{\unit}[0]{\ensuremath{()}}
-  \providecommand{\letunit}[2]{\ensuremath{\letbind{\unit}{#1}{#2}}}
+  \providecommand{\letunit}[2]{\andthen{#1}{#2}}
+  % \providecommand{\letunit}[2]{\ensuremath{\letbind{\unit}{#1}{#2}}}
   \providecommand{\absurd}[1]{\ensuremath{\mathbf{absurd}\;#1}}
   \providecommand{\link}[0]{\ensuremath{\mathbf{link}}}
   \providecommand{\new}[0]{\ensuremath{\mathbf{new}}}

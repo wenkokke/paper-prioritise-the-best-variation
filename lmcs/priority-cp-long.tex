@@ -306,7 +306,7 @@ There are two separate translations on processes. The main translation, $\tm{\cp
   &\pcp{\tm{\cpgvM{\link{x}{y}}}}
   &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
   &\pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
-  &&= \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
+  &&= \pgv{\tm{\letpair{x}{y}{\new\;\unit}{\cpgvM{P}}}} \\
   &\pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
   &&= \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
   &\pcp{\tm{\cpgvM{\halt}}}
@@ -316,7 +316,7 @@ There are two separate translations on processes. The main translation, $\tm{\cp
   &\pcp{\tm{\cpgvM{\wait{x}{P}}}}
   &&= \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
   &\pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
-  &&= \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+  &&= \pgv{\tm{\letpair{y}{z}{\new\;\unit}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
   &\pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
   &&= \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
   &\pcp{\tm{\cpgvM{\inl{x}{P}}}}

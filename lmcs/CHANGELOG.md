@@ -41,8 +41,14 @@
 
   @wenkokke: Because of the operational semantics evaluting products. They're ordered. First field goes first.
 
+# Breaking changes
+
 - We changed the definitions of \pr and \minpr:
   We now overload \pr to work on session types, data types and contexts, and remove \minpr.
+
+- We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
+
+- We have merged the notations `M; N` and `let () = M in N` as they are synonymous, and any use of the latter was an error.
 
 # To the reviewers
 

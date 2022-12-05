@@ -102,7 +102,7 @@ Types ($\ty{T}$, $\ty{U}$) are defined by the following grammar:
 Types $\ty{\typrod{T}{U}}$, $\ty{\tyunit}$, $\ty{\tysum{T}{U}}$, and $\ty{\tyvoid}$ are the standard linear $\lambda$-calculus product type, unit type, sum type, and empty type.
 Type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ is the standard linear function type, annotated with \emph{priority bounds} $\cs{p},\cs{q}\in\mathbb{N}\cup\{\cs{\pbot},\cs{\ptop}\}$.
 Every session type is also a type.
-Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of \emph{pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$.
+Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of \emph{pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$. The lower bound for a pure function is $\cs{\ptop}$ as pure functions never start communicating. For similar reasons, the upper bound for a pure function is $\cs{\pbot}$.
 
 \subsubsection*{Typing Environments}
 Typing environments $\ty{\Gamma}$, $\ty{\Delta}$, $\ty{\Theta}$ associate types to names. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
@@ -327,8 +327,7 @@ Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel
 \subsubsection*{Terms Typing}
 %\Cref{fig:pgv-typing} gives the typing rules for PGV.
 Typing rules for terms are at the top of \cref{fig:pgv-typing}.
-Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ stating that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing for the linear $\lambda$-calculus is standard. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. Constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const} (mid of \cref{fig:pgv-typing}). The typing rules treat \emph{all variables} as linear resources, even those of non-linear types such as $\ty{\tyunit}$. However, the rules can easily be extended to allow values with unrestricted usage~\cite{wadler14}.
-
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ stating that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing for the linear $\lambda$-calculus is standard. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. Constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const} (mid of \cref{fig:pgv-typing}). The typing rules treat \emph{all variables} as linear resources, even those of non-linear types such as $\ty{\tyunit}$, though they can easily be extended to allow values with unrestricted usage~\cite{wadler14}.
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on \emph{obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18extended}, priorities obey the following two laws:
 \begin{enumerate}[label= (\roman*) ]
@@ -336,9 +335,11 @@ The only non-standard feature of the typing rules is the priority annotations. P
 \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate}
 
-In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and it finishes, respectively. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentiality, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
+In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and when it finishes, respectively. The upper bound is written on the sequent and the lower bound is approximated from the typing environment, \eg, for $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ the upper bound is $\cs{p}$ and the lower bound is at least $\minpr(\ty{\Gamma})$. The latter is \emph{correct} because a term cannot communicate at a priority earlier than the earliest priority amongst the channels it has access to. It is an \emph{approximation} on function terms, as these can ``skip'' communication by returning the corresponding channel unused. However, linearity prevents such functions from being used in well-typed configurations: once the unused channel's priority has passed, it can no longer be used.
 
-To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
+Typing rules for sequential constructs enforce sequentiality, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
+
+To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well typed, they impose opposite conditions on the priorities, so connecting $\ty{x}$ to $\ty{x'}$ and $\ty{y}$ to $\ty{y'}$ using \LabTirName{T-Res} is ill-typed, as there is no assignment to $\cs{o}$ and $\cs{o'}$ that can satsify both $\cs{o}<\cs{o'}$ and $\cs{o'}<\cs{o}$. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
   \inferrule*{
     \tseq[\cs{o'}]
@@ -423,6 +424,8 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
   }
 \end{mathpar}
 
+For simplicity, we assume priority annotations are not inferred, but provided as an input to type checking. However, for any term, priorities can be inferred, \eg, by using the topological ordering of the directed graph where the vertices are the priority meta-variables and the edges are the inequality constraints between the priority meta-variables in the typing derivation.
+
 \subsubsection*{Configurations Typing}
 Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Configurations are typed by a judgement $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ stating that ``a configuration $\tm{\conf{C}}$ with flag $\phi$ is well typed under typing environment $\ty{\Gamma}$''. Configuration typing is based on the standard typing for GV. Terms are embedded either as main or as child threads. The priority bound from the term typing is discarded, as configurations contain no further blocking actions. Main threads are allowed to return a value, whereas child threads are required to return the unit value. Sequents are annotated with a flag $\phi$, which ensures that there is at most one main thread.
 
@@ -488,7 +491,7 @@ Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris1
 \[
   \begin{array}{ll}
     \tm{\main}
-    & \tm{\letpair{x}{x'}{\new}{}}
+    & \tm{\letpair{x}{x'}{\new\;\unit}{}}
     \\
     & \tm{\andthen{\spawn\;(\lambda\unit.\echo_{x})}{x'}}
   \end{array}

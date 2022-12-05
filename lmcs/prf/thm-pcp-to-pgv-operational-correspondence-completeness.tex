@@ -38,7 +38,7 @@
               \begin{array}{l}
                 \child\bigg(
                   \begin{array}{l}
-                    \letpair{y}{y'}{\new}{}
+                    \letpair{y}{y'}{\new\;\unit}{}
                     \\
                     \letbind{x}{\send\;{\pair{y}{x}}}{\cpgvM{P}}
                   \end{array}
@@ -61,7 +61,7 @@
   \begin{case*}[\LabTirName{E-Close}]
     \begin{mathpar}
       \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}} 
+        \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}}
         \arrow[d, "\cpgvM{\cdot}"]
         \arrow[r, "\pcp{\red}"]
         &
@@ -69,14 +69,14 @@
         \arrow[dd, "\cpgvC{\cdot}"]
         \\
         \pgv{\tm{\res{x}{x'}{(\ppar
-              {\child\;\andthen{\close\;{x}}{\cpgvM{P}}} 
+              {\child\;\andthen{\close\;{x}}{\cpgvM{P}}}
               {\child\;\andthen{\wait\;{x'}}{\cpgvM{Q}}}
               )}}}
         \arrow[d, "\pgv{\cred^+}"]
-        \\ 
+        \\
         \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
         \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        & 
+        &
         \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
       \end{tikzcd}
     \end{mathpar}
@@ -100,10 +100,10 @@
               \end{array}
             \right)}}
         \arrow[d, "\pgv{\cred^+}"]
-        \\ 
+        \\
         \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}
         \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        & 
+        &
         \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}
       \end{tikzcd}
     \end{mathpar}
@@ -127,10 +127,10 @@
               \end{array}
             \right)}}
         \arrow[d, "\pgv{\cred^+}"]
-        \\ 
+        \\
         \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{R}})}}}
         \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        & 
+        &
         \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{R}})}}}
       \end{tikzcd}
     \end{mathpar}

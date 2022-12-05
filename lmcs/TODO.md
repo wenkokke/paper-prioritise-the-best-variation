@@ -1,12 +1,7 @@
 
 # TODO: @wenkokke
 
-## Derived issues
-
-- @Reviewer2: Lemma 4.5: this lemma seems to rely on a translation (notation (.)), which has not been introduced yet,
-  as far as I can tell! See also my remark in the previous section.
-
-  @wenkokke: Wait?! Where did our translation go?!
+- @Reviewer2: Write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
 
 - @wenkokke: We should clarify what leads to deadlock freedom:
 
@@ -42,38 +37,7 @@
 
   - @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
 
-- @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
-
-  Related comments:
-
-  - @Reviewer1: page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
-
-  - @Reviewer1: page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
-
-  - @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
-
-  We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language.
-
-- @wenkokke: Add informal definition for simulation and reflection.
-
-  Related comments:
-
-  - @Reviewer1: 3rd paragraph: What is "reflection"?
-
 ## Clarifies contribution
-
-- @wenkokke: Add an explanation to the type of pure functions.
-
-  Related comments:
-
-  - @Reviewer2: About top and bottom on lolli: aren’t they used counter standard usage? I.e., shouldn’t the greatest
-    upper bound be top? After all the priorities on the sequent are joined.
-
-- @Reviewer2: Fix occurances of bare `new` and write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
-
-- @Reviewer2: While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities. Also, I didn’t get a clear understanding of the handling of priorities when it comes to closures. With regard to the former, for example, I am unclear about what the precise relationship is between the priority of the sequent and those in the context. There seems to be some relationship that is imposed by typing, but I was unable to distill the pattern, nor have the authors properly explained this. Closures are really tricky, and the authors should devote more time and space to convincingly argue that the enforced treatment is correct. Ideally, there would be a discussion based on a number of examples, including one that would be ruled out by typing, so that the reader can get an understanding of what the key concerns are. The current treatment is short, with the only justification for the chosen treatment: ”Closures suspend communication, so T-Lam stores the priority bounds of the function body on the function type, and T-App restores them.”
-
-- @Reviewer2: Another question I was left wondering about is whether priorities are inferred by typing or whether the programmer has to provide them. The former seems to be the case, but this should be made explicit. Also, it would be helpful to provide a complete, unsuccessful typing derivation for Example 2.2. Two individual derivations, for each thread, are given on page 10, which show that the derivations impose contradicting orderings on the priorities. It would then also be helpful to show the rule that composes the two derivations and fails because of the contradiction. Which rule would that be?
 
 - @Reviewer1: Did you find it straightforward to apply the concepts from PCP to PGV? What was challenging?
 
@@ -230,3 +194,5 @@
 - @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
   @wenkokke: Think about this!
+
+- @Reviewer2: While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities. Also, I didn’t get a clear understanding of the handling of priorities when it comes to closures. With regard to the former, for example, I am unclear about what the precise relationship is between the priority of the sequent and those in the context. There seems to be some relationship that is imposed by typing, but I was unable to distill the pattern, nor have the authors properly explained this. Closures are really tricky, and the authors should devote more time and space to convincingly argue that the enforced treatment is correct. Ideally, there would be a discussion based on a number of examples, including one that would be ruled out by typing, so that the reader can get an understanding of what the key concerns are. The current treatment is short, with the only justification for the chosen treatment: ”Closures suspend communication, so T-Lam stores the priority bounds of the function body on the function type, and T-App restores them.”

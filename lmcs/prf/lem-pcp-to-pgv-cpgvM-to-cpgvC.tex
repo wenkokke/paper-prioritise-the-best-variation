@@ -8,7 +8,7 @@
       \begin{array}{lrll}
         \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
         & =
-        & \pgv{\tm{\child\;\letpair{x}{y}{\new}{\cpgvM{P}}}}
+        & \pgv{\tm{\child\;\letpair{x}{y}{\new\;\unit}{\cpgvM{P}}}}
         \\
         & \pgv{\cred^+}
         & \pgv{\tm{\res{x}{y}{(\child\;\cpgvM{P})}}}
@@ -44,7 +44,7 @@
       \begin{array}{lrll}
         \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
         & =
-        & \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}}
+        & \pgv{\tm{\letpair{y}{z}{\new\;\unit}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}}
         \\
         & \pgv{\cred^+}
         & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
@@ -62,7 +62,7 @@
         & \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}}
         \\
         & \elabarrow
-        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}}{\cpgvM{P}}}}
+        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inl{y}}{x}})}{z}}}{\cpgvM{P}}}}
         \\
         & \pgv{\cred^+}
         & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
@@ -80,7 +80,7 @@
         & \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}}
         \\
         & \elabarrow
-        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}}{\cpgvM{P}}}}
+        & \pgv{\tm{\letbind{x}{\letpair{y}{z}{\new\;\unit}{\andthen{\close\;(\send\;{\pair{\inr{y}}{x}})}{z}}}{\cpgvM{P}}}}
         \\
         & \pgv{\cred^+}
         & \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}

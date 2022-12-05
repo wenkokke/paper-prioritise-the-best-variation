@@ -1,5 +1,40 @@
 # Done
 
+- @Reviewer2: Another question I was left wondering about is whether priorities are inferred by typing or whether the programmer has to provide them. The former seems to be the case, but this should be made explicit. Also, it would be helpful to provide a complete, unsuccessful typing derivation for Example 2.2. Two individual derivations, for each thread, are given on page 10, which show that the derivations impose contradicting orderings on the priorities. It would then also be helpful to show the rule that composes the two derivations and fails because of the contradiction. Which rule would that be?
+
+  @wenkokke: Added the following passage:
+
+  > For simplicity, we assume priority annotations are not inferred, but provided as an input to type checking. However, for any term, priorities can be inferred, e.g., by using the topological ordering of the directed graph where the vertices are the priority meta-variables and the edges are the inequality constraints between the priority meta-variables in the typing derivation.
+
+- @wenkokke: Add an explanation to the type of pure functions.
+
+  Related comments:
+
+  - @Reviewer2: About top and bottom on lolli: aren’t they used counter standard usage? I.e., shouldn’t the greatest
+    upper bound be top? After all the priorities on the sequent are joined.
+
+  > The lower bound for a pure function is $\cs{\ptop}$ as pure functions never start communicating. For similar reasons, the upper bound for a pure function is $\cs{\pbot}$.
+
+- @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
+
+  Related comments:
+
+  - @Reviewer1: page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
+
+  - @Reviewer1: page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
+
+  - @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
+
+  We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language.
+
+- @wenkokke: Add informal definition for simulation and reflection.
+
+  Related comments:
+
+  - @Reviewer1: 3rd paragraph: What is "reflection"?
+
+  @wenkokke: I've simply removed "reflection" and substituted "operational correspondence".
+
 ## Just No
 
 - ~~@Reviewer2: Fig2, runtime typing: Shouldn’t these rules incorporate the earlier defined + operator to ensure that there is only one main thread?~~
@@ -15,6 +50,8 @@
   > "The typing rule for new ensures that both endpoints of a channel share the same priorities."
 
 ## Minor Changes
+
+- ~~@Reviewer2: Fix occurances of bare `new`.~~
 
 - ~~@Reviewer2: P28, ”Let this process be let this be Pi...”: grammar~~
 
@@ -166,3 +203,10 @@
   > ~~Pedro Rocha, Luís Caires:~~ > ~~Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)~~
 
   @elektra85: we have now added this reference.
+
+## Fixes bugs
+
+
+- ~~@Reviewer2: Lemma 4.5: this lemma seems to rely on a translation (notation (.)), which has not been introduced yet, as far as I can tell! See also my remark in the previous section.~~
+
+  @wenkokke: Wait?! Where did our translation go?!
