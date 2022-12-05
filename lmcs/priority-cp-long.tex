@@ -261,11 +261,97 @@ If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the
   If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
 \end{restatabletheorem}
 \input{prf/thm-pcp-closed-progress}
-
 \endgroup
 
 \subsection{Correspondence between PGV and PCP}
 \begingroup
+We illustrate the relation between PCP and PGV by defining a translation from PCP to PGV. The translation on types is defined as follows:
+\[
+  \begin{array}{lcl}
+    \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
+    & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgvT{A}}}{\cpgvT{B}}}}
+    \\
+    \ty{\cpgvT{\pcp{\typlus[\cs{o}]{A}{B}}}}
+    & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+  \end{array}
+  \hfill\quad\hfill%
+  \begin{array}{lcl}
+    \ty{\cpgvT{\pcp{\tyone[\cs{o}]}}}
+    & = & \ty{\pgv{\tyends[\cs{o}]}}
+    \\
+    \ty{\cpgvT{\pcp{\tynil[\cs{o}]}}}
+    & = & \pgv{\ty{\tyselectemp[\cs{o}]}}
+  \end{array}
+\]%
+\[%
+  \begin{array}{lcl}
+    \ty{\cpgvT{\pcp{\typarr[\cs{o}]{A}{B}}}}
+    & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+    \\
+    \ty{\cpgvT{\pcp{\tywith[\cs{o}]{A}{B}}}}
+    & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+  \end{array}
+  \hfill\quad\hfill%
+  \begin{array}{lcl}
+    \ty{\cpgvT{\pcp{\tybot[\cs{o}]}}}
+    & = & \ty{\pgv{\tyendr[\cs{o}]}}
+    \\
+    \ty{\cpgvT{\pcp{\tytop[\cs{o}]}}}
+    & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
+  \end{array}
+\]
+
+There are two separate translations on processes. The main translation, $\tm{\cpgvM{\cdot}}$, translates processes to \emph{terms}:
+\begin{align*}
+  &\pcp{\tm{\cpgvM{\link{x}{y}}}}
+  &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
+  &\pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{x}{y}{\new}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
+  &&= \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
+  &\pcp{\tm{\cpgvM{\halt}}}
+  &&= \pgv{\tm{\unit}} \\
+  &\pcp{\tm{\cpgvM{\close{x}{P}}}}
+  &&= \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\wait{x}{P}}}}
+  &&= \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{y}{z}{\new}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+  &\pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
+  &&= \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\inl{x}{P}}}}
+  &&= \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\inr{x}{P}}}}
+  &&= \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
+  &\pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}
+  &&= \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
+  &\pcp{\tm{\cpgvM{\absurd{x}}}}
+  &&= \pgv{\tm{\offeremp{x}}}
+\end{align*}
+
+Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which can reduce to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted when translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce. To address this issue, we use a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to translating with $\tm{\cpgvM{\cdot}}$ then reducing with \LabTirName{E-New} and \LabTirName{E-Spawn}:
+\begin{align*}
+  &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+  &&= \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+  \\
+  &\pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inl{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{\inr{x}{P}}}}
+  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
+  \\
+  &\pcp{\tm{\cpgvC{P}}}
+  &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
+\end{align*}
+Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$, where $\tm{\pgv{\child}}$ indicates a child thread, since translated processes do not have a main thread.
+The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence.
+
 %\restatelemma{lempcptopgvtermspreservation}
 \begin{lemma}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
   \label{lem:pcp-to-pgv-terms-preservation}
