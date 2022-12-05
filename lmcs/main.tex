@@ -113,8 +113,9 @@
 \newcommand{\emptyenv}{\varnothing}
 \newcommand{\subst}[4][]{\ifstrempty{#1}{\ensuremath{#2\{#3/#4\}}}{\ensuremath{#2(\{#3/#4\}\cup#1)}}}
 \newcommand{\plug}[2]{\ensuremath{#1[#2]}}
-\newcommand{\minpr}[0]{\ensuremath{\text{min}_{\pr}}}
-\newcommand{\maxpr}[0]{\ensuremath{\text{max}_{\pr}}}
+\newcommand{\minpr}[0]{\pr}
+% \newcommand{\minpr}[0]{\ensuremath{\text{min}_{\pr}}}
+% \newcommand{\maxpr}[0]{\ensuremath{\text{max}_{\pr}}}
 \providecommand{\pbot}[0]{\ensuremath{\cs{\bot\!}}}
 \providecommand{\ptop}[0]{\ensuremath{\cs{\top\!}}}
 \newcommand{\aleq}[0]{\mathbin{{=_{\alpha}}}}
@@ -306,12 +307,12 @@
 \begin{abstract}
   %
   Binary session types guarantee communication safety and session fidelity, but \emph{alone} they cannot rule out deadlocks arising from the interleaving of {different} sessions.
-  
+
   In Classical Processes (CP)~\cite{wadler14}---a process calculus based on classical linear logic---deadlock freedom is guaranteed by combining channel creation and parallel composition under the same logical cut rule. Similarly, in Good Variation (GV)~\cite{wadler15,lindleymorris15}---a linear concurrent $\lambda$-calculus---deadlock freedom is guaranteed by combining channel creation and thread spawning under the same operation, called fork.
-  
+
   In both CP and GV, deadlock freedom is achieved at the expense of expressivity, as the only processes allowed are tree-structured. This is true more broadly than for CP and GV, and it holds for all works in the research line based on Curry-Howard correspondences between linear logic and session types, starting with Caires and Pfenning \cite{cairespfenning10}.
   To overcome the limitations of tree-structured processes, Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
-  
+
   Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
   \end{abstract}
 %

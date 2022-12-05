@@ -1,0 +1,168 @@
+# Done
+
+## Just No
+
+- ~~@Reviewer2: Fig2, runtime typing: Shouldn’t these rules incorporate the earlier defined + operator to ensure that there is only one main thread?~~
+
+  @wenkokke: They literally do: T-Par.
+
+- ~~@Reviewer2: P9: At first, I didn’t see how the typing rule for New ensures that both endpoint have same priority. Maybe remind the reader that S and S requires priorities to be the same.~~
+
+  @wenkokke: I'd take your suggestion, except we literally already do this:
+
+  > _(immediately after the figure)_
+  >
+  > "The typing rule for new ensures that both endpoints of a channel share the same priorities."
+
+## Minor Changes
+
+- ~~@Reviewer2: P28, ”Let this process be let this be Pi...”: grammar~~
+
+- ~~@Reviewer2: P36: It would be helpful to already alert the reader to the figure on the next page when discussing the setup here.~~
+
+- ~~@Reviewer2: P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.~~
+
+- ~~@Reviewer2: Shouldn’t it be, for minpr(Γ, x : A) = minpr(Γ) ∩ pr(A)?~~
+
+  @wenkokke: No.
+
+- ~~@Reviewer2: Lemma 3.2 proof, 2nd case: pr() should be minpr().~~
+
+- ~~@Reviewer2: Lemma 3.2: Metavariable Theta has not been introduced earlier. For typing environments, only Gamma and Delta have been introduced.~~
+
+- ~~@Reviewer2: Proof of Lemma 3.1 misses cases T-Var and T-Const.~~
+
+- ~~@Reviewer2: P10: Example lambda abstraction, I don’t think that the metavariable A was ever introduced.~~
+
+  @wenkokke: Good, that should be T.
+
+- ~~@Reviewer2: P8, ”In PGV, we keep track of a lower and upper bound on the priorities of a term, i.e., while evaluating the term, when does it start communicating, and when does it finish”: Nitpicking, but this is not really properly formulated. What does the ”it start” refer to? Use of resp. would be helpful.~~
+
+  @wenkokke: You don't have to be this way.
+
+- ~~@Reviewer2: P8, ”allows restriction to applied”: to be applied~~
+
+- ~~@Reviewer2: P6, ”overlap between flags and priorities”: Could you clarify what the implications of this overlap are? Or does it just mean that the color indicates what ”circle” means?~~
+
+  @wenkokke: Yes. Condensed that paragraph.
+
+- ~~@Reviewer2: P2, ”can be tweaked to satisfy reflection”: What is meant by reflection here?~~
+
+- ~~@Reviewer2: P3, ”is typeable and guaranteed deadlock-free”: Guaranteed to be~~
+
+- ~~@Reviewer2: P5: ”to denote the minimum and maximum”: ..., respectively. Also, that listing seems to be missing max!~~
+
+  @wenkokke: max is defined here to be used later.
+
+- ~~@Reviewer2: P5: The programs in Example 2.1 are not well-formed wrt abstract syntax of terms defined on page 5.~~
+  ~~For example, the term ”recv x” cannot be parsed.~~
+
+  @wenkokke: That's just not true: "recv x" is "M N" with "M = K = recv" and "N = x"
+
+- ~~@Reviewer2: P6: I am not sure how to parse the grammar of configurations. The two productions seem not clearly separated. I believe it should be phi ::= closed circle — open circle and then separately, C, D, E ::== ...?~~
+
+- ~~@Reviewer2: P2, ”succinctness of process calculi”: What is meant?~~
+
+  @wenkokke: Compared to concurrent lambda calculi.
+
+- ~~@Reviewer2: P2, ”they achieve by restricting structure of”: the structure of~~
+
+- ~~@Reviewer1: page 26: you sometimes say "well typed" and other times "well-typed".~~
+
+- ~~@Reviewer1: page 8: "to applied" -> "to be applied"~~
+
+- ~~@Reviewer1: 1st paragraph of Section 6: "andcapabilities" -> "and capabilities"~~
+
+- ~~@Reviewer3: page 2, paragraph 2: combing -> combining~~
+
+- ~~@Reviewer3: page 6: formating of \phi ::= ... is broken~~
+
+- ~~@Reviewer1: page 6: The syntax of configuration needs a line break or some spacing, I think.~~
+
+- ~~@Reviewer1: page 6: I couldn't really make sense of the equations for the markings. I proceeded by guessing what spacing should have been there.~~
+
+- ~~@Reviewer3: Section 6, paragraph 2: conservation types -> conversation~~
+
+- ~~@Reviewer1: last line of page 1: I think you lack a colon at the end.~~
+
+- ~~@Reviewer1: page 26: T-Res sTates~~
+
+- ~~@Reviewer3: page 10: l1, enforce sequentially~~
+
+- ~~@Reviewer1: 1st line: "verify correct ordering of operations, namely protocols". Don't session types verify _implementations_ of protocols, instead of the protocols themselves?~~
+
+- ~~@Reviewer1: 2nd line: "Regular types". I don't think you mean regular types in the technical sense. Perhaps you mean data types?~~
+
+## Clarifies contribution
+
+- ~~@Reviewer1: The Introduction should mention that this article is the extended version of a published conference paper.~~
+
+  @elektra85: We have now added a paragraph at the end of the introduction.
+
+- ~~@Reviewer1: Please write some introductory text for Section 4. At this point I had forgotten most about what PCP is and why it matters for this paper.~~
+
+  @elektra85: We have added an opening to sec 4, clarifying what PCP is and why it matters to us.
+
+## Clarifies related work
+
+- ~~@Reviewer3: The issue raised in the abstract about CP is coupling thread spawning and channel creation is true also about the earlier work of Caires and Pfenning, and is generally true of all works in this space based on the core proof theory of linear logic. I suggest reflecting this in the abstract rather than singling out CP in this sense.~~
+
+  @elektra85: We have now added a paragraph about this in the abstract.
+
+- ~~@Reviewer1: 2nd paragraph: You say that Linear Compositional Choreographies maintain a correspondence to CLL, but they are based on Intuitionistic Linear Logic.~~
+
+  @elektra85: We have fixed this.
+
+- ~~@Reviewer1: page 27: Rule T-Halt recalls standard session types rather than linear logic. Could you elaborate on what the link between PCP and linear logic is? See also my previous comment on the introduction.~~
+
+  @elektra85: We have now added section 4.4 on PCP and PLL to clarify this.
+
+- ~~@Reviewer1: 3rd paragraph of Section 6: Similarly, I don't think the average reader will know what a "global type" is. Might be worth saying something about it.~~
+
+  @elektra85: We have now clarified this.
+
+- ~~@Reviewer1: 3rd paragraph of Section 6: You say that [CM13] combine MPST with choreographies to achieve deadlock-freedom. But global types in MPST _are_ choreographies. Do you mean choreographic programming ("combine MPST with choreographic programming")?~~
+
+  @elektra85: Yes, thank you. We have fixed this now.
+
+- ~~@Reviewer1: By the way, just like global types, I don't think that the average reader will know what choreographic programming is.~~
+
+  @elektra85: We have added a description of choreographies in this paragraph.
+
+## Adds related work
+
+- ~~@Reviewer2:~~
+
+  - ~~M. Coppo, M. Dezani-Ciancaglini, L. Padovani, and N. Yoshida. Inference of global progress prop- erties for dynamically interleaved multiparty sessions. In COORDINATION, 2013. doi: 10.1007/ 978-3-642-38493-6\ 4.~~
+
+  - ~~M. Coppo, M. Dezani-Ciancaglini, N. Yoshida, and L. Padovani. Global progress for dynamically interleaved multiparty sessions. MSCS, 26(2):238–302, 2016. doi: 10.1017/S0960129514000188. URL https://doi.org/10.1017/S0960129514000188.~~
+
+  - ~~B. Toninho, L. Caires, and F. Pfenning. Higher-order processes, functions, and sessions: A monadic integration. In ESOP, volume 7792 of LNCS, pages 350–369, 2013. doi: 10.1007/978-3-642-37036-6\ 20. URL https://doi.org/10.1007/978-3-642-37036-6\_20.~~
+
+  @elektra85: we have now added all the above related work.
+
+- ~~@Reviewer1: 1st paragraph of Section 6: As far as I know one of the most powerful of Kobayashi's systems is the one in~~
+
+  > ~~Naoki Kobayashi, Cosimo Laneve~~ > ~~Deadlock analysis of unbounded process networks. Inf. Comput. 252: 48-70 (2017)~~
+
+  ~~so it might be worth citing. This system seems much more powerful than the one presented in this paper (but has no link to linear logic, as far as I know, so it doesn't detract from the authors' contribution).~~
+
+  @elektra85: we have now added this reference.
+
+- ~~@Reviewer1: Your work and GV in general reminded me a lot of this paper:~~
+
+  > ~~Bernardo Toninho, Luís Caires, Frank Pfenning:~~ > ~~Higher-Order Processes, Functions, and Sessions: A Monadic Integration. ESOP 2013: 350-369~~
+
+~~where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.~~
+
+@elektra85: we have now added this reference.
+
+- ~~@Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.~~
+
+  @elektra85: we have now commented about it and restructured this part of the paper.
+
+- ~~@Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the recent work by Rocha and Caires on shared state in a language inspired by differential linear logic:~~
+
+  > ~~Pedro Rocha, Luís Caires:~~ > ~~Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)~~
+
+  @elektra85: we have now added this reference.

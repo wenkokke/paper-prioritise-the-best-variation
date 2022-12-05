@@ -2,6 +2,20 @@
   \label{prf:lem-pgv-value-done}
   By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$.
 
+  \begin{case*}[\LabTirName{T-Var}]
+    Immediately.
+    \begin{mathpar}
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
+    \end{mathpar}
+  \end{case*}
+  \begin{case*}[\LabTirName{T-Const}]
+    Immediately.
+    \begin{mathpar}
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
+    \end{mathpar}
+  \end{case*}
   \begin{case*}[\LabTirName{T-Lam}]
     Immediately.
     \begin{mathpar}

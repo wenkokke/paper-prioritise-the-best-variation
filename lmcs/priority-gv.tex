@@ -9,7 +9,7 @@ We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each p
 \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
 \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate}
-PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadlock-free in PGV, but is not typeable in GV~\cite{wadler14} and not guaranteed deadlock-free in GV's predecessor~\cite{gayvasconcelos10}. We believe PGV is a non-conservative \emph{extension} of GV, as CP can be embedded in a Kobayashi-style system~\cite{dardhaperez15extended}.
+PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed to be deadlock-free in PGV, but is not typeable in GV~\cite{wadler14} and not guaranteed deadlock-free in GV's predecessor~\cite{gayvasconcelos10}. We believe PGV is a non-conservative \emph{extension} of GV, as CP can be embedded in a Kobayashi-style system~\cite{dardhaperez15extended}.
 
 \begin{figure}
 \begin{minipage}{0.5\linewidth}
@@ -17,9 +17,9 @@ PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadl
   \label{ex:cycle}
   \[\tm{%
     \begin{array}{l}
-      \letpair{x}{x'}{\new\unit}{}
+      \letpair{x}{x'}{\new\;\unit}{}
       \\
-      \letpair{y}{y'}{\new\unit}{}
+      \letpair{y}{y'}{\new\;\unit}{}
       \\
       \spawn\left(\lambda\unit.%
       \begin{array}{l}
@@ -45,9 +45,9 @@ PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed deadl
   \label{ex:deadlock}
   \[\tm{%
     \begin{array}{l}
-      \letpair{x}{x'}{\new\unit}{}
+      \letpair{x}{x'}{\new\;\unit}{}
       \\
-      \letpair{y}{y'}{\new\unit}{}
+      \letpair{y}{y'}{\new\;\unit}{}
       \\
       \spawn\left(\lambda\unit.%
       \begin{array}{l}
@@ -105,7 +105,7 @@ Every session type is also a type.
 Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of \emph{pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$.
 
 \subsubsection*{Typing Environments}
-Typing environments $\ty{\Gamma}$, $\ty{\Delta}$ associate types to names. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
+Typing environments $\ty{\Gamma}$, $\ty{\Delta}$, $\ty{\Theta}$ associate types to names. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
 \[
 \begin{array}{lcl}
   \ty{\Gamma}, \ty{\Delta}
@@ -138,7 +138,7 @@ Function $\pr(\cdot)$ returns the smallest priority of a session type. The type 
   \pr(\ty{\tyendr[\cs{o}]})       = \cs{o}
 \]
 
-We extend the function $\pr(\cdot)$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority. We use $\sqcap$ and $\sqcup$ to denote the minimum and maximum:
+We extend the function $\pr(\cdot)$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority. We use $\sqcap$ and $\sqcup$ to denote the minimum and maximum, respectively:
 \[
 \begin{array}{lcl}
   \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
@@ -262,7 +262,7 @@ Configurations ($\tm{\conf{C}}$, $\tm{\conf{D}}$, $\tm{\conf{E}}$) consist of th
   \hfill\qquad\hfill
 \]
 
-The use of $\tm{\child}$ for child threads~\cite{lindleymorris15} overlaps with the use of the meta-variable $\cs{o}$ for priorities~\cite{dardhagay18extended}. Both are used to annotate sequents: flags appear on the sequent in configuration typing, and priorities in term typing. To distinguish the two symbols, they are typeset in a different font and a different colour.
+To distinguish between the use of $\tm{\child}$ to mark child threads~\cite{lindleymorris15} and the use of the meta-variable $\cs{o}$ for priorities~\cite{dardhagay18extended}, they are typeset in a different font and colour.
 
 \subsubsection*{Values}
 Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation contexts ($\tm{\conf{F}}$), and configuration contexts ($\tm{\conf{G}}$) are defined by the following grammars:
@@ -336,7 +336,7 @@ The only non-standard feature of the typing rules is the priority annotations. P
 \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate}
 
-In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when does it start communicating, and when does it finish. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentiality, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
+In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and it finishes, respectively. The upper bound is written on the sequent, whereas the lower bound is approximated from the typing environment. Typing rules for sequential constructs enforce sequentiality, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
 
 To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well typed, they impose opposite conditions on the priorities, so their composition is ill-typed. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
@@ -391,35 +391,35 @@ Closures suspend communication, so \LabTirName{T-Lam} stores the priority bounds
     \inferrule*{
       \inferrule*{
       }{
-        \tmty{\send}{\tylolli[\ptop,\cs{o}]{\typrod{A}{\tysend[\cs{o}]{A}{S}}}{S}}
+        \tmty{\send}{\tylolli[\ptop,\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}
       }
       \and
       \inferrule*{%
         \inferrule*{
         }{
-          \tseq[\pbot]{\tmty{x}{A}}{x}{A}
+          \tseq[\pbot]{\tmty{x}{T}}{x}{T}
         }
         \and
         \inferrule*{
         }{
           \tseq[\pbot]
-          {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-          {y}{\tysend[\cs{o}]{A}{S}}
+          {\tmty{x}{T},\tmty{y}{\tysend[\cs{o}]{T}{S}}}
+          {y}{\tysend[\cs{o}]{T}{S}}
         }
       }{
         \tseq[\pbot]
-        {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-        {\pair{x}{y}}{\typrod{A}{\tysend[\cs{o}]{A}{S}}}
+        {\tmty{x}{T},\tmty{y}{\tysend[\cs{o}]{T}{S}}}
+        {\pair{x}{y}}{\typrod{T}{\tysend[\cs{o}]{T}{S}}}
       }
     }{
       \tseq[\cs{o}]
-      {\tmty{x}{A},\tmty{y}{\tysend[\cs{o}]{A}{S}}}
+      {\tmty{x}{T},\tmty{y}{\tysend[\cs{o}]{T}{S}}}
       {\send\;\pair{x}{y}}{S}
     }
   }{
     \tseq[\pbot]
-    {\tmty{y}{\tysend[\cs{o}]{A}{S}}}
-    {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{A}{S}}
+    {\tmty{y}{\tysend[\cs{o}]{T}{S}}}
+    {\lambda{x}.\send\;\pair{x}{y}}{\tylolli[\cs{o},\cs{o}]{T}{S}}
   }
 \end{mathpar}
 
@@ -530,7 +530,7 @@ It is worth mentioning that the notion of readiness presented here is akin to \e
   \end{enumerate*}
 \end{lemma}
 
-Canonical forms deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
+\emph{Canonical forms} deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
 
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
 Finally, as a corollary, we get that well typed terms which do not return endpoints return \emph{just} a value:

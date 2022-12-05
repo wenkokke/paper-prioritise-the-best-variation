@@ -1,3 +1,7 @@
+# Breaking changes
+
+- We overload \pr to work on session types, data types and contexts, and remove \minpr.
+
 # To the reviewers
 
 We have rewritten the paper with particular focus on abstract, introduction, and related work sections to address the reviewers' comments.
