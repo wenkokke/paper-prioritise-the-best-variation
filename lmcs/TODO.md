@@ -124,7 +124,7 @@
 
 # TODO: re-evaluate?
 
-- @Reviewer2: Write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
+- @Reviewer2: Write down derivation for `• let (x, x′) = new () in spawn(λ().echo x); x′`.
 
 - @Reviewer1: Did you find it straightforward to apply the concepts from PCP to PGV? What was challenging?
 
