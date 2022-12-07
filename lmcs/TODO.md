@@ -39,26 +39,25 @@
 
 - Should we ask the editor:
 
-  * Should we remove references from the abstract?
-  * Do we need DOI links in the references? If so, can we have more pages of bibliography?
+  * Should we remove references from the abstract? NO
+  * Do we need DOI links in the references? If so, can we have more pages of bibliography? Maybe for the final version... 
 
 - @Reviewer2: P3, ”Priority GV offers a more fine-grained analysis of communication structures”: Clarify?
 
-  @wenkokke: Compared to what?
+  @wenkokke: Done.
 
 - @Reviewer2: P4: Why does top denote a lower bound and bottom an upper bound? Shouldn’t it be the other way
   around?
 
-  @wenkokke: I assume this is regarding the type of functions. Perhaps add a clarification?
+  @wenkokke: clarified in the paper in the typing rule sec right after pure functional types.
 
 - @Reviewer2: P5, ”top-most connective”: Left-most?
 
-  @wenkokke: Eh, given the structure of these types, either way?
-  Left-most may be clearer, but top-most is unambiguous in general.
+  @wenkokke: top-most is unambiguous and refers to the tree of the type.
 
 - @Reviewer2: P6: again, the definitions for the flags lack space to separate them. Also, this seems not a proper inductive definition, i.e., base cases are missing. Moreover, what seems required is a left to right reading here, i.e., the right to left reading doesn’t seem to make sense. I think the proper way to define this would be as an inductive definition over the configuration, in particular decomposing C||D. The introduction of ”+” seems unnecessary, moreover the semantics of it is not defined. And, after having read the paper, these definitions are later on never used.
 
-  @wenkokke: What are they _talking about_?
+  @wenkokke: We added the required space. "+" is used in ...
 
 - @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
 
@@ -66,11 +65,11 @@
 
 - @Reviewer2: Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
 
-  @wenkokke: We use it all over the place in examples?
+  @wenkokke: We use syntactic sugar in the examples. In addition, giving syntactic sugar for select and offer is a witness to the expressivity of our language. Select/offer are normally primitives in session typed pi-calculus.
 
 - @Reviewer2: P8, last sentence: At this point it’s not clear to me how the lower bound is approximated.
 
-  @wenkokke: @elektra85, let's discuss if we can improve this?
+  @wenkokke: addressed at the third paragraph of sec 2.3.
 
 - @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
 
@@ -78,15 +77,15 @@
 
 - @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
 
-  @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_"
+  @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_" Need to say it is standard in the paper.
 
 - @Reviewer2: Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
 
-  @wenkokke: Bestie, derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'".
+  @wenkokke: Bestie, derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'". Finite language, only inductive definitions in here!
 
 - @Reviewer2: P22: I am surprised to read that progress seems to allow ready terms. Shouldn’t a stronger progress statement be possible due to linearity?
 
-  @wenkokke: You're reading progress for the functional language as progress for the whole dealio.
+  @wenkokke: You're reading progress for the functional language as progress for the whole dealio. Two different progress properties, for terms and for the whole language. In the paper, the results are labelled accordingly.
 
 - @Reviewer2: Lemma 3.7: here the remark is made that Gamma contains only session types. Reminding of my earlier remark regarding closed terms, I think this remark should also be made for subject reduction?
 
@@ -104,12 +103,12 @@
 
 - @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
 
-  @wenkokke: Good point. @elektra85, is this fixed by expanding the PCP section?
+  @wenkokke: we meant subject reduction (Thm 2) specifically and we clarified this in the paper.
 
 - @Reviewer2: Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture
   of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
 
-  @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive?
+  @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive? This follows the original work by Kobayashi (cite paper + page). We have structured the proof.
 
 - @Reviewer2: Fig.10: What is the semantics of this arrow/implication?
 
@@ -117,7 +116,7 @@
 
 - @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
-  @wenkokke: Think about this!
+  @wenkokke: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases... 
 
 - @Reviewer2: While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities. Also, I didn’t get a clear understanding of the handling of priorities when it comes to closures. With regard to the former, for example, I am unclear about what the precise relationship is between the priority of the sequent and those in the context. There seems to be some relationship that is imposed by typing, but I was unable to distill the pattern, nor have the authors properly explained this. Closures are really tricky, and the authors should devote more time and space to convincingly argue that the enforced treatment is correct. Ideally, there would be a discussion based on a number of examples, including one that would be ruled out by typing, so that the reader can get an understanding of what the key concerns are. The current treatment is short, with the only justification for the chosen treatment: ”Closures suspend communication, so T-Lam stores the priority bounds of the function body on the function type, and T-App restores them.”
 
