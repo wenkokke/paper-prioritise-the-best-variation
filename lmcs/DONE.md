@@ -1,3 +1,55 @@
+# Breaking changes
+
+- We changed the definitions of \pr and \minpr:
+  We now overload \pr to work on session types, data types and contexts, and remove \minpr.
+
+- We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
+
+- We have merged the notations `M; N` and `let () = M in N` as they are synonymous, and any use of the latter was an error.
+
+# Won't Fix
+
+- ~~@Reviewer2: P2, ”there have been several attempts at developing Curry-Howard correspondences”: Attempts, implies that it failed.~~
+
+  There is no suggested change.
+  I disagree that "attempt" implies failure.
+
+- ~~@Reviewer2: References: It would be nice if references included DOI links.~~
+
+  @wenkokke: Sure would, but we removed them because there was a page limit for the bibliography, and I'm not putting them back. Unless the editor requires this of us.
+
+- ~~@Reviewer2: Abstract: It seems rather unusual to include citations.~~
+
+  @wenkokke: Let's check in with the editor on this. "Unusual" does not mean bad. If the editor says no, we'll cut them.
+
+- ~~@Reviewer2: P2, ”Concurrent lambda-calculi maintain a clear separation between the program ... and the configurations”: True also for some other session-typed languages.~~
+
+  Do we imply that is not the case? I don't think we do.
+
+- ~~@Reviewer2: P6, grammar, bottom of page: Why is K (defined earlier in the term syntax) a value? Shouldn’t K be mentioned in rhs of E? Also, I do not understand the need for the thread evaluation context, nor do I understand how it fits with the remaining notions, E and G. F doesn’t show up there. Could it be that F should appear in the rhs of G? Maybe instead of the hole?~~
+
+  @wenkokke: No. Functions are values, K is the sort for builtin functions, so K is a value. I don't know why K should be in the rhs of E, and @Reviewer2 does not elaborate. The thread evaluation context is separately useful. The contexts F and G have holes of different types. They are used in different places.
+
+- ~~@Reviewer2: SC-ResComm: Why is the side condition necessary? Doesn’t name restriction generate fresh names?~~
+
+  Following the operational semantics, sure, but it's not encoded in the term syntax. Your suggestion amounts to moving the side-condition to well-formedness of the term syntax.
+
+- ~~@Reviewer2: P8, ”We no longer require that every child thread finishes by returning a terminated channel”: Doesn’t that have implications for linearity?~~
+
+  It doesn't. In previous settings, each child thread returned its terminated channel to be closed by the "runtime system". In our setting, it is enforced by the type system that each child thread must close its terminated channel.
+
+- ~~@Reviewer2: P8, middle of page, in (b): not sure how to parse this arrow/implication?~~
+
+  @wenkokke: Which? The composition of equality and reduction?
+
+- @Reviewer2: Fig2: rule T-Absurd would admit weakening, so is wrong.
+
+  @wenkokke: My buddy, my pal, if you build a proof of False, you can weaken all you want.
+
+- ~~@Reviewer2: T-Pair: why should p < minpr(∆)?~~
+
+  @wenkokke: Because of the operational semantics evaluting products. They're ordered. First field goes first.
+
 # Done
 
 - @Reviewer2: Another question I was left wondering about is whether priorities are inferred by typing or whether the programmer has to provide them. The former seems to be the case, but this should be made explicit. Also, it would be helpful to provide a complete, unsuccessful typing derivation for Example 2.2. Two individual derivations, for each thread, are given on page 10, which show that the derivations impose contradicting orderings on the priorities. It would then also be helpful to show the rule that composes the two derivations and fails because of the contradiction. Which rule would that be?
@@ -192,7 +244,7 @@
 
 ~~where the session-typed pi-calculus (with linear logic) is integrated with functions. Probably also worth mentioning.~~
 
-@elektra85: we have now added this reference.
+  @elektra85: we have now added this reference.
 
 - ~~@Reviewer3: The notion of Ready Term (Def. 3.6) seems related to the notion of poised process of [BP17,BTP19] and live process of [CP10]. A remark to this effect would be helpful.~~
 
