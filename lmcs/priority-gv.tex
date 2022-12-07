@@ -2,7 +2,7 @@
 \usingnamespace{pgv}
 
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
-Priority GV offers a more fine-grained analysis of communication structures, and by separating channel creation form thread spawning it allows cyclic structures.
+Priority GV is more flexible than GV because it allows processes to share more than one communication channel.
 
 We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
 \begin{enumerate}[label= (\alph*) ]

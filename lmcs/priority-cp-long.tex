@@ -230,7 +230,7 @@ Rules \textsc{T-Close} and \textsc{T-Wait} type the closure of channel $\pcp{\tm
 \Cref{fig:pcp-typing-sugar} shows how syntactic sugar in PCP is well typed.
 \input{fig/pcp-typing-sugar}
 
-Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proofs. We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
+Finally, since our reduction relation is a strict subset of the reduction relation in the original~\cite{dardhagay18extended}, we defer to their proof of subject reduction (Theorem 2 in~\cite{dardhagay18extended}). We prove progress for our version of PCP, see~\cref{prf:thm-pcp-closed-progress}.
 
 
 \subsection{PCP and PLL}
@@ -253,6 +253,8 @@ If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm
 \begin{proof}
 If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
 \end{proof}
+
+The proof for progress (below) follows the same reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2).
 
 %\restatetheorem{thmpcpclosedprogress}
 \begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]%
