@@ -112,6 +112,14 @@
 
 ## Minor Changes
 
+- @Reviewer1: You say in the abstract that deadlock-freedom is guaranteed in CP and GV by combining parallel composition/thread spawning with channel creation. Later in the Introduction, you say that deadlock-freedom actually depends on restricting the structure of processes and shared channels to trees, which is achieved by the aforementioned combination. But then you mention works (Hypersequent CP and Linear Compositional Choreographies) that achieve the tree structure without that combination. So the really important thing seems to be the "tree structure" of processes. What do you mean by that exactly? You say that "this ensures that two processes can only communicate via exactly one series of channels". What's a "series of channels"? A mini example on what can and cannot be written in CP / Hypersequent CP / Linear Compositional Choreographies would probably help.
+
+  @wenkokke: Clarified in P2.
+
+- @Reviewer2: P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
+
+  @wenkokke: Clarified in P2.
+
 - ~~@Reviewer2: Fix occurances of bare `new`.~~
 
 - ~~@Reviewer2: P28, ”Let this process be let this be Pi...”: grammar~~

@@ -1,21 +1,7 @@
 # TODO: @wenkokke
 
-- @wenkokke: We should clarify what leads to deadlock freedom:
-
-  - "deadlock-freedom is guaranteed in CP and GV by combining parallel composition/thread spawning with channel creation"
-  - "deadlock-freedom actually depends on restricting the structure of processes and shared channels to trees"
-
-  The former ensures the latter. The latter guarantees deadlock freedom when using session types, because then "two processes can only communicate via exactly one series of channels".
-
-  We should clarify what a "series of channels" is.
-
-  Related comments:
-
-  - @Reviewer1: You say in the abstract that deadlock-freedom is guaranteed in CP and GV by combining parallel composition/thread spawning with channel creation. Later in the Introduction, you say that deadlock-freedom actually depends on restricting the structure of processes and shared channels to trees, which is achieved by the aforementioned combination. But then you mention works (Hypersequent CP and Linear Compositional Choreographies) that achieve the tree structure without that combination. So the really important thing seems to be the "tree structure" of processes. What do you mean by that exactly? You say that "this ensures that two processes can only communicate via exactly one series of channels". What's a "series of channels"? A mini example on what can and cannot be written in CP / Hypersequent CP / Linear Compositional Choreographies would probably help.
 
   - @Reviewer2: P2, ”processes and shared channels to trees”: What is meant by shared channels? Please clarify.
-
-  - @Reviewer2: P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
 
   - @Reviewer3: The authors should state clearly what the downsides of coupling channel creation with thread spawning in a setting such as GV are (beyond the acyclicity constraint)
 
