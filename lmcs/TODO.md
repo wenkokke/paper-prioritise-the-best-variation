@@ -17,11 +17,6 @@
 
   - @Reviewer2: P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
 
-  - @Reviewer3: I disagree with the (informal) definition of session interleaving used in e.g. paragraph 2, page 2, of the introduction. The authors state that:
-
-    > [...] This ensures that two processes can only communicate via exactly one series of channels, which rules out interleavings of sessions, and guarantees deadlock freedom
-    > To my understanding, session interleaving is the ability of a process to communicate on more than one channel, which is clearly supported by linear logic-based systems in a deadlock-free way. This is in sharp contrast with the original session type works where the sheer fact that a process can use more than one channel entails the possibility of deadlock. What is ruled out is cyclic dependencies of blocking actions, not interleaving.
-
   - @Reviewer3: The authors should state clearly what the downsides of coupling channel creation with thread spawning in a setting such as GV are (beyond the acyclicity constraint)
 
 - @wenkokke: Either what "ties to linear logic" means, or remove any mention of it.
@@ -40,7 +35,7 @@
 - Should we ask the editor:
 
   * Should we remove references from the abstract? NO
-  * Do we need DOI links in the references? If so, can we have more pages of bibliography? Maybe for the final version... 
+  * Do we need DOI links in the references? If so, can we have more pages of bibliography? Maybe for the final version...
 
 - @Reviewer2: P3, ”Priority GV offers a more fine-grained analysis of communication structures”: Clarify?
 
@@ -116,7 +111,7 @@
 
 - @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
-  @wenkokke: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases... 
+  @wenkokke: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases...
 
 - @Reviewer2: While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities. Also, I didn’t get a clear understanding of the handling of priorities when it comes to closures. With regard to the former, for example, I am unclear about what the precise relationship is between the priority of the sequent and those in the context. There seems to be some relationship that is imposed by typing, but I was unable to distill the pattern, nor have the authors properly explained this. Closures are really tricky, and the authors should devote more time and space to convincingly argue that the enforced treatment is correct. Ideally, there would be a discussion based on a number of examples, including one that would be ruled out by typing, so that the reader can get an understanding of what the key concerns are. The current treatment is short, with the only justification for the chosen treatment: ”Closures suspend communication, so T-Lam stores the priority bounds of the function body on the function type, and T-App restores them.”
 

@@ -1,3 +1,12 @@
+# Discuss
+
+- @Reviewer3: I disagree with the (informal) definition of session interleaving used in e.g. paragraph 2, page 2, of the introduction. The authors state that:
+
+  > [...] This ensures that two processes can only communicate via exactly one series of channels, which rules out interleavings of sessions, and guarantees deadlock freedom
+  > To my understanding, session interleaving is the ability of a process to communicate on more than one channel, which is clearly supported by linear logic-based systems in a deadlock-free way. This is in sharp contrast with the original session type works where the sheer fact that a process can use more than one channel entails the possibility of deadlock. What is ruled out is cyclic dependencies of blocking actions, not interleaving.
+
+@wenkokke: "What is ruled out is cyclic dependencies of blocking actions, not interleaving." That's actually not true, or not at least overly rose-tinted. What linear logic based systems ensure is that information can only flow from one process to another across one unique path. Since that path consists of session-typed channels, and session types rule out cyclic dependencies on session-typed channels, deadlock freedom follows. Sure, that *does* rule out "cyclic dependencies of blocking actions", but it rules out much more than that. Priorities rule out *exactly* all cyclic dependencies of blocking actions, and nothing else.
+
 # Breaking changes
 
 - We changed the definitions of \pr and \minpr:
