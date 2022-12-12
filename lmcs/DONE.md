@@ -64,6 +64,14 @@
 
 # Done
 
+- @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
+
+  @wenkokke: we meant subject reduction (Thm 2) specifically and we clarified this in the paper.
+
+- @Reviewer2: P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
+
+  @wenkokke: Added emphasis to make it apparent at the start of the sentence that the term is being defined, as we did for the other terms.
+
 - @Reviewer2: Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
 
   @wenkokke: Derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'". The language is finite, so there are only inductive definitions.

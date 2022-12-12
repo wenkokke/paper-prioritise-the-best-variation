@@ -12,14 +12,6 @@
 
   @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_" Need to say it is standard in the paper.
 
-- @Reviewer2: P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
-
-  @wenkokke: _Please_ read until the end of the sentence before you comment?! This sequencing structure is used for the _entire_ section and only now it tripped you up?!
-
-- @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
-
-  @wenkokke: we meant subject reduction (Thm 2) specifically and we clarified this in the paper.
-
 - @Reviewer2: Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture
   of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
 
