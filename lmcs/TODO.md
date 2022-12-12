@@ -1,38 +1,8 @@
 # TODO: discuss
 
-- Should we ask the editor:
-
-  * Should we remove references from the abstract? NO
-  * Do we need DOI links in the references? If so, can we have more pages of bibliography? Maybe for the final version...
-
-- @Reviewer2: P3, ”Priority GV offers a more fine-grained analysis of communication structures”: Clarify?
-
-  @wenkokke: Done.
-
-- @Reviewer2: P4: Why does top denote a lower bound and bottom an upper bound? Shouldn’t it be the other way
-  around?
-
-  @wenkokke: clarified in the paper in the typing rule sec right after pure functional types.
-
-- @Reviewer2: P5, ”top-most connective”: Left-most?
-
-  @wenkokke: top-most is unambiguous and refers to the tree of the type.
-
-- @Reviewer2: P6: again, the definitions for the flags lack space to separate them. Also, this seems not a proper inductive definition, i.e., base cases are missing. Moreover, what seems required is a left to right reading here, i.e., the right to left reading doesn’t seem to make sense. I think the proper way to define this would be as an inductive definition over the configuration, in particular decomposing C||D. The introduction of ”+” seems unnecessary, moreover the semantics of it is not defined. And, after having read the paper, these definitions are later on never used.
-
-  @wenkokke: We added the required space. "+" is used in ...
-
 - @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
 
   @wenkokke: Do we have to? -\_-
-
-- @Reviewer2: Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
-
-  @wenkokke: We use syntactic sugar in the examples. In addition, giving syntactic sugar for select and offer is a witness to the expressivity of our language. Select/offer are normally primitives in session typed pi-calculus.
-
-- @Reviewer2: P8, last sentence: At this point it’s not clear to me how the lower bound is approximated.
-
-  @wenkokke: addressed at the third paragraph of sec 2.3.
 
 - @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
 
@@ -41,24 +11,6 @@
 - @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
 
   @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_" Need to say it is standard in the paper.
-
-- @Reviewer2: Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
-
-  @wenkokke: Bestie, derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'". Finite language, only inductive definitions in here!
-
-- @Reviewer2: P22: I am surprised to read that progress seems to allow ready terms. Shouldn’t a stronger progress statement be possible due to linearity?
-
-  @wenkokke: You're reading progress for the functional language as progress for the whole dealio. Two different progress properties, for terms and for the whole language. In the paper, the results are labelled accordingly.
-
-- @Reviewer2: Lemma 3.7: here the remark is made that Gamma contains only session types. Reminding of my earlier remark regarding closed terms, I think this remark should also be made for subject reduction?
-
-  @wenkokke: Nope. "Only contains session types" means, essentially, that the term is closed wrt variables, but may become blocked on a channel, i.e., be ready. So this is essentially progress for variable-closed terms. If there's variables, obviously progress becomes trickier, since we may also become blocked on a variable. Subject reduction holds for all terms.
-
-- @Reviewer2: P22, ”we opt to move all nu-binders to the top”: Where is that done?
-
-  @wenkokke: Literally in the definition of canonical forms that's referenced?
-  In the associated canonical forms proof by "using SC-ResExt"?
-  My guy, please, I am tired.
 
 - @Reviewer2: P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
 
