@@ -1,14 +1,5 @@
 # TODO: @wenkokke
 
-- @wenkokke: Either what "ties to linear logic" means, or remove any mention of it.
-
-  Related comments:
-
-  - @Reviewer1: 2nd paragraph: What do you mean when you say that Hypersequent CP and Linear Compositional Choreographies "maintain" the correspondence to CLL?
-
-  - @Reviewer1: 2nd paragraph: You say that PCP weakens the correspondence to CLL. What do you mean, exactly? Understanding this is important to gauge the relevance of PGV as well.
-
-  - @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
 
 
 # TODO: discuss
@@ -152,7 +143,7 @@
   Related comments:
 
   - @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
-  
+
     @elektra85: add a sentence about this in the paper.
 
 - @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the work by Qian, Kavvos and Birkedal using coexponentials:

@@ -25,7 +25,7 @@
 - @Reviewer2: References: It would be nice if references included DOI links.
 
   @wenkokke: Sure would, but we removed them because there was a page limit for the bibliography, and I'm not putting them back. Unless the editor requires this of us.
-  
+
   @elektra85: add the DOIs back! if it goes over the page limit, I'll discuss this with the editor.
 
 - @Reviewer2: Abstract: It seems rather unusual to include citations.
@@ -63,6 +63,18 @@
   @wenkokke: Because of the operational semantics evaluating products. They're ordered. First field goes first.
 
 # Done
+
+- @Reviewer1: 2nd paragraph: What do you mean when you say that Hypersequent CP and Linear Compositional Choreographies "maintain" the correspondence to CLL?
+
+  @wenkokke: Elaborated in P2.
+
+- @Reviewer1: 2nd paragraph: You say that PCP weakens the correspondence to CLL. What do you mean, exactly? Understanding this is important to gauge the relevance of PGV as well.
+
+  @wenkokke: Elaborated in P2.
+
+- @Reviewer1: page 39, 2nd line: Again, what do you mean by "loosening its ties to linear logic"?
+
+  @wenkokke: Expected to be clear due to elaboration in introduction.
 
 - @Reviewer2: Another question I was left wondering about is whether priorities are inferred by typing or whether the programmer has to provide them. The former seems to be the case, but this should be made explicit. Also, it would be helpful to provide a complete, unsuccessful typing derivation for Example 2.2. Two individual derivations, for each thread, are given on page 10, which show that the derivations impose contradicting orderings on the priorities. It would then also be helpful to show the rule that composes the two derivations and fails because of the contradiction. Which rule would that be?
 
