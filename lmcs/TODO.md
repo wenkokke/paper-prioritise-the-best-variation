@@ -1,7 +1,3 @@
-# TODO: @wenkokke
-
-
-
 # TODO: discuss
 
 - Should we ask the editor:
