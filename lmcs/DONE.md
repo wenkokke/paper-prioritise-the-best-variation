@@ -64,6 +64,18 @@
 
 # Done
 
+- @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
+
+  @wenkokke: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases...
+
+- @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
+
+  @wenkokke: Lemma 3.3 is subject reduction for a simply-typed lambda calculus with constants, which is standard. We added as much to the paper.
+
+- @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
+
+  @wenkokke: Fixed use of A,B,C in type schemas. Added further explanation.
+
 - @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
 
   @Reviewer2: Fig.10: What is the semantics of this arrow/implication?

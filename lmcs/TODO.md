@@ -1,26 +1,11 @@
 # TODO: discuss
 
-- @Reviewer2: Also, I am not familiar with type schemas, some explanation would be helpful.
-
-  @wenkokke: Do we have to? -\_-
-
-- @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
-
-  @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_" Need to say it is standard in the paper.
-
 - @Reviewer2: Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture
   of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
 
   @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive? This follows the original work by Kobayashi (cite paper + page). We have structured the proof.
 
-- @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
-
-  @wenkokke: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases...
-
 - @Reviewer2: While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities. Also, I didn’t get a clear understanding of the handling of priorities when it comes to closures. With regard to the former, for example, I am unclear about what the precise relationship is between the priority of the sequent and those in the context. There seems to be some relationship that is imposed by typing, but I was unable to distill the pattern, nor have the authors properly explained this. Closures are really tricky, and the authors should devote more time and space to convincingly argue that the enforced treatment is correct. Ideally, there would be a discussion based on a number of examples, including one that would be ruled out by typing, so that the reader can get an understanding of what the key concerns are. The current treatment is short, with the only justification for the chosen treatment: ”Closures suspend communication, so T-Lam stores the priority bounds of the function body on the function type, and T-App restores them.”
-
-
-# TODO: re-evaluate?
 
 - @Reviewer2: Write down derivation for `• let (x, x′) = new () in spawn(λ().echo x); x′`.
 
@@ -33,6 +18,7 @@
 
   @wenkokke: There are no well-formedness conditions, but there are particular lemmas that hold for them, which could be _taken as_ well-formedness conditions. In particular I believe the theorem is: for a sequent with lower bound p and upper bound q, either p < q, or p is top and q is bottom.
   This is relaxed somewhat by some extensions, in which case I believe we can also have "p is top and q is a concrete priority", but I don't recall to what extend that applies here. I believe it may have been due to recursion, in which case it wouldn't.
+
   @elektra85: add the above explanation to the paper, if not done yet.
 
 - @Reviewer1: In general, the presentation seems to be aimed at experts in GV. Please make it more accessible.

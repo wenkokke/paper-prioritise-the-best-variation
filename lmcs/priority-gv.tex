@@ -327,7 +327,13 @@ Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel
 \subsubsection*{Terms Typing}
 %\Cref{fig:pgv-typing} gives the typing rules for PGV.
 Typing rules for terms are at the top of \cref{fig:pgv-typing}.
-Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ stating that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing for the linear $\lambda$-calculus is standard. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. Constants $\tm{K}$ are typed using type schemas, and embedded using \LabTirName{T-Const} (mid of \cref{fig:pgv-typing}). The typing rules treat {all variables} as linear resources, even those of non-linear types such as $\ty{\tyunit}$, though they can easily be extended to allow values with unrestricted usage~\cite{wadler14}.
+Terms are typed by a judgement $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ stating that ``a term $\tm{M}$ has type $\ty{T}$ and an upper bound on its priority $\cs{p}$ under the typing environment $\ty{\Gamma}$''. Typing for the linear $\lambda$-calculus is standard. Linearity is ensured by splitting environments on branching rules, requiring that the environment in the variable rule consists of just the variable, and the environment in the constant and unit rules are empty. Constants $\tm{K}$ are typed using type schemas, which hold for any concrete assignment of types and priorities to their meta-variables. Instantiated type schemas are embedded into typing derivations using \LabTirName{T-Const} in~\cref{fig:pgv-typing}, \eg, the type schema for $\tm{\send}$ can be instantiated with $\cs{o}=\cs{2}$, $\ty{T}=\ty{\tyunit}$, and $\ty{S}=\ty{\tyvoid}$, and embedded using \LabTirName{T-Const} to give the following typing derivation:
+\[
+  \inferrule*{
+  }{\tmty{\send}{\tylolli[\cs{\ptop},\cs{2}]{\typrod{\tyunit}{\tysend[\cs{2}]{\tyunit}{\tyvoid}}}{\tyvoid}}}
+\]
+
+The typing rules treat {all variables} as linear resources, even those of non-linear types such as $\ty{\tyunit}$, though they can easily be extended to allow values with unrestricted usage~\cite{wadler14}.
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on {obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18extended}, priorities obey the following two laws:
 \begin{enumerate}[label= (\roman*) ]
