@@ -71,7 +71,7 @@ Types $\pcp{\ty{\tytens[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\typarr[\cs{o}]{A}{B}}}$ 
 
 Types $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$ type the endpoints of a channel over which we can receive or send a choice between two branches $\pcp{\ty{A}}$ or $\pcp{\ty{B}}$. We have opted for a simplified version of choice and followed the original Wadler's CP \cite{wadler14}, however types $\ty{\oplus}$ and $\ty{\with}$ can be trivially generalised to $\pcp{\ty{\oplus^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$ and $\pcp{\ty{\with^{\cs{o}}\{l_i:A_i\}_{i\in I}}}$, respectively, as in the original PCP \cite{dardhagay18extended}.
 
-Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between \emph{no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
+Types $\pcp{\ty{\tynil[\cs{o}]}}$ and $\pcp{\ty{\tytop[\cs{o}]}}$ type the endpoints of a channel over which we can send or receive a choice between {no options}. These two types act as units for $\pcp{\ty{\typlus[\cs{o}]{A}{B}}}$ and $\pcp{\ty{\tywith[\cs{o}]{A}{B}}}$, respectively.
 
 \subsubsection*{Typing Environments}
 \label{sec:pcp-environments}
@@ -176,7 +176,7 @@ We write \emph{unbound} send as $\pcp{\tm{\usend{x}{y}{P}}}$, which is syntactic
 \subsubsection*{On Commuting Conversions}
 \label{app:commuting-conversions}
 
-The main change we make to PCP is \emph{removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond \emph{exactly} to cut (or cycle in \cite{dardhagay18extended}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, but using structural congruence.
+The main change we make to PCP is {removing commuting conversions}. Commuting conversions are necessary if we want our reduction strategy to correspond {exactly} to cut (or cycle in \cite{dardhagay18extended}) elimination. However, as Lindley and Morris~\cite{lindleymorris15} show, all communications that can be performed \emph{with} the use of commuting conversions, can also be performed \emph{without} them, but using structural congruence.
 
 From the perspective of process calculi, commuting conversions behave strangely.
 Consider the commuting conversion $(\kappa_{\parr})$ for $\pcp{\tm{\recv{x}{y}{P}}}$:

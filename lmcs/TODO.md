@@ -168,8 +168,10 @@
 
   - @Reviewer1: page 10: in "a configuration C with flag \phi" you highlight C but not \phi (and likewise in the second-last line of the same paragraph). What's the rationale for colouring things?
 
-- @wenkokke: I wouldn't mind having less emphasis, but I don't feel like it'd be worth the effort to make the change myself.
+- @elektra85: we have fixed this now.
 
   Related comments:
 
   @Reviewer1: The document is full of emphasised words, a bit too much for my taste. I'd suggest to highlight only keywords that should be remembered for later, not words that the reader should really read (the reader should read everything, and if not that part should be erased)---an example is the emphasis on "alone" in line 4 of page 2. This might be a matter of taste so it's not a strong suggestion.
+  
+- @elektra85: we have fixed this now.
