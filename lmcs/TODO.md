@@ -109,27 +109,34 @@
 - @Reviewer1: Did you find it straightforward to apply the concepts from PCP to PGV? What was challenging?
 
   @wenkokke: The main difficulty was due to the fact that PGV has to track starting & ending priorities, rather than just [whichever PCP stores], but we were aided in this by the work by Padovani & Novara.
+  @elektra85: add the above sentence to the intro, if not done yet.
 
 - @Reviewer1: page 4: In your presentation of types, I wondered if there are any well-formedness conditions on priority bounds.
 
   @wenkokke: There are no well-formedness conditions, but there are particular lemmas that hold for them, which could be _taken as_ well-formedness conditions. In particular I believe the theorem is: for a sequent with lower bound p and upper bound q, either p < q, or p is top and q is bottom.
   This is relaxed somewhat by some extensions, in which case I believe we can also have "p is top and q is a concrete priority", but I don't recall to what extend that applies here. I believe it may have been due to recursion, in which case it wouldn't.
+  @elektra85: add the above explanation to the paper, if not done yet.
 
 - @Reviewer1: In general, the presentation seems to be aimed at experts in GV. Please make it more accessible.
 
 - @Reviewer1: Another example is that you say that you "recover fork", but at this point it's not clear what fork was in GV.
 
   @wenkokke: Perhaps best to just qualify this statement with "for those who care about GV", because it's uninteresting otherwise.
+  @elektra85: add a sentence about this in the paper; no need to restrict it to those who care about GV.
 
 - @Reviewer1: page 6: The paragraph on values and evaluation contexts is going to be clear only to a selected few. Please write some text that explains how contexts work (holes, notation for replacing a hole with a term, etc.), that values are a specialisation of terms, etc.
+
+  @elektra85: add a sentence or so about this in the paper.
 
 - @Reviewer1: page 20, case E-Close: I couldn't make sense of the derivation, where two subderivations seem to be organised vertically?.. Is that the right reading? Could you reorganise it to make it obvious?
 
   @wenkokke: We can't reorganise it, but we can add words. They're not subderivations, but rather the typing derivations before and after reduction.
+   @elektra85: add a sentence about this in the paper.
 
 - @Reviewer1: page 22: Lemma 3.7 is fundamental and seems to be the key difference wrt PCP and Kobayashi's work. Is that the case? Is the proof trivial? Could you at least provide a sketch, or say at least _why_ it is trivial?
 
   @wenkokke: It's not _trivial_ but it's _boring_, as it's precisely the proof you'd give for any lambda calculus. We should mention that, essentially, this is just progress for the simply-typed linear lambda calculus, with "M is ready" falling out as extra stuck cases.
+    @elektra85: add a sentence about this in the paper.
 
 - @Reviewer1: page 23: In case (4), before introducing the subcases (a) and (b), it'd be kind to say that L' is either a ready term or a value.
 
@@ -150,6 +157,8 @@
   Related comments:
 
   - @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
+  
+    @elektra85: add a sentence about this in the paper.
 
 - @Reviewer3: Since the orignal publication of this work, a few works on deadlock-freedom by typing that go beyond the languages that stem directly from the logical interpretation of session types have been published that should be included in the related work discussion. Please comment on the work by Qian, Kavvos and Birkedal using coexponentials:
 
@@ -158,7 +167,7 @@
 
 - @Reviewer2: Another technical comment I have is on the distinction between variables and channels (which the authors refer to as names). The latter are generated at runtime (via new), and are also gathered, in the environment. I believe that’s also the reason why the usual theorems (preservation and progress) are stated relative to a non-empty context. However, the formalization should guarantee that the respective terms are closed. It would also be helpful if different meta variables were used for variables and names. Currently, x, y, z are used for both.
 
-- @wenkokke: Truly, what? I'm fairly sure we just use `\varnothing`, which I don't think is that uncommon?
+- @elektra85: clarify the use of `\varnothing`
 
   @Reviewer1: page 4: You use a different font than usual for the empty set symbol, so maybe write explicitly in parenthesis that it is what you mean when you use the symbol for the first time?
 
