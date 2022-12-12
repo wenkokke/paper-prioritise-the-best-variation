@@ -64,6 +64,14 @@
 
 # Done
 
+- @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
+
+  @Reviewer2: Fig.10: What is the semantics of this arrow/implication?
+
+  @wenkokke: It is the unfolding of the definition of substitution/translation.
+
+  @wenkokke: I've rewritten these to be single-lined arrows instead, which is more consistent with the remainder of the paper and the usual notation for commuting diagrams.
+
 - @Reviewer2: P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
 
   @wenkokke: we meant subject reduction (Thm 2) specifically and we clarified this in the paper.

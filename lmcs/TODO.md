@@ -4,10 +4,6 @@
 
   @wenkokke: Do we have to? -\_-
 
-- @Reviewer2: Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
-
-  @wenkokke: I am so tired. But perhaps @Reviewer2 has a point, and we should define what this notation means?! -\_-
-
 - @Reviewer2: The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
 
   @wenkokke: My guy, this is a proof of subject reduction for a simply-typed lambda calculus with constants. If anything, this is too verbose, as it can be found in every textbook. I am crying. "\_" Need to say it is standard in the paper.
@@ -16,10 +12,6 @@
   of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
 
   @wenkokke: @elektra85, should we mark it as a sketch? Do we justify the cases are exhaustive? This follows the original work by Kobayashi (cite paper + page). We have structured the proof.
-
-- @Reviewer2: Fig.10: What is the semantics of this arrow/implication?
-
-  @wenkokke: In all case, it is unfolding the definition.
 
 - @Reviewer2: Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
