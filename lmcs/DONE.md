@@ -144,7 +144,7 @@
 
 - ~~@Reviewer2: P8, ”In PGV, we keep track of a lower and upper bound on the priorities of a term, i.e., while evaluating the term, when does it start communicating, and when does it finish”: Nitpicking, but this is not really properly formulated. What does the ”it start” refer to? Use of resp. would be helpful.~~
 
-  @wenkokke: You don't have to be this way.
+  @wenkokke: Fixed.
 
 - ~~@Reviewer2: P8, ”allows restriction to applied”: to be applied~~
 
