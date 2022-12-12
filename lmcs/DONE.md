@@ -139,6 +139,14 @@
 
 - ~~@Reviewer2: Lemma 3.2: Metavariable Theta has not been introduced earlier. For typing environments, only Gamma and Delta have been introduced.~~
 
+- @Reviewer2: P2, ”processes and shared channels to trees”: What is meant by shared channels? Please clarify.
+
+  A channel is shared by two processes if each holds an endpoint.
+
+- ~~@Reviewer3: The authors should state clearly what the downsides of coupling channel creation with thread spawning in a setting such as GV are (beyond the acyclicity constraint)~~
+
+  I've added that GV suffers from a complicated metatheory as a consequence. The details are too involved for this section.
+
 - ~~@Reviewer2: Proof of Lemma 3.1 misses cases T-Var and T-Const.~~
 
 - ~~@Reviewer2: P10: Example lambda abstraction, I don’t think that the metavariable A was ever introduced.~~
