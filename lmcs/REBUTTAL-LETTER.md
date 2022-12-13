@@ -1,6 +1,6 @@
 # Response to the reviewers
 
-We thank the reviewers for their useful feedback and comments. We addressed their concerns in the paper and respond below detailing how we went about these changes. 
+We thank the reviewers for their useful feedback and comments. We addressed their concerns in the paper and respond below detailing how we went about these changes.
 
 # Review 1
 
@@ -48,7 +48,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: we have fixed this now.
 
 - The document is full of emphasised words, a bit too much for my taste. I'd suggest to highlight only keywords that should be remembered for later, not words that the reader should really read (the reader should read everything, and if not that part should be erased)---an example is the emphasis on "alone" in line 4 of page 2. This might be a matter of taste so it's not a strong suggestion.
-  
+
   The authors: we have fixed this now.
 
 - page 4: You use a different font than usual for the empty set symbol, so maybe write explicitly in parenthesis that it is what you mean when you use the symbol for the first time?
@@ -164,16 +164,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: Following the operational semantics, sure, but it's not encoded in the term syntax. Your suggestion amounts to moving the side-condition to well-formedness of the term syntax.
   @elektra85: rephrase the above to make it clear and say it with more kindness.
-  
+
 - P8, ”We no longer require that every child thread finishes by returning a terminated channel”: Doesn’t that have implications for linearity?
- 
+
   The authors: It doesn't. In previous settings, each child thread returned its terminated channel to be closed by the "runtime system". In our setting, it is enforced by the type system that each child thread must close its terminated channel.
-
-- P8, middle of page, in (b): not sure how to parse this arrow/implication?
-
-  @wenkokke: Which? The composition of equality and reduction?
-  @elektra85: just say something, even if trial (add it below)
-  The authors:
 
 - Fig2: rule T-Absurd would admit weakening, so is wrong.
 
@@ -199,9 +193,11 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   @elektra85: comment on this, add something in the paper.
 
-- Fig.10: What is the semantics of this arrow/implication?
+- P8, middle of page, in (b): not sure how to parse this arrow/implication?
 
-  The authors: It is the unfolding of the definition of substitution/translation. We have rewritten these to be single-lined arrows instead, which is more consistent with the remainder of the paper and the usual notation for commuting diagrams.
+  Fig.10: What is the semantics of this arrow/implication?
+
+  The authors: It is the unfolding of the definition of substitution and translation, respectively. We have rewritten these to be single-lined arrows instead, which is more consistent with the remainder of the paper and the usual notation for commuting diagrams.
 
 - P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
 
@@ -228,7 +224,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
 
   @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
-  
+
   @elektra85: what is the above comment and where should it go?
 
 - Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
@@ -257,7 +253,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: we added the following passage:
 
   > For simplicity, we assume priority annotations are not inferred, but provided as an input to type checking. However, for any term, priorities can be inferred, e.g., by using the topological ordering of the directed graph where the vertices are the priority meta-variables and the edges are the inequality constraints between the priority meta-variables in the typing derivation.
-  
+
   @wenkokke: Add an explanation to the type of pure functions.
   @elektra85: wen address your own comment above.
 
