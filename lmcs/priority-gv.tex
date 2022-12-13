@@ -317,7 +317,7 @@ In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the 
 
 Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must {create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the {actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
 \item
-\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well typed configuration using $\equiv$.
+\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
 \end{enumerate}
 
 
@@ -341,7 +341,7 @@ The only non-standard feature of the typing rules is the priority annotations. P
 \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate}
 
-In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and when it finishes, respectively. The upper bound is written on the sequent and the lower bound is approximated from the typing environment, \eg, for $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ the upper bound is $\cs{p}$ and the lower bound is at least $\minpr(\ty{\Gamma})$. The latter is {correct} because a term cannot communicate at a priority earlier than the earliest priority amongst the channels it has access to. It is an \emph{approximation} on function terms, as these can ``skip'' communication by returning the corresponding channel unused. However, linearity prevents such functions from being used in well-typed configurations: once the unused channel's priority has passed, it can no longer be used.
+In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and when it finishes, respectively. The upper bound is written on the sequent and the lower bound is approximated from the typing environment, \eg, for $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ the upper bound is $\cs{p}$ and the lower bound is at least $\minpr(\ty{\Gamma})$. The latter is {correct} because a term cannot communicate at a priority earlier than the earliest priority amongst the channels it has access to. It is an \emph{approximation} on function terms, as these can ``skip'' communication by returning the corresponding channel unused. However, linearity prevents such functions from being used in well typed configurations: once the unused channel's priority has passed, it can no longer be used.
 
 Typing rules for sequential constructs enforce sequentiality, \eg, the typing for $\tm{\andthen{M}{N}}$ has a side condition which requires that the upper bound of $\tm{M}$ is smaller than the lower bound of $\tm{N}$, \ie, $\tm{M}$ finishes before $\tm{N}$ starts. The typing rule for $\tm{\new}$ ensures that both endpoints of a channel share the same priorities. Together, these two constraints guarantee deadlock freedom.
 
@@ -491,7 +491,7 @@ We must show that substitution preserves priority constraints. For this, we prov
   \input{prf/thm-pgv-subject-reduction-confs}
 
 \subsection{Progress and Deadlock Freedom}
-PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well typed PGV term does not necessarily produce {just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV.
+PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce {just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV.
 
 Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris15}, in which a term returns an endpoint linked to an echo server. The echo server receives a value and sends it back unchanged. Consider the program which creates a new channel, with endpoints $\tm{x}$ and $\tm{x'}$, spawns off an echo server listening on $\tm{x}$, and then returns $\tm{x'}$:
 \[
@@ -542,7 +542,7 @@ It is worth mentioning that the notion of readiness presented here is akin to {l
 \emph{Canonical forms} deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
 
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
-Finally, as a corollary, we get that well typed terms which do not return endpoints return {just} a value:
+Finally, as a corollary, we get that well-typed terms which do not return endpoints return {just} a value:
 
   \begin{definition}[Canonical Forms]%
     \label{def:pgv-canonical-forms}
