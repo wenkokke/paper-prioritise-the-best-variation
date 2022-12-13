@@ -1,6 +1,6 @@
 # Response to the reviewers
 
-We thank the reviewers for their useful feedback and comments. We addressed their concerns in the paper and respond below detailing how we went about these changes. 
+We thank the reviewers for their useful feedback and comments. We addressed their concerns in the paper and respond below detailing how we went about these changes.
 
 # Review 1
 
@@ -21,15 +21,13 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 ## Comments on technical developments
 - page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
 
-- page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
+- page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit? Also, for the case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
 
-- page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
+  The authors: We have merged `M;N` and `let () = ...` as they are synonymous. All uses of the latter have been replaced by the former, and `let () = M in N` should no longer occur in the paper.
 
 - 3rd paragraph: What is "reflection"?
 
-  The authors: We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language. We added informal definition for simulation and reflection. Also, we removed "reflection" and substituted "operational correspondence".
-
-  @elektra85: @wenkokke please check the above and adjust
+  The authors: We added informal definition for simulation and reflection. Also, we removed "reflection" and substituted "operational correspondence".
 
 - You say in the abstract that deadlock-freedom is guaranteed in CP and GV by combining parallel composition/thread spawning with channel creation. Later in the Introduction, you say that deadlock-freedom actually depends on restricting the structure of processes and shared channels to trees, which is achieved by the aforementioned combination. But then you mention works (Hypersequent CP and Linear Compositional Choreographies) that achieve the tree structure without that combination. So the really important thing seems to be the "tree structure" of processes. What do you mean by that exactly? You say that "this ensures that two processes can only communicate via exactly one series of channels". What's a "series of channels"? A mini example on what can and cannot be written in CP / Hypersequent CP / Linear Compositional Choreographies would probably help.
 
@@ -48,7 +46,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: we have fixed this now.
 
 - The document is full of emphasised words, a bit too much for my taste. I'd suggest to highlight only keywords that should be remembered for later, not words that the reader should really read (the reader should read everything, and if not that part should be erased)---an example is the emphasis on "alone" in line 4 of page 2. This might be a matter of taste so it's not a strong suggestion.
-  
+
   The authors: we have fixed this now.
 
 - page 4: You use a different font than usual for the empty set symbol, so maybe write explicitly in parenthesis that it is what you mean when you use the symbol for the first time?
@@ -169,16 +167,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: Following the operational semantics, sure, but it's not encoded in the term syntax. Your suggestion amounts to moving the side-condition to well-formedness of the term syntax.
   @elektra85: rephrase the above to make it clear and say it with more kindness.
-  
+
 - P8, ”We no longer require that every child thread finishes by returning a terminated channel”: Doesn’t that have implications for linearity?
- 
+
   The authors: It doesn't. In previous settings, each child thread returned its terminated channel to be closed by the "runtime system". In our setting, it is enforced by the type system that each child thread must close its terminated channel.
-
-- P8, middle of page, in (b): not sure how to parse this arrow/implication?
-
-  @wenkokke: Which? The composition of equality and reduction?
-  @elektra85: just say something, even if trial (add it below)
-  The authors:
 
 - Fig2: rule T-Absurd would admit weakening, so is wrong.
 
@@ -204,9 +196,11 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   @elektra85: comment on this, add something in the paper.
 
-- Fig.10: What is the semantics of this arrow/implication?
+- P8, middle of page, in (b): not sure how to parse this arrow/implication?
 
-  The authors: It is the unfolding of the definition of substitution/translation. We have rewritten these to be single-lined arrows instead, which is more consistent with the remainder of the paper and the usual notation for commuting diagrams.
+  Fig.10: What is the semantics of this arrow/implication?
+
+  The authors: It is the unfolding of the definition of substitution and translation, respectively. We have rewritten these to be single-lined arrows instead, which is more consistent with the remainder of the paper and the usual notation for commuting diagrams.
 
 - P22, explanations below Lemma 3.7: This seems important, but it should be elaborated, I wasn’t able to understand the details. Also, I don’t remember that the term canonical forms has been defined. Is a term in canonical form if it is ready? (Reading on, I see that the term canonical form is now defined. So, the sequencing here is probably not ideal.)
 
@@ -231,10 +225,6 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 - Lemma 4.5: this lemma seems to rely on a translation (notation (.)), which has not been introduced yet, as far as I can tell! See also my remark in the previous section.
 
   The authors: We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
-
-  @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
-  
-  @elektra85: what is the above comment and where should it go?
 
 - Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
 
@@ -262,9 +252,6 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: we added the following passage:
 
   > For simplicity, we assume priority annotations are not inferred, but provided as an input to type checking. However, for any term, priorities can be inferred, e.g., by using the topological ordering of the directed graph where the vertices are the priority meta-variables and the edges are the inequality constraints between the priority meta-variables in the typing derivation.
-  
-  @wenkokke: Add an explanation to the type of pure functions.
-  @elektra85: wen address your own comment above.
 
 - About top and bottom on lolli: aren’t they used counter standard usage? I.e., shouldn’t the greatest upper bound be top? After all the priorities on the sequent are joined.
 
@@ -273,8 +260,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - Fig2, runtime typing: Shouldn’t these rules incorporate the earlier defined + operator to ensure that there is only one main thread?
 
-  The authors: They literally do: T-Par.
-  @elektra85: adjust the above.
+  The authors: The T-Par incorporates the + operator.
 
 - P9: At first, I didn’t see how the typing rule for New ensures that both endpoint have same priority. Maybe remind the reader that S and S requires priorities to be the same.
 
@@ -289,9 +275,9 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 We have fixed all the minor comments below.
 
-- P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
+- We have fixed all occurances of bare `new`.
 
-- @Reviewer2: Fix occurances of bare `new`.
+- P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
 
 - @Reviewer2: P28, ”Let this process be let this be Pi...”: grammar
 
