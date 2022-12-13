@@ -9,12 +9,30 @@
 
 # Breaking changes
 
-- We changed the definitions of \pr and \minpr:
+- ~~@Reviewer2: P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.~~
+
+  We changed the definitions of \pr and \minpr:
   We now overload \pr to work on session types, data types and contexts, and remove \minpr.
 
-- We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
+- ~~@Reviewer2: Lemma 4.5: this lemma seems to rely on a translation (notation (.)), which has not been introduced yet, as far as I can tell! See also my remark in the previous section.~~
 
-- We have merged the notations `M; N` and `let () = M in N` as they are synonymous, and any use of the latter was an error.
+  @wenkokke: Wait?! Where did our translation go?!
+
+  We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
+
+- @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
+
+  Related comments:
+
+  - @Reviewer1: page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
+
+  - @Reviewer1: page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
+
+  - @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
+
+  We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language.
+
+  We have merged the notations `M; N` and `let () = M in N` as they are synonymous, and any use of the latter was an error.
 
 # Will Fix (Some OD already fixed)
 
@@ -160,18 +178,6 @@
 
   > The lower bound for a pure function is $\cs{\ptop}$ as pure functions never start communicating. For similar reasons, the upper bound for a pure function is $\cs{\pbot}$.
 
-- @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
-
-  Related comments:
-
-  - @Reviewer1: page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
-
-  - @Reviewer1: page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
-
-  - @Reviewer1: page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
-
-  We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language.
-
 - @wenkokke: Add informal definition for simulation and reflection.
 
   Related comments:
@@ -209,8 +215,6 @@
 - ~~@Reviewer2: P28, ”Let this process be let this be Pi...”: grammar~~
 
 - ~~@Reviewer2: P36: It would be helpful to already alert the reader to the figure on the next page when discussing the setup here.~~
-
-- ~~@Reviewer2: P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.~~
 
 - ~~@Reviewer2: Shouldn’t it be, for minpr(Γ, x : A) = minpr(Γ) ∩ pr(A)?~~
 
@@ -364,10 +368,3 @@
   > ~~Pedro Rocha, Luís Caires:~~ > ~~Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)~~
 
   @elektra85: we have now added this reference.
-
-## Fixes bugs
-
-
-- ~~@Reviewer2: Lemma 4.5: this lemma seems to rely on a translation (notation (.)), which has not been introduced yet, as far as I can tell! See also my remark in the previous section.~~
-
-  @wenkokke: Wait?! Where did our translation go?!
