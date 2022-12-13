@@ -234,6 +234,11 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: "Only contains session types" means that the term is closed wrt variables, but may become blocked on a channel, i.e., be ready. So this is essentially progress for variable-closed terms. If there's variables, obviously progress becomes trickier, since we may also become blocked on a variable. Subject reduction holds for all terms.
 
+- Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
+
+  The authors: we have marked this proof as a sketch. We have also added the following comment:
+  >  This proof follows the exact same reasoning and proof sketch given by Kobayashi in \cite{kobayashi06} and later adopted by Dardha and Gay for PCP in their technical report \cite{dardhagay18extended}.
+
 - Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
 
   The authors: We use syntactic sugar in the examples. In addition, giving syntactic sugar for select and offer is a witness to the expressivity of our language. Select/offer are normally primitives in session typed pi-calculus.
