@@ -123,7 +123,6 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: thank you for pointing out the typos and minor issues. We have now fixed them in the paper.
 
-
 # Review 2
 
 ## Presentation and text
@@ -135,6 +134,12 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 - Abstract: It seems rather unusual to include citations.
 
   The authors: it is not uncommon for references to be included in the abstract. We think it gives a more complete picture, while allowing the abstract to remain succinct. Without the references we would need to expand on several notions, which defeats the purpose of a succinct abstract.
+
+## General comments
+
+- The reviewer comments that they cannot write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
+
+  The authors: we apologize, there is typo in the term and it should be `• let (x, x′) = new () in spawn(λ().echo x); x′`. We have fixed this in the paper.
 
 - P2, ”there have been several attempts at developing Curry-Howard correspondences”: Attempts, implies that it failed.
 
