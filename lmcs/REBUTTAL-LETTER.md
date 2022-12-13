@@ -21,15 +21,13 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 ## Comments on technical developments
 - page 5: Please explain the syntax of terms carefully. For example, you have a term for sequential composition (M;N) in a functional language, but you] don't even mention it in the paragraph that describes terms. The term does not even appear in the semantics.
 
-- page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit?
+- page 12: Where is the case for `M;N`? Is it obtained by composing N of type unit with something like what is typed in T-LamUnit? Also, for the case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
 
-- page 12, case T-LamUnit: I could not find a typing rule for a term `let () = ...`, which would be necessary here.
+  The authors: We have merged `M;N` and `let () = ...` as they are synonymous. All uses of the latter have been replaced by the former, and `let () = M in N` should no longer occur in the paper.
 
 - 3rd paragraph: What is "reflection"?
 
-  The authors: We do not need a typing rule for whichever one we end up using, as it'll be a part of the core language. We added informal definition for simulation and reflection. Also, we removed "reflection" and substituted "operational correspondence".
-
-  @elektra85: @wenkokke please check the above and adjust
+  The authors: We added informal definition for simulation and reflection. Also, we removed "reflection" and substituted "operational correspondence".
 
 - You say in the abstract that deadlock-freedom is guaranteed in CP and GV by combining parallel composition/thread spawning with channel creation. Later in the Introduction, you say that deadlock-freedom actually depends on restricting the structure of processes and shared channels to trees, which is achieved by the aforementioned combination. But then you mention works (Hypersequent CP and Linear Compositional Choreographies) that achieve the tree structure without that combination. So the really important thing seems to be the "tree structure" of processes. What do you mean by that exactly? You say that "this ensures that two processes can only communicate via exactly one series of channels". What's a "series of channels"? A mini example on what can and cannot be written in CP / Hypersequent CP / Linear Compositional Choreographies would probably help.
 
@@ -250,9 +248,6 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   > For simplicity, we assume priority annotations are not inferred, but provided as an input to type checking. However, for any term, priorities can be inferred, e.g., by using the topological ordering of the directed graph where the vertices are the priority meta-variables and the edges are the inequality constraints between the priority meta-variables in the typing derivation.
 
-  @wenkokke: Add an explanation to the type of pure functions.
-  @elektra85: wen address your own comment above.
-
 - About top and bottom on lolli: aren’t they used counter standard usage? I.e., shouldn’t the greatest upper bound be top? After all the priorities on the sequent are joined.
 
   The authors: In the paper we have the following sentence.
@@ -260,8 +255,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - Fig2, runtime typing: Shouldn’t these rules incorporate the earlier defined + operator to ensure that there is only one main thread?
 
-  The authors: They literally do: T-Par.
-  @elektra85: adjust the above.
+  The authors: The T-Par incorporates the + operator.
 
 - P9: At first, I didn’t see how the typing rule for New ensures that both endpoint have same priority. Maybe remind the reader that S and S requires priorities to be the same.
 
@@ -276,9 +270,9 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 We have fixed all the minor comments below.
 
-- P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
+- We have fixed all occurances of bare `new`.
 
-- @Reviewer2: Fix occurances of bare `new`.
+- P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
 
 - @Reviewer2: P28, ”Let this process be let this be Pi...”: grammar
 
