@@ -223,10 +223,6 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: We have included our definition for the translations from PCP to PGV, which had been erroneously removed from the journal submission.
 
-  @wenkokke: Ensure that we consistently use either `M; N` or `let () = M in N`. In my opinion, all uses of the latter should be replaced by the former, and `let () = M in N` should not occur in the paper.
-
-  @elektra85: what is the above comment and where should it go?
-
 - Proof of Lemma 3.4: it does not seem to go by induction of C = C’ because structural congruence is not an inductive definition. Instead, it seems typing derivations of the structurally equal configurations are provided and it is shown that the same type is derived.
 
   The authors: Derivations of structural congruence are an inductive definition, and we say that we proceed "by induction on the derivation of C = C'". The language is finite, so there are only inductive definitions.
