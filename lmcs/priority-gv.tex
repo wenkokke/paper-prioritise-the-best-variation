@@ -310,14 +310,14 @@ Configuration reduction resembles evaluation for a process calculus: \LabTirName
 Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$ allows swapping channels in the link process. $\LabTirName{SC-ResLink}$ allows restriction to be applied to link which is structurally equivalent to the terminated process, thus allowing elimination of unnecessary restrictions. $\LabTirName{SC-ResSwap}$ allows swapping channels and $\LabTirName{SC-ResComm}$ states that restriction is commutative. $\LabTirName{SC-ResExt}$ is the standard scope extrusion rule. Rules $\LabTirName{SC-ParNil}$, $\LabTirName{SC-ParComm}$ and $\LabTirName{SC-ParAssoc}$ state that parallel composition uses the terminated process as the neutral element; it is commutative and associative.
 
 While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts.
-\begin{enumerate}[label=(\alph*)]
+\begin{enumerate}[label=(\roman*)]
 \item
 \emph{We decompose the $\tm{\fork}$ construct}.
 In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct.
 
 Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must {create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the {actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
 \item
-\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if $\equiv\cred$ ends up in an ill-typed configuration, we can rewrite it to a well-typed configuration using $\equiv$.
+\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via $\equiv$ followed by reducing via $\cred$ is an ill-typed configuration, we can rewrite it to a well-typed configuration via $\equiv$.
 \end{enumerate}
 
 
@@ -532,7 +532,7 @@ It is worth mentioning that the notion of readiness presented here is akin to {l
 \begin{lemma}[Progress, $\tred$]%
   \label{lem:pgv-open-progress-terms}
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
-  \begin{enumerate*}[label= (\alph*) ]
+  \begin{enumerate*}[label= (\roman*) ]
   \item $\tm{M}$ is a value;
   \item $\tm{M}\tred\tm{N}$ for some $\tm{N}$; or
   \item $\tm{M}$ is ready.

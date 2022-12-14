@@ -165,8 +165,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - SC-ResComm: Why is the side condition necessary? Doesn’t name restriction generate fresh names?
 
-  The authors: Following the operational semantics, sure, but it's not encoded in the term syntax. Your suggestion amounts to moving the side-condition to well-formedness of the term syntax.
-  @elektra85: rephrase the above to make it clear and say it with more kindness.
+  The authors: Yes, operationally, the `new` function generates name restrictions with fresh names. However, this is not encoded as a property of the _syntax_ of terms. Therefore, to ensure that the equivalence works for any configuration, and not just configurations which are reachable by the operational semantics, it needs that side-condition.
 
 - P8, ”We no longer require that every child thread finishes by returning a terminated channel”: Doesn’t that have implications for linearity?
 
@@ -174,11 +173,13 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - Fig2: rule T-Absurd would admit weakening, so is wrong.
 
-  @elektra85: clarify this in the paper and here.
+  The authors: The rule T-Absurd is exfalso, i.e., from a proof of false, or a term of the empty type, anything follows, including weakening.
+
+  We believe that T-Absurd can only be used to derive weakening in the presence of a proof of false. If the reviewer believes that T-Absurd admits general weakening, we would welcome them to elaborate.
 
 - T-Pair: why should p < minpr(∆)?
 
-  The authors: we need this condition becuase of the operational semantics evaluating products. They're ordered. First field goes first.
+  The authors: We need this condition because of the operational semantics evaluating products, which evaluate the fields of a pair in order.
 
 - Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
@@ -192,11 +193,13 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: we have now fixed use of A,B,C in type schemas and added further explanation.
 
-- Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
-
-  @elektra85: comment on this, add something in the paper.
-
 - P8, middle of page, in (b): not sure how to parse this arrow/implication?
+
+  The authors: This is the composition of the structural congruence and the reduction relation. We split them up and elaborated in the text:
+
+  > In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via ≡ followed by reducing via −→C is an ill-typed configuration, we can rewrite it to a well-typed configuration via ≡.
+
+- Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
 
   Fig.10: What is the semantics of this arrow/implication?
 
@@ -249,8 +252,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - P6: again, the definitions for the flags lack space to separate them. Also, this seems not a proper inductive definition, i.e., base cases are missing. Moreover, what seems required is a left to right reading here, i.e., the right to left reading doesn’t seem to make sense. I think the proper way to define this would be as an inductive definition over the configuration, in particular decomposing C||D. The introduction of ”+” seems unnecessary, moreover the semantics of it is not defined. And, after having read the paper, these definitions are later on never used.
 
-  The authors: We added the required space. "+" is used in ...
-  @elektra85: wen pls complete the above.
+  The authors: We added the required space. "+" is used in the T-Par rule.
 
 - Another question I was left wondering about is whether priorities are inferred by typing or whether the programmer has to provide them. The former seems to be the case, but this should be made explicit. Also, it would be helpful to provide a complete, unsuccessful typing derivation for Example 2.2. Two individual derivations, for each thread, are given on page 10, which show that the derivations impose contradicting orderings on the priorities. It would then also be helpful to show the rule that composes the two derivations and fails because of the contradiction. Which rule would that be?
 
@@ -284,11 +286,11 @@ We have fixed all the minor comments below.
 
 - P2, ”communicate via exactly one series of channels”: What is meant by series of channels?
 
-- @Reviewer2: P28, ”Let this process be let this be Pi...”: grammar
+- P28, ”Let this process be let this be Pi...”: grammar
 
-- @Reviewer2: P36: It would be helpful to already alert the reader to the figure on the next page when discussing the setup here.
+- P36: It would be helpful to already alert the reader to the figure on the next page when discussing the setup here.
 
-- @Reviewer2: P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.
+- P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.
 
 - Lemma 3.2 proof, 2nd case: pr() should be minpr().
 
@@ -322,10 +324,11 @@ We have fixed all the minor comments below.
 
   The authors: we defined max here as we need it and it is used later.
 
-- P5: The programs in Example 2.1 are not well-formed wrt abstract syntax of terms defined on page 5.For example, the term ”recv x” cannot be parsed.
+- P5: The programs in Example 2.1 are not well-formed wrt abstract syntax of terms defined on page 5. For example, the term ”recv x” cannot be parsed.
 
-  The authors: the reviewer has misunderstood this. Note for eg: "recv x" is "M N" with "M = K = recv" and "N = x"
-  @elektra85: wen say somthing more above, as atm it doesn't make much sense.
+  The authors: The term `recv x` is well-formed. Specifically, it is an application (of the form `M N`) where:
+    * `M` is a constant (of the form `K`), specifically, it is `recv`; and
+    * `N` is a variable (of the form `x`).
 
 - P6: I am not sure how to parse the grammar of configurations. The two productions seem not clearly separated. I believe it should be phi ::= closed circle — open circle and then separately, C, D, E ::== ...?
 
