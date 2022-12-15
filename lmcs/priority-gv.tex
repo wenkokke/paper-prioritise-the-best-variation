@@ -104,6 +104,8 @@ Type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ is the standard linear function type, 
 Every session type is also a type.
 Given a function with type $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$, $\cs{p}$ is a \emph{lower bound} on the priorities of the endpoints captured by the body of the function, and $\cs{q}$ is an \emph{upper bound} on the priority of the communications that take place as a result of applying the function. The type of {pure functions} $\ty{\tylolli{T}{U}}$, \ie those which perform no communications, is syntactic sugar for $\ty{\tylolli[\cs{\ptop},\cs{\pbot}]{T}{U}}$. The lower bound for a pure function is $\cs{\ptop}$ as pure functions never start communicating. For similar reasons, the upper bound for a pure function is $\cs{\pbot}$.
 
+We postulate that the only function types---and, consequently, sequents---that are inhabited in PGV are pure functions and functions $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ for which $\cs{p}<\cs{q}$.
+
 \subsubsection*{Typing Environments}
 Typing environments $\ty{\Gamma}$, $\ty{\Delta}$, $\ty{\Theta}$ associate types to names. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
 \[
@@ -195,7 +197,7 @@ However, since the typing rules for PGV ensure the linear usage of endpoints, th
 The $\tm{\close}$ and $\tm{\wait}$ functions close a channel.
 
 We use syntactic sugar to make terms more readable: we write $\tm{\letbind{x}{M}{N}}$ in place of $\tm{(\lambda x.N)\;M}$, $\tm{\lambda\unit.M}$ in place of $\tm{\lambda z.\andthen{z}{M}}$, and $\tm{\lambda\pair{x}{y}.M}$ in place of $\tm{\lambda z.\letpair{x}{y}{z}{M}}$.
-We recover $\tm{\fork}$ as $\tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}$.
+We can recover GV's $\tm{\fork}$ as $\tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\andthen{\spawn\;{(\lambda\unit.x\;y)}}{z}}}$.
 
 \subsubsection*{Internal and External Choice}
 Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
@@ -297,6 +299,11 @@ Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation c
     \sep        \tm{\res{x}{y}{\conf{G}}}
 \end{array}
 \]
+Values are the subset of terms which cannot reduce further.
+Evaluation contexts are one-hole term contexts, \ie, terms with exactly one hole, written $\tm{\hole}$. We write $\tm{\plug{E}{M}}$ for the evaluation context $\tm{E}$ with its hole replaced by the term $\tm{M}$. Evaluation contexts are specifically those one-hole term contexts under which term reduction can take place.
+Thread contexts are a convenient way to lift the notion of evaluation contexts to threads. We write $\tm{\plug{\conf{F}}{M}}$ for the thread context $\tm{\conf{F}}$ with its hole replaced by the term $\tm{M}$.
+Configuration contexts are one-hole configuration contexts, \ie, configurations with exactly one hole, written $\tm{\hole}$. Specifically, configuration contexts are those one-hole term contexts under which configuration reduction can take place. The definition for $\tm{\conf{G}}$ only gives the case in which the hole is in the left-most parallel process, \ie, it only defines $\tm{\ppar{\conf{G}}{\conf{C}}}$ and not $\tm{\ppar{\conf{C}}{\conf{G}}}$. The latter is not needed, as $\tm{\parallel}$ is symmetric under structural congruence, though it would be harmless to add. We write $\tm{\plug{\conf{G}}{\conf{C}}}$ for the evaluation context $\tm{\conf{G}}$ with its hole replaced by the term $\tm{\conf{C}}$.
+
 
 \subsubsection*{Reduction Relation}
 \input{fig/pgv-operational-semantics}
@@ -527,7 +534,7 @@ It is worth mentioning that the notion of readiness presented here is akin to {l
   A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$.
 \end{definition}
 
-\emph{Progress} for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}.
+\emph{Progress} for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}, where the definition of ready terms encompasses all terms whose reduction is struck on some constant $\tm{K}$.
 
 \begin{lemma}[Progress, $\tred$]%
   \label{lem:pgv-open-progress-terms}

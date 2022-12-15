@@ -13,8 +13,7 @@
   \item
     If $\tm{L}$ is a link $\tm{\plug{E}{\link\;\pair{y}{z}}}$ or $\tm{\plug{E}{\link\;\pair{z}{y}}}$, we apply \LabTirName{E-Link}.
   \item
-    Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. The typing rules enforce the linear use of endpoints, so there must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$.
-    % There are two cases:
+    Otherwise, $\tm{L}$ is ready to act on some endpoint $\tmty{y}{S}$. Let $\tmty{y'}{\co{S}}$ be the dual endpoint of $\tm{y}$. The typing rules enforce the linear use of endpoints, so there must be a term $\tm{L'}\in\{\tm{M_1},\dots,\tm{M_m},\tm{N}\}$ which uses $\tm{y'}$. $\tm{L'}$ must be either a ready term or a value:
     \begin{enumerate}
     \item
       $\tm{L'}$ is ready. By~\cref{lem:pgv-ready-priority}, the priority of $\tm{L}$ is $\pr(\ty{S})$. By duality, $\pr(\ty{\co{S}})=\pr(\ty{S})$.

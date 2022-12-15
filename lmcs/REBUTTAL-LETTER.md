@@ -4,6 +4,37 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 # Review 1
 
+- @Reviewer1: Did you find it straightforward to apply the concepts from PCP to PGV? What was challenging?
+
+  The authors: The main difficulty was due to the fact that PGV has to track starting & ending priorities, rather than just [whichever PCP stores], but we were aided in this by the work by Padovani & Novara. We added the following passage:
+
+  > We cannot straightforwardly adapt the priority typing from PCP to PGV, as PGV adds higher-order functions. Instead, the priority typing for PGV follow the work by Padovani and Novara~\cite{padovaninovara15}.
+
+- @Reviewer1: page 4: In your presentation of types, I wondered if there are any well-formedness conditions on priority bounds.
+
+  The authors: There are no well-formedness conditions, but there are particular lemmas that hold for them, which could be _taken as_ well-formedness conditions. In particular I believe the theorem is: for a sequent with lower bound p and upper bound q, either p < q, or p is top and q is bottom. This is relaxed somewhat by some extensions, in which case I believe we can also have "p is top and q is a concrete priority", but I don't recall to what extend that applies here. I believe it may have been due to recursion, in which case it wouldn't. We added the following passage:
+
+  > We postulate that the only function types---and, consequently, sequents---that are inhabited in PGV are pure functions and functions $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ for which $\cs{p}<\cs{q}$.
+
+- @Reviewer1: page 6: The paragraph on values and evaluation contexts is going to be clear only to a selected few. Please write some text that explains how contexts work (holes, notation for replacing a hole with a term, etc.), that values are a specialisation of terms, etc.
+
+  The authors:  We added the following passage:
+
+  > Values are the subset of terms which cannot reduce further.
+  > Evaluation contexts are one-hole term contexts, \ie, terms with exactly one hole, written $\tm{\hole}$. We write $\tm{\plug{E}{M}}$ for the evaluation context $\tm{E}$ with its hole replaced by the term $\tm{M}$. Evaluation contexts are specifically those one-hole term contexts under which term reduction can take place.
+  > Thread contexts are a convenient way to lift the notion of evaluation contexts to threads. We write $\tm{\plug{\conf{F}}{M}}$ for the thread context $\tm{\conf{F}}$ with its hole replaced by the term $\tm{M}$.
+  > Configuration contexts are one-hole configuration contexts, \ie, configurations with exactly one hole, written $\tm{\hole}$. Specifically, configuration contexts are those one-hole term contexts under which configuration reduction can take place. The definition for $\tm{\conf{G}}$ only gives the case in which the hole is in the left-most parallel process, \ie, it only defines $\tm{\ppar{\conf{G}}{\conf{C}}}$ and not $\tm{\ppar{\conf{C}}{\conf{G}}}$. The latter is not needed, as $\tm{\parallel}$ is symmetric under structural congruence, though it would be harmless to add. We write $\tm{\plug{\conf{G}}{\conf{C}}}$ for the evaluation context $\tm{\conf{G}}$ with its hole replaced by the term $\tm{\conf{C}}$.
+
+- @Reviewer1: Another example is that you say that you "recover fork", but at this point it's not clear what fork was in GV.
+
+  The authors: At this point the reader has been told that "[GV] combines channel creation and thread spawning into a single operation, called ``fork'', which is related to the cut construct in CP." This effectively summarizes all one needs to know about fork in GV. The fact that it is recoverable is only interesting to the readers familiar with GV, or interested in the exact relation to GV, and we hope that any reader unfamiliar with GV can gleam fork's original semantics from our definition.
+
+- @Reviewer1: page 22: Lemma 3.7 is fundamental and seems to be the key difference wrt PCP and Kobayashi's work. Is that the case? Is the proof trivial? Could you at least provide a sketch, or say at least _why_ it is trivial?
+
+  The authors: It's not _trivial_ but it's _boring_, as it's precisely the proof you'd give for any lambda calculus. We should mention that, essentially, this is just progress for the simply-typed linear lambda calculus, with "M is ready" falling out as extra stuck cases. We added the following passage:
+
+  > [Progress for PGV] deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}, where the definition of ready terms encompasses all terms whose reduction is struck on some constant $\tm{K}$.
+
 ## Connection to logic
 
 - 2nd paragraph: What do you mean when you say that Hypersequent CP and Linear Compositional Choreographies "maintain" the correspondence to CLL?
@@ -99,6 +130,9 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 
 ## Minor comments
+
+- page 23: In case (4), before introducing the subcases (a) and (b), it'd be kind to say that L' is either a ready term or a value.
+
 - page 26: you sometimes say "well typed" and other times "well-typed".
 
   The authors: we fixed this and use consistently well typed.

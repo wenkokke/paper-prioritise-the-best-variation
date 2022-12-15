@@ -22,6 +22,7 @@ We thus pose our research question for GV:
 \vspace{1em}
 
 We follow the line of work from CP to Priority CP, and present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, thus allowing cyclic-structured processes, but which nonetheless guarantees deadlock freedom via priorities. This closes the circle of the connection between CP and GV~\cite{wadler14}, and their priority-based versions, PCP~\cite{dardhagay18extended} and PGV.
+We cannot straightforwardly adapt the priority typing from PCP to PGV, as PGV adds higher-order functions. Instead, the priority typing for PGV follow the work by Padovani and Novara~\cite{padovaninovara15}.
 
 We make the following main contributions:
 \begin{enumerate}
