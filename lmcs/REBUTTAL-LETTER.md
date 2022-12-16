@@ -324,6 +324,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   >
   > "The typing rule for new ensures that both endpoints of a channel share the same priorities."
 
+- While I generally understand the use of priorities to rule out circular waiting dependency, I am unclear about what the invariants are that the type system maintains in terms of priorities.
+
+  The authors: We have added a comment explaining the invariant that we believe the type system maintains in terms of priorities in section 2.1 (2nd paragraph of page 5).
+
 
 ## Minor Changes
 

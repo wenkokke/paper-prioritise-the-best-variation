@@ -267,9 +267,14 @@ The proof for progress (below) follows the same reasoning by Kobayashi~\cite{kob
 
 \subsection{Correspondence between PGV and PCP}
 \begingroup
-% How does it work?
-%
-We illustrate the relation between PCP and PGV by defining a translation from PCP to PGV. The translation on types is defined as follows:
+We illustrate the relation between PCP and PGV by defining a translation $\cpgvC{\cdot}$ from PCP processes to PGV configurations which satisfies operational correspondence.
+
+The translation $\tm{\cpgvC{\cdot}}$ translates PCP processes to PGV configurations by translating as much as possible of the $\pi$-calculus constructs from PCP to the identical configuration constructs in PGV, \ie, all top-level $\tm{\nu}$ and $\tm{\parallel}$ constructs. When it encounters the first action, it translates the remainder of the processs to a term using $\tm{\cpgvM{\cdot}}$.
+The translation $\tm{\cpgvM{\cdot}}$ translates PCP processes to PGV terms by mapping the $\pi$-calculus constructs from PCP (\eg, $\tm{\nu}$, $\tm{\parallel}$, $\pcp{\tm{\send{\cdot}{\cdot}{\cdot}}}$, $\pcp{\tm{\send{\cdot}{\cdot}{\cdot}}}$, $\pcp{\tm{\recv{\cdot}{\cdot}{\cdot}}}$, \etc) to the corresponding constants in PGV (\eg, $\pgv{\tm{\new}}$, $\pgv{\tm{\spawn}}$, $\pgv{\tm{\send}}$, $\pgv{\tm{\recv}}$, \etc).
+Translating a process with $\tm{\cpgvC{\cdot}}$ is the same as translating that process with $\tm{\cpgvM{\cdot}}$ followed by several steps of configuration reduction.
+The translation $\tm{\cpgvT{\cdot}}$ tranlates session types from PCP to session types in PGV matching the translation on processes.
+
+The translation on types is defined as follows:
 \[
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
@@ -305,7 +310,7 @@ We illustrate the relation between PCP and PGV by defining a translation from PC
   \end{array}
 \]
 
-There are two separate translations on processes. The main translation, $\tm{\cpgvM{\cdot}}$, translates processes to \emph{terms}:
+The translation $\tm{\cpgvM{\cdot}}$ translates processes to \emph{terms} and maps the $\pi$-calculus constructs from PCP to the corresponding constants in PGV:
 \begin{align*}
   &\pcp{\tm{\cpgvM{\link{x}{y}}}}
   &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
@@ -333,7 +338,8 @@ There are two separate translations on processes. The main translation, $\tm{\cp
   &&= \pgv{\tm{\offeremp{x}}}
 \end{align*}
 
-Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which can reduce to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted when translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce. To address this issue, we use a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to translating with $\tm{\cpgvM{\cdot}}$ then reducing with \LabTirName{E-New} and \LabTirName{E-Spawn}:
+Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which can reduce to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted when translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce.
+To address this issue, we introduce a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to translating with $\tm{\cpgvM{\cdot}}$ then reducing with \LabTirName{E-New} and \LabTirName{E-Spawn}:
 \begin{align*}
   &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
   &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
