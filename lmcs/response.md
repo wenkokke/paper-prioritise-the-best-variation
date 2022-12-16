@@ -8,7 +8,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: The main difficulty was due to the fact that PGV has to track starting & ending priorities, rather than just [whichever PCP stores], but we were aided in this by the work by Padovani & Novara. We added the following passage:
 
-  > We cannot straightforwardly adapt the priority typing from PCP to PGV, as PGV adds higher-order functions. Instead, the priority typing for PGV follow the work by Padovani and Novara~\cite{padovaninovara15}.
+  > We cannot straightforwardly adapt the priority typing from PCP to PGV, as PGV adds higher-order functions. Instead, the priority typing for PGV follow the work by Padovani and Novara.
 
 - page 4: In your presentation of types, I wondered if there are any well-formedness conditions on priority bounds.
 
@@ -22,9 +22,9 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: At this point the reader has been told that "[GV] combines channel creation and thread spawning into a single operation, called ``fork'', which is related to the cut construct in CP." This effectively summarizes all one needs to know about fork in GV. The fact that it is recoverable is only interesting to the readers familiar with GV, or interested in the exact relation to GV, and we hope that any reader unfamiliar with GV can gleam fork's original semantics from our definition.
 
-- page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
+- page 12: Here and in all other cases in the remainder, you write "= with $\Delta$" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with $\Delta$" stands for "which is defined as"? A clarification would be appreciated.
 
-  The authors: we intended to use the "= with \Delta" because the syntactic sugar rules are indeed definitions in terms of the core typing rules; they are macros for what comes after the "= with \Delta".
+  The authors: we intended to use the "= with $\Delta$" because the syntactic sugar rules are indeed definitions in terms of the core typing rules; they are macros for what comes after the "= with $\Delta$".
 
 - page 20, case E-Close: I couldn't make sense of the derivation, where two subderivations seem to be organised vertically?.. Is that the right reading? Could you reorganise it to make it obvious?
 
@@ -77,7 +77,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: We have added an opening to sec 4, clarifying what PCP is and why it matters to us.
 
-- page 10: in "a configuration C with flag \phi" you highlight C but not \phi (and likewise in the second-last line of the same paragraph). What's the rationale for colouring things?
+- page 10: in "a configuration C with flag $\phi$" you highlight C but not $\phi$ (and likewise in the second-last line of the same paragraph). What's the rationale for colouring things?
 
   The authors: we have fixed this now.
 
@@ -182,9 +182,9 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: we use 'names' to refer to channel endpoints, not channels. Preservation results (lemma 3.3 and thm 3.1) is standard and stated on open terms. Term progress (lemma 3.7) is stated for terms which may contain free names but not variables. We agree that separating variable and channel contexts would make the theorem statement clearer however, it would complicate the type system and its meta-theory. Configuration progress (thm 3.2) is stated for closed configurations, which is standard. Results are labelled accordingly. We clarified this after lemma 3.7.
 
-- The reviewer comments that they cannot write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
+- The reviewer comments that they cannot write down derivation for `• let (x, x') = new in spawn(lambda ().echo x); x'`.
 
-  The authors: we apologize, there is typo in the term and it should be `• let (x, x′) = new () in spawn(λ().echo x); x′`. We have fixed this in the paper.
+  The authors: we apologize, there is typo in the term and it should be `• let (x, x') = new () in spawn(lambda ().echo x); x'`. We have fixed this in the paper.
 
 - P2, ”there have been several attempts at developing Curry-Howard correspondences”: Attempts, implies that it failed.
 
@@ -224,13 +224,13 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   We believe that T-Absurd can only be used to derive weakening in the presence of a proof of false. If the reviewer believes that T-Absurd admits general weakening, we would welcome them to elaborate.
 
-- T-Pair: why should p < minpr(∆)?
+- T-Pair: why should p < minpr($\Delta$)?
 
   The authors: We need this condition because of the operational semantics evaluating products, which evaluate the fields of a pair in order.
 
 - Lemma 3.2: Also, shouldn’t there be a relationship on p and q?
 
-  The authors: There is no need for a relationship between p and q because by Lemma 3.1 q=\bottom for all cases.
+  The authors: There is no need for a relationship between p and q because by Lemma 3.1 $q = \bot$ for all cases.
 
 - The proof of Lemma 3.3 is sloppy. It omits the typing of evaluation contexts, which is all glossed over in the last case, dismissed as immediate. Also, it is stated for open terms. Presumably, Gamma can only contain channel names at this stage, but that is not made precise, nor guaranteed.
 
@@ -244,7 +244,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: This is the composition of the structural congruence and the reduction relation. We split them up and elaborated in the text:
 
-  > In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via ≡ followed by reducing via −→C is an ill-typed configuration, we can rewrite it to a well-typed configuration via ≡.
+  > In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via $\equiv$ followed by reducing via $\longrightarrow_C$ is an ill-typed configuration, we can rewrite it to a well-typed configuration via $\equiv$.
 
 - Lemma 3.2 proof, it is not clear what is meant by right arrow with label V/x. What is the semantics of it? Note, I didn’t check the remaining cases. But in general I find the proof not detailed enough. Several steps are omitted.
 
@@ -266,7 +266,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - P24, pr(): here pr is used, earlier minpr. Not sure whether that is intended, but it also caused mistakes in an earlier proof (see earlier remark). Actually, this definition uses again minpr.
 
-  The authors: We changed the definitions of \pr and \minpr. We now overload \pr to work on session types, data types and contexts, and remove \minpr.
+  The authors: We changed the definitions of pr and minpr. We now overload pr to work on session types, data types and contexts, and remove minpr.
 
 - P26, ”Finally, since our reduction relation is a strict subset of the reduction relation in the original [DG18b], we defer to their proofs.”: I am not convinced by this argument, i.e., why should the proof that was carried out for a bigger system hold for a subset?
 
@@ -287,7 +287,7 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 - Proof of Thm 4.4: this is not a rigorous argument. I would like to understand better the architecture of the proof. It seems to be going by cases, so I want to be convinced that they are exhaustive. Also, various inferences are not properly justified.
 
   The authors: we have marked this proof as a sketch. We have also added the following comment:
-  >  This proof follows the exact same reasoning and proof sketch given by Kobayashi in \cite{kobayashi06} and later adopted by Dardha and Gay for PCP in their technical report \cite{dardhagay18extended}.
+  >  This proof follows the exact same reasoning and proof sketch given by Kobayashi [Kobayashi06] and later adopted by Dardha and Gay for PCP in their technical report [DardhaGay18].
 
 - Figures 3-5: I have not checked them for mistakes. What is the significance of providing this syntactic sugar?
 
@@ -393,11 +393,11 @@ We have fixed all the minor comments below.
 ## Related work
 
 The reviewer suggested adding an comparing to the following related work.
-- M. Coppo, M. Dezani-Ciancaglini, L. Padovani, and N. Yoshida. Inference of global progress prop- erties for dynamically interleaved multiparty sessions. In COORDINATION, 2013. doi: 10.1007/ 978-3-642-38493-6\ 4.
+- M. Coppo, M. Dezani-Ciancaglini, L. Padovani, and N. Yoshida. Inference of global progress prop- erties for dynamically interleaved multiparty sessions. In COORDINATION, 2013.
 
-- M. Coppo, M. Dezani-Ciancaglini, N. Yoshida, and L. Padovani. Global progress for dynamically interleaved multiparty sessions. MSCS, 26(2):238–302, 2016. doi: 10.1017/S0960129514000188. URL https://doi.org/10.1017/S0960129514000188.
+- M. Coppo, M. Dezani-Ciancaglini, N. Yoshida, and L. Padovani. Global progress for dynamically interleaved multiparty sessions. MSCS, 26(2):238–302, 2016.
 
-- B. Toninho, L. Caires, and F. Pfenning. Higher-order processes, functions, and sessions: A monadic integration. In ESOP, volume 7792 of LNCS, pages 350–369, 2013. doi: 10.1007/978-3-642-37036-6\ 20. URL https://doi.org/10.1007/978-3-642-37036-6\_20.
+- B. Toninho, L. Caires, and F. Pfenning. Higher-order processes, functions, and sessions: A monadic integration. In ESOP, volume 7792 of LNCS, pages 350–369, 2013.
 
   The authors: many thanks for the suggestion, we have now added all the above related work and compared to them.
 
@@ -421,7 +421,7 @@ The reviewer suggested adding an comparing to the following related work.
 
 - page 2, paragraph 2: combing -> combining
 
-- page 6: formating of \phi ::= ... is broken
+- page 6: formating of $\phi ::= ...$ is broken
 
 - Section 6, paragraph 2: conservation types -> conversation
 
