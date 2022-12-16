@@ -428,4 +428,9 @@ The authors: many thanks for this. We have addressed typos and inconsistencies.
   > Pedro Rocha, Luís Caires:
   > Propositions-as-types and shared state. Proc. ACM Program. Lang. 5(ICFP): 1-30 (2021)
 
-  The authors: thanks, we have now added this reference and commented about the work.
+  Please comment on the work by Qian, Kavvos and Birkedal using coexponentials:
+
+  > Zesen Qian, G. A. Kavvos, Lars Birkedal:
+  > Client-server sessions in linear logic. Proc. ACM Program. Lang. 5(ICFP): 1-31 (2021)
+
+  The authors: thanks, we have now added these references and commented about the work.
