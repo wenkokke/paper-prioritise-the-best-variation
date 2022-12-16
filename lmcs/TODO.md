@@ -18,16 +18,8 @@
 
 - @Reviewer1: pages 27-36: These sections are too dry. There's no explanation of what works as usual, what is different, how the translation from PCP to PGV works (it is not even really _defined_ before the proofs!), and what the reader should focus on. It almost reads like a file intended for a theorem prover. I suggest that you rewrite these sections by explaining these aspects, presenting selected rules and the translation with examples, and then putting what "works as usual" into an appendix.
 
+@elektra85: we have expanded the section on PCP and we have commented about the translation in page x and paragraph y. the key intuition of the translation is.. the main thing for the reader to focus on is the case for xyz the rest is standard.
+however, you can add a paragraph at the beginning of the sections the reviewer is mentioning by recaping exactly what they want: what is new and where the reader should focus.
+
+
 - @wenkokke: Regarding Figure 3, are these definitions? I believe so: we're deriving the typing rules for the syntactic sugar from the core typing rules.
-  @elektra85: perhaps your comment above is misplaced wen, and refers to something else? anyway I think this is far to big to be addressed now. however, you can add a paragraph at the beginning of the sections the reviewer is mentioning by recaping exactly what they want: what is new and where the reader should focus.
-
-  Related comments:
-
-  - @Reviewer1: page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
-
-  @elektra85: add a sentence about this in the paper. reviewer1 has been kind and a clarification would be appreciated is a kind request.
-
-
-- @Reviewer2: Another technical comment I have is on the distinction between variables and channels (which the authors refer to as names). The latter are generated at runtime (via new), and are also gathered, in the environment. I believe that’s also the reason why the usual theorems (preservation and progress) are stated relative to a non-empty context. However, the formalization should guarantee that the respective terms are closed. It would also be helpful if different meta variables were used for variables and names. Currently, x, y, z are used for both.
-
-  @elektra85: needs to be addressed.

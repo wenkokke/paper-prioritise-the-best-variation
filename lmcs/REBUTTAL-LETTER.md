@@ -29,6 +29,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
   The authors: At this point the reader has been told that "[GV] combines channel creation and thread spawning into a single operation, called ``fork'', which is related to the cut construct in CP." This effectively summarizes all one needs to know about fork in GV. The fact that it is recoverable is only interesting to the readers familiar with GV, or interested in the exact relation to GV, and we hope that any reader unfamiliar with GV can gleam fork's original semantics from our definition.
 
+- page 12: Here and in all other cases in the remainder, you write "= with \Delta" on top which usually stands for a definition. Is that what you mean? Don't you mean a simple "=" instead? Or perhaps you mean that "= with \Delta" stands for "which is defined as"? A clarification would be appreciated.
+
+  The authors: we intended to use the "= with \Delta" because the syntactic sugar rules are indeed definitions in terms of the core typing rules; they are macros for what comes after the "= with \Delta".
+
 - page 20, case E-Close: I couldn't make sense of the derivation, where two subderivations seem to be organised vertically?.. Is that the right reading? Could you reorganise it to make it obvious?
 
   The authors: we have now fixed this derivation.
@@ -172,6 +176,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
   The authors: it is not uncommon for references to be included in the abstract. We think it gives a more complete picture, while allowing the abstract to remain succinct. Without the references we would need to expand on several notions, which defeats the purpose of a succinct abstract.
 
 ## General comments
+
+- Another technical comment I have is on the distinction between variables and channels (which the authors refer to as names). The latter are generated at runtime (via new), and are also gathered, in the environment. I believe that’s also the reason why the usual theorems (preservation and progress) are stated relative to a non-empty context. However, the formalization should guarantee that the respective terms are closed. It would also be helpful if different meta variables were used for variables and names. Currently, x, y, z are used for both.
+
+  The authors: we use 'names' to refer to channel endpoints, not channels. Preservation results (lemma 3.3 and thm 3.1) is standard and stated on open terms. Term progress (lemma 3.7) is stated for terms which may contain free names but not variables. We agree that separating variable and channel contexts would make the theorem statement clearer however, it would complicate the type system and its meta-theory. Configuration progress (thm 3.2) is stated for closed configurations, which is standard. Results are labelled accordingly. We clarified this after lemma 3.7.
 
 - The reviewer comments that they cannot write down derivation for `• let (x, x′) = new in spawn(λ().echo x); x′`.
 
