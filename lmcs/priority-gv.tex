@@ -531,7 +531,7 @@ If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\child\;\echo_{x}
 It is worth mentioning that the notion of readiness presented here is akin to {live} processes introduced by Caires and Pfenning \cite{cairespfenning10,DardhaP22}, and {poised} processes introduced by Pfenning and Griffith \cite{PfenningG15} and later used by Balzer \etal \cite{balzerpfenning17,balzertoninho19}. Ready processes like live/poised processes denote processes that are ready to communicate on their providing channel.
 \begin{definition}[Ready Terms]%
   \label{def:pgv-ready-actions}
-  A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$.
+  A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$ or is \emph{blocked on}.
 \end{definition}
 
 \emph{Progress} for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}, where the definition of ready terms encompasses all terms whose reduction is struck on some constant $\tm{K}$.
@@ -545,6 +545,8 @@ It is worth mentioning that the notion of readiness presented here is akin to {l
   \item $\tm{M}$ is ready.
   \end{enumerate*}
 \end{lemma}
+
+With ``$\ty{\Gamma}$ contains only session types'' we mean that for every $\tmty{x}{T}\in\ty{\Gamma}$, $\ty{T}$ is a session type, \ie, is of the form $\ty{S}$.
 
 \emph{Canonical forms} deviate from those for GV, in that we opt to move all $\nu$-binders to the top. The standard GV canonical form, alternating $\nu$-binders and their corresponding parallel compositions, does not work for PGV, since multiple channels may be split across a single parallel composition.
 
@@ -584,9 +586,6 @@ Finally, as a corollary, we get that well-typed terms which do not return endpoi
     \label{thm:pgv-closed-progress-confs}
     If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
   \end{theorem}
-  % \begin{proof}[Sketch]
-  %   Our proof follows that of Kobayashi~\cite[theorem 2]{kobayashi06}. We apply \cref{lem:pgv-open-progress-terms} to each thread. Either we obtain a reduction, or each child thread is ready and the main thread ready or a value. We pick the ready term $\tm{L}$ with the smallest priority bound. If $\tm{L}$ contains new, spawn, or a link, we apply \LabTirName{E-New}, \LabTirName{E-Spawn}, or \LabTirName{E-Link}. Otherwise, $\tm{L}$ must be ready on some $\tm{x_i}$. Linearity guarantees there is some thread  $\tm{L'}$ which acts on $\tm{x'_i}$. If $\tm{L'}$ is ready, priority typing guarantees it is ready on $\tm{x'_i}$, and we apply \LabTirName{E-Send} or \LabTirName{E-Close}. If $\tm{L'}$ is not ready, it must be the main thread returning a value. We move $\tm{L}$ into the $i^{\text{th}}$ position and repeat until we either find a reduction or reach normal form.
-  % \end{proof}
   \input{prf/thm-pgv-closed-progress-confs}
 
 \begin{corollary}%

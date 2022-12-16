@@ -12,18 +12,11 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 
 - page 4: In your presentation of types, I wondered if there are any well-formedness conditions on priority bounds.
 
-  The authors: There are no well-formedness conditions, but there are particular lemmas that hold for them, which could be _taken as_ well-formedness conditions. In particular I believe the theorem is: for a sequent with lower bound p and upper bound q, either p < q, or p is top and q is bottom. This is relaxed somewhat by some extensions, in which case I believe we can also have "p is top and q is a concrete priority", but I don't recall to what extend that applies here. I believe it may have been due to recursion, in which case it wouldn't. We added the following passage:
-
-  > We postulate that the only function types---and, consequently, sequents---that are inhabited in PGV are pure functions and functions $\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}$ for which $\cs{p}<\cs{q}$.
+  The authors: There are no well-formedness conditions, but there are particular lemmas that hold for them, which could be _taken as_ well-formedness conditions. In particular I believe the theorem is: for a sequent with lower bound p and upper bound q, either p < q, or p is top and q is bottom. This is relaxed somewhat by some extensions, in which case I believe we can also have "p is top and q is a concrete priority", but I don't recall to what extend that applies here. I believe it may have been due to recursion, in which case it wouldn't. We added a passage to the relevant section (now page 5).
 
 - page 6: The paragraph on values and evaluation contexts is going to be clear only to a selected few. Please write some text that explains how contexts work (holes, notation for replacing a hole with a term, etc.), that values are a specialisation of terms, etc.
 
-  The authors:  We added the following passage:
-
-  > Values are the subset of terms which cannot reduce further.
-  > Evaluation contexts are one-hole term contexts, \ie, terms with exactly one hole, written $\tm{\hole}$. We write $\tm{\plug{E}{M}}$ for the evaluation context $\tm{E}$ with its hole replaced by the term $\tm{M}$. Evaluation contexts are specifically those one-hole term contexts under which term reduction can take place.
-  > Thread contexts are a convenient way to lift the notion of evaluation contexts to threads. We write $\tm{\plug{\conf{F}}{M}}$ for the thread context $\tm{\conf{F}}$ with its hole replaced by the term $\tm{M}$.
-  > Configuration contexts are one-hole configuration contexts, \ie, configurations with exactly one hole, written $\tm{\hole}$. Specifically, configuration contexts are those one-hole term contexts under which configuration reduction can take place. The definition for $\tm{\conf{G}}$ only gives the case in which the hole is in the left-most parallel process, \ie, it only defines $\tm{\ppar{\conf{G}}{\conf{C}}}$ and not $\tm{\ppar{\conf{C}}{\conf{G}}}$. The latter is not needed, as $\tm{\parallel}$ is symmetric under structural congruence, though it would be harmless to add. We write $\tm{\plug{\conf{G}}{\conf{C}}}$ for the evaluation context $\tm{\conf{G}}$ with its hole replaced by the term $\tm{\conf{C}}$.
+  The authors: We added a passage to the relevant section (now page 7).
 
 - Another example is that you say that you "recover fork", but at this point it's not clear what fork was in GV.
 
@@ -36,12 +29,16 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 - page 20, case E-Close: I couldn't make sense of the derivation, where two subderivations seem to be organised vertically?.. Is that the right reading? Could you reorganise it to make it obvious?
 
   The authors: we have now fixed this derivation.
-  
+
 - page 22: Lemma 3.7 is fundamental and seems to be the key difference wrt PCP and Kobayashi's work. Is that the case? Is the proof trivial? Could you at least provide a sketch, or say at least _why_ it is trivial?
 
   The authors: It's not _trivial_ but it's _boring_, as it's precisely the proof you'd give for any lambda calculus. We should mention that, essentially, this is just progress for the simply-typed linear lambda calculus, with "M is ready" falling out as extra stuck cases. We added the following passage:
 
-  > [Progress for PGV] deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}, where the definition of ready terms encompasses all terms whose reduction is struck on some constant $\tm{K}$.
+  > [Progress for PGV] deviates from progress for linear lambda calculus only in that terms may reduce to values or _ready terms_, where the definition of ready terms encompasses all terms whose reduction is struck on some constant K.
+
+- pages 27-36: These sections are too dry. There's no explanation of what works as usual, what is different, how the translation from PCP to PGV works (it is not even really _defined_ before the proofs!), and what the reader should focus on. It almost reads like a file intended for a theorem prover. I suggest that you rewrite these sections by explaining these aspects, presenting selected rules and the translation with examples, and then putting what "works as usual" into an appendix.
+
+  The authors: We have added a section at the beginning of section 4.6 explaining how the translation works in prose.
 
 ## Connection to logic
 
@@ -91,6 +88,10 @@ We thank the reviewers for their useful feedback and comments. We addressed thei
 - page 4: You use a different font than usual for the empty set symbol, so maybe write explicitly in parenthesis that it is what you mean when you use the symbol for the first time?
 
   The authors: The rationale for colouring terms is to communicate their syntactic sort: red for terms, blue for types, teal for priorities & priority constraints. This may not have been consistently applied.
+
+- page 23: In case (4.b), if L' is a value like an abstraction or a pair, what do you mean by "the endpoint that it is blocked on"?
+
+  The authors: We amended the definition of _ready terms_ to include the phrase "is blocked on" as an alias for "is ready to act on".
 
 ## Related Work
 
