@@ -1,69 +1,69 @@
-\begin{proof}
-  \label{prf:lem-pgv-value-done}
-  By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$.
+\proof
+\label{prf:lem-pgv-value-done}
+By induction on the derivation of $\tseq[\cs{o}]{\ty{\Gamma}}{V}{T}$.
 
-  \begin{case*}[\LabTirName{T-Var}]
-    Immediately.
-    \begin{mathpar}
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Const}]
-    Immediately.
-    \begin{mathpar}
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Lam}]
-    Immediately.
-    \begin{mathpar}
-      \inferrule*{
-        \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
-      }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{q}]{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Unit}]
-    Immediately.
-    \begin{mathpar}
-      \inferrule*{
-      }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Pair}]
-    The induction hypotheses give us $\cs{p}=\cs{q}=\cs{\pbot}$, hence $\cs{p}\sqcup\cs{q}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$ and $\pr(\ty{\Delta})=\pr(\ty{U})$, hence $\pr(\ty{\Gamma},\ty{\Delta})=\pr(\ty{\Gamma})\sqcap\pr(\ty{\Delta})=\pr(\ty{T})\sqcap\pr(\ty{U})=\pr(\ty{\typrod{T}{U}})$.
-    \begin{mathpar}
-      \inferrule*{
-        \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
-        \\
-        \tseq[\cs{q}]{\ty{\Delta}}{W}{U}
-        \\
-        \cs{p}<\pr(\ty{\Delta})
-      }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{V}{W}}{\typrod{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Inl}]
-    The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{T})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
-    \begin{mathpar}
-      \inferrule*{
-        \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
-        \\
-        \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{T-Inr}]
-    The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{U})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
-    \begin{mathpar}
-      \inferrule*{
-        \tseq[\cs{p}]{\ty{\Gamma}}{V}{U}
-        \\
-        \pr(\ty{T})=\pr(\ty{U})
-      }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{V}}{\tysum{T}{U}}}
-    \end{mathpar}
-  \end{case*}
-\end{proof}
+\begin{case*}[\LabTirName{T-Var}]
+  Immediately.
+  \begin{mathpar}
+    \inferrule*{
+    }{\tseq[\cs{\pbot}]{\tmty{x}{T}}{x}{T}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Const}]
+  Immediately.
+  \begin{mathpar}
+    \inferrule*{
+    }{\tseq[\cs{\pbot}]{\emptyenv}{K}{T}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Lam}]
+  Immediately.
+  \begin{mathpar}
+    \inferrule*{
+      \tseq[\cs{q}]{\ty{\Gamma},\tmty{x}{T}}{M}{U}
+    }{\tseq[\cs{\pbot}]{\ty{\Gamma}}{\lambda x.M}{\tylolli[\cs{\pr(\ty{\Gamma})},\cs{q}]{T}{U}}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Unit}]
+  Immediately.
+  \begin{mathpar}
+    \inferrule*{
+    }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Pair}]
+  The induction hypotheses give us $\cs{p}=\cs{q}=\cs{\pbot}$, hence $\cs{p}\sqcup\cs{q}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr(\ty{T})$ and $\pr(\ty{\Delta})=\pr(\ty{U})$, hence $\pr(\ty{\Gamma},\ty{\Delta})=\pr(\ty{\Gamma})\sqcap\pr(\ty{\Delta})=\pr(\ty{T})\sqcap\pr(\ty{U})=\pr(\ty{\typrod{T}{U}})$.
+  \begin{mathpar}
+    \inferrule*{
+      \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
+      \\
+      \tseq[\cs{q}]{\ty{\Delta}}{W}{U}
+      \\
+      \cs{p}<\pr(\ty{\Delta})
+    }{\tseq[\cs{p}\sqcup\cs{q}]{\ty{\Gamma},\ty{\Delta}}{\pair{V}{W}}{\typrod{T}{U}}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Inl}]
+  The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{T})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
+  \begin{mathpar}
+    \inferrule*{
+      \tseq[\cs{p}]{\ty{\Gamma}}{V}{T}
+      \\
+      \pr(\ty{T})=\pr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inl{V}}{\tysum{T}{U}}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{T-Inr}]
+  The induction hypothesis gives us $\cs{p}=\cs{\pbot}$, and $\pr(\ty{\Gamma})=\pr{(\ty{U})}$. We know $\pr(\ty{T})=\pr({\ty{U}})$, hence $\pr(\ty{\Gamma})=\pr(\ty{\tysum{T}{U}})$.
+  \begin{mathpar}
+    \inferrule*{
+      \tseq[\cs{p}]{\ty{\Gamma}}{V}{U}
+      \\
+      \pr(\ty{T})=\pr(\ty{U})
+    }{\tseq[\cs{p}]{\ty{\Gamma}}{\inr{V}}{\tysum{T}{U}}}
+  \end{mathpar}
+\end{case*}
+\qed
 
 %%% Local Variables:
 %%% TeX-master: "../priorities"

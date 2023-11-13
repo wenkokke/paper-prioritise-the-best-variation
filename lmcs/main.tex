@@ -38,65 +38,16 @@
 % Namespaces
 \usepackage{namespc}
 
-% Compatibility code for LMCS
-\let\theorem\thm%
-\let\endtheorem\endthm%
-\let\lemma\lem%
-\let\endlemma\endlem%
-\let\example\exa%
-\let\endexample\endexa%
-\let\definition\defi%
-\let\enddefinition\enddefi%
-\let\corollary\cor%
-\let\endcorollary\endcor%
-\newtheorem*{case*}{Case}{\itshape}{\rmfamily}
-\newtheorem*{subcase*}{Subcase}{\itshape}{\rmfamily}
-\newenvironment{compacttheorems}{}{}
-
-% Restatable theorems and lemmas (LLNCS-compatible)
-\newcommand{\restatetheorem}[1]{%
-  \begingroup
-  \renewcommand{\thethm}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\thm%
-  \csname restatabletheorem@#1\endcsname%
-  \endthm%
-  \endgroup
-}
-\NewEnviron{restatabletheorem}[1]{%
-  \global\expandafter\xdef\csname restatabletheorem@#1\endcsname{%
-    \unexpanded\expandafter{\BODY}%
-  }%
-  \expandafter\thm\BODY\unskip\label{#1}\endthm%
-}
-\newcommand{\restatelemma}[1]{%
-  \begingroup
-  \renewcommand{\thelem}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\lem%
-  \csname restatablelemma@#1\endcsname
-  \endlem%
-  \endgroup
-}
-\NewEnviron{restatablelemma}[1]{%
-  \global\expandafter\xdef\csname restatablelemma@#1\endcsname{%
-    \unexpanded\expandafter{\BODY}%
-  }%
-  \expandafter\lem\BODY\unskip\label{#1}\endlem%
-}
-\newcommand{\restatedefinition}[1]{%
-  \begingroup
-  \renewcommand{\thedefinition}{\ref{#1}}%
-  \expandafter\expandafter\expandafter\defi%
-  \csname restatabledefinition@#1\endcsname
-  \enddefi%
-  \endgroup
-}
-\NewEnviron{restatabledefinition}[1]{%
-  \global\expandafter\xdef\csname restatabledefinition@#1\endcsname{%
-    \unexpanded\expandafter{\BODY}%
-  }%
-  \expandafter\defi\BODY\unskip\label{#1}\enddefi%
-}
-
+% Cases in proof environments
+\newenvironment{case*}[1][]{%
+  \vspace{0.5\baselineskip}%
+  \par%
+  \noindent%
+  \textbf{Case}~#1.\itshape\rmfamily}{\par}
+\newenvironment{subcase*}[1][]{%
+  \vspace{0.5\baselineskip}%
+  \par%
+  \textbf{Subcase}~#1.\itshape\rmfamily}{\par}
 
 % Inference rules
 \usepackage{mathpartir}
@@ -114,8 +65,6 @@
 \newcommand{\subst}[4][]{\ifstrempty{#1}{\ensuremath{#2\{#3/#4\}}}{\ensuremath{#2(\{#3/#4\}\cup#1)}}}
 \newcommand{\plug}[2]{\ensuremath{#1[#2]}}
 \newcommand{\minpr}[0]{\pr}
-% \newcommand{\minpr}[0]{\ensuremath{\text{min}_{\pr}}}
-% \newcommand{\maxpr}[0]{\ensuremath{\text{max}_{\pr}}}
 \providecommand{\pbot}[0]{\ensuremath{\cs{\bot\!}}}
 \providecommand{\ptop}[0]{\ensuremath{\cs{\top\!}}}
 \newcommand{\aleq}[0]{\mathbin{{=_{\alpha}}}}
@@ -266,11 +215,11 @@
 % References
 \usepackage{varioref}
 \usepackage[colorlinks]{hyperref}
-\usepackage{thmtools,cleveref}
+\usepackage{cleveref}
 \usepackage{doi}
 \usepackage[strings]{underscore}
 
-%% so that \Cref actually works
+% Renew theorem environments for cleveref
 \newcommand{\renewtheorem}[1]{%
   \expandafter\let\csname #1\endcsname\relax
   \expandafter\let\csname c@#1\endcsname\relax
@@ -278,14 +227,40 @@
   \newtheorem{#1}%
 }
 
+% the following environments switch to a slanted font:
+\theoremstyle{plain}
+
+\renewtheorem{thm}{Theorem}[section]
+\renewtheorem{cor}[thm]{Corollary}
+\renewtheorem{lem}[thm]{Lemma}
+\renewtheorem{slem}[thm]{Sublemma}
+\renewtheorem{prop}[thm]{Proposition}
+\renewtheorem{asm}[thm]{Assumption}
+
 % the following environments keep the roman font:
 \theoremstyle{definition}
 
-\renewtheorem{theorem}{Theorem}[section]
-\renewtheorem{corollary}[thm]{Corollary}
-\renewtheorem{lemma}[thm]{Lemma}
-\renewtheorem{proposition}[thm]{Proposition}
-\renewtheorem{example}[thm]{Example}
+\renewtheorem{rem}[thm]{Remark}
+\renewtheorem{rems}[thm]{Remarks}
+\renewtheorem{exa}[thm]{Example}
+\renewtheorem{exas}[thm]{Examples}
+\renewtheorem{defi}[thm]{Definition}
+\renewtheorem{conv}[thm]{Convention}
+\renewtheorem{conj}[thm]{Conjecture}
+\renewtheorem{prob}[thm]{Problem}
+\renewtheorem{oprob}[thm]{Open Problem}
+\renewtheorem{oprobs}[thm]{Open Problems}
+\renewtheorem{algo}[thm]{Algorithm}
+\renewtheorem{obs}[thm]{Observation}
+\renewtheorem{desc}[thm]{Description}
+\renewtheorem{fact}[thm]{Fact}
+\renewtheorem{qu}[thm]{Question}
+\renewtheorem{oqu}[thm]{Open Question}
+\renewtheorem{pty}[thm]{Property}
+\renewtheorem{clm}[thm]{Claim}
+\renewtheorem{nota}[thm]{Notation}
+\renewtheorem{com}[thm]{Comment}
+\renewtheorem{coms}[thm]{Comments}
 
 \crefname{section}{\S.\@\!}{Sections}%
 \crefname{subsection}{\S\!\!\,}{\S\!\!\,}%
@@ -315,7 +290,7 @@
   To overcome the limitations of tree-structured processes, Dardha and Gay~\cite{dardhagay18} define Priority CP (PCP), which allows cyclic-structured processes and restores deadlock freedom by using \emph{priorities}, in line with Kobayashi and Padovani~\cite{kobayashi06,padovani14}.
 
   Following PCP, we present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning. Consequently, we type cyclic-structured processes and restore deadlock freedom by using priorities. We show that our type system is sound by proving subject reduction and progress. We define an encoding from PCP to PGV and prove that the encoding preserves typing and is sound and complete with respect to the operational semantics.
-  \end{abstract}
+\end{abstract}
 %
 \maketitle
 

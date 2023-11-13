@@ -17,18 +17,18 @@
 % \restatetheorem{thmpgvsubjectreductionconfs}
 % \input{prf/thm-pgv-subject-reduction-confs}
 
-% \begin{restatablelemma}{lempgvreadypriority}
+% \begin{lem}
 %   \label{lem:pgv-ready-priority}
 %   If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
-% \end{restatablelemma}
-% \begin{proof}
+% \end{lem}
+% \proof
 %   Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
-% \end{proof}
+% \qed
 
 % \restatelemma{lempgvcanonicalforms}
-% \begin{proof}
+% \proof
 %   We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
-% \end{proof}
+% \qed
 
 % \restatetheorem{thmpgvclosedprogressconfs}
 % \input{prf/thm-pgv-closed-progress-confs}
@@ -54,14 +54,14 @@ Types ($\pcp{\ty{A}}, \pcp{\ty{B}}$) in PCP are based on classical linear logic 
   \usingnamespace{pcp}
   \begin{array}{lcl}
     \ty{A}, \ty{B}
-    & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
-      \sep        \ty{\typarr[\cs{o}]{A}{B}}
-      \sep        \ty{\tyone[\cs{o}]}
-      \sep        \ty{\tybot[\cs{o}]}
-      \sep        \ty{\typlus[\cs{o}]{A}{B}}
-      \sep        \ty{\tywith[\cs{o}]{A}{B}}
-      \sep        \ty{\tynil[\cs{o}]}
-      \sep        \ty{\tytop[\cs{o}]}
+     & \Coloneqq & \ty{\tytens[\cs{o}]{A}{B}}
+    \sep        \ty{\typarr[\cs{o}]{A}{B}}
+    \sep        \ty{\tyone[\cs{o}]}
+    \sep        \ty{\tybot[\cs{o}]}
+    \sep        \ty{\typlus[\cs{o}]{A}{B}}
+    \sep        \ty{\tywith[\cs{o}]{A}{B}}
+    \sep        \ty{\tynil[\cs{o}]}
+    \sep        \ty{\tytop[\cs{o}]}
   \end{array}
 \]
 
@@ -80,8 +80,8 @@ Typing environments $\pcp{\ty{\Gamma}}$, $\pcp{\ty{\Delta}}$ associate names to 
   \usingnamespace{pcp}
   \begin{array}{lcl}
     \ty{\Gamma}, \ty{\Delta}
-    & \Coloneqq & \ty{\emptyenv}
-      \sep        \ty{\Gamma}, \tmty{x}{A}
+     & \Coloneqq & \ty{\emptyenv}
+    \sep        \ty{\Gamma}, \tmty{x}{A}
   \end{array}
 \]
 
@@ -119,8 +119,8 @@ The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the 
   \usingnamespace{pcp}
   \setlength{\arraycolsep}{1pt}
   \begin{array}{lclclcl}
-    \pr(\ty{\tyone[\cs{o}]})        & = & \cs{o} \\
-    \pr(\ty{\tybot[\cs{o}]})        & = & \cs{o}
+    \pr(\ty{\tyone[\cs{o}]}) & = & \cs{o} \\
+    \pr(\ty{\tybot[\cs{o}]}) & = & \cs{o}
   \end{array}
   \qquad
   \begin{array}{lclclcl}
@@ -129,8 +129,8 @@ The function $\pr(\cdot)$ returns smallest priority of a type. As with PGV, the 
   \end{array}
   \qquad
   \begin{array}{lclclcl}
-    \pr(\ty{\tynil[\cs{o}]})        & = & \cs{o} \\
-    \pr(\ty{\tytop[\cs{o}]})        & = & \cs{o}
+    \pr(\ty{\tynil[\cs{o}]}) & = & \cs{o} \\
+    \pr(\ty{\tytop[\cs{o}]}) & = & \cs{o}
   \end{array}
   \qquad
   \begin{array}{lclclcl}
@@ -150,18 +150,18 @@ Processes ($\pcp{\tm{P}}$, $\pcp{\tm{Q}}$) in PCP are defined by the following g
   \usingnamespace{pcp}
   \begin{array}[t]{lcl}
     \tm{P}, \tm{Q}
-    & \Coloneqq & \tm{\link{x}{y}}
-           \sep   \tm{\res{x}{y}{P}}
-           \sep   \tm{(\ppar{P}{Q})}
-           \sep   \tm{\halt}
+     & \Coloneqq & \tm{\link{x}{y}}
+    \sep   \tm{\res{x}{y}{P}}
+    \sep   \tm{(\ppar{P}{Q})}
+    \sep   \tm{\halt}
     \\   & \sep & \tm{\send{x}{y}{P}}
-           \sep   \tm{\close{x}{P}}
-           \sep   \tm{\recv{x}{y}{P}}
-           \sep   \tm{\wait{x}{P}}
+    \sep   \tm{\close{x}{P}}
+    \sep   \tm{\recv{x}{y}{P}}
+    \sep   \tm{\wait{x}{P}}
     \\   & \sep & \tm{\inl{x}{P}}
-           \sep   \tm{\inr{x}{P}}
-           \sep   \tm{\offer{x}{P}{Q}}
-           \sep   \tm{\absurd{x}}
+    \sep   \tm{\inr{x}{P}}
+    \sep   \tm{\offer{x}{P}{Q}}
+    \sep   \tm{\absurd{x}}
   \end{array}
 \]
 
@@ -192,15 +192,15 @@ As a result of $(\kappa_{\parr})$, $\pcp{\tm{Q}}$ becomes blocked on $\pcp{\tm{\
   \setlength{\arraycolsep}{2em}
   \begin{array}{cc}
     \multicolumn{2}{c}{%
-    \hspace*{10ex}
-    {\tm{\res{x}{x'}{(\ppar{\recv{a}{y}{P}}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
+      \hspace*{10ex}
+      {\tm{\res{x}{x'}{(\ppar{\recv{a}{y}{P}}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
     \\
     \qquad\rotatebox[origin=c]{270}{$\red\hphantom{{}^+}$}
-    &
+     &
     \rotatebox[origin=c]{270}{$\red^+$}\qquad
     \\
     {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{\res{z}{z'}{(\ppar{\close{z}{\halt}}{\wait{z'}{Q}})}})}}}}
-    &
+     &
     {\tm{\recv{a}{y}{\res{x}{x'}{(\ppar{P}{Q})}}}}
   \end{array}
 \end{mathpar}
@@ -239,29 +239,27 @@ Dardha and Gay \cite{dardhagay18} present PCP--consequently also PCP given in th
 PLL builds on CLL by replacing the cut rule with two logical rules: a mix and a cycle rule---here corresponding to T-Par and T-Res, respectively. Dardha and Gay \cite[\S 4]{dardhagay18} prove cycle-elimination, in the same lines as cut-elimination for CLL. As a corollary of cycle-elimination for PLL, we obtain deadlock freedom for PCP (Theorem 3 in \cite[\S 4]{dardhagay18}). In summary, PLL is an extension of CLL and the authors show the correspondence of PCP and PLL. Notice however, that PCP is not in correspondence with CLL itself, since processes in PCP are graphs, whether CLL induces trees.
 
 \subsection{Technical Developments}
-\begin{definition}[Actions]
-A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
-\end{definition}
-\begin{definition}[Canonical Forms]
-\label{def:pcp-canonical-forms}
-A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
-\end{definition}
-\begin{lemma}[Canonical Forms]
-\label{lem:pcp-canonical-forms}
-If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
-\end{lemma}
-\begin{proof}
+\begin{defi}
+  A~process acts on an endpoint $\tm{x}$ if it is $\tm{\link{x}{y}}$, $\tm{\link{y}{x}}$, $\tm{\send{x}{y}{P}}$, $\tm{\recv{x}{y}{P}}$, $\tm{\close{x}{P}}$, $\tm{\wait{x}{P}}$, $\tm{\inl{x}{P}}$, $\tm{\inr{x}{P}}$, $\tm{\offer{x}{P}{Q}}$, or $\tm{\absurd{x}}$. A~process is an action if it acts on some endpoint $\tm{x}$.
+\end{defi}
+\begin{defi}\label{def:pcp-canonical-forms}
+  %[Canonical Forms]
+  A~process $\tm{P}$ is in canonical form if it is either $\tm{\halt}$ or of the form $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(P_1 \parallel\dots\parallel P_m)}}}$ where $m>0$ and each $\tm{P_j}$ is an action.
+\end{defi}
+\begin{lem}\label{lem:pcp-canonical-forms}
+  %[Canonical Forms]
+  If $\seq{P}{\ty{\Gamma}}$, there exists some $\tm{Q}$ such that $\tm{P}\equiv\tm{Q}$ and $\tm{Q}$ is in canonical form.
+\end{lem}
+\proof
 If $\tm{P}=\tm{\halt}$, we are done. Otherwise, we move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, and discard any superfluous occurrences of $\tm{\halt}$ using \LabTirName{SC-ParNil}.
-\end{proof}
+\qed
 
 The proof for progress (below) follows the same reasoning by Kobayashi~\cite{kobayashi06} used in the proof of deadlock freedom for closed processes (Theorem 2).
 
-%\restatetheorem{thmpcpclosedprogress}
-\begin{restatabletheorem}{thmpcpclosedprogress}[Progress, $\pcp{\red}$]%
-  \label{thm:pcp-closed-progress}
-  \hfill\\%newline before theorem statement
+\begin{thm}\label{thm:pcp-closed-progress}
+  %[Progress, $\pcp{\red}$]%
   If $\pcp{\seq{P}{\emptyenv}}$, then either $\pcp{\tm{P}=\tm{\halt}}$ or there exists a $\pcp{\tm{Q}}$ such that $\pcp{\tm{P}\red\tm{Q}}$.
-\end{restatabletheorem}
+\end{thm}
 \input{prf/thm-pcp-closed-progress}
 \endgroup
 
@@ -278,141 +276,131 @@ The translation on types is defined as follows:
 \[
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\tytens[\cs{o}]{A}{B}}}}
-    & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgvT{A}}}{\cpgvT{B}}}}
+     & = & \pgv{\ty{\tysend[\cs{o}]{\co{\cpgvT{A}}}{\cpgvT{B}}}}
     \\
     \ty{\cpgvT{\pcp{\typlus[\cs{o}]{A}{B}}}}
-    & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+     & = & \pgv{\ty{\tyselect[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
   \end{array}
   \hfill\quad\hfill%
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\tyone[\cs{o}]}}}
-    & = & \ty{\pgv{\tyends[\cs{o}]}}
+     & = & \ty{\pgv{\tyends[\cs{o}]}}
     \\
     \ty{\cpgvT{\pcp{\tynil[\cs{o}]}}}
-    & = & \pgv{\ty{\tyselectemp[\cs{o}]}}
+     & = & \pgv{\ty{\tyselectemp[\cs{o}]}}
   \end{array}
 \]%
 \[%
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\typarr[\cs{o}]{A}{B}}}}
-    & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+     & = & \pgv{\ty{\tyrecv[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
     \\
     \ty{\cpgvT{\pcp{\tywith[\cs{o}]{A}{B}}}}
-    & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
+     & = & \pgv{\ty{\tyoffer[\cs{o}]{\cpgvT{A}}{\cpgvT{B}}}}
   \end{array}
   \hfill\quad\hfill%
   \begin{array}{lcl}
     \ty{\cpgvT{\pcp{\tybot[\cs{o}]}}}
-    & = & \ty{\pgv{\tyendr[\cs{o}]}}
+     & = & \ty{\pgv{\tyendr[\cs{o}]}}
     \\
     \ty{\cpgvT{\pcp{\tytop[\cs{o}]}}}
-    & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
+     & = & \pgv{\ty{\tyofferemp[\cs{o}]}}
   \end{array}
 \]
 
 The translation $\tm{\cpgvM{\cdot}}$ translates processes to \emph{terms} and maps the $\pi$-calculus constructs from PCP to the corresponding constants in PGV:
 \begin{align*}
-  &\pcp{\tm{\cpgvM{\link{x}{y}}}}
-  &&= \pgv{\tm{\link\;{\pair{x}{y}}}} \\
-  &\pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
-  &&= \pgv{\tm{\letpair{x}{y}{\new\;\unit}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
-  &&= \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}} \\
-  &\pcp{\tm{\cpgvM{\halt}}}
-  &&= \pgv{\tm{\unit}} \\
-  &\pcp{\tm{\cpgvM{\close{x}{P}}}}
-  &&= \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\wait{x}{P}}}}
-  &&= \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
-  &&= \pgv{\tm{\letpair{y}{z}{\new\;\unit}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
-  &\pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
-  &&= \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\inl{x}{P}}}}
-  &&= \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\inr{x}{P}}}}
-  &&= \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}} \\
-  &\pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}
-  &&= \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}} \\
-  &\pcp{\tm{\cpgvM{\absurd{x}}}}
-  &&= \pgv{\tm{\offeremp{x}}}
+   & \pcp{\tm{\cpgvM{\link{x}{y}}}}
+   &                                    & = \pgv{\tm{\link\;{\pair{x}{y}}}}                                                      \\
+   & \pcp{\tm{\cpgvM{\res{x}{y}{P}}}}
+   &                                    & = \pgv{\tm{\letpair{x}{y}{\new\;\unit}{\cpgvM{P}}}}                                    \\
+   & \pcp{\tm{\cpgvM{\ppar{P}{Q}}}}
+   &                                    & = \pgv{\tm{\andthen{\spawn\;{(\lambda\unit.\cpgvM{P})}}{\cpgvM{Q}}}}                   \\
+   & \pcp{\tm{\cpgvM{\halt}}}
+   &                                    & = \pgv{\tm{\unit}}                                                                     \\
+   & \pcp{\tm{\cpgvM{\close{x}{P}}}}
+   &                                    & = \pgv{\tm{\andthen{\close\;{x}}{\cpgvM{P}}}}                                          \\
+   & \pcp{\tm{\cpgvM{\wait{x}{P}}}}
+   &                                    & = \pgv{\tm{\andthen{\wait\;{x}}{\cpgvM{P}}}}                                           \\
+   & \pcp{\tm{\cpgvM{\send{x}{y}{P}}}}
+   &                                    & = \pgv{\tm{\letpair{y}{z}{\new\;\unit}{\letbind{x}{\send\;{\pair{z}{x}}}{\cpgvM{P}}}}} \\
+   & \pcp{\tm{\cpgvM{\recv{x}{y}{P}}}}
+   &                                    & = \pgv{\tm{\letpair{y}{x}{\recv\;{x}}{\cpgvM{P}}}}                                     \\
+   & \pcp{\tm{\cpgvM{\inl{x}{P}}}}
+   &                                    & = \pgv{\tm{\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}}}                             \\
+   & \pcp{\tm{\cpgvM{\inr{x}{P}}}}
+   &                                    & = \pgv{\tm{\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}}}                             \\
+   & \pcp{\tm{\cpgvM{\offer{x}{P}{Q}}}}
+   &                                    & = \pgv{\tm{\offer{x}{x}{\cpgvM{P}}{x}{\cpgvM{Q}}}}                                     \\
+   & \pcp{\tm{\cpgvM{\absurd{x}}}}
+   &                                    & = \pgv{\tm{\offeremp{x}}}
 \end{align*}
 
 Unfortunately, the operational correspondence along $\tm{\cpgvM{\cdot}}$ is unsound, as it translates $\nu$-binders and parallel compositions to $\pgv{\tm{\new}}$ and $\pgv{\tm{\spawn}}$, which can reduce to their equivalent configuration constructs using \LabTirName{E-New} and \LabTirName{E-Spawn}. The same goes for $\nu$-binders which are inserted when translating bound send to unbound send. For instance, the process $\pcp{\tm{\send{x}{y}{P}}}$ is blocked, but its translation uses $\pgv{\tm{\new}}$ and can reduce.
 To address this issue, we introduce a second translation, $\tm{\cpgvC{\cdot}}$, which is equivalent to translating with $\tm{\cpgvM{\cdot}}$ then reducing with \LabTirName{E-New} and \LabTirName{E-Spawn}:
 \begin{align*}
-  &\pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
-  &&= \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
+   & \pcp{\tm{\cpgvC{\res{x}{y}{P}}}}
+   &                                   & = \pgv{\tm{\res{x}{y}{\cpgvC{P}}}}
   \\
-  &\pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
-  &&= \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+   & \pcp{\tm{\cpgvC{\ppar{P}{Q}}}}
+   &                                   & = \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
   \\
-  &\pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
+   & \pcp{\tm{\cpgvC{\send{x}{y}{P}}}}
+   &                                   & = \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\send\;\pair{z}{x}}{\cpgvM{P}})}}}
   \\
-  &\pcp{\tm{\cpgvC{\inl{x}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
+   & \pcp{\tm{\cpgvC{\inl{x}{P}}}}
+   &                                   & = \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inl{y}}{x})}{z}}{\cpgvM{P}})}}}
   \\
-  &\pcp{\tm{\cpgvC{\inr{x}{P}}}}
-  &&= \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
+   & \pcp{\tm{\cpgvC{\inr{x}{P}}}}
+   &                                   & = \pgv{\tm{\res{y}{z}{(\child\;\letbind{x}{\andthen{\close\;(\send\;\pair{\inr{y}}{x})}{z}}{\cpgvM{P}})}}}
   \\
-  &\pcp{\tm{\cpgvC{P}}}
-  &&= \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
+   & \pcp{\tm{\cpgvC{P}}}
+   &                                   & = \pgv{\tm{\child{\cpgvM{P}}}},\quad\text{if none of the above apply}
 \end{align*}
 Typing environments are translated pointwise, and sequents $\pcp{\seq{P}{\ty{\Gamma}}}$ are translated as $\pgv{\cseq[\child]{\ty{\cpgvT{\ty{\Gamma}}}}{\cpgvC{P}}}$, where $\tm{\pgv{\child}}$ indicates a child thread, since translated processes do not have a main thread.
 The translations $\tm{\cpgvM{\cdot}}$ and $\tm{\cpgvC{\cdot}}$ preserve typing, and the latter induces a sound and complete operational correspondence.
 
-%\restatelemma{lempcptopgvtermspreservation}
-\begin{lemma}[Preservation, ${\tm{\cpgvM{\cdot}}}$]%
-  \label{lem:pcp-to-pgv-terms-preservation}
+\begin{lem}\label{lem:pcp-to-pgv-terms-preservation}
+  % [Preservation, ${\tm{\cpgvM{\cdot}}}$]%
   If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\tseq[\cs{p}]{\ty{\cpgvT{\Gamma}}}{\cpgvM{P}}{\tyunit}}$.
-\end{lemma}
+\end{lem}
 \input{prf/lem-pcp-to-pgv-terms-preservation}
 
-%\restatetheorem{thmpcptopgvconfspreservation}
-\begin{theorem}[Preservation, ${\tm{\cpgvC{\cdot}}}$]%
-  \label{thm:pcp-to-pgv-confs-preservation}
+\begin{thm}\label{thm:pcp-to-pgv-confs-preservation}
+  %[Preservation, ${\tm{\cpgvC{\cdot}}}$]%
   If $\pcp{\seq{P}{\ty{\Gamma}}}$, then $\pgv{\cseq[\child]{\ty{\cpgvT{\Gamma}}}{\cpgvC{P}}}$.
-\end{theorem}
+\end{thm}
 \input{prf/thm-pcp-to-pgv-confs-preservation}
 
-%\restatetheorem{thmpcptopgvoperationalcorrespondencesoundness}
-\begin{theorem}%
-  [Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]%
-  \label{thm:pcp-to-pgv-operational-correspondence-soundness}
-  \hfill\\%newline before theorem statement
+\begin{thm}\label{thm:pcp-to-pgv-operational-correspondence-soundness}
+  %[Operational Correspondence, Soundness, ${\tm{\cpgvC{\cdot}}}$]%
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$, there exists a $\tm{Q}$ such that $\pcp{\tm{P}\red^+\tm{Q}}$ and $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{Q}}}$
-\end{theorem}
+\end{thm}
 \input{prf/thm-pcp-to-pgv-operational-correspondence-soundness}
 
-%\restatelemma{lempcptopgvcpgvMtocpgvC}
-\begin{lemma}%
-  \label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
+\begin{lem}\label{lem:pcp-to-pgv-cpgvM-to-cpgvC}
   For any $\pcp{\tm{P}}$, either:
   \begin{itemize}
-  \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
-  \item $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
+    \item $\pgv{\tm{\child\;\cpgvM{P}}=\tm{\cpgvC{P}}}$; or
+    \item $\pgv{\tm{\child\;\cpgvM{P}}\cred^+\tm{\cpgvC{P}}}$, and for any $\pgv{\tm{\conf{C}}}$, if $\pgv{\tm{\child\;\cpgvM{P}}\cred\tm{\conf{C}}}$, then $\pgv{\tm{\conf{C}}\cred^\star\tm{\cpgvC{P}}}$.
   \end{itemize}
-\end{lemma}
+\end{lem}
 \input{prf/lem-pcp-to-pgv-cpgvM-to-cpgvC}
 
-\begin{lemma}%
-  \label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
+\begin{lem}\label{lem:pcp-to-pgv-confs-operational-correspondence-equiv}
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\equiv\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\equiv\tm{\cpgvC{Q}}}$.
-\end{lemma}
-\begin{proof}
-  Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
-\end{proof}
+\end{lem}
+\proof
+Every axiom of the structural congruence in PCP maps directly to the axiom of the same name in PGV.
+\qed
 
-%\restatetheorem{thmpcptopgvoperationalcorrespondencecompleteness}
-\begin{theorem}%
-  [Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]%
-  \label{thm:pcp-to-pgv-operational-correspondence-completeness}
+\begin{thm}\label{thm:pcp-to-pgv-operational-correspondence-completeness}
+  %[Operational Correspondence, Completeness, ${\tm{\cpgvC{\cdot}}}$]%
   \hfill\\%newline before theorem statement
   If $\pcp{\seq{P}{\ty{\Gamma}}}$ and $\pcp{\tm{P}\red\tm{Q}}$,
   then $\pgv{\tm{\cpgvC{P}}\cred^+\tm{\cpgvC{Q}}}$.
-\end{theorem}
+\end{thm}
 \input{prf/thm-pcp-to-pgv-operational-correspondence-completeness}
 \endgroup
 
@@ -422,8 +410,7 @@ As an example of a deadlock-free cyclic process, Dardha and Gay~\cite{dardhagay1
 
 \begingroup
 \usingnamespace{pcp}
-\begin{example}[Milner's Cyclic Scheduler, PCP]
-  \label{ex:pcp-scheduler}
+\begin{exa}\label{ex:pcp-scheduler}
   A set of processes $\tm{\proc{i}}$, $1\leq{i}\leq{n}$, is scheduled to perform some tasks in cyclic order, starting with $\tm{\proc1}$, ending with $\tm{\proc{n}}$, and notifying $\tm{\proc1}$ when all processes have finished.
 
   Our scheduler $\tm{\sched}$ consists of set of agents $\tm{\agent{i}}$, $1\leq{i}\leq{n}$, each representing their respective process. Each process $\tm{\proc{i}}$ waits for the signal to start their task on $\tm{a'_i}$, and signals completion on $\tm{b'_i}$. Each agent signals their process to start on $\tm{a_i}$, waits for their process to finish on $\tm{b_i}$, and then signals for the next agent to continue on $\tm{c_i}$. The agent $\tm{\agent1}$ initiates, then waits for every other process to finish, and signals $\tm{\proc1}$ on $\tm{d}$. Every other agent $\tm{\agent{i}}$, $2\leq{i}\leq{n}$ waits on $\tm{c'_{i-1}}$ for the signal to start. Each of the channels in the scheduler is of a terminated type, and is merely used to synchronise.
@@ -471,66 +458,66 @@ As an example of a deadlock-free cyclic process, Dardha and Gay~\cite{dardhagay1
     \end{tikzpicture}
   \end{center}
 
-    We implement the scheduler as follows, using $\tm{\prod_{I}P_i}$ to denote the parallel composition of the processes $\tm{P_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{P}{Q}}$ to denote the plugging of $\tm{Q}$ in the one-hole process-context $\tm{P}$. The process-contexts $\tm{P_i}$ represent the computations performed by each process $\tm{\proc{i}}$. The process-contexts $\tm{Q_i}$ represent any post-processing, and any possible data transfer from $\tm{\proc{i}}$ to $\tm{\proc{i+1}}$. Finally, $\tm{Q_1}$ should contain $\tm{\labwait{d'}}$.
-\[
-  \begin{array}{lrlr}
-    \tm{\sched}
-    & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
-               \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
-               \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
-               \tm{\res{d}{d'}{}}
-    \\ &     & \tm{(
-               \ppar{\proc1}{\agent1}
-               \parallel
-               \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
-               )}
-    \\
-    \tm{\agent1}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
-    \\
-    \tm{\agent{i}}
-    & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
-    \\
-    \tm{\proc{i}}
-    & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
-  \end{array}
-\]
-\end{example}
+  We implement the scheduler as follows, using $\tm{\prod_{I}P_i}$ to denote the parallel composition of the processes $\tm{P_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{P}{Q}}$ to denote the plugging of $\tm{Q}$ in the one-hole process-context $\tm{P}$. The process-contexts $\tm{P_i}$ represent the computations performed by each process $\tm{\proc{i}}$. The process-contexts $\tm{Q_i}$ represent any post-processing, and any possible data transfer from $\tm{\proc{i}}$ to $\tm{\proc{i+1}}$. Finally, $\tm{Q_1}$ should contain $\tm{\labwait{d'}}$.
+  \[
+    \begin{array}{lrlr}
+      \tm{\sched}
+       & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+      \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+      \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+      \tm{\res{d}{d'}{}}
+      \\ &     & \tm{(
+        \ppar{\proc1}{\agent1}
+        \parallel
+        \prod_{2\leq{i}\leq{n}}(\ppar{\proc{i}}{\wait{c'_{i-1}}{\agent{i}}})
+        )}
+      \\
+      \tm{\agent1}
+       & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\wait{c'_n}{\close{d}{\halt}}}}}}
+      \\
+      \tm{\agent{i}}
+       & \defeq & \tm{\close{a_i}{\wait{b_i}{\close{c_i}{\halt}}}}
+      \\
+      \tm{\proc{i}}
+       & \defeq & \tm{\wait{a'_i}{\plug{P_i}{\close{b'_i}{Q_i}}}}
+    \end{array}
+  \]
+\end{exa}
 \endgroup
 
 \begingroup
 \usingnamespace{pgv}
-\begin{example}[Milner's Cyclic Scheduler, PGV]
-  \label{ex:pgv-scheduler}
+\begin{exa}\label{ex:pgv-scheduler}
+  %[Milner's Cyclic Scheduler, PGV]
   The PGV scheduler has exactly the same behaviour as the PCP version in~\cref{ex:pcp-scheduler}. It is implemented as follows, using $\tm{\prod_{I}\conf{C}_i}$ to denote the parallel composition of the processes $\tm{\conf{C}_i}$, $\tm{i}\in\tm{I}$, and $\tm{\plug{M}{N}}$ to denote the plugging of $\tm{N}$ in the one-hole term-context $\tm{M}$. For simplicity, we let $\tm{\sched}$ be a configuration. The terms $\tm{M_i}$ represent the computations performed by each process $\tm{\proc{i}}$. The terms $\tm{N_i}$ represent any post-processing, and any possible data transfer from $\tm{\proc{i}}$ to $\tm{\proc{i+1}}$. Finally, $\tm{N_1}$ should contain $\tm{\wait\;{d'}}$.
   \[
     \begin{array}{lrlr}
       \tm{\sched}
-      & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
-                 \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
-                 \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
-                 \tm{\res{d}{d'}{}}
+       & \defeq & \tm{\res{a_1}{a'_1}{\dots{\res{a_n}{a'_n}{}}}}
+      \tm{\res{b_1}{b'_1}{\dots{\res{b_n}{b'_n}{}}}}
+      \tm{\res{c_1}{c'_1}{\dots{\res{c_n}{c'_n}{}}}}
+      \tm{\res{d}{d'}{}}
       \\ &     & \tm{\begin{array}{lll}
-                       (
-                       & \phi\;\proc1
-                         \parallel
-                         \child\;\andthen{\agent1}{\andthen{\wait\;{c'_n}}{\close\;{d}}}
-                       \\
-                       \parallel
-                       &
-                         \prod_{2\leq{i}\leq{n}}
-                         (\child\;\proc{i} \parallel \child\;\andthen{\wait\;{c'_{i-1}}}{\agent{i}})
-                       & )
-                     \end{array}}
+          (
+           & \phi\;\proc1
+          \parallel
+          \child\;\andthen{\agent1}{\andthen{\wait\;{c'_n}}{\close\;{d}}}
+          \\
+          \parallel
+           &
+          \prod_{2\leq{i}\leq{n}}
+          (\child\;\proc{i} \parallel \child\;\andthen{\wait\;{c'_{i-1}}}{\agent{i}})
+           & )
+        \end{array}}
       \\
       \tm{\agent{i}}
-      & \defeq & \tm{\andthen{\close\;{a_i}}{\andthen{\wait\;{b_i}}{\close\;{c_i}}}}
+       & \defeq & \tm{\andthen{\close\;{a_i}}{\andthen{\wait\;{b_i}}{\close\;{c_i}}}}
       \\
       \tm{\proc{i}}
-      & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
+       & \defeq & \tm{\andthen{\wait\;{a'_i}}{\plug{M_i}{\andthen{\close\;{b'_i}}{N_i}}}}
     \end{array}
   \]
-\end{example}
+\end{exa}
 \endgroup
 
 If $\pcp{\tm{\cpgvM{P_i}}}=\pgv{\tm{M_i}}$ and $\pcp{\tm{\cpgvM{Q_i}}}=\pgv{\tm{N_i}}$, then the translation of $\pcp{\tm{\sched}}$ (\cref{ex:pcp-scheduler}), $\pcp{\tm{\cpgvC{\sched\,}}}$, is exactly $\pgv{\tm{\sched}}$ (\cref{ex:pgv-scheduler}).

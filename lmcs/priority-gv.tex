@@ -4,83 +4,83 @@
 We present Priority GV (PGV), a session-typed functional language based on GV~\cite{wadler15,lindleymorris15} which uses priorities \`{a} la Kobayashi and Padovani~\cite{kobayashi06,padovaninovara15} to enforce deadlock freedom.
 Priority GV is more flexible than GV because it allows processes to share more than one communication channel.
 
-We illustrate this with two programs in PGV, \cref{ex:cycle,ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
+We illustrate this with two programs in PGV, \cref{ex:cycle} and \cref{ex:deadlock}. Each program contains two processes---the main process, and the child process created by $\tm{\spawn}$---which communicate using \emph{two} channels. The child process receives a unit over the channel $\tm{x}/\tm{x'}$, and then sends a unit over the channel $\tm{y}/\tm{y'}$. The main process does one of two things:
 \begin{enumerate}[label= (\alph*) ]
-\item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
-\item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
+  \item in \cref{ex:cycle}, it sends a unit over the channel $\tm{x}/\tm{x'}$, and then waits to receive a unit over the channel $\tm{y}/\tm{y'}$;
+  \item in \cref{ex:deadlock}, it does these in the opposite order, which results in a deadlock.
 \end{enumerate}
 PGV is more expressive than GV: \cref{ex:cycle} is typeable and guaranteed to be deadlock-free in PGV, but is not typeable in GV~\cite{wadler14} and not guaranteed deadlock-free in GV's predecessor~\cite{gayvasconcelos10}. We believe PGV is a non-conservative \emph{extension} of GV, as CP can be embedded in a Kobayashi-style system~\cite{dardhaperez15extended}.
 
 \begin{figure}
-\begin{minipage}{0.5\linewidth}
-\begin{example}[Cyclic Structure]%
-  \label{ex:cycle}
-  \[\tm{%
-    \begin{array}{l}
-      \letpair{x}{x'}{\new\;\unit}{}
-      \\
-      \letpair{y}{y'}{\new\;\unit}{}
-      \\
-      \spawn\left(\lambda\unit.%
-      \begin{array}{l}
-        {\letpair{\unit}{x'}{\recv\;{x'}}{}}
-        \\
-        {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
-        \\
-        {\andthen{\wait\;{x'}}{\close\;{y}}}
-      \end{array}%
-      \right);
-      \\
-      \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
-      \\
-      \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
-      \\
-      {\andthen{\close\;{x}}{\wait\;{y'}}}
-    \end{array}
-  }\]
-\end{example}
-\end{minipage}%
-\begin{minipage}{0.5\linewidth}
-\begin{example}[Deadlock]%
-  \label{ex:deadlock}
-  \[\tm{%
-    \begin{array}{l}
-      \letpair{x}{x'}{\new\;\unit}{}
-      \\
-      \letpair{y}{y'}{\new\;\unit}{}
-      \\
-      \spawn\left(\lambda\unit.%
-      \begin{array}{l}
-        {\letpair{\unit}{x'}{\recv\;{x'}}{}}
-        \\
-        {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
-        \\
-        {\andthen{\wait\;{x'}}{\close\;{y}}}
-      \end{array}%
-      \right);
-      \\
-      \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
-      \\
-      \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
-      \\
-      {\andthen{\close\;{x}}{\wait\;{y'}}}
-    \end{array}
-   }\]
-\end{example}
-\end{minipage}
+  \begin{minipage}{0.5\linewidth}
+    \begin{exa}\label{ex:cycle}
+      % [Cyclic Structure]%
+      \[\tm{%
+          \begin{array}{l}
+            \letpair{x}{x'}{\new\;\unit}{}
+            \\
+            \letpair{y}{y'}{\new\;\unit}{}
+            \\
+            \spawn\left(\lambda\unit.%
+            \begin{array}{l}
+                {\letpair{\unit}{x'}{\recv\;{x'}}{}}
+                \\
+                {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
+                \\
+                {\andthen{\wait\;{x'}}{\close\;{y}}}
+              \end{array}%
+            \right);
+            \\
+            \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
+            \\
+            \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
+            \\
+            {\andthen{\close\;{x}}{\wait\;{y'}}}
+          \end{array}
+        }\]
+    \end{exa}
+  \end{minipage}%
+  \begin{minipage}{0.5\linewidth}
+    \begin{exa}\label{ex:deadlock}
+      % [Deadlock]%
+      \[\tm{%
+          \begin{array}{l}
+            \letpair{x}{x'}{\new\;\unit}{}
+            \\
+            \letpair{y}{y'}{\new\;\unit}{}
+            \\
+            \spawn\left(\lambda\unit.%
+            \begin{array}{l}
+                {\letpair{\unit}{x'}{\recv\;{x'}}{}}
+                \\
+                {\letbind{y}{\send\;{\pair{\unit}{y}}}{}}
+                \\
+                {\andthen{\wait\;{x'}}{\close\;{y}}}
+              \end{array}%
+            \right);
+            \\
+            \underline{\letpair{\unit}{y'}{\recv\;{y'}}{}}
+            \\
+            \underline{\letbind{x}{\send\;{\pair{\unit}{x}}}{}}
+            \\
+            {\andthen{\close\;{x}}{\wait\;{y'}}}
+          \end{array}
+        }\]
+    \end{exa}
+  \end{minipage}
 \end{figure}
 
 \subsection{Syntax of Types and Terms}
 \subsubsection*{Session types}
 Session types ($\ty{S}$) are defined by the following grammar:
 \[
-\begin{array}{lcl}
-  \ty{S}
-  & \Coloneqq & \ty{\tysend[\cs{o}]{T}{S}}
+  \begin{array}{lcl}
+    \ty{S}
+     & \Coloneqq & \ty{\tysend[\cs{o}]{T}{S}}
     \sep        \ty{\tyrecv[\cs{o}]{T}{S}}
     \sep        \ty{\tyends[\cs{o}]}
     \sep        \ty{\tyendr[\cs{o}]}
-\end{array}
+  \end{array}
 \]
 
 Session types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ describe the endpoints of a channel over which we send or receive a value of type $\ty{T}$, and then proceed as $\ty{S}$. Types $\ty{\tyends[\cs{o}]}$ and $\ty{\tyendr[\cs{o}]}$ describe endpoints of a channel whose communication has finished, and over which we must synchronise before closing the channel. Each connective in a session type is annotated with a \emph{priority} $\cs{o}\in\mathbb{N}$.
@@ -88,15 +88,15 @@ Session types $\ty{\tysend[\cs{o}]{T}{S}}$ and $\ty{\tyrecv[\cs{o}]{T}{S}}$ desc
 \subsubsection*{Types}
 Types ($\ty{T}$, $\ty{U}$) are defined by the following grammar:
 \[
-\begin{array}{lcl}
-  \ty{T}, \ty{U}
-  & \Coloneqq & \ty{\typrod{T}{U}}
+  \begin{array}{lcl}
+    \ty{T}, \ty{U}
+     & \Coloneqq & \ty{\typrod{T}{U}}
     \sep        \ty{\tyunit}
     \sep        \ty{\tysum{T}{U}}
     \sep        \ty{\tyvoid}
     \sep        \ty{\tylolli[\cs{p},\cs{q}]{T}{U}}
     \sep        \ty{S}
-\end{array}
+  \end{array}
 \]
 
 Types $\ty{\typrod{T}{U}}$, $\ty{\tyunit}$, $\ty{\tysum{T}{U}}$, and $\ty{\tyvoid}$ are the standard linear $\lambda$-calculus product type, unit type, sum type, and empty type.
@@ -109,11 +109,11 @@ We postulate that the only function types---and, consequently, sequents---that a
 \subsubsection*{Typing Environments}
 Typing environments $\ty{\Gamma}$, $\ty{\Delta}$, $\ty{\Theta}$ associate types to names. Environments are linear, so two environments can only be combined as $\ty{\Gamma}, \ty{\Delta}$ if their names are distinct, \ie $\fv(\ty{\Gamma})\cap\fv(\ty{\Delta})=\varnothing$.
 \[
-\begin{array}{lcl}
-  \ty{\Gamma}, \ty{\Delta}
-  & \Coloneqq & \ty{\emptyenv}
+  \begin{array}{lcl}
+    \ty{\Gamma}, \ty{\Delta}
+     & \Coloneqq & \ty{\emptyenv}
     \sep        \ty{\Gamma}, \tmty{x}{T}
-\end{array}
+  \end{array}
 \]
 
 \subsubsection*{Type Duality}
@@ -142,47 +142,47 @@ Function $\pr(\cdot)$ returns the smallest priority of a session type. The type 
 
 We extend the function $\pr(\cdot)$ to types and typing contexts by returning the smallest priority in the type or context, or $\cs{\top}$ if there is no priority. We use $\sqcap$ and $\sqcup$ to denote the minimum and maximum, respectively:
 \[
-\begin{array}{lcl}
-  \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
-  \minpr(\ty{\tysum{T}{U}})                  & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}}) \\
-  \minpr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p} \\
-  \minpr(\ty{\Gamma}, \tmty{x}{A})           & = & \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
-\end{array}
-\qquad
-\begin{array}{lcl}
-  \minpr(\ty{\tyunit})                       & = & \ptop \\
-  \minpr(\ty{\tyvoid})                       & = & \ptop \\
-  \minpr(\ty{S})                             & = & \pr(\ty{S}) \\
-  \minpr(\ty{\emptyenv})                     & = & \ptop
-\end{array}
+  \begin{array}{lcl}
+    \minpr(\ty{\typrod{T}{U}})                 & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}})  \\
+    \minpr(\ty{\tysum{T}{U}})                  & = & \minpr({\ty{T}})\sqcap\minpr({\ty{U}})  \\
+    \minpr(\ty{\tylolli[\cs{p},\cs{q}]{T}{U}}) & = & \cs{p}                                  \\
+    \minpr(\ty{\Gamma}, \tmty{x}{A})           & = & \minpr(\ty{\Gamma})\sqcap\minpr(\ty{A})
+  \end{array}
+  \qquad
+  \begin{array}{lcl}
+    \minpr(\ty{\tyunit})   & = & \ptop       \\
+    \minpr(\ty{\tyvoid})   & = & \ptop       \\
+    \minpr(\ty{S})         & = & \pr(\ty{S}) \\
+    \minpr(\ty{\emptyenv}) & = & \ptop
+  \end{array}
 \]
 
 \subsubsection*{Terms}
 Terms ($\tm{L}$, $\tm{M}$, $\tm{N}$) are defined by the following grammar:
 \[
-\begin{array}{lcl}
-  \tm{L}, \tm{M}, \tm{N}
-  & \Coloneqq & \tm{x}
+  \begin{array}{lcl}
+    \tm{L}, \tm{M}, \tm{N}
+     & \Coloneqq & \tm{x}
     \sep        \tm{K}
     \sep        \tm{\lambda x.M}
-    \sep        \tm{M\;N} \\
-  & \sep      & \tm{\unit}
+    \sep        \tm{M\;N}                 \\
+     & \sep      & \tm{\unit}
     \sep        \tm{\andthen{M}{N}}
     \sep        \tm{\pair{M}{N}}
     \sep        \tm{\letpair{x}{y}{M}{N}} \\
-  & \sep      & \tm{\inl{M}}
+     & \sep      & \tm{\inl{M}}
     \sep        \tm{\inr{M}}
     \sep        \tm{\casesum{L}{x}{M}{y}{N}}
-    \sep        \tm{\absurd{M}} \\
-  \tm{K}
-  & \Coloneqq & \tm{\link}
+    \sep        \tm{\absurd{M}}           \\
+    \tm{K}
+     & \Coloneqq & \tm{\link}
     \sep        \tm{\new}
     \sep        \tm{\spawn}
     \sep        \tm{\send}
     \sep        \tm{\recv}
     \sep        \tm{\close}
     \sep        \tm{\wait}
-\end{array}
+  \end{array}
 \]
 
 Let $\tm{x}$, $\tm{y}$, $\tm{z}$, and $\tm{w}$ range over variable names. Occasionally, we use $\tm{a}$, $\tm{b}$, $\tm{c}$, and $\tm{d}$. The term language is the standard linear $\lambda$-calculus with products, sums, and their units, extended with constants $\tm{K}$ for the communication primitives.
@@ -202,40 +202,40 @@ We can recover GV's $\tm{\fork}$ as $\tm{\lambda x.\letpair{y}{z}{\new\;\unit}{\
 \subsubsection*{Internal and External Choice}
 Typically, session-typed languages feature constructs for internal and external choice. In GV, these can be defined in terms of the core language, by sending or receiving a value of a sum type~\cite{lindleymorris15}. We use the following syntactic sugar for internal ($\ty{\tyselect[\cs{o}]{S}{S'}}$) and external ($\ty{\tyoffer[\cs{o}]{S}{S'}}$) choice and their units:
 \[
-\begin{array}{lcl}
-  \ty{\tyselect[\cs{o}]{S}{S'}}
-  & \elabarrow & \ty{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}} \\
-  \ty{\tyoffer[\cs{o}]{S}{S'}}
-  & \elabarrow & \ty{\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}} \\
-\end{array}
-\qquad
-\begin{array}{lcl}
-  \ty{\tyselectemp[\cs{o}]}
-  & \elabarrow & \ty{\tysend[\cs{o}]{\tyvoid}{\tyends[\cs{o+1}]}} \\
-  \ty{\tyofferemp[\cs{o}]}
-  & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
-\end{array}
+  \begin{array}{lcl}
+    \ty{\tyselect[\cs{o}]{S}{S'}}
+     & \elabarrow & \ty{\tysend[\cs{o}]{(\tysum{\co{S}}{\co{S'}})}{\tyends[\cs{o+1}]}} \\
+    \ty{\tyoffer[\cs{o}]{S}{S'}}
+     & \elabarrow & \ty{\tyrecv[\cs{o}]{(\tysum{S}{S'})}{\tyendr[\cs{o+1}]}}           \\
+  \end{array}
+  \qquad
+  \begin{array}{lcl}
+    \ty{\tyselectemp[\cs{o}]}
+     & \elabarrow & \ty{\tysend[\cs{o}]{\tyvoid}{\tyends[\cs{o+1}]}} \\
+    \ty{\tyofferemp[\cs{o}]}
+     & \elabarrow & \ty{\tyrecv[\cs{o}]{\tyvoid}{\tyendr[\cs{o+1}]}} \\
+  \end{array}
 \]
 
 As the syntax for units suggests, these are the binary and nullary forms of the more common n-ary choice constructs $\ty{{\oplus}^{\cs{o}}\{l_i:S_i\}_{i\in{I}}}$ and $\ty{{\with}^{\cs{o}}\{l_i:S_i\}_{i\in{I}}}$, which one may obtain generalising the sum types to variant types. For simplicity, we present only the binary and nullary forms.
 
 Similarly, we use syntactic sugar for the term forms of choice, which combine sending and receiving with the introduction and elimination forms for the sum and empty types. There are two constructs for binary internal choice, expressed using the meta-variable $\tm{\ell}$ which ranges over $\{\tm{\labinl},\tm{\labinr}\}$. As there is no introduction for the empty type, there is no construct for nullary internal choice:
 \[
-\begin{array}{lcl}
-  \tm{\select{\ell}}
-  & \elabarrow
-  & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\ell\;y}{x}})}{z}}}
-  \\
-  \multicolumn{3}{l}{%
-  \tm{\offer{L}{x}{M}{y}{N}}\elabarrow}
-  \\
-  \multicolumn{3}{l}{%
-  \qquad\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}}
-  \\
-  \tm{\offeremp{L}}
-  & \elabarrow
-  & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
-\end{array}
+  \begin{array}{lcl}
+    \tm{\select{\ell}}
+     & \elabarrow
+     & \tm{\lambda x.\letpair{y}{z}{\new}{\andthen{\close\;(\send\;{\pair{\ell\;y}{x}})}{z}}}
+    \\
+    \multicolumn{3}{l}{%
+      \tm{\offer{L}{x}{M}{y}{N}}\elabarrow}
+    \\
+    \multicolumn{3}{l}{%
+    \qquad\tm{\letpair{z}{w}{\recv\;{L}}{\andthen{\wait\;{w}}{\casesum{z}{x}{M}{y}{N}}}}}
+    \\
+    \tm{\offeremp{L}}
+     & \elabarrow
+     & \tm{\letpair{z}{w}{\recv\;L}{\andthen{\wait\;{w}}{\absurd{z}}}}
+  \end{array}
 \]
 
 \subsection{Operational Semantics}
@@ -269,35 +269,35 @@ To distinguish between the use of $\tm{\child}$ to mark child threads~\cite{lind
 \subsubsection*{Values}
 Values ($\tm{V}$, $\tm{W}$), evaluation contexts ($\tm{E}$), thread evaluation contexts ($\tm{\conf{F}}$), and configuration contexts ($\tm{\conf{G}}$) are defined by the following grammars:
 \[
-\begin{array}[t]{lcl}
-  \tm{V}, \tm{W}
-  & \Coloneqq & \tm{x}
+  \begin{array}[t]{lcl}
+    \tm{V}, \tm{W}
+     & \Coloneqq & \tm{x}
     \sep        \tm{K}
     \sep        \tm{\lambda x.M}
     \sep        \tm{\unit}
     \sep        \tm{\pair{V}{W}}
     \sep        \tm{\inl{V}}
-    \sep        \tm{\inr{V}} \\
-  \tm{E}
-  & \Coloneqq & \tm{\hole}
+    \sep        \tm{\inr{V}}              \\
+    \tm{E}
+     & \Coloneqq & \tm{\hole}
     \sep        \tm{E\;M}
-    \sep        \tm{V\;E} \\
-  & \sep      & \tm{\andthen{E}{N}}
+    \sep        \tm{V\;E}                 \\
+     & \sep      & \tm{\andthen{E}{N}}
     \sep        \tm{\pair{E}{M}}
     \sep        \tm{\pair{V}{E}}
     \sep        \tm{\letpair{x}{y}{E}{M}} \\
-  & \sep      & \tm{\inl{E}}
+     & \sep      & \tm{\inl{E}}
     \sep        \tm{\inr{E}}
     \sep        \tm{\casesum{E}{x}{M}{y}{N}}
-    \sep        \tm{\absurd{E}} \\
-  \tm{\conf{F}}
-  & \Coloneqq & \tm{\phi\;E}
-  \\
-  \tm{\conf{G}}
-  & \Coloneqq & \tm{\hole}
+    \sep        \tm{\absurd{E}}           \\
+    \tm{\conf{F}}
+     & \Coloneqq & \tm{\phi\;E}
+    \\
+    \tm{\conf{G}}
+     & \Coloneqq & \tm{\hole}
     \sep        \tm{\ppar{\conf{G}}{\conf{C}}}
     \sep        \tm{\res{x}{y}{\conf{G}}}
-\end{array}
+  \end{array}
 \]
 Values are the subset of terms which cannot reduce further.
 Evaluation contexts are one-hole term contexts, \ie, terms with exactly one hole, written $\tm{\hole}$. We write $\tm{\plug{E}{M}}$ for the evaluation context $\tm{E}$ with its hole replaced by the term $\tm{M}$. Evaluation contexts are specifically those one-hole term contexts under which term reduction can take place.
@@ -318,13 +318,13 @@ Structural congruence satisfies the following axioms: $\LabTirName{SC-LinkSwap}$
 
 While our configuration reduction is based on the standard evaluation for GV, the increased expressiveness of PGV allows us to simplify the relation on two counts.
 \begin{enumerate}[label=(\roman*)]
-\item
-\emph{We decompose the $\tm{\fork}$ construct}.
-In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct.
+  \item
+        \emph{We decompose the $\tm{\fork}$ construct}.
+        In GV, $\tm{\fork}$ creates a new channel, spawns a child thread, and, when the child thread finishes, it closes the channel to its parent. In PGV, these are three separate operations: $\tm{\new}$, $\tm{\spawn}$, and $\tm{\close}$. We no longer require that every child thread finishes by returning a terminated channel. Consequently, we also simplify the evaluation of the $\tm{\link}$ construct.
 
-Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must {create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the {actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
-\item
-\emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via $\equiv$ followed by reducing via $\cred$ is an ill-typed configuration, we can rewrite it to a well-typed configuration via $\equiv$.
+        Intuitively, evaluating $\tm{\link}$ causes a substitution: if we have a channel bound as $\tm{\res{x}{y}{}}$, then $\tm{\link\;\pair{w}{x}}$ replaces all occurrences of $\tm{y}$ by $\tm{w}$. However, in GV, $\tm{\link}$ is required to return a terminated channel, which means that the semantics for $\tm{link}$ must {create} a fresh channel of type $\ty{\tyends}/\ty{\tyendr}$. The endpoint of type $\ty{\tyends}$ is returned by the $\tm{link}$ construct, and a $\tm{\wait}$ on the other endpoint guards the {actual} substitution. In PGV, evaluating $\tm{\link}$ simply causes a substitution.
+  \item
+        \emph{Our structural congruence is type preserving}. Consequently, we can embed it directly into the reduction relation. In GV, this is not the case, and subject reduction relies on proving that if the result of rewriting via $\equiv$ followed by reducing via $\cred$ is an ill-typed configuration, we can rewrite it to a well-typed configuration via $\equiv$.
 \end{enumerate}
 
 
@@ -344,8 +344,8 @@ The typing rules treat {all variables} as linear resources, even those of non-li
 
 The only non-standard feature of the typing rules is the priority annotations. Priorities are based on {obligations/capabilities} used by Kobayashi~\cite{kobayashi06}, and simplified to single priorities following Padovani~\cite{padovani14}. The integration of priorities into GV is adapted from Padovani and Novara~\cite{padovaninovara15}. Paraphrasing Dardha and Gay~\cite{dardhagay18extended}, priorities obey the following two laws:
 \begin{enumerate}[label= (\roman*) ]
-\item an action with lower priority happens before an action with higher priority; and
-\item communication requires \emph{equal} priorities for dual actions.
+  \item an action with lower priority happens before an action with higher priority; and
+  \item communication requires \emph{equal} priorities for dual actions.
 \end{enumerate}
 
 In PGV, we keep track of a lower and upper bound on the priorities of a term, \ie, while evaluating the term, when it starts communicating, and when it finishes, respectively. The upper bound is written on the sequent and the lower bound is approximated from the typing environment, \eg, for $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ the upper bound is $\cs{p}$ and the lower bound is at least $\minpr(\ty{\Gamma})$. The latter is {correct} because a term cannot communicate at a priority earlier than the earliest priority amongst the channels it has access to. It is an \emph{approximation} on function terms, as these can ``skip'' communication by returning the corresponding channel unused. However, linearity prevents such functions from being used in well typed configurations: once the unused channel's priority has passed, it can no longer be used.
@@ -355,47 +355,47 @@ Typing rules for sequential constructs enforce sequentiality, \eg, the typing fo
 To illustrate this, let's go back to the deadlocked program in \cref{ex:deadlock}. Crucially, it composes the terms below in parallel. While each of these terms itself is well typed, they impose opposite conditions on the priorities, so connecting $\ty{x}$ to $\ty{x'}$ and $\ty{y}$ to $\ty{y'}$ using \LabTirName{T-Res} is ill-typed, as there is no assignment to $\cs{o}$ and $\cs{o'}$ that can satsify both $\cs{o}<\cs{o'}$ and $\cs{o'}<\cs{o}$. (We omit the priorities on $\ty{\tyends}$ and $\ty{\tyendr}$.)
 \begin{mathpar}
   \inferrule*{
-    \tseq[\cs{o'}]
-    {\tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}}
-    {\recv\;{y'}}
-    {\typrod{\tyunit}{\tyendr}}
-    \\
-    \tseq[\cs{p}]
-    {\tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},\tmty{y'}{\tyendr}}
-    {\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}
-    {\tyunit}
-    \and
-    \cs{o'}<\cs{o}
+  \tseq[\cs{o'}]
+  {\tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}}
+  {\recv\;{y'}}
+  {\typrod{\tyunit}{\tyendr}}
+  \\
+  \tseq[\cs{p}]
+  {\tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},\tmty{y'}{\tyendr}}
+  {\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}
+  {\tyunit}
+  \and
+  \cs{o'}<\cs{o}
   }{%
-    \tseq[\cs{p}]
-    {%
-      \tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},
-      \tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}
-    }
-    {\letpair{\unit}{y'}{\recv\;{y'}}{\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}}
-    {\tyunit}
+  \tseq[\cs{p}]
+  {%
+  \tmty{x}{\tysend[\cs{o}]{\tyunit}{\tyends}},
+  \tmty{y'}{\tyrecv[\cs{o'}]{\tyunit}{\tyendr}}
+  }
+  {\letpair{\unit}{y'}{\recv\;{y'}}{\letbind{x}{\send\;{\pair{\unit}{x}}}{\dots}}}
+  {\tyunit}
   }
 
   \inferrule*{
-    \tseq[\cs{o}]
-    {\tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}}
-    {\recv\;{x'}}
-    {\typrod{\tyunit}{\tyendr}}
-    \\
-    \tseq[\cs{q}]
-    {\tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},\tmty{x'}{\tyendr}}
-    {\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}
-    {\tyunit}
-    \and
-    \cs{o}<\cs{o'}
+  \tseq[\cs{o}]
+  {\tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}}
+  {\recv\;{x'}}
+  {\typrod{\tyunit}{\tyendr}}
+  \\
+  \tseq[\cs{q}]
+  {\tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},\tmty{x'}{\tyendr}}
+  {\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}
+  {\tyunit}
+  \and
+  \cs{o}<\cs{o'}
   }{%
-    \tseq[\cs{q}]
-    {%
-      \tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},
-      \tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}
-    }
-    {\letpair{\unit}{x'}{\recv\;{x'}}{\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}}
-    {\tyunit}
+  \tseq[\cs{q}]
+  {%
+  \tmty{y}{\tysend[\cs{o'}]{\tyunit}{\tyends}},
+  \tmty{x'}{\tyrecv[\cs{o}]{\tyunit}{\tyendr}}
+  }
+  {\letpair{\unit}{x'}{\recv\;{x'}}{\letbind{y}{\send\;{\pair{\unit}{y}}}{\dots}}}
+  {\tyunit}
   }
 \end{mathpar}
 
@@ -444,8 +444,8 @@ Typing rules for configurations are at the bottom of \cref{fig:pgv-typing}. Conf
 
 While our configuration typing is based on the standard typing for GV, it differs on two counts:
 \begin{enumerate}[label= (\roman*) ]
-\item \emph{we require that child threads return the unit value}, as opposed to a terminated channel; and
-\item \emph{we simplify typing for parallel composition}.
+  \item \emph{we require that child threads return the unit value}, as opposed to a terminated channel; and
+  \item \emph{we simplify typing for parallel composition}.
 \end{enumerate}
 
 In order to guarantee deadlock freedom, in GV each parallel composition must split \emph{exactly one} channel of the channel pseudo-type $\ty{S^\sharp}$ into two endpoints of type $\ty{S}$ and $\ty{\co{S}}$. Consequently, associativity of parallel composition does not preserve typing. In PGV, we guarantee deadlock freedom using priorities, which removes the need for the channel pseudo-type $\ty{S^\sharp}$, and simplifies typing for parallel composition, while restoring type preservation for the structural congruence.
@@ -459,43 +459,37 @@ The following typing rules given in \cref{{fig:pgv-typing-sugar},fig:pgv-typing-
 Unlike with previous versions of GV, structural congruence, term reduction, and configuration reduction are all type preserving.
 
 We must show that substitution preserves priority constraints. For this, we prove~\cref{lem:pgv-value-done}, which shows that values have finished all their communication, and that any priorities in the type of the value come from the typing environment.
-%The proofs are by structural induction and can be found in \cref{prf:lem-pgv-value-done,prf:lem-pgv-substitution,prf:lem-pgv-subject-reduction-terms,prf:lem-pgv-subject-congruence,prf:thm-pgv-subject-reduction-confs}.
-  \begin{lemma}%
-    \label{lem:pgv-value-done}
-    If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
-  \end{lemma}
-  \input{prf/lem-pgv-value-done}
+\begin{lem}\label{lem:pgv-value-done}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{V}{T}$, then $\cs{p}=\cs{\pbot}$, and $\minpr(\ty{\Gamma})=\minpr(\ty{T})$.
+\end{lem}
+\input{prf/lem-pgv-value-done}
 
-  \begin{lemma}[Substitution]%
-    \label{lem:pgv-substitution}
-    \hfill\\%newline before theorem statement
-    If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
-  \end{lemma}
-  \input{prf/lem-pgv-substitution}
+\begin{lem}\label{lem:pgv-substitution}
+  %[Substitution]
+  If $\tseq[\cs{p}]{\ty{\Gamma},\tmty{x}{U'}}{M}{T}$ and $\tseq[\cs{q}]{\ty{\Theta}}{V}{U'}$, then $\tseq[\cs{p}]{\ty{\Gamma},\ty{\Theta}}{\subst{M}{V}{x}}{T}$.
+\end{lem}
+\input{prf/lem-pgv-substitution}
 
-  \begin{lemma}[Subject Reduction, $\tred$]%
-    \label{lem:pgv-subject-reduction-terms}
-    \hfill\\%newline before theorem statement
-    If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
-    then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
-  \end{lemma}
-  \input{prf/lem-pgv-subject-reduction-terms}
+\begin{lem}\label{lem:pgv-subject-reduction-terms}
+  %[Subject Reduction, $\tred$]%
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\tm{M}\tred\tm{M'}$,
+  then $\tseq[\cs{p}]{\ty{\Gamma}}{M'}{T}$.
+\end{lem}
+\input{prf/lem-pgv-subject-reduction-terms}
 
-  \begin{lemma}[Subject Congruence, $\equiv$]%
-    \label{lem:pgv-subject-congruence}
-    \hfill\\%newline before theorem statement
-    If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
-    then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-  \end{lemma}
-  \input{prf/lem-pgv-subject-congruence}
+\begin{lem}\label{lem:pgv-subject-congruence}
+  %[Subject Congruence, $\equiv$]%
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\equiv\tm{\conf{C'}}$,
+  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+\end{lem}
+\input{prf/lem-pgv-subject-congruence}
 
-  \begin{theorem}[Subject Reduction, $\cred$]%
-    \label{thm:pgv-subject-reduction-confs}
-    \hfill\\%newline before theorem statement
-    If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
-    then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
-  \end{theorem}
-  \input{prf/thm-pgv-subject-reduction-confs}
+\begin{thm}\label{thm:pgv-subject-reduction-confs}
+  %[Subject Reduction, $\cred$]%
+  If $\cseq[\phi]{\ty{\Gamma}}{\conf{C}}$ and $\tm{\conf{C}}\cred\tm{\conf{C'}}$,
+  then $\cseq[\phi]{\ty{\Gamma}}{\conf{C'}}$.
+\end{thm}
+\input{prf/thm-pgv-subject-reduction-confs}
 
 \subsection{Progress and Deadlock Freedom}
 PGV satisfies progress, as PGV configurations either reduce or are in normal form. However, the normal forms may seem surprising at first, as evaluating a well-typed PGV term does not necessarily produce {just} a value. If a term returns an endpoint, then its normal form contains a thread which is ready to communicate on the dual of that endpoint. This behaviour is not new to PGV.
@@ -504,47 +498,47 @@ Let us consider an example, adapted from Lindley and Morris~\cite{lindleymorris1
 \[
   \begin{array}{ll}
     \tm{\main}
-    & \tm{\letpair{x}{x'}{\new\;\unit}{}}
+     & \tm{\letpair{x}{x'}{\new\;\unit}{}}
     \\
-    & \tm{\andthen{\spawn\;(\lambda\unit.\echo_{x})}{x'}}
+     & \tm{\andthen{\spawn\;(\lambda\unit.\echo_{x})}{x'}}
   \end{array}
   \hfill\qquad\hfill
   \begin{array}{lcl}
     \tm{\echo_x}
-    & \defeq
-    & \tm{\letpair{y}{x}{\recv\;{x}}{}}
+     & \defeq
+     & \tm{\letpair{y}{x}{\recv\;{x}}{}}
     \\
-    &
-    & \tm{\letbind{x}{\send\;\pair{y}{x}}{\close\;x}}
+     &
+     & \tm{\letbind{x}{\send\;\pair{y}{x}}{\close\;x}}
   \end{array}
 \]
 
 If we reduce the above program, we get $\tm{\res{x}{x'}{(\ppar{\child\;\echo_{x}}{\main\;x'})}}$. Clearly, no more evaluation is possible, even though the configuration contains the thread $\tm{\child\;\echo_{x}}$, which is blocked on $\tm{x}$. In~\cref{cor:pgv-closed-progress} we will show that if a term does not return an endpoint, it must produce {only} a value.
 
 \emph{Actions} are terms which perform communication actions and which synchronise between two threads.
-\begin{definition}[Actions]%
-  \label{def:pgv-actions}
+\begin{defi}\label{def:pgv-actions}
+  %[Actions]%
   A~term \emph{acts on} an endpoint $\tm{x}$ if it is $\tm{\send\;\pair{V}{x}}$, $\tm{\recv\;{x}}$, $\tm{\close\;{x}}$, or $\tm{\wait\;{x}}$. A~term is an \emph{action} if it acts on some endpoint $\tm{x}$.
-\end{definition}
+\end{defi}
 
 \emph{Ready terms} are terms which perform communication actions, either by themselves, \eg creating a new channel or thread, or with another thread, \eg sending or receiving.
 It is worth mentioning that the notion of readiness presented here is akin to {live} processes introduced by Caires and Pfenning \cite{cairespfenning10,DardhaP22}, and {poised} processes introduced by Pfenning and Griffith \cite{PfenningG15} and later used by Balzer \etal \cite{balzerpfenning17,balzertoninho19}. Ready processes like live/poised processes denote processes that are ready to communicate on their providing channel.
-\begin{definition}[Ready Terms]%
-  \label{def:pgv-ready-actions}
+\begin{defi}\label{def:pgv-ready-actions}
+  % [Ready Terms]%
   A~term $\tm{L}$ is \emph{ready} if it is of the form $\tm{\plug{E}{M}}$, where $\tm{M}$ is of the form $\tm{\new}$, $\tm{\spawn\;N}$, $\tm{\link\;\pair{x}{y}}$, or $\tm{M}$ acts on $\tm{x}$. In the latter case, we say that $\tm{L}$ is \emph{ready to act on} $\tm{x}$ or is \emph{blocked on}.
-\end{definition}
+\end{defi}
 
 \emph{Progress} for the term language is standard for GV, and deviates from progress for linear $\lambda$-calculus only in that terms may reduce to values or \emph{ready terms}, where the definition of ready terms encompasses all terms whose reduction is struck on some constant $\tm{K}$.
 
-\begin{lemma}[Progress, $\tred$]%
-  \label{lem:pgv-open-progress-terms}
+\begin{lem}\label{lem:pgv-open-progress-terms}
+  %[Progress, $\tred$]%
   If $\tseq[\cs{p}]{\ty{\Gamma}}{M}{T}$ and $\ty{\Gamma}$ contains only session types, then:
   \begin{enumerate*}[label= (\roman*) ]
-  \item $\tm{M}$ is a value;
-  \item $\tm{M}\tred\tm{N}$ for some $\tm{N}$; or
-  \item $\tm{M}$ is ready.
+    \item $\tm{M}$ is a value;
+    \item $\tm{M}\tred\tm{N}$ for some $\tm{N}$; or
+    \item $\tm{M}$ is ready.
   \end{enumerate*}
-\end{lemma}
+\end{lem}
 
 With ``$\ty{\Gamma}$ contains only session types'' we mean that for every $\tmty{x}{T}\in\ty{\Gamma}$, $\ty{T}$ is a session type, \ie, is of the form $\ty{S}$.
 
@@ -553,45 +547,44 @@ With ``$\ty{\Gamma}$ contains only session types'' we mean that for every $\tmty
 A~configuration either reduces, or it is equivalent to configuration in normal form. Crucial to the normal form is that each term $\tm{M_i}$ is blocked on the corresponding channel $\tm{x_i}$, and hence no two terms act on dual endpoints. Furthermore, no term $\tm{M_i}$ can perform a communication action by itself, since those are excluded by the definition of actions.
 Finally, as a corollary, we get that well-typed terms which do not return endpoints return {just} a value:
 
-  \begin{definition}[Canonical Forms]%
-    \label{def:pgv-canonical-forms}
-    A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$
-    where no term $\tm{M_i}$ is a value.
-  \end{definition}
+\begin{defi}\label{def:pgv-canonical-forms}
+  %[Canonical Forms]%
+  A~configuration $\tm{\conf{C}}$ is in canonical form if it is of the form
+  $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;N)}}}$
+  where no term $\tm{M_i}$ is a value.
+\end{defi}
 
-  \begin{lemma}[Canonical Forms]%
-    \label{lem:pgv-canonical-forms}
-    If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
-  \end{lemma}
-  \begin{proof}
-    We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
-  \end{proof}
+\begin{lem}\label{lem:pgv-canonical-forms}
+  % [Canonical Forms]%
+  If $\cseq[\main]{\ty{\Gamma}}{\conf{C}}$, there exists some $\tm{\conf{D}}$ such that $\tm{\conf{C}}\equiv\tm{\conf{D}}$ and $\tm{\conf{D}}$ is in canonical form.
+\end{lem}
+\proof
+We move any $\nu$-binders to the top using \LabTirName{SC-ResExt}, discard any superfluous occurrences of $\tm{\child\;\unit}$ using \LabTirName{SC-ParNil}, and move the main thread to the rightmost position using \LabTirName{SC-ParComm} and \LabTirName{SC-ParAssoc}.
+\qed
 
-  \begin{definition}[Normal Forms]%
-    A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
-    $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}$
-    where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
-  \end{definition}
+\begin{defi}
+  % [Normal Forms]%
+  A~configuration $\tm{\conf{C}}$ is in normal form if it is of the form
+  $\tm{\res{x_1}{x'_1}{\dots\res{x_n}{x'_n}{(\child\;M_1\parallel\dots\parallel\child\;M_m\parallel\main\;V)}}}$
+  where each $\tm{M_i}$ is ready to act on $\tm{x_i}$.
+\end{defi}
 
-  \begin{lemma}
-    \label{lem:pgv-ready-priority}
-    If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
-  \end{lemma}
-  \begin{proof}
-    Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
-  \end{proof}
+\begin{lem}\label{lem:pgv-ready-priority}
+  If $\tseq[\cs{p}]{\ty{\Gamma}}{L}{T}$ is ready to act on $\tmty{x}{S}\in\ty{\Gamma}$, then the priority bound $\cs{p}$ is some priority $\cs{o}$, \ie not $\cs{\pbot}$ or $\cs{\ptop}$.
+\end{lem}
+\proof
+Let $\tm{L}=\tm{\plug{E}{M}}$. By induction on the structure of $\tm{E}$. $\tm{M}$ has priority $\pr({\ty{S}})$, and each constructor of the evaluation context $\tm{E}$ passes on the \emph{maximum} of the priorities of its premises. No rule introduces the priority bound $\cs{\ptop}$ on the sequent.
+\qed
 
-  \begin{theorem}[Progress, $\cred$]%
-    \label{thm:pgv-closed-progress-confs}
-    If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
-  \end{theorem}
-  \input{prf/thm-pgv-closed-progress-confs}
+\begin{thm}\label{thm:pgv-closed-progress-confs}
+  % [Progress, $\cred$]%
+  If $\cseq[\main]{\emptyenv}{\conf{C}}$ and $\tm{\conf{C}}$ is in canonical form, then either $\tm{\conf{C}}\cred\tm{\conf{D}}$ for some $\tm{\conf{D}}$; or $\tm{\conf{C}\equiv\conf{D}}$ for some $\tm{\conf{D}}$ in normal form.
+\end{thm}
+\input{prf/thm-pgv-closed-progress-confs}
 
-\begin{corollary}%
-  \label{cor:pgv-closed-progress}
+\begin{cor}\label{cor:pgv-closed-progress}
   If $\cseq[\phi]{\emptyenv}{\conf{C}}$, $\tm{\conf{C}}\centernot\cred$, and $\tm{\conf{C}}$ contains no endpoints, then $\tm{\conf{C}}\equiv\tm{\phi\;V}$ for some value $\tm{V}$.
-\end{corollary}
+\end{cor}
 
 
 An immediate consequence of \cref{thm:pgv-closed-progress-confs} and \cref{cor:pgv-closed-progress} is that \emph{a term which does not return an endpoint will complete all its communication actions, thus satisfying deadlock freedom.}

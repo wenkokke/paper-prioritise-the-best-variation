@@ -1,150 +1,150 @@
-\begin{proof}
-  \label{prf:thm-pcp-to-pgv-operational-correspondence-completeness}
-  By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
+\proof
+\label{prf:thm-pcp-to-pgv-operational-correspondence-completeness}
+By induction on the derivation of $\pcp{\tm{P}\red\tm{Q}}$.
 
-  \begin{case*}[\LabTirName{E-Link}]
-    \begin{mathpar}
-      \begin{tikzcd}[cramped]
-        \pcp{\tm{\res{x}{x'}{(\ppar{\link{w}{x}}{P})}}}
-        \arrow[r, "\pcp{\red}"]
-        \arrow[d, "\cpgvC{\cdot}"]
-        &
-        \pcp{\tm{\subst{P}{w}{x'}}}
-        \arrow[dd, "\cpgvC{\cdot}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\link\;\pair{w}{x}}{\cpgvC{P}})}}}
-        \arrow[d, "\pgv{\cred^+}"]
-        \\
-        \pgv{\tm{\subst{\cpgvC{P}}{w}{x'}}}
-        \arrow[r, "\pcp{=}"]
-        &
-        \pgv{\tm{\cpgvC{\subst{P}{w}{x'}}}}
-      \end{tikzcd}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Send}]
-    \begin{mathpar}
-      \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\send{x}{y}{P}}{\recv{x'}{y'}{Q}})}}}
-        \arrow[d, "\cpgvM{\cdot}"]
-        \arrow[r, "\pcp{\red}"]
-        &
-        \pcp{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{P}{Q})}}}}
-        \arrow[dd, "\cpgvC{\cdot}"]
-        \\
-        \pgv{\tm{
-            \setlength{\arraycolsep}{0pt}
-            \res{x}{x'}{}\left(
+\begin{case*}[\LabTirName{E-Link}]
+  \begin{mathpar}
+    \begin{tikzcd}[cramped]
+      \pcp{\tm{\res{x}{x'}{(\ppar{\link{w}{x}}{P})}}}
+      \arrow[r, "\pcp{\red}"]
+      \arrow[d, "\cpgvC{\cdot}"]
+      &
+      \pcp{\tm{\subst{P}{w}{x'}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\link\;\pair{w}{x}}{\cpgvC{P}})}}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\subst{\cpgvC{P}}{w}{x'}}}
+      \arrow[r, "\pcp{=}"]
+      &
+      \pgv{\tm{\cpgvC{\subst{P}{w}{x'}}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Send}]
+  \begin{mathpar}
+    \begin{tikzcd}
+      \pcp{\tm{\res{x}{x'}{(\ppar{\send{x}{y}{P}}{\recv{x'}{y'}{Q}})}}}
+      \arrow[d, "\cpgvM{\cdot}"]
+      \arrow[r, "\pcp{\red}"]
+      &
+      \pcp{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{P}{Q})}}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{
+          \setlength{\arraycolsep}{0pt}
+          \res{x}{x'}{}\left(
+          \begin{array}{l}
+              \child\bigg(
               \begin{array}{l}
-                \child\bigg(
-                  \begin{array}{l}
-                    \letpair{y}{y'}{\new\;\unit}{}
-                    \\
-                    \letbind{x}{\send\;{\pair{y}{x}}}{\cpgvM{P}}
-                  \end{array}
-                \bigg)
-                \parallel
-                \\
-                \child\hphantom{\bigg(}
-                \letpair{y'}{x'}{\recv\;{x'}}{\cpgvM{Q}}
-              \end{array}
-            \right)}}
-        \arrow[d, "\pgv{\cred^+}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}}
-        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        &
-        \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}}
-      \end{tikzcd}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Close}]
-    \begin{mathpar}
-      \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}}
-        \arrow[d, "\cpgvM{\cdot}"]
-        \arrow[r, "\pcp{\red}"]
-        &
-        \pcp{\tm{\ppar{P}{Q}}}
-        \arrow[dd, "\cpgvC{\cdot}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{(\ppar
-              {\child\;\andthen{\close\;{x}}{\cpgvM{P}}}
-              {\child\;\andthen{\wait\;{x'}}{\cpgvM{Q}}}
-              )}}}
-        \arrow[d, "\pgv{\cred^+}"]
-        \\
-        \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
-        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        &
-        \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
-      \end{tikzcd}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Select-Inl}]
-    \begin{mathpar}
-      \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}}
-        \arrow[d, "\cpgvM{\cdot}"]
-        \arrow[r, "\pcp{\red}"]
-        &
-        \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
-        \arrow[dd, "\cpgvC{\cdot}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{}\left(
-              \begin{array}{l}
-                \child\;\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}
-                \parallel
-                \\
-                \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
-              \end{array}
-            \right)}}
-        \arrow[d, "\pgv{\cred^+}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}
-        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        &
-        \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}
-      \end{tikzcd}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Select-Inr}]
-    \begin{mathpar}
-      \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}}
-        \arrow[d, "\cpgvM{\cdot}"]
-        \arrow[r, "\pcp{\red}"]
-        &
-        \pcp{\tm{\res{x}{x'}{(\ppar{P}{R})}}}
-        \arrow[dd, "\cpgvC{\cdot}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{}\left(
-              \begin{array}{l}
-                \child\;\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}
-                \parallel
-                \\
-                \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
-              \end{array}
-            \right)}}
-        \arrow[d, "\pgv{\cred^+}"]
-        \\
-        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{R}})}}}
-        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        &
-        \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{R}})}}}
-      \end{tikzcd}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftRes}]
-    By the induction hypothesis and \LabTirName{E-LiftC}.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftPar}]
-    By the induction hypotheses and \LabTirName{E-LiftC}.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftSC}]
-    By the induction hypothesis, \LabTirName{E-LiftSC}, and \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv}.
-  \end{case*}
-\end{proof}
+                  \letpair{y}{y'}{\new\;\unit}{}
+                  \\
+                  \letbind{x}{\send\;{\pair{y}{x}}}{\cpgvM{P}}
+                \end{array}
+              \bigg)
+              \parallel
+              \\
+              \child\hphantom{\bigg(}
+              \letpair{y'}{x'}{\recv\;{x'}}{\cpgvM{Q}}
+            \end{array}
+          \right)}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}}
+      \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+      &
+      \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Close}]
+  \begin{mathpar}
+    \begin{tikzcd}
+      \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}}
+      \arrow[d, "\cpgvM{\cdot}"]
+      \arrow[r, "\pcp{\red}"]
+      &
+      \pcp{\tm{\ppar{P}{Q}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar
+      {\child\;\andthen{\close\;{x}}{\cpgvM{P}}}
+      {\child\;\andthen{\wait\;{x'}}{\cpgvM{Q}}}
+      )}}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
+      \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+      &
+      \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Select-Inl}]
+  \begin{mathpar}
+    \begin{tikzcd}
+      \pcp{\tm{\res{x}{x'}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}}
+      \arrow[d, "\cpgvM{\cdot}"]
+      \arrow[r, "\pcp{\red}"]
+      &
+      \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{}\left(
+          \begin{array}{l}
+              \child\;\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}
+              \parallel
+              \\
+              \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
+            \end{array}
+          \right)}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}
+      \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+      &
+      \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Select-Inr}]
+  \begin{mathpar}
+    \begin{tikzcd}
+      \pcp{\tm{\res{x}{x'}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}}
+      \arrow[d, "\cpgvM{\cdot}"]
+      \arrow[r, "\pcp{\red}"]
+      &
+      \pcp{\tm{\res{x}{x'}{(\ppar{P}{R})}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{}\left(
+          \begin{array}{l}
+              \child\;\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}
+              \parallel
+              \\
+              \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
+            \end{array}
+          \right)}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{R}})}}}
+      \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+      &
+      \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{R}})}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftRes}]
+  By the induction hypothesis and \LabTirName{E-LiftC}.
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftPar}]
+  By the induction hypotheses and \LabTirName{E-LiftC}.
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftSC}]
+  By the induction hypothesis, \LabTirName{E-LiftSC}, and \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv}.
+\end{case*}
+\qed
 
 %%% Local Variables:
 %%% TeX-master: "../priorities"

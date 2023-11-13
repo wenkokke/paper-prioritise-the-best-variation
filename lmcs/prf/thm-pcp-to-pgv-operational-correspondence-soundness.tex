@@ -1,169 +1,168 @@
-\begin{proof}
-  \label{prf:thm-pcp-to-pgv-operational-correspondence-soundness}
-  By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
-  We omit the cases which cannot occur as their left-hand side term forms are not in the image of the translation function, \ie \LabTirName{E-New}, \LabTirName{E-Spawn}, and \LabTirName{E-LiftM}.
+\proof
+\label{prf:thm-pcp-to-pgv-operational-correspondence-soundness}
+By induction on the derivation of $\pgv{\tm{\cpgvC{P}}\cred\tm{\conf{C}}}$.
+We omit the cases which cannot occur as their left-hand side term forms are not in the image of the translation function, \ie \LabTirName{E-New}, \LabTirName{E-Spawn}, and \LabTirName{E-LiftM}.
 
-  \begin{case*}[\LabTirName{E-Link}]
-    \[\pgv{%
-        \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
-        \cred
-        \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{x'}}}
-      }\]
-    The source for $\pgv{\tm{\link\;\pair{w}{x}}}$ \emph{must} be $\pcp{\tm{\link{w}{x}}}$. None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be the empty context. Let $\pcp{\tm{P}}$ be the source term for $\pgv{\tm{\conf{C}}}$, \ie $\pgv{\tm{\cpgvC{P}}=\tm{\conf{C}}}$. Hence, we have:
+\begin{case*}[\LabTirName{E-Link}]
+  \[\pgv{%
+      \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\link\;\pair{w}{x}}}{\conf{C}})}}
+      \cred
+      \tm{\ppar{\plug{\conf{F}}{\unit}}{\subst{\conf{C}}{w}{x'}}}
+    }\]
+  The source for $\pgv{\tm{\link\;\pair{w}{x}}}$ \emph{must} be $\pcp{\tm{\link{w}{x}}}$. None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be the empty context. Let $\pcp{\tm{P}}$ be the source term for $\pgv{\tm{\conf{C}}}$, \ie $\pgv{\tm{\cpgvC{P}}=\tm{\conf{C}}}$. Hence, we have:
+  \begin{mathpar}
+    \begin{tikzcd}[cramped, column sep=tiny]
+      \pcp{\tm{\res{x}{x'}{(\ppar{\link{w}{x}}{P})}}}
+      \arrow[r, "\pcp{\red}"]
+      \arrow[d, "\cpgvC{\cdot}"]
+      &
+      \pcp{\tm{\subst{P}{w}{x'}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\link\;\pair{w}{x}}{\cpgvC{P}})}}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\subst{\cpgvC{P}}{w}{x'}}}
+      \arrow[r, "\pcp{=}"]
+      &
+      \pgv{\tm{\cpgvC{\subst{P}{w}{x'}}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Send}]
+  \[\pgv{%
+    \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{x'}}})}}
+    \cred
+    \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{x}}{\plug{\conf{F'}}{\pair{V}{x'}}})}}
+    }\]
+  There are three possible sources for $\pgv{\tm{\send}}$ and $\pgv{\tm{\recv}}$: $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x'}{y'}{Q}}}$; $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$; or $\pcp{\tm{\inr{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$.
+  \begin{subcase*}[$\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x'}{y'}{Q}}}$]
+    None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $\pgv{\tm{\child\;\letbind{x}{\hole}{\cpgvM{P}}}}$. Similarly, $\pgv{\tm{\conf{F'}}}$ must be $\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\cpgvM{Q}}}}$. The value $\pgv{\tm{V}}$ must be an endpoint $\tm{y}$, bound by the name restriction $\pgv{\tm{\res{y}{y'}{}}}$ introduced by the translation. Hence, we have:
     \begin{mathpar}
       \begin{tikzcd}[cramped, column sep=tiny]
-        \pcp{\tm{\res{x}{x'}{(\ppar{\link{w}{x}}{P})}}}
-        \arrow[r, "\pcp{\red}"]
+        \pcp{\tm{\res{x}{x'}{(\ppar{\send{x}{y}{P}}{\recv{x'}{y'}{Q}})}}}
         \arrow[d, "\cpgvC{\cdot}"]
+        \arrow[r, "\pcp{\red}"]
         &
-        \pcp{\tm{\subst{P}{w}{x'}}}
+        \pcp{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{P}{Q})}}}}
         \arrow[dd, "\cpgvC{\cdot}"]
         \\
-        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\link\;\pair{w}{x}}{\cpgvC{P}})}}}
-        \arrow[d, "\pgv{\cred^+}"]
+        \pgv{\tm{\res{x}{x'}{\res{y}{y'}{}}\left(
+            \begin{array}{l}
+                \child\;\letbind{x}{\send\;{\pair{y}{x}}}{\cpgvM{P}}
+                \parallel
+                \\
+                \child\;\letpair{y'}{x'}{\recv\;{x'}}{\cpgvM{Q}}
+              \end{array}
+            \right)}}
+        \arrow[d, "\pgv{\equiv\cred^+}"]
         \\
-        \pgv{\tm{\subst{\cpgvC{P}}{w}{x'}}}
-        \arrow[r, "\pcp{=}"]
+        \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}}
+        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
         &
-        \pgv{\tm{\cpgvC{\subst{P}{w}{x'}}}}
+        \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}}
       \end{tikzcd}
     \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Send}]
-    \[\pgv{%
-        \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{x'}}})}}
-        \cred
-        \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{x}}{\plug{\conf{F'}}{\pair{V}{x'}}})}}
-      }\]
-    There are three possible sources for $\pgv{\tm{\send}}$ and $\pgv{\tm{\recv}}$: $\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x'}{y'}{Q}}}$; $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$; or $\pcp{\tm{\inr{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$.
-    \begin{subcase*}[$\pcp{\tm{\send{x}{y}{P}}}$ and $\pcp{\tm{\recv{x'}{y'}{Q}}}$]
-      None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $\pgv{\tm{\child\;\letbind{x}{\hole}{\cpgvM{P}}}}$. Similarly, $\pgv{\tm{\conf{F'}}}$ must be $\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\cpgvM{Q}}}}$. The value $\pgv{\tm{V}}$ must be an endpoint $\tm{y}$, bound by the name restriction $\pgv{\tm{\res{y}{y'}{}}}$ introduced by the translation. Hence, we have:
-      \begin{mathpar}
-          \begin{tikzcd}[cramped, column sep=tiny]
-            \pcp{\tm{\res{x}{x'}{(\ppar{\send{x}{y}{P}}{\recv{x'}{y'}{Q}})}}}
-            \arrow[d, "\cpgvC{\cdot}"]
-            \arrow[r, "\pcp{\red}"]
-            &
-            \pcp{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{P}{Q})}}}}
-            \arrow[dd, "\cpgvC{\cdot}"]
-            \\
-            \pgv{\tm{\res{x}{x'}{\res{y}{y'}{}}\left(
-                  \begin{array}{l}
-                    \child\;\letbind{x}{\send\;{\pair{y}{x}}}{\cpgvM{P}}
-                    \parallel
-                    \\
-                    \child\;\letpair{y'}{x'}{\recv\;{x'}}{\cpgvM{Q}}
-                  \end{array}
-                \right)}}
-            \arrow[d, "\pgv{\equiv\cred^+}"]
-            \\
-            \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}}
-            \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-            &
-            \pgv{\tm{\res{x}{x'}{\res{y}{y'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}}
-          \end{tikzcd}
-      \end{mathpar}
-    \end{subcase*}
-    \begin{subcase*}[$\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$]
-      None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $$\pgv{\tm{\child\;\letbind{x}{\andthen{\close\;\hole}{y}}{\cpgvM{P}}}}.$$ Similarly, $\pgv{\tm{\conf{F'}}}$ must be $$\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\andthen{\wait\;x'}{\casesum{y'}{y'}{\cpgvM{Q}}{y'}{\cpgvM{R}}}}}}.$$ Hence, we have:
-      \begin{mathpar}
-        \begin{tikzcd}[cramped, column sep=tiny]
-          \pcp{\tm{\res{x}{x'}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}}
-          \arrow[d, "\cpgvM{\cdot}"]
-          \arrow[r, "\pcp{\red}"]
-          &
-          \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
-          \arrow[dd, "\cpgvC{\cdot}"]
-          \\
-          \pgv{\tm{\res{x}{x'}{}\left(
-                \begin{array}{l}
-                  \child\;\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}
-                  \parallel
-                  \\
-                  \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
-                \end{array}
-              \right)}}
-          \arrow[d, "\pgv{\cred^+}"]
-          \\ 
-          \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}
-          \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-          & 
-          \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}
-        \end{tikzcd}
-      \end{mathpar}
-    \end{subcase*}
-    \begin{subcase*}[$\pcp{\tm{\inr{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$]
-      None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $$\pgv{\tm{\child\;\letbind{x}{\andthen{\close\;\hole}{y}}{\cpgvM{P}}}}.$$ Similarly, $\pgv{\tm{\conf{F'}}}$ must be $$\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\andthen{\wait\;x'}{\casesum{y'}{y'}{\cpgvM{Q}}{y'}{\cpgvM{R}}}}}}.$$ Hence, we have:
-      \begin{mathpar}
-        \begin{tikzcd}[cramped, column sep=tiny]
-          \pcp{\tm{\res{x}{x'}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}}
-          \arrow[d, "\cpgvM{\cdot}"]
-          \arrow[r, "\pcp{\red}"]
-          &
-          \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
-          \arrow[dd, "\cpgvC{\cdot}"]
-          \\
-          \pgv{\tm{\res{x}{x'}{}\left(
-                \begin{array}{l}
-                  \child\;\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}
-                  \parallel
-                  \\
-                  \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
-                \end{array}
-              \right)}}
-          \arrow[d, "\pgv{\cred^+}"]
-          \\ 
-          \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{R}})}}}
-          \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-          & 
-          \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{R}})}}}
-        \end{tikzcd}
-      \end{mathpar}
-    \end{subcase*}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Close}]
-    \[\pgv{%
-        \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\wait\;{x}}}{\plug{\conf{F'}}{\close\;{x'}}})}}
-        \cred
-        \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
-      }\]
-    The source for $\pgv{\tm{\wait}}$ and $\pgv{\tm{\close}}$ \emph{must} be $\pcp{\tm{\wait{x}{P}}}$ and $\pcp{\tm{\close{x'}{Q}}}$.
-
-    (The translation for $\pcp{\tm{\offer{x}{P}{Q}}}$ also introduces a $\pgv{\tm{\wait}}$, but it is blocked on another communication, and hence cannot be the first communication on a translated term. The translations for $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ also introduce a $\pgv{\tm{\close}}$, but these are similarly blocked.)
-
-    None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $\pgv{\tm{\andthen{\hole}{\cpgvM{P}}}}$. Similarly, $\pgv{\tm{\conf{F'}}}$ must be $\pgv{\tm{\andthen{\hole}{\cpgvM{Q}}}}$. Hence, we have:
+  \end{subcase*}
+  \begin{subcase*}[$\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$]
+    None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $$\pgv{\tm{\child\;\letbind{x}{\andthen{\close\;\hole}{y}}{\cpgvM{P}}}}.$$ Similarly, $\pgv{\tm{\conf{F'}}}$ must be $$\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\andthen{\wait\;x'}{\casesum{y'}{y'}{\cpgvM{Q}}{y'}{\cpgvM{R}}}}}}.$$ Hence, we have:
     \begin{mathpar}
-      \begin{tikzcd}
-        \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}} 
+      \begin{tikzcd}[cramped, column sep=tiny]
+        \pcp{\tm{\res{x}{x'}{(\ppar{\inl{x}{P}}{\offer{x}{Q}{R}})}}}
         \arrow[d, "\cpgvM{\cdot}"]
         \arrow[r, "\pcp{\red}"]
         &
-        \pcp{\tm{\ppar{P}{Q}}}
+        \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
         \arrow[dd, "\cpgvC{\cdot}"]
         \\
-        \pgv{\tm{\res{x}{x'}{(\ppar
-              {\child\;\andthen{\close\;{x}}{\cpgvM{P}}} 
-              {\child\;\andthen{\wait\;{x'}}{\cpgvM{Q}}}
-              )}}}
+        \pgv{\tm{\res{x}{x'}{}\left(
+            \begin{array}{l}
+                \child\;\letbind{x}{\select{\labinl}\;{x}}{\cpgvM{P}}
+                \parallel
+                \\
+                \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
+              \end{array}
+            \right)}}
         \arrow[d, "\pgv{\cred^+}"]
-        \\ 
-        \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
+        \\
+        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}})}}}
         \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
-        & 
-        \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+        &
+        \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{Q}})}}}
       \end{tikzcd}
     \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftC}]
-    By the induction hypothesis and \LabTirName{E-LiftC}.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftSC}]
-    By the induction hypothesis, \LabTirName{E-LiftSC},
-    and \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv}.
-  \end{case*}
-\end{proof}
+  \end{subcase*}
+  \begin{subcase*}[$\pcp{\tm{\inr{x}{P}}}$ and $\pcp{\tm{\offer{x'}{Q}{R}}}$]
+    None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $$\pgv{\tm{\child\;\letbind{x}{\andthen{\close\;\hole}{y}}{\cpgvM{P}}}}.$$ Similarly, $\pgv{\tm{\conf{F'}}}$ must be $$\pgv{\tm{\child\;\letpair{y'}{x'}{\hole}{\andthen{\wait\;x'}{\casesum{y'}{y'}{\cpgvM{Q}}{y'}{\cpgvM{R}}}}}}.$$ Hence, we have:
+    \begin{mathpar}
+      \begin{tikzcd}[cramped, column sep=tiny]
+        \pcp{\tm{\res{x}{x'}{(\ppar{\inr{x}{P}}{\offer{x}{Q}{R}})}}}
+        \arrow[d, "\cpgvM{\cdot}"]
+        \arrow[r, "\pcp{\red}"]
+        &
+        \pcp{\tm{\res{x}{x'}{(\ppar{P}{Q})}}}
+        \arrow[dd, "\cpgvC{\cdot}"]
+        \\
+        \pgv{\tm{\res{x}{x'}{}\left(
+            \begin{array}{l}
+                \child\;\letbind{x}{\select{\labinr}\;{x}}{\cpgvM{P}}
+                \parallel
+                \\
+                \child\;\offer{x'}{x'}{\cpgvM{Q}}{x'}{\cpgvM{R}}
+              \end{array}
+            \right)}}
+        \arrow[d, "\pgv{\cred^+}"]
+        \\
+        \pgv{\tm{\res{x}{x'}{(\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{R}})}}}
+        \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+        &
+        \pgv{\tm{\res{x}{x'}{(\ppar{\cpgvC{P}}{\cpgvC{R}})}}}
+      \end{tikzcd}
+    \end{mathpar}
+  \end{subcase*}
+\end{case*}
+\begin{case*}[\LabTirName{E-Close}]
+  \[\pgv{%
+    \tm{\res{x}{x'}{(\ppar{\plug{\conf{F}}{\wait\;{x}}}{\plug{\conf{F'}}{\close\;{x'}}})}}
+    \cred
+    \tm{\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}
+    }\]
+  The source for $\pgv{\tm{\wait}}$ and $\pgv{\tm{\close}}$ \emph{must} be $\pcp{\tm{\wait{x}{P}}}$ and $\pcp{\tm{\close{x'}{Q}}}$.
+
+  (The translation for $\pcp{\tm{\offer{x}{P}{Q}}}$ also introduces a $\pgv{\tm{\wait}}$, but it is blocked on another communication, and hence cannot be the first communication on a translated term. The translations for $\pcp{\tm{\inl{x}{P}}}$ and $\pcp{\tm{\inr{x}{P}}}$ also introduce a $\pgv{\tm{\close}}$, but these are similarly blocked.)
+
+  None of the translation rules introduce an evaluation context around the recursive call, hence $\pgv{\tm{\conf{F}}}$ must be $\pgv{\tm{\andthen{\hole}{\cpgvM{P}}}}$. Similarly, $\pgv{\tm{\conf{F'}}}$ must be $\pgv{\tm{\andthen{\hole}{\cpgvM{Q}}}}$. Hence, we have:
+  \begin{mathpar}
+    \begin{tikzcd}
+      \pcp{\tm{\res{x}{x'}{(\ppar{\close{x}{P}}{\wait{x'}{Q}})}}}
+      \arrow[d, "\cpgvM{\cdot}"]
+      \arrow[r, "\pcp{\red}"]
+      &
+      \pcp{\tm{\ppar{P}{Q}}}
+      \arrow[dd, "\cpgvC{\cdot}"]
+      \\
+      \pgv{\tm{\res{x}{x'}{(\ppar
+      {\child\;\andthen{\close\;{x}}{\cpgvM{P}}}
+      {\child\;\andthen{\wait\;{x'}}{\cpgvM{Q}}}
+      )}}}
+      \arrow[d, "\pgv{\cred^+}"]
+      \\
+      \pgv{\tm{\ppar{\child\;\cpgvM{P}}{\child\;\cpgvM{Q}}}}
+      \arrow[r, "\pgv{\cred^\star}", "\text{(by \cref{lem:pcp-to-pgv-cpgvM-to-cpgvC})}"']
+      &
+      \pgv{\tm{\ppar{\cpgvC{P}}{\cpgvC{Q}}}}
+    \end{tikzcd}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftC}]
+  By the induction hypothesis and \LabTirName{E-LiftC}.
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftSC}]
+  By the induction hypothesis, \LabTirName{E-LiftSC},
+  and \cref{lem:pcp-to-pgv-confs-operational-correspondence-equiv}.
+\end{case*}
+\qed
 
 %%% Local Variables:
 %%% TeX-master: "../priorities"
 %%% End:
-

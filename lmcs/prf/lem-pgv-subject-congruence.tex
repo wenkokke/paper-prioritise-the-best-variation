@@ -1,205 +1,205 @@
-\begin{proof}
-  \label{prf:lem-pgv-subject-congruence}
-  By induction on the derivation of $\tm{\conf{C}}\equiv\tm{\conf{C'}}$.
+\proof
+\label{prf:lem-pgv-subject-congruence}
+By induction on the derivation of $\tm{\conf{C}}\equiv\tm{\conf{C'}}$.
 
-  \begin{case*}[\LabTirName{SC-LinkSwap}]
-    \begin{mathpar}
+\begin{case*}[\LabTirName{SC-LinkSwap}]
+  \begin{mathpar}
+    \inferrule*{
+    \inferrule*[vdots=1.5em]{
+    \inferrule*{
+    }{\tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}}
+    \\
+    \inferrule*{
       \inferrule*{
-        \inferrule*[vdots=1.5em]{
-          \inferrule*{
-          }{\tmty{\link}{\tylolli{\typrod{S}{\co{S}}}{\tyunit}}}
-          \\
-          \inferrule*{
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
-            \\
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
-          }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{x}{y}}{\typrod{S}{\co{S}}}}
-        }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\link\;{\pair{x}{y}}}{\tyunit}}
-      }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}}
-      \\
-      \begin{turn}{270}
-        \ensuremath{\equiv}
-      \end{turn}
+      }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
       \\
       \inferrule*{
-        \inferrule*[vdots=1.5em]{
-          \inferrule*{
-          }{\tmty{\link}{\tylolli{\typrod{\co{S}}{S}}{\tyunit}}}
-          \\
-          \inferrule*{
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
-            \\
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
-          }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{y}{x}}{\typrod{S}{\co{S}}}}
-        }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\link\;{\pair{y}{x}}}{\tyunit}}
-      }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}}
-    \end{mathpar}
-  \end{case*}
+      }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
+    }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{x}{y}}{\typrod{S}{\co{S}}}}
+    }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\link\;{\pair{x}{y}}}{\tyunit}}
+    }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\link\;{\pair{x}{y}}}}}
+    \\
+    \begin{turn}{270}
+      \ensuremath{\equiv}
+    \end{turn}
+    \\
+    \inferrule*{
+    \inferrule*[vdots=1.5em]{
+    \inferrule*{
+    }{\tmty{\link}{\tylolli{\typrod{\co{S}}{S}}{\tyunit}}}
+    \\
+    \inferrule*{
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
+      \\
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
+    }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{y}{x}}{\typrod{S}{\co{S}}}}
+    }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\link\;{\pair{y}{x}}}{\tyunit}}
+    }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\link\;{\pair{y}{x}}}}}
+  \end{mathpar}
+\end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResLink}]
-    \begin{mathpar}
+\begin{case*}[\LabTirName{SC-ResLink}]
+  \begin{mathpar}
+    \inferrule*{
       \inferrule*{
         \inferrule*{
           \inferrule*{
+          }{\tmty
+            {\link}
+            {\tylolli{\typrod{S}{\co{S}}}{\tyunit}}}
+          \\
+          \inferrule*{
             \inferrule*{
-            }{\tmty
-              {\link}
-              {\tylolli{\typrod{S}{\co{S}}}{\tyunit}}}
+            }{\tseq[\cs{\pbot}]
+              {\tmty{x}{S}}
+              {x}
+              {S}}
             \\
             \inferrule*{
-              \inferrule*{
-              }{\tseq[\cs{\pbot}]
-                {\tmty{x}{S}}
-                {x}
-                {S}}
-              \\
-              \inferrule*{
-              }{\tseq[\cs{\pbot}]
-                {\tmty{y}{\co{S}}}
-                {y}
-                {\co{S}}}
             }{\tseq[\cs{\pbot}]
-              {\tmty{x}{S},\tmty{y}{\co{S}}}
-              {\pair{x}{y}}
-              {\typrod{S}{\co{S}}}}
+              {\tmty{y}{\co{S}}}
+              {y}
+              {\co{S}}}
           }{\tseq[\cs{\pbot}]
             {\tmty{x}{S},\tmty{y}{\co{S}}}
-            {\link\;\pair{x}{y}}
-            {\tyunit}}
-        }{\cseq[\phi]
+            {\pair{x}{y}}
+            {\typrod{S}{\co{S}}}}
+        }{\tseq[\cs{\pbot}]
           {\tmty{x}{S},\tmty{y}{\co{S}}}
-          {\phi\;\link\;\pair{x}{y}}}
-      }{\cseq[\phi]
-        {\ty{\emptyenv}}
-        {\res{x}{y}{(\phi\;\link\;\pair{x}{y})}}}
-      \equiv
-      \inferrule*{
-        \inferrule*{
-        }{\tseq[\phi]
-          {\ty{\emptyenv}}
-          {\unit}
+          {\link\;\pair{x}{y}}
           {\tyunit}}
       }{\cseq[\phi]
+        {\tmty{x}{S},\tmty{y}{\co{S}}}
+        {\phi\;\link\;\pair{x}{y}}}
+    }{\cseq[\phi]
+      {\ty{\emptyenv}}
+      {\res{x}{y}{(\phi\;\link\;\pair{x}{y})}}}
+    \equiv
+    \inferrule*{
+      \inferrule*{
+      }{\tseq[\phi]
         {\ty{\emptyenv}}
-        {\phi\;\unit}}
-    \end{mathpar}
-  \end{case*}
+        {\unit}
+        {\tyunit}}
+    }{\cseq[\phi]
+      {\ty{\emptyenv}}
+      {\phi\;\unit}}
+  \end{mathpar}
+\end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResSwap}]
-    \begin{mathpar}
-      \inferrule*{
-        \cseq[\phi]
-        {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
-        {\conf{C}}
-      }{\cseq[\phi]
-        {\ty{\Gamma}}
-        {\res{x}{y}{\conf{C}}}}
-      \equiv
-      \inferrule*{
-        \cseq[\phi]
-        {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
-        {\conf{C}}
-      }{\cseq[\phi]
-        {\ty{\Gamma}}
-        {\res{y}{x}{\conf{C}}}}
-    \end{mathpar}
-  \end{case*}
+\begin{case*}[\LabTirName{SC-ResSwap}]
+  \begin{mathpar}
+    \inferrule*{
+      \cseq[\phi]
+      {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
+      {\conf{C}}
+    }{\cseq[\phi]
+      {\ty{\Gamma}}
+      {\res{x}{y}{\conf{C}}}}
+    \equiv
+    \inferrule*{
+      \cseq[\phi]
+      {\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}
+      {\conf{C}}
+    }{\cseq[\phi]
+      {\ty{\Gamma}}
+      {\res{y}{x}{\conf{C}}}}
+  \end{mathpar}
+\end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResComm}]
-    \begin{mathpar}
+\begin{case*}[\LabTirName{SC-ResComm}]
+  \begin{mathpar}
+    \inferrule*{
       \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
-        }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\res{z}{w}{\conf{C}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\res{z}{w}{\conf{C}}}}}
-      \equiv
+        \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
+      }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\res{z}{w}{\conf{C}}}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\res{z}{w}{\conf{C}}}}}
+    \equiv
+    \inferrule*{
       \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
-        }{\cseq[\phi]{\ty{\Gamma},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\res{x}{y}{\conf{C}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\cseq{}{\res{z}{w}{\res{x}{y}{\conf{C}}}}}}
-    \end{mathpar}
-  \end{case*}
+        \cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\conf{C}}
+      }{\cseq[\phi]{\ty{\Gamma},\tmty{z}{S'},\tmty{w}{\co{S'}}}{\res{x}{y}{\conf{C}}}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\cseq{}{\res{z}{w}{\res{x}{y}{\conf{C}}}}}}
+  \end{mathpar}
+\end{case*}
 
-  \begin{case*}[\LabTirName{SC-ResExt}]
-    \begin{mathpar}
-      \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-          \\
-          \cseq[\phi]{\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{D}}
-        }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{(\ppar{\conf{C}}{\conf{D}})}}
-      }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}}
-      \equiv
+\begin{case*}[\LabTirName{SC-ResExt}]
+  \begin{mathpar}
+    \inferrule*{
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
         \\
-        \inferrule*{
-          \cseq[\phi]{\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{D}}
-        }{\cseq[\phi]{\ty{\Delta}}{\res{x}{y}{\conf{D}}}}
-      }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}}}
-    \end{mathpar}
-  \end{case*}
-
-  \begin{case*}[\LabTirName{SC-ParNil}]
-    \begin{mathpar}
-      \inferrule*{
-        \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-        \\
-        \inferrule*{
-          \inferrule*{
-          }{\tseq[\cs{\pbot}]{\ty{\emptyenv}}{\unit}{\tyunit}}
-        }{\cseq[\child]{\ty{\emptyenv}}{\child{\unit}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\ppar{\conf{C}}{\child{\unit}}}}
-      \equiv
+        \cseq[\phi]{\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{D}}
+      }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{(\ppar{\conf{C}}{\conf{D}})}}
+    }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\res{x}{y}{(\ppar{\conf{C}}{\conf{D}}})}}
+    \equiv
+    \inferrule*{
       \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-    \end{mathpar}
-  \end{case*}
+      \\
+      \inferrule*{
+        \cseq[\phi]{\ty{\Delta},\tmty{x}{S},\tmty{y}{\co{S}}}{\conf{D}}
+      }{\cseq[\phi]{\ty{\Delta}}{\res{x}{y}{\conf{D}}}}
+    }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\conf{C}}{\res{x}{y}{\conf{D}}}}}
+  \end{mathpar}
+\end{case*}
 
-  \begin{case*}[\LabTirName{SC-ParComm}]
-    \begin{mathpar}
+\begin{case*}[\LabTirName{SC-ParNil}]
+  \begin{mathpar}
+    \inferrule*{
+      \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+      \\
+      \inferrule*{
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]{\ty{\emptyenv}}{\unit}{\tyunit}}
+      }{\cseq[\child]{\ty{\emptyenv}}{\child{\unit}}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\ppar{\conf{C}}{\child{\unit}}}}
+    \equiv
+    \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+  \end{mathpar}
+\end{case*}
+
+\begin{case*}[\LabTirName{SC-ParComm}]
+  \begin{mathpar}
+    \inferrule*{
+      \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+      \\
+      \cseq[\phi']{\ty{\Delta}}{\conf{D}}
+    }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{C}}{\conf{D}})}}
+    \equiv
+    \inferrule*{
+      \cseq[\phi']{\ty{\Delta}}{\conf{D}}
+      \\
+      \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+    }{\cseq[\phi'+\phi]{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{D}}{\conf{C}})}}
+  \end{mathpar}
+\end{case*}
+
+\begin{case*}[\LabTirName{SC-ParAssoc}]
+  \begin{mathpar}
+    \inferrule*{
+      \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
+      \\
+      \inferrule*{
+        \cseq[\phi']{\ty{\Delta}}{\conf{D}}
+        \\
+        \cseq[\phi'']{\ty{\Theta}}{\conf{E}}
+      }{\cseq[\phi'+\phi'']{\ty{\Delta},\ty{\Theta}}{(\ppar{\conf{D}}{\conf{E}})}}
+    }{\cseq[\phi+\phi'+\phi'']{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}}
+    \equiv
+    \inferrule*{
       \inferrule*{
         \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
         \\
         \cseq[\phi']{\ty{\Delta}}{\conf{D}}
       }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{C}}{\conf{D}})}}
-      \equiv
-      \inferrule*{
-        \cseq[\phi']{\ty{\Delta}}{\conf{D}}
-        \\
-        \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-      }{\cseq[\phi'+\phi]{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{D}}{\conf{C}})}}
-    \end{mathpar}
-  \end{case*}
-
-  \begin{case*}[\LabTirName{SC-ParAssoc}]
-    \begin{mathpar}
-      \inferrule*{
-        \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-        \\
-        \inferrule*{
-          \cseq[\phi']{\ty{\Delta}}{\conf{D}}
-          \\
-          \cseq[\phi'']{\ty{\Theta}}{\conf{E}}
-        }{\cseq[\phi'+\phi'']{\ty{\Delta},\ty{\Theta}}{(\ppar{\conf{D}}{\conf{E}})}}
-      }{\cseq[\phi+\phi'+\phi'']{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\ppar{\conf{C}}{(\ppar{\conf{D}}{\conf{E}})}}}
-      \equiv
-      \inferrule*{
-        \inferrule*{
-          \cseq[\phi]{\ty{\Gamma}}{\conf{C}}
-          \\
-          \cseq[\phi']{\ty{\Delta}}{\conf{D}}
-        }{\cseq[\phi+\phi']{\ty{\Gamma},\ty{\Delta}}{(\ppar{\conf{C}}{\conf{D}})}}
-        \\
-        \cseq[\phi'']{\ty{\Theta}}{\conf{E}}
-      }{\cseq[\phi+\phi'+\phi'']{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}}
-    \end{mathpar}
-  \end{case*}
-\end{proof}
+      \\
+      \cseq[\phi'']{\ty{\Theta}}{\conf{E}}
+    }{\cseq[\phi+\phi'+\phi'']{\ty{\Gamma},\ty{\Delta},\ty{\Theta}}{\ppar{(\ppar{\conf{C}}{\conf{D}})}{\conf{E}}}}
+  \end{mathpar}
+\end{case*}
+\qed
 
 %%% Local Variables:
 %%% TeX-master: "../priorities"

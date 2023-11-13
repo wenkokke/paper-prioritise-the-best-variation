@@ -17,8 +17,8 @@ The benefit of working specifically with GV, as opposed to other concurrent $\la
 We thus pose our research question for GV:
 
 \vspace{1em}
-  \textbf{RQ:}
-  \emph{Can we design a more expressive GV which guarantees deadlock freedom for cyclic-structured processes?}
+\textbf{RQ:}
+\emph{Can we design a more expressive GV which guarantees deadlock freedom for cyclic-structured processes?}
 \vspace{1em}
 
 We follow the line of work from CP to Priority CP, and present Priority GV (PGV), a~variant of GV which decouples channel creation from thread spawning, thus allowing cyclic-structured processes, but which nonetheless guarantees deadlock freedom via priorities. This closes the circle of the connection between CP and GV~\cite{wadler14}, and their priority-based versions, PCP~\cite{dardhagay18extended} and PGV.
@@ -26,18 +26,18 @@ We cannot straightforwardly adapt the priority typing from PCP to PGV, as PGV ad
 
 We make the following main contributions:
 \begin{enumerate}
-\item \textbf{Priority GV}. We present Priority GV (\cref{sec:pgv}, PGV), a session-typed functional language with priorities, and prove \emph{subject reduction} (\cref{thm:pgv-subject-reduction-confs}) and \emph{progress} (\cref{thm:pgv-closed-progress-confs}).
+  \item \textbf{Priority GV}. We present Priority GV (\cref{sec:pgv}, PGV), a session-typed functional language with priorities, and prove \emph{subject reduction} (\cref{thm:pgv-subject-reduction-confs}) and \emph{progress} (\cref{thm:pgv-closed-progress-confs}).
 
-We addresses several problems in the original GV language, most notably:
-  \begin{enumerate}
-  \item PGV does not require the pseudo-type $S^\sharp$;
-  \item Structural congruence is type preserving.
-  \end{enumerate}
-  PGV answers our research question positively as it allows cyclic-structured binary session-typed processes that are deadlock free.
-\item \textbf{Translation from PCP to PGV}.
-  We present a \emph{sound and complete encoding} of PCP~\cite{dardhagay18extended} in PGV (\cref{sec:pcp}). We prove the encoding preserves typing (\cref{thm:pcp-to-pgv-confs-preservation}) and satisfies operational correspondence (\cref{thm:pcp-to-pgv-operational-correspondence-soundness,thm:pcp-to-pgv-operational-correspondence-completeness}).
+        We addresses several problems in the original GV language, most notably:
+        \begin{enumerate}
+          \item PGV does not require the pseudo-type $S^\sharp$;
+          \item Structural congruence is type preserving.
+        \end{enumerate}
+        PGV answers our research question positively as it allows cyclic-structured binary session-typed processes that are deadlock free.
+  \item \textbf{Translation from PCP to PGV}.
+        We present a \emph{sound and complete encoding} of PCP~\cite{dardhagay18extended} in PGV (\cref{sec:pcp}). We prove the encoding preserves typing (\cref{thm:pcp-to-pgv-confs-preservation}) and satisfies operational correspondence (\cref{thm:pcp-to-pgv-operational-correspondence-soundness} and \cref{thm:pcp-to-pgv-operational-correspondence-completeness}).
 
-  To obtain a tight correspondence, we update PCP, moving away from commuting conversions and reduction as cut elimination towards reduction based on structural congruence, as it is standard in process calculi.
+        To obtain a tight correspondence, we update PCP, moving away from commuting conversions and reduction as cut elimination towards reduction based on structural congruence, as it is standard in process calculi.
 \end{enumerate}
 
 This paper is an improved and extended version of a paper published at FORTE 2021 international conference \cite{kokkedardha21pgv}. We present detailed examples and complete proofs of our technical results.

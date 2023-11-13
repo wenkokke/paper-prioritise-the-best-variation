@@ -1,187 +1,187 @@
-\begin{proof}
-  \label{prf:thm-pgv-subject-reduction-confs}
-  By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
+\proof
+\label{prf:thm-pgv-subject-reduction-confs}
+By induction on the derivation of $\tm{\conf{C}}\cred\tm{\conf{C'}}$.
 
-  \begin{case*}[\LabTirName{E-New}]
-    \begin{mathpar}
+\begin{case*}[\LabTirName{E-New}]
+  \begin{mathpar}
+    \inferrule*{
+      \inferrule*[vdots=1.5em]{
+        \inferrule*{
+        }{\tmty{\new}{\tylolli{\tyunit}{\typrod{S}{\co{S}}}}}
+        \\
+        \inferrule*{
+        }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+      }{\tseq[\cs{\pbot}]{\emptyenv}{\new\;\unit}{\typrod{S}{\co{S}}}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\new\;\unit}}}
+    \cred
+    \inferrule*{
       \inferrule*{
         \inferrule*[vdots=1.5em]{
           \inferrule*{
-          }{\tmty{\new}{\tylolli{\tyunit}{\typrod{S}{\co{S}}}}}
+          }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
+          \\
+          \inferrule*{
+          }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
+        }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{x}{y}}{\typrod{S}{\co{S}}}}
+      }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\pair{x}{y}}}}
+    }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-Spawn}]
+  \begin{mathpar}
+    \inferrule*{
+      \inferrule*[vdots=1.5em]{
+        \inferrule*{
+        }{\tmty{\spawn}{\tylolli{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}}
+        \tseq[\cs{\pbot}]{\ty{\Delta}}{V}{\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit}}
+      }{\tseq[\cs{\pbot}]{\ty{\Delta}}{\spawn\;V}{\tyunit}}
+    }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\plug{\conf{F}}{\spawn\;V}}}
+    \\
+    \begin{turn}{270}
+      \cred
+    \end{turn}
+    \\
+    \inferrule*{
+      \inferrule*{
+        \inferrule*[vdots=1.5em]{
+        }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+      }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\unit}}}
+      \\
+      \inferrule*{
+        \inferrule*{
+          \tseq[\cs{\pbot}]{\ty{\Delta}}{V}{\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit}}
           \\
           \inferrule*{
           }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-        }{\tseq[\cs{\pbot}]{\emptyenv}{\new\;\unit}{\typrod{S}{\co{S}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\new\;\unit}}}
-      \cred
-      \inferrule*{
-        \inferrule*{
-          \inferrule*[vdots=1.5em]{
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{x}{S}}{x}{S}}
-            \\
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\tmty{y}{\co{S}}}{y}{\co{S}}}
-          }{\tseq[\cs{\pbot}]{\tmty{x}{S},\tmty{y}{\co{S}}}{\pair{x}{y}}{\typrod{S}{\co{S}}}}
-        }{\cseq[\phi]{\ty{\Gamma},\tmty{x}{S},\tmty{y}{\co{S}}}{\plug{\conf{F}}{\pair{x}{y}}}}
-      }{\cseq[\phi]{\ty{\Gamma}}{\res{x}{y}{\plug{\conf{F}}{\pair{x}{y}}}}}
+        }{\tseq[\cs{q}]{\ty{\Delta}}{V\;\unit}{\tyunit}}
+      }{\cseq[\child]{\ty{\Delta}}{\child\;(V\;\unit)}}
+    }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\plug{\conf{F}}{\unit}}{\child\;(V\;\unit)}}}
   \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Spawn}]
-    \begin{mathpar}
-      \inferrule*{
-        \inferrule*[vdots=1.5em]{
-          \inferrule*{
-          }{\tmty{\spawn}{\tylolli{(\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit})}{\tyunit}}}
-          \tseq[\cs{\pbot}]{\ty{\Delta}}{V}{\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit}}
-        }{\tseq[\cs{\pbot}]{\ty{\Delta}}{\spawn\;V}{\tyunit}}
-      }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\plug{\conf{F}}{\spawn\;V}}}
-      \\
-      \begin{turn}{270}
-        \cred
-      \end{turn}
-      \\
-      \inferrule*{
-        \inferrule*{
-          \inferrule*[vdots=1.5em]{
-          }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-        }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\unit}}}
-        \\
-        \inferrule*{
-          \inferrule*{
-            \tseq[\cs{\pbot}]{\ty{\Delta}}{V}{\tylolli[\cs{p},\cs{q}]{\tyunit}{\tyunit}}
-            \\
-            \inferrule*{
-            }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-          }{\tseq[\cs{q}]{\ty{\Delta}}{V\;\unit}{\tyunit}}
-        }{\cseq[\child]{\ty{\Delta}}{\child\;(V\;\unit)}}
-      }{\cseq[\phi]{\ty{\Gamma},\ty{\Delta}}{\ppar{\plug{\conf{F}}{\unit}}{\child\;(V\;\unit)}}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Send}]
-    See \cref{fig:pgv-subject-reduction-cred-send}.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-Close}]
-    \begin{mathpar}
-      \footnotesize
-      \inferrule*{
-        \inferrule*{
-          \inferrule*{
-            \inferrule*[vdots=1.5em]{
-              \inferrule*{
-              }{\tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}}
-              \\
-              \inferrule*{
-              }{\tseq[\cs{\pbot}]{\tmty{x}{\tyends[\cs{o}]}}{x}{\tyends[\cs{o}]}}
-            }{\tseq[\cs{o}]{\tmty{x}{\tyends[\cs{o}]}}{\close\;{x}}{\tyunit}}
-          }{\cseq[\phi]
-            {\ty{\Gamma},\tmty{x}{\tyends[\cs{o}]}}
-            {\plug{\conf{F}}{\close\;{x}}}}
-          \and
-          \inferrule*{
-            \inferrule*[vdots=1.5em]{
-              \inferrule*{
-              }{\tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}}
-              \\
-              \inferrule*{
-              }{\tseq[\cs{\pbot}]{\tmty{y}{\tyendr[\cs{o}]}}{y}{\tyendr[\cs{o}]}}
-            }{\tseq[\cs{o}]{\tmty{y}{\tyendr[\cs{o}]}}{\wait\;{y}}{\tyunit}}
-          }{\cseq[\phi']
-            {\ty{\Delta},\tmty{y}{\tyendr[\cs{o}]}}
-            {\plug{\conf{F'}}{\wait\;{y}}}}
-        }{\cseq[\phi+\phi']
-          {\ty{\Gamma},\ty{\Delta},
-            \tmty{x}{\tyends[\cs{o}]},\tmty{y}{\tyendr[\cs{o}]}}
-          {\ppar{\plug{\conf{F}}{\close\;{x}}}{\plug{\conf{F'}}{\wait\;{y}}}}}
-      }{\cseq[\phi+\phi']
-        {\ty{\Gamma},\ty{\Delta}}
-        {\res{x}{y}{(\ppar
-            {\plug{\conf{F}}{\close\;{x}}}
-            {\plug{\conf{F'}}{\wait\;{y}}})}}}
-      \\
-      \begin{turn}{270}
-        \cred
-      \end{turn}
-      \\
-      \inferrule*{
-        \inferrule*{
-          \inferrule*[vdots=1.5em]{
-          }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-        }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\unit}}}
-        \\
-        \inferrule*{
-          \inferrule*[vdots=1.5em]{
-          }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
-        }{\cseq[\phi']
-          {\ty{\Delta}}
-          {\plug{\conf{F'}}{\unit}}}
-      }{\cseq[\phi+\phi']
-        {\ty{\Gamma},\ty{\Delta}}
-        {\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
-    \end{mathpar}
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftC}]
-    By induction on the evaluation context $\ty{\conf{G}}$.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftM}]
-    By \cref{lem:pgv-subject-reduction-terms}.
-  \end{case*}
-  \begin{case*}[\LabTirName{E-LiftSC}]
-    By \cref{lem:pgv-subject-congruence}.
-  \end{case*}
-\end{proof}
-%\begin{landscape}
-\begin{figure}[ht!]
-  \begin{mathpar}        
+\end{case*}
+\begin{case*}[\LabTirName{E-Send}]
+  See \cref{fig:pgv-subject-reduction-cred-send}.
+\end{case*}
+\begin{case*}[\LabTirName{E-Close}]
+  \begin{mathpar}
+    \footnotesize
+    \inferrule*{
+    \inferrule*{
+    \inferrule*{
+    \inferrule*[vdots=1.5em]{
+    \inferrule*{
+    }{\tmty{\close}{\tylolli[\cs{\ptop},\cs{o}]{\tyends[\cs{o}]}{\tyunit}}}
+    \\
+    \inferrule*{
+    }{\tseq[\cs{\pbot}]{\tmty{x}{\tyends[\cs{o}]}}{x}{\tyends[\cs{o}]}}
+    }{\tseq[\cs{o}]{\tmty{x}{\tyends[\cs{o}]}}{\close\;{x}}{\tyunit}}
+    }{\cseq[\phi]
+    {\ty{\Gamma},\tmty{x}{\tyends[\cs{o}]}}
+    {\plug{\conf{F}}{\close\;{x}}}}
+    \and
+    \inferrule*{
+    \inferrule*[vdots=1.5em]{
+    \inferrule*{
+    }{\tmty{\wait}{\tylolli[\cs{\ptop},\cs{o}]{\tyendr[\cs{o}]}{\tyunit}}}
+    \\
+    \inferrule*{
+    }{\tseq[\cs{\pbot}]{\tmty{y}{\tyendr[\cs{o}]}}{y}{\tyendr[\cs{o}]}}
+    }{\tseq[\cs{o}]{\tmty{y}{\tyendr[\cs{o}]}}{\wait\;{y}}{\tyunit}}
+    }{\cseq[\phi']
+    {\ty{\Delta},\tmty{y}{\tyendr[\cs{o}]}}
+    {\plug{\conf{F'}}{\wait\;{y}}}}
+    }{\cseq[\phi+\phi']
+    {\ty{\Gamma},\ty{\Delta},
+    \tmty{x}{\tyends[\cs{o}]},\tmty{y}{\tyendr[\cs{o}]}}
+    {\ppar{\plug{\conf{F}}{\close\;{x}}}{\plug{\conf{F'}}{\wait\;{y}}}}}
+    }{\cseq[\phi+\phi']
+    {\ty{\Gamma},\ty{\Delta}}
+    {\res{x}{y}{(\ppar
+    {\plug{\conf{F}}{\close\;{x}}}
+    {\plug{\conf{F'}}{\wait\;{y}}})}}}
+    \\
+    \begin{turn}{270}
+      \cred
+    \end{turn}
+    \\
     \inferrule*{
       \inferrule*{
-        \LabTirName{(a)}
-        \\
-        \LabTirName{(b)}
-      }{\cseq[\phi+\phi']
-        {\ty{\Gamma},\ty{\Delta},\ty{\Theta},
-          \tmty{x}{\tysend[\cs{o}]{T}{S}},\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
-        {\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{y}}}}}
+        \inferrule*[vdots=1.5em]{
+        }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+      }{\cseq[\phi]{\ty{\Gamma}}{\plug{\conf{F}}{\unit}}}
+      \\
+      \inferrule*{
+        \inferrule*[vdots=1.5em]{
+        }{\tseq[\cs{\pbot}]{\emptyenv}{\unit}{\tyunit}}
+      }{\cseq[\phi']
+        {\ty{\Delta}}
+        {\plug{\conf{F'}}{\unit}}}
     }{\cseq[\phi+\phi']
-      {\ty{\Gamma},\ty{\Delta},\ty{\Theta}}
-      {\res{x}{y}{(\ppar
-          {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
-          {\plug{\conf{F'}}{\recv\;{y}}})}}}
+      {\ty{\Gamma},\ty{\Delta}}
+      {\ppar{\plug{\conf{F}}{\unit}}{\plug{\conf{F'}}{\unit}}}}
+  \end{mathpar}
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftC}]
+  By induction on the evaluation context $\ty{\conf{G}}$.
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftM}]
+  By \cref{lem:pgv-subject-reduction-terms}.
+\end{case*}
+\begin{case*}[\LabTirName{E-LiftSC}]
+  By \cref{lem:pgv-subject-congruence}.
+\end{case*}
+\qed
+%\begin{landscape}
+\begin{figure}[ht!]
+  \begin{mathpar}
+    \inferrule*{
+    \inferrule*{
+    \LabTirName{(a)}
+    \\
+    \LabTirName{(b)}
+    }{\cseq[\phi+\phi']
+    {\ty{\Gamma},\ty{\Delta},\ty{\Theta},
+    \tmty{x}{\tysend[\cs{o}]{T}{S}},\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
+    {\ppar{\plug{\conf{F}}{\send\;{\pair{V}{x}}}}{\plug{\conf{F'}}{\recv\;{y}}}}}
+    }{\cseq[\phi+\phi']
+    {\ty{\Gamma},\ty{\Delta},\ty{\Theta}}
+    {\res{x}{y}{(\ppar
+    {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}
+    {\plug{\conf{F'}}{\recv\;{y}}})}}}
 
     \LabTirName{(a)}
     \elabarrow
     \inferrule*{
-      \inferrule*[vdots=1.5em]{
-        \inferrule*{
-        }{\tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}}
-        \inferrule*{
-          \tseq[\cs{p}]{\ty{\Delta}}{V}{T}
-          \\
-          \inferrule*{
-          }{\tseq[\cs{\pbot}]{\tmty{x}{\tysend[\cs{o}]{T}{S}}}{x}{\tysend[\cs{o}]{T}{S}}}
-        }{\tseq[\cs{p}]{\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}
-          {\pair{V}{x}}{\typrod{T}{\tysend[\cs{o}]{T}{S}}}}
-      }{\tseq[\cs{p}\sqcup\cs{o}]{\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}{\send\;{\pair{V}{x}}}{S}}
+    \inferrule*[vdots=1.5em]{
+    \inferrule*{
+    }{\tmty{\send}{\tylolli[\cs{\ptop},\cs{o}]{\typrod{T}{\tysend[\cs{o}]{T}{S}}}{S}}}
+    \inferrule*{
+      \tseq[\cs{p}]{\ty{\Delta}}{V}{T}
+      \\
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\tmty{x}{\tysend[\cs{o}]{T}{S}}}{x}{\tysend[\cs{o}]{T}{S}}}
+    }{\tseq[\cs{p}]{\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}
+      {\pair{V}{x}}{\typrod{T}{\tysend[\cs{o}]{T}{S}}}}
+    }{\tseq[\cs{p}\sqcup\cs{o}]{\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}{\send\;{\pair{V}{x}}}{S}}
     }{\cseq[\phi]
-      {\ty{\Gamma},\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}
-      {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}}
+    {\ty{\Gamma},\ty{\Delta},\tmty{x}{\tysend[\cs{o}]{T}{S}}}
+    {\plug{\conf{F}}{\send\;{\pair{V}{x}}}}}
 
     \LabTirName{(b)}
     \elabarrow
     \inferrule*{
-      \inferrule*[vdots=1.5em]{
-        \inferrule*{
-        }{\tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]{\tyrecv[\cs{o}]{T}{\co{S}}}{\typrod{T}{\co{S}}}}}
-        \\
-        \inferrule*{
-        }{\tseq[\cs{\pbot}]{\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
-      }{\tseq[\cs{o}]
-        {\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
-        {\recv\;y}
-        {\typrod{T}{\co{S}}}}
+    \inferrule*[vdots=1.5em]{
+      \inferrule*{
+      }{\tmty{\recv}{\tylolli[\cs{\ptop},\cs{o}]{\tyrecv[\cs{o}]{T}{\co{S}}}{\typrod{T}{\co{S}}}}}
+      \\
+      \inferrule*{
+      }{\tseq[\cs{\pbot}]{\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
+    }{\tseq[\cs{o}]
+      {\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
+      {\recv\;y}
+      {\typrod{T}{\co{S}}}}
     }{\cseq[\phi']
-      {\ty{\Theta},\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
-      {\plug{\conf{F'}}{\recv\;{y}}}}
+    {\ty{\Theta},\tmty{y}{\tyrecv[\cs{o}]{T}{\co{S}}}}
+    {\plug{\conf{F'}}{\recv\;{y}}}}
 
     \\
     \begin{turn}{270}
